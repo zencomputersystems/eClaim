@@ -22,7 +22,6 @@
 
 
   <ion-list>
-
     <ion-list-header>
       BANK NAME
     </ion-list-header>
@@ -108,7 +107,7 @@
   </div>
   <!-- add bank form end-->
 
-  
+
 
   <!-- Edit bank form start-->
   <div class="blackcontainer" *ngIf="EditBanksClicked">
@@ -127,7 +126,7 @@
       <ion-list>
         <form [formGroup]="Bankform">
           <ion-item>
-            <ion-label stacked>{{"BANKNAME"}}</ion-label>
+            <ion-label stacked>{{"BANK NAME"}}</ion-label>
             <ion-input type="text" formControlName="NAME" [(ngModel)]="bank_entry.NAME" value="{{bank.NAME}}" placeholder="{{'Please fill in the bank name'}}"></ion-input>
           </ion-item>
           <div class="btn">
