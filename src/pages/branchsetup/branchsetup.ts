@@ -134,7 +134,7 @@ export class BranchsetupPage {
 
       this.branch_entry.BRANCH_GUID = BRANCH_GUID;
       this.branch_entry.UPDATE_TS = new Date().toISOString();
-      this.branch_entry.UPDATE_USER_GUID = '1';    
+      this.branch_entry.UPDATE_USER_GUID = '1';
 
       this.branchsetupservice.update(this.branch_entry)
         .subscribe((response) => {
