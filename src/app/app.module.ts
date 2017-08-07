@@ -34,7 +34,6 @@ import { ScheduleFilterPage } from '../pages/schedule-filter/schedule-filter';
 import { SessionDetailPage } from '../pages/session-detail/session-detail';
 import { SignupPage } from '../pages/signup/signup';
 import { SpeakerListPage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
 import { TenantsetupPage } from '../pages/tenantsetup/tenantsetup';
 import { SetupPage } from '../pages/setup/setup';
 import { ConferenceData } from '../providers/conference-data';
@@ -46,7 +45,7 @@ import { OvertimeclaimPage } from '../pages/overtimeclaim/overtimeclaim';
 import { EntertainmentclaimPage } from '../pages/entertainmentclaim/entertainmentclaim';
 import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
 
-
+import { TabsPage } from '../pages/tabs/tabs';
 
 @NgModule({
   declarations: [
@@ -54,6 +53,7 @@ import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
     AboutPage,
     AccountPage,
     LoginPage,
+    TabsPage,
     PopoverPage,
     SchedulePage,
     MedicalclaimPage,
@@ -79,8 +79,7 @@ import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
     PaymenttypesetupPage,
     QualificationsetupPage,
     SubsciptionsetupPage,
-    TenantsetupPage,
-    TabsPage
+    TenantsetupPage
   ],
   imports: [
     BrowserModule,
@@ -95,7 +94,7 @@ import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
     }),
     IonicModule.forRoot(ConferenceApp, {}, {
       links: [
-        { component: TabsPage, name: 'TabsPage', segment: 'tabs' },
+ 
         { component: SchedulePage, name: 'Schedule', segment: 'schedule' },
         { component: SessionDetailPage, name: 'SessionDetail', segment: 'sessionDetail/:name' },
         { component: ScheduleFilterPage, name: 'ScheduleFilter', segment: 'scheduleFilter' },
