@@ -1,17 +1,16 @@
 ﻿page-speaker-list {
 
-   
+   .Subtitle {
+     text-align: center;
+     font-size: 1vw;
+   }
 
 }
 
-    .Subtitle {
-      text-align: center;
-      font-size: 1.12vw;
-    }
 
 
     .iconf {
-      font-size: 7vw;
+      font-size: 6vw;
       color: #ca9b24;
          transition: width 2s;
     }
@@ -22,7 +21,9 @@
        float:left;
      }
 
-
+    .eClaimSub{
+      padding: 0 30px;
+    }
     .icon {
       text-align: center;
     }
@@ -35,10 +36,7 @@
     }
 
 
-    .Subtitle {
-      text-align: center;
-      font-size: 3.5vw;
-    }
+
 
 
     .iconf {

@@ -41776,6 +41776,18 @@ page-account img {
   margin-top: 10px;
 }
 
+.eClaimSubTitle3 {
+  color: black;
+  font-size: 20px;
+  padding: 200px 50px;
+}
+
+.eClaimSubTitle4 {
+  color: black;
+  font-size: 20px;
+  padding: 10px 50px;
+}
+
 .scroll {
   height: calc(100% - 48px);
   overflow: scroll;
@@ -41830,13 +41842,13 @@ td.lgl1 {
   width: 100% !important;
 }
 
-.Subtitle {
+page-speaker-list .Subtitle {
   text-align: center;
-  font-size: 1.12vw;
+  font-size: 1vw;
 }
 
 .iconf {
-  font-size: 7vw;
+  font-size: 6vw;
   color: #ca9b24;
   transition: width 2s;
 }
@@ -41847,6 +41859,10 @@ td.lgl1 {
   float: left;
 }
 
+.eClaimSub {
+  padding: 0 30px;
+}
+
 .icon {
   text-align: center;
 }
@@ -41855,10 +41871,6 @@ td.lgl1 {
   .round {
     width: calc(100% - 20px);
     min-height: 100px;
-  }
-  .Subtitle {
-    text-align: center;
-    font-size: 3.5vw;
   }
   .iconf {
     font-size: 22vw;
