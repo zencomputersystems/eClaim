@@ -41841,6 +41841,12 @@ td.lgl1 {
   transition: width 2s;
 }
 
+.cont {
+  border-radius: 10px;
+  max-width: 188px;
+  float: left;
+}
+
 .icon {
   text-align: center;
 }
