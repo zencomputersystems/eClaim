@@ -2,24 +2,38 @@
 
    .Subtitle {
      text-align: center;
-     font-size: 1vw;
+     font-size: 0.95vw;
    }
 
-}
-
-
-
+   
     .iconf {
-      font-size: 6vw;
+      font-size: 5.5vw;
       color: #ca9b24;
          transition: width 2s;
     }
+
+    .card-md + ion-card {
+    margin-top: 10px !important; 
+}
+
+}
 
      .cont {
        border-radius: 10px;
         max-width: 188px;
        float:left;
      }
+
+         .cont1 {
+            border-radius: 10px;
+            max-width: 294px;
+            float: left;
+          }
+
+          .num{
+            text-align: center;
+            font-size: 80px;
+          }
 
     .eClaimSub{
       padding: 0 30px;

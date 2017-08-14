@@ -10,68 +10,106 @@
 
 
 <ion-content padding>
-     <div class="eClaimSubTitle4" style="font-style: Arial;"><b>Claim Form</b></div>
 
 <div class="eClaimSub">
- <ion-card class="cont" (click)="goToTravelClaim()">
-    <ion-card-header class="icon">
-      <ion-icon name="car" class="iconf"></ion-icon>
-    </ion-card-header>
-    <ion-card-content class="Subtitle">
-      TRAVEL CLAIM
-    </ion-card-content>
-  </ion-card>
 
-  <ion-card class="cont"  (click)="goToEntertainmentClaim()">
-    <ion-card-header class="icon">
-      <ion-icon name="musical-notes" class="iconf"></ion-icon>
-    </ion-card-header>
-    <ion-card-content class="Subtitle">
-      ENTERTAINMENT CLAIM
-    </ion-card-content>
-  </ion-card>
+    <div class="ion">CLAIM HISTORY</div>
 
-  <ion-card class="cont"  (click)="goToMedicalClaim()">
-    <ion-card-header class="icon">
-      <ion-icon name="medkit" class="iconf"></ion-icon>
-    </ion-card-header>
-    <ion-card-content class="Subtitle">
-      MEDICAL CLAIM
-    </ion-card-content>
-  </ion-card>
+    <ion-card class="cont1">
+      <ion-item class="icon">TOTAL</ion-item>
+      <ion-item class="num">10</ion-item>
+      <ion-item class="icon">CLAIM APPLIED</ion-item>
 
+    
+    </ion-card>
+    
+    <ion-card class="cont1">
+      <ion-item class="icon">TOTAL</ion-item>
+      <ion-item class="num">10</ion-item>
+      <ion-item class="icon">CLAIM APPLIED</ion-item>
 
-  <ion-card class="cont"  (click)="goToOTClaim()">
-    <ion-card-header class="icon">
-      <ion-icon name="stopwatch" class="iconf"></ion-icon>
-    </ion-card-header>
-    <ion-card-content class="Subtitle">
-      OVERTIME CLAIM
-    </ion-card-content>
-  </ion-card>
+    
+    </ion-card>
+    <ion-card class="cont1">
+      <ion-item class="icon">TOTAL</ion-item>
+      <ion-item class="num">10</ion-item>
+      <ion-item class="icon">CLAIM APPLIED</ion-item>
 
-  <ion-card class="cont"  (click)="goToPrintingClaim()">
-    <ion-card-header class="icon">
-      <ion-icon name="print" class="iconf"></ion-icon>
-    </ion-card-header>
-    <ion-card-content class="Subtitle">
-      PRINTING CLAIM
-    </ion-card-content>
-  </ion-card>
+    
+    </ion-card>
+        <ion-card class="cont1">
+   <ion-card-header class="icon">
+        <ion-icon name="car" class="iconf"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="Subtitle">
+        TRAVEL CLAIM
+      </ion-card-content>
 
-  <ion-card class="cont"  (click)="goToGiftClaim()">
-    <ion-card-header class="icon">
-      <ion-icon name="basket" class="iconf"></ion-icon>
-    </ion-card-header>
-    <ion-card-content class="Subtitle">
-      GIFT CLAIM
-    </ion-card-content>
-  </ion-card>
+    
+    </ion-card>
+ 
 
 
+    <div class="eClaimSubTitle4">CLAIM APPLICATION FORM</div>
+    <ion-card class="cont" (click)="goToTravelClaim()">
+      <ion-card-header class="icon">
+        <ion-icon name="car" class="iconf"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="Subtitle">
+        TRAVEL CLAIM
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="cont" (click)="goToEntertainmentClaim()">
+      <ion-card-header class="icon">
+        <ion-icon name="musical-notes" class="iconf"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="Subtitle">
+        ENTERTAINMENT CLAIM
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="cont" (click)="goToMedicalClaim()">
+      <ion-card-header class="icon">
+        <ion-icon name="medkit" class="iconf"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="Subtitle">
+        MEDICAL CLAIM
+      </ion-card-content>
+    </ion-card>
 
 
-  <!-- <ion-card class="round">
+    <ion-card class="cont" (click)="goToOTClaim()">
+      <ion-card-header class="icon">
+        <ion-icon name="stopwatch" class="iconf"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="Subtitle">
+        OVERTIME CLAIM
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="cont" (click)="goToPrintingClaim()">
+      <ion-card-header class="icon">
+        <ion-icon name="print" class="iconf"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="Subtitle">
+        PRINTING CLAIM
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="cont" (click)="goToGiftClaim()">
+      <ion-card-header class="icon">
+        <ion-icon name="basket" class="iconf"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="Subtitle">
+        GIFT CLAIM
+      </ion-card-content>
+    </ion-card>
+</div>
+
+
+
+    <!-- <ion-card class="round">
     <ion-card-header class="icon">
       <ion-icon name="briefcase" class="iconf"></ion-icon>
     </ion-card-header>
@@ -80,7 +118,7 @@
     </ion-card-content>
   </ion-card> -->
 
-  <!-- <ion-card class="round" (click)="goToAbout()">
+    <!-- <ion-card class="round" (click)="goToAbout()">
     <ion-card-header class="icon">
       <ion-icon name="checkbox-outline" class="iconf"></ion-icon>
     </ion-card-header>
@@ -89,7 +127,7 @@
     </ion-card-content>
   </ion-card> -->
 
-<!-- 
+    <!-- 
   <ion-card class="round">
     <ion-card-header class="icon">
       <ion-icon name="paper" class="iconf"></ion-icon>
@@ -101,7 +139,7 @@
 
 
 
-  <!-- <ion-card class="round">
+    <!-- <ion-card class="round">
     <ion-card-header class="icon">
       <ion-icon name="podium" class="iconf"></ion-icon>
     </ion-card-header>
@@ -112,7 +150,7 @@
 
 
 
-  <!-- <ion-card class="round">
+    <!-- <ion-card class="round">
     <ion-card-header class="icon">
       <ion-icon name="folder" class="iconf"></ion-icon>
     </ion-card-header>
@@ -122,7 +160,7 @@
   </ion-card> -->
 
 
-  <!-- <ion-card class="round">
+    <!-- <ion-card class="round">
     <ion-card-header class="icon">
       <ion-icon name="contacts" class="iconf"></ion-icon>
     </ion-card-header>
@@ -130,7 +168,7 @@
       CUSTOMER ADDRESS BOOK
     </ion-card-content>
   </ion-card>   -->
-</div>
-<div class="eClaimSubTitle3" style="font-style: Arial;"><b>Claim History</b></div>
+  
+
 
 </ion-content>

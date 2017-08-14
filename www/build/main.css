@@ -41785,7 +41785,7 @@ page-account img {
 .eClaimSubTitle4 {
   color: black;
   font-size: 20px;
-  padding: 10px 50px;
+  padding: 10px 0px;
 }
 
 .scroll {
@@ -41821,6 +41821,21 @@ td.lgl1 {
   border-bottom: 1px solid gainsboro;
 }
 
+th.lgl2 {
+  padding: 5px 5px;
+  border: none;
+  font-size: 14px;
+}
+
+td.lgl2 {
+  font-size: 14px;
+  padding: 2px;
+  text-align: center;
+  word-wrap: break-word;
+  border: none;
+  border-bottom: 1px solid gainsboro;
+}
+
 .tblBrLeft {
   border-radius: 5px 0 0 5px;
 }
@@ -41844,19 +41859,34 @@ td.lgl1 {
 
 page-speaker-list .Subtitle {
   text-align: center;
-  font-size: 1vw;
+  font-size: 0.95vw;
 }
 
-.iconf {
-  font-size: 6vw;
+page-speaker-list .iconf {
+  font-size: 5.5vw;
   color: #ca9b24;
   transition: width 2s;
+}
+
+page-speaker-list .card-md + ion-card {
+  margin-top: 10px !important;
 }
 
 .cont {
   border-radius: 10px;
   max-width: 188px;
   float: left;
+}
+
+.cont1 {
+  border-radius: 10px;
+  max-width: 294px;
+  float: left;
+}
+
+.num {
+  text-align: center;
+  font-size: 80px;
 }
 
 .eClaimSub {
