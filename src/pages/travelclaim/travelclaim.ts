@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
 /**
  * Generated class for the TravelclaimPage page.
  *
@@ -13,8 +13,24 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'travelclaim.html',
 })
 export class TravelclaimPage {
+  Travelform: FormGroup;
+  public AddTravelClicked: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public AddTravelClick() {
+
+    this.AddTravelClicked = true;
+  }
+
+  public CloseTravelClick() {
+
+    this.AddTravelClicked = false;
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams,fb:FormBuilder) {
+    this.Travelform = fb.group({
+
+      travelname: '',
+
+    });
   }
 
   ionViewDidLoad() {

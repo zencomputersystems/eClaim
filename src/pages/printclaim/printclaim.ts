@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
 /**
  * Generated class for the PrintclaimPage page.
  *
@@ -14,8 +14,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PrintclaimPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    Printform: FormGroup;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder ) {
+
+       this.Printform = fb.group({
+
+      printname: '',
+
+    });
   }
+
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PrintclaimPage');

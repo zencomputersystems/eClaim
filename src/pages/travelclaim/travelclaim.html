@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>travelclaim</ion-title>
+    <ion-title>TRAVEL CLAIM</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,4 +15,115 @@
 
 <ion-content padding>
 
+    <button ion-button (click)="AddTravelClick()">SUMMARY</button>
+
+      <form [formGroup]="Travelform">
+          <ion-item>
+            <ion-label stacked>{{"SOC NUMBER"}}</ion-label>
+            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the SOC NUMBER'}}"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"PROJECT NAME"}}</ion-label>
+            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the project name'}}"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"DATE"}}</ion-label>
+            <ion-datetime displayFormat="DD/MM/YYYY" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please choose yours date while you go to the place'}}"></ion-datetime>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"CALENDAR REF."}}</ion-label>
+           
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"FROM"}}</ion-label>
+            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the the place that you start car'}}"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"DESTINATION"}}</ion-label>
+            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the destination of the Claim'}}"></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label stacked>{{"DISTANCE(KM)"}}</ion-label>
+            <ion-input type="number" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please choose the distance between the trip'}}"></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
+            <ion-input type="number" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the amount of yours Travel Claim'}}"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
+            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the description (if you have)'}}"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
+
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"TOTAL AMOUNT(RM)"}}</ion-label>
+            <ion-input type="number" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the amount for the total of the Travel Claim'}}"></ion-input>
+          </ion-item>
+          <div class="btn">
+            <button ion-button>SUBMIT</button></div>
+        </form>
+  
+
+ 
+
+  <!-- add Travel form start-->
+  <div class="blackcontainer" *ngIf="AddTravelClicked">
+  </div>
+  <div class="popup" padding *ngIf="AddTravelClicked">
+
+    <ion-card class="cm">
+      <ion-card-header class="icTitle headerColor-white ">
+
+        <div class="icHeaderText">    TRAVEL CLAIM HISTORY</div>
+        <button class="btnR" (click)="CloseTravelClick()">
+          <ion-icon name="md-close"></ion-icon> 
+        </button>
+      </ion-card-header>
+      <ion-list class="scroll">
+          <ion-item>
+      <table class="Tabler">
+        <tr class="colth tColor">
+          <th class="lgl1 tblBrLeft" style="width:60px">S.NO</th>
+          <th class="lgl1">SOC NUMBER</th>
+          <th class="lgl1">FROM</th>
+          <th class="lgl1">DESTINATION</th>
+          <th class="lgl1">CLAIM AMOUNT(RM)</th>
+          <th class="lgl1 tblBrRight" style="width:80px">ACTION</th>
+
+        </tr>
+
+        <tr class="col7">
+          <td class="lgl1">1</td>
+          <td class="lgl1">CS 001</td>
+          <td class="lgl1">KUALA LUMPUR</td>
+          <td class="lgl1">KLIA 2</td>
+          <td class="lgl1">222</td>
+          <td class="lgl1 fColor">
+            <button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
+            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>
+          </td>
+        </tr>
+
+
+      </table>
+    </ion-item>
+      </ion-list>
+    </ion-card>
+
+  </div>
+  <!-- add Travel form end-->
 </ion-content>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 /**
  * Generated class for the GiftclaimPage page.
@@ -13,8 +14,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'giftclaim.html',
 })
 export class GiftclaimPage {
+    Giftform: FormGroup;
+  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder) {
+           this.Giftform = fb.group({
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+      giftname: '',
+
+    });
   }
 
   ionViewDidLoad() {

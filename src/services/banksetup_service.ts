@@ -21,7 +21,7 @@ class ServerResponse {
 @Injectable()
 export class BankSetup_Service 
 {	
-	baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/bank_main';
+	baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_bank';
 	baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 	
 	constructor(private httpService: BaseHttpService, private nav: NavController) {};
@@ -85,7 +85,7 @@ export class BankSetup_Service
 	{
 		var queryHeaders = new Headers();
     	queryHeaders.append('Content-Type', 'application/json');		
-    	queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
     	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
 		return this.httpService.http
 			.get(this.baseResourceUrl, { search: params ,headers: queryHeaders})
@@ -125,7 +125,27 @@ export class BankSetup_Service
 			.get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders})
 			.map((response) => {
 				var result: any = response.json();
-				let bank: BankSetup_Model = BankSetup_Model.fromJson(result); //alert(JSON.stringify(bank));
+				let bank: BankSetup_Model = BankSetup_Model.fromJson(result);//alert(JSON.stringify(bank)); 
+				return bank; 
+			}).catch(this.handleError);	
+	};
+
+	GetExistingRecord (bank_name:string, params?: URLSearchParams): Observable<BankSetup_Model> {		
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');
+		
+		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+		//queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		
+		let options = new RequestOptions({ headers: queryHeaders });
+		let url:string;
+		url = "http://api.zen.com.my/api/v2/zcs/_table/main_bank?filter=(NAME=" + bank_name + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+		
+		return this.httpService.http
+			.get(url, options)
+			.map((response) => {
+				var result: any = response.json();				
+				let bank: BankSetup_Model = BankSetup_Model.fromJson(result);alert("In GetExist"+JSON.stringify(result));
 				return bank; 
 			}).catch(this.handleError);	
 	};

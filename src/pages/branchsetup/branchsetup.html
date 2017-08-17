@@ -1,6 +1,5 @@
 <!--
   Generated template for the BranchsetupPage page.
-
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
@@ -14,50 +13,76 @@
 
 
 <ion-content padding>
-    <ion-fab top right edge>
-      <button ion-fab mini (click)="AddBranchsClick()"><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
+  <ion-fab top right edge>
+    <button ion-fab mini (click)="AddBranchsClick()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
 
-    <ion-list>
-      <ion-list-header>
-        BRANCH NAME
-      </ion-list-header>
-      <ion-item>MALAYSIA
-        <button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>
-      </ion-item>
-      <ion-item>INDIA
-        <button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>
-      </ion-item>
+  <ion-list>
+    <ion-list-header>
+      BRANCH NAME
+    </ion-list-header>
+    <ion-item *ngFor="let branch of branchs">
+      <!-- MALAYSIA -->{{branch.NAME}}
+      <button ion-button item-end (click)="EditClick(branch.BRANCH_GUID)"><ion-icon name="md-create"></ion-icon></button>
+      <button ion-button item-end (click)="DeleteClick(branch.BRANCH_GUID)"><ion-icon name="md-close"></ion-icon></button>
+    </ion-item>
+  </ion-list>
 
-    </ion-list>
-
-<!-- add branch form start-->
-<div class="blackcontainer" *ngIf="AddBranchsClicked">
-</div>
+  <!-- add branch form start-->
+  <div class="blackcontainer" *ngIf="AddBranchsClicked">
+  </div>
   <div class="popup" padding *ngIf="AddBranchsClicked">
 
-      <ion-card>
+    <ion-card>
       <ion-card-header class="icTitle headerColor-white ">
 
         <div class="icHeaderText">REGISTER NEW BRANCH</div>
         <button class="btnR" (click)="CloseBranchsClick()">
           <ion-icon name="md-close"></ion-icon> 
         </button>
+
       </ion-card-header>
-     <ion-list>
+      <ion-list>
         <form [formGroup]="Branchform">
-          <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"BRANCHNAME"}}</ion-label>
-            <ion-input type="text" formControlName="branchname" [(ngModel)]="Branchform.fullname"  placeholder="{{'Please fill in the branch name'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="branch_entry.NAME" placeholder="{{'Please fill in the branch name'}}"></ion-input>
           </ion-item>
           <div class="btn">
-          <button ion-button>SUBMIT</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Branchform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
         </form>
-     </ion-list>
-      </ion-card>
- 
- </div>
- <!-- add branch form end-->
+      </ion-list>
+    </ion-card>
+
+  </div>
+  <!-- add branch form end-->
+
+  <!-- Edit branch form start-->
+  <div class="blackcontainer" *ngIf="EditBranchsClicked">
+  </div>
+  <div class="popup" padding *ngIf="EditBranchsClicked">
+
+    <ion-card>
+      <ion-card-header class="icTitle headerColor-white ">
+
+        <div class="icHeaderText">UPDATE BRANCH</div>
+        <button class="btnR" (click)="CloseBranchsClick()">
+          <ion-icon name="md-close"></ion-icon> 
+        </button>
+
+      </ion-card-header>
+      <ion-list>
+        <form [formGroup]="Branchform">
+          <ion-item>
+            <ion-label stacked>{{"BRANCH NAME"}}</ion-label>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="branch_entry.NAME" value="{{branch.NAME}}" placeholder="{{'Please fill in the branch name'}}"></ion-input>
+          </ion-item>
+          <div class="btn">
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(branch.BRANCH_GUID)">{{"SUBMIT" | translate}}</button></div>
+        </form>
+      </ion-list>
+    </ion-card>
+
+  </div>
+  <!-- Edit branch form end-->
 </ion-content>

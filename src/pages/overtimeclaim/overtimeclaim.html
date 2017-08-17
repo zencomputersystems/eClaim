@@ -7,12 +7,70 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>overtimeclaim</ion-title>
+    <ion-title>OVERTIME CLAIM</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-list>
+    <form [formGroup]="OTform">
+      <ion-item>
+        <ion-label stacked>{{"DATE"}}</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" formControlName="otname" [(ngModel)]="OTform.fullname" placeholder="{{'Please choose yours date while you OT'}}"></ion-datetime>
+      </ion-item>
 
+
+      <ion-item>
+        <ion-label stacked>{{"CUSTOMER NAME"}}</ion-label>
+        <ion-input type="text" formControlName="otname" [(ngModel)]="OTform.fullname" placeholder="{{'Please fill in the name of yours customer'}}"></ion-input>
+      </ion-item>
+
+
+
+      <ion-item>
+        <ion-label stacked>{{"SOC NO."}}</ion-label>
+        <ion-input type="text" formControlName="otname" [(ngModel)]="OTform.fullname" placeholder="{{'Please fill in the SOC number'}}"></ion-input>
+      </ion-item>
+
+
+
+      <ion-item>
+        <ion-label stacked>{{"PROJECT NAME"}}</ion-label>
+        <ion-input type="text" formControlName="otname" [(ngModel)]="OTform.fullname" placeholder="{{'Please fill in the name of yours project'}}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{"START TIME"}}</ion-label>
+        <ion-datetime displayFormat="HH:mm:ss" formControlName="otname" [(ngModel)]="OTform.fullname" placeholder="{{'Please choose yours starting overtime'}}"></ion-datetime>
+      </ion-item>
+
+      
+      <ion-item>
+        <ion-label stacked>{{"END TIME"}}</ion-label>
+        <ion-datetime displayFormat="HH:mm:ss" formControlName="otname" [(ngModel)]="OTform.fullname" placeholder="{{'Please choose yours ending overtime'}}"></ion-datetime>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
+        <ion-input type="number" formControlName="otname" [(ngModel)]="OTform.fullname" placeholder="{{'Please fill in the amount of yours Overtime Claim'}}"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{"CALENDAR REF."}}</ion-label>
+
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
+
+      </ion-item>
+
+      <div class="btn">
+        <button ion-button>SUBMIT</button>
+      </div>
+
+    </form>
+  </ion-list>
 </ion-content>

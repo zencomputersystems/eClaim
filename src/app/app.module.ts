@@ -34,16 +34,18 @@ import { ScheduleFilterPage } from '../pages/schedule-filter/schedule-filter';
 import { SessionDetailPage } from '../pages/session-detail/session-detail';
 import { SignupPage } from '../pages/signup/signup';
 import { SpeakerListPage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
 import { TenantsetupPage } from '../pages/tenantsetup/tenantsetup';
 import { SetupPage } from '../pages/setup/setup';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
 import { MedicalclaimPage } from '../pages/medicalclaim/medicalclaim';
-import { File } from '@ionic-native/file';
-import { Transfer } from '@ionic-native/transfer';
-import { FilePath } from '@ionic-native/file-path';
-import { Camera } from '@ionic-native/camera';
+import { PrintclaimPage } from '../pages/printclaim/printclaim';
+import { GiftclaimPage } from '../pages/giftclaim/giftclaim';
+import { OvertimeclaimPage } from '../pages/overtimeclaim/overtimeclaim';
+import { EntertainmentclaimPage } from '../pages/entertainmentclaim/entertainmentclaim';
+import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
+
+import { TabsPage } from '../pages/tabs/tabs';
 
 @NgModule({
   declarations: [
@@ -51,9 +53,15 @@ import { Camera } from '@ionic-native/camera';
     AboutPage,
     AccountPage,
     LoginPage,
+    TabsPage,
     PopoverPage,
     SchedulePage,
     MedicalclaimPage,
+    PrintclaimPage,
+    GiftclaimPage,
+    OvertimeclaimPage,
+    EntertainmentclaimPage,
+    TravelclaimPage,
     ScheduleFilterPage,
     SessionDetailPage,
     SignupPage,
@@ -71,8 +79,7 @@ import { Camera } from '@ionic-native/camera';
     PaymenttypesetupPage,
     QualificationsetupPage,
     SubsciptionsetupPage,
-    TenantsetupPage,
-    TabsPage
+    TenantsetupPage
   ],
   imports: [
     BrowserModule,
@@ -87,7 +94,7 @@ import { Camera } from '@ionic-native/camera';
     }),
     IonicModule.forRoot(ConferenceApp, {}, {
       links: [
-        { component: TabsPage, name: 'TabsPage', segment: 'tabs' },
+ 
         { component: SchedulePage, name: 'Schedule', segment: 'schedule' },
         { component: SessionDetailPage, name: 'SessionDetail', segment: 'sessionDetail/:name' },
         { component: ScheduleFilterPage, name: 'ScheduleFilter', segment: 'scheduleFilter' },
@@ -114,6 +121,11 @@ import { Camera } from '@ionic-native/camera';
     SignupPage,
     SetupPage,
     MedicalclaimPage,
+    TravelclaimPage,
+     PrintclaimPage,
+    GiftclaimPage,
+    OvertimeclaimPage,
+    EntertainmentclaimPage,
     BanksetupPage,
     BranchsetupPage,
     CompanysetupPage,
@@ -134,10 +146,6 @@ import { Camera } from '@ionic-native/camera';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ConferenceData,
     UserData,
-    File,
-    Transfer,
-    Camera,
-    FilePath,
     InAppBrowser,
     SplashScreen,StatusBar
   ]

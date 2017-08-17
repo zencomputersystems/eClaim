@@ -7,12 +7,59 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>giftclaim</ion-title>
+    <ion-title>GIFT CLAIM</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-list>
+    <form [formGroup]="Giftform">
+      <ion-item>
+        <ion-label stacked>{{"DATE"}}</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" formControlName="giftname" [(ngModel)]="Giftform.fullname" placeholder="{{'Please choose yours date while you buy the gift'}}"></ion-datetime>
+      </ion-item>
 
+      <ion-item>
+        <ion-label stacked>{{"CUSTOMER NAME"}}</ion-label>
+        <ion-input type="text" formControlName="giftname" [(ngModel)]="Giftform.fullname" placeholder="{{'Please fill in the name of yours customer'}}"></ion-input>
+      </ion-item>
+
+
+
+      <ion-item>
+        <ion-label stacked>{{"SOC NO."}}</ion-label>
+        <ion-input type="text" formControlName="giftname" [(ngModel)]="Giftform.fullname" placeholder="{{'Please fill in the SOC number'}}"></ion-input>
+      </ion-item>
+
+
+
+      <ion-item>
+        <ion-label stacked>{{"PROJECT NAME"}}</ion-label>
+        <ion-input type="text" formControlName="giftname" [(ngModel)]="Giftform.fullname" placeholder="{{'Please fill in the name of yours project'}}"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
+        <ion-input type="text" formControlName="giftname" [(ngModel)]="Giftform.fullname" placeholder="{{'Please fill in the description (if you have)'}}"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
+        <ion-input type="number" formControlName="giftname" [(ngModel)]="Giftform.fullname" placeholder="{{'Please fill in the amount of yours Gift Claim'}}"></ion-input>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
+
+      </ion-item>
+
+      <div class="btn">
+        <button ion-button>SUBMIT</button>
+      </div>
+
+    </form>
+  </ion-list>
 </ion-content>
