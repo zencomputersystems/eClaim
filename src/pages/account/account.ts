@@ -9,7 +9,7 @@ import { UserData } from '../../providers/user-data';
   selector: 'page-account',
   templateUrl: 'account.html'
 })
-export class AccountPage {
+export class AccountPage { 
   username: string;
 
   constructor(public alertCtrl: AlertController, public nav: NavController, public userData: UserData) {

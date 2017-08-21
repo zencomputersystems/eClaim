@@ -41797,6 +41797,7 @@ page-account img {
   height: 100%;
 }
 
+<<<<<<< HEAD
 .Tabler {
   width: 100%;
   padding-top: 35px;
@@ -41858,6 +41859,9 @@ td.lgl2 {
 }
 
 page-speaker-list .Subtitle {
+=======
+.Subtitle {
+>>>>>>> master
   text-align: center;
   font-size: 0.95vw;
 }

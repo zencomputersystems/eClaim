@@ -19,83 +19,113 @@
       <button ion-fab mini (click)="AddDepartmentClick()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
   <ion-list>
-      <ion-list-header>
+      <!-- <ion-list-header>
        TITLE
-      </ion-list-header>
-      <ion-item>PROFESSIONAL SERVICE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>	</ion-item>
-      <ion-item>APPLICATION DEVELOPMENT	<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>R&D<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>	</ion-item>
-      <ion-item>SOLFWARE ARCHITECH<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>	</ion-item>
-    </ion-list>
+      </ion-list-header> -->
+      <ion-item class="bgColor-lightGrey">
+        <ion-label>S.No</ion-label>
+        <ion-label class="textRight" item-end>TITLE</ion-label>
+        <ion-label class="textRight" item-end>COMPANY</ion-label>
+        <ion-label class="textRight" item-end>DESCRIPTION</ion-label>
+        <ion-label class="textRight" item-end>ACTION</ion-label>
 
-    <ion-list>
-      <ion-list-header>
-       COMPANY
-      </ion-list-header>
-      <ion-item>ZEON TECHNOLOGY SDN BHD<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>ZEN COMPUTER SYSTEM SDN BHD<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>ZEON BUISNESS SOLUTION SDN BHD<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>ZON BUISNESS SOLUTION SDN BHD<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-    </ion-list>
+      </ion-item>
+      <ion-item *ngFor="let department of departments; let i=index">
+        
+        <ion-label item-start>{{i+1}}</ion-label>
+        <ion-label item-start class="textRight">{{department.NAME}}</ion-label>
+        <ion-label item-start class="textRight">{{department.COMPANY}}</ion-label>
+        <ion-label item-start class="textRight">{{department.DESCRIPTION}}</ion-label>
 
-    <ion-list>
-      <ion-list-header>
-       DESCRIPTION
-      </ion-list-header>
-      <ion-item>R&D OFFICE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>APPLICATION DEVELOPMENT OFFICE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>SERVICE DESK OFFICE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>PROJECT MNAGEMENT OFFICE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-    </ion-list>
+        <button ion-button item-end (click)="EditClick(department.DEPARTMENT_GUID)"><ion-icon name="md-create"></ion-icon></button>
+        <button ion-button item-end (click)="DeleteClick(department.DEPARTMENT_GUID)"><ion-icon name="md-close"></ion-icon></button>
+      </ion-item>
+      <!--<ion-icon color="success" item-right [name]="isGroupShown(i) ? 'arrow-dropdown' : 'arrow-dropright'"></ion-icon>-->
+    <!-- <ion-item *ngFor="let department of departments">
+      {{department.NAME}}   
+      {{department.COMPANY}}
+      {{department.DESCRIPTION}}
+      <button ion-button item-end (click)="EditClick(department.DEPARTMENT_GUID)"><ion-icon name="md-create"></ion-icon></button>
+      <button ion-button item-end (click)="DeleteClick(department.DEPARTMENT_GUID)"><ion-icon name="md-close"></ion-icon></button> 
+    </ion-item>-->
+  </ion-list>
+  
 
-    <!-- add department form start-->
-<div class="blackcontainer" *ngIf="AddDepartmentClicked">
-</div>
+  <!-- add department form start-->
+  <div class="blackcontainer" *ngIf="AddDepartmentClicked">
+  </div>
   <div class="popup" padding *ngIf="AddDepartmentClicked">
 
-      <ion-card>
+    <ion-card>
       <ion-card-header class="icTitle headerColor-white ">
 
         <div class="icHeaderText">REGISTER NEW DEPARTMENT</div>
         <button class="btnR" (click)="CloseDepartmentClick()">
           <ion-icon name="md-close"></ion-icon> 
         </button>
+
       </ion-card-header>
-     <ion-list>
+
+      <ion-list>
         <form [formGroup]="Departmentform">
-          <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"TITLE"}}</ion-label>
-            <ion-input type="text" formControlName="departmentname" [(ngModel)]="Departmentform.fullname"  placeholder="{{'Please fill in the title of the department'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="department_entry.NAME" placeholder="{{'Please fill in the tittle of department'}}"></ion-input>
           </ion-item>
 
-          <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"COMPANY"}}</ion-label>
-            <ion-input type="text" formControlName="departmentname" [(ngModel)]="Departmentform.fullname"  placeholder="{{'Please fill in the company name of the department'}}"></ion-input>
+            <ion-input type="text" formControlName="COMPANY" [(ngModel)]="department_entry.COMPANY" placeholder="{{'Please fill in the company ame of department'}}"></ion-input>
           </ion-item>
 
-
-          <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="departmentname" [(ngModel)]="Departmentform.fullname"  placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="department_entry.DESCRIPTION" placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-          <button ion-button>SUBMIT</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Departmentform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
         </form>
-     </ion-list>
-      </ion-card>
+      </ion-list>
+    </ion-card>
+  </div>
+
+  <!-- edit claimtype form start-->
+   <div class="blackcontainer" *ngIf="EditDepartmentClicked">
+  </div>
+  <div class="popup" padding *ngIf="EditDepartmentClicked">
+    <ion-card>
+      <ion-card-header class="icTitle headerColor-white ">
+        <div class="icHeaderText">UPDATE DEPARTMENT</div>
+        <button class="btnR" (click)="CloseDepartmentClick()">
+          <ion-icon name="md-close"></ion-icon> 
+        </button>
+      </ion-card-header>
+
+      <ion-list>
+        <form [formGroup]="Departmentform">
+          <ion-item>
+            
+            <ion-label stacked>{{"TITLE"}}</ion-label>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="department_entry.NAME" value="{{department.NAME}}" placeholder="{{'Please fill in the tittle in the department'}}"></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label stacked>{{"COMPANY"}}</ion-label>
+            <ion-input type="text" formControlName="COMPANY" [(ngModel)]="department_entry.COMPANY" value="{{department.COMPANY}}" placeholder="{{'Please fill in the company name of the department'}}"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="department_entry.DESCRIPTION" value="{{department.DESCRIPTION}}" placeholder="{{'Please fill in the description'}}"></ion-input>
+          </ion-item>
+          <div class="btn">
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Departmentform.valid" (click)="Update(department.DEPARTMENT_GUID)">{{"SUBMIT" | translate}}</button></div>
+        </form>
+      </ion-list>
+    </ion-card>
+  </div> 
+  <!-- edit bank form end-->
+
  
- </div>
- <!-- add department form end-->
 </ion-content>

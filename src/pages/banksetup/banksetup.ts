@@ -1,4 +1,4 @@
-import { Component, Inject ,ViewChild } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -114,7 +114,16 @@ export class BanksetupPage {
 
   Save_Bank() {
     if (this.Bankform.valid) {
+      //this.GetExistingRecord(this.bank_entry.NAME)
+      // alert("Im in save");
+      // var self = this;
+      // this.banksetupservice
+      //   .GetExistingRecord(this.bank_entry.NAME)
+      //   .subscribe((bank_details) => self.bank = bank_details);
+      //   alert("Save"+JSON.stringify(this.bank));
+      // this.ExistRecord();      
 
+      // if (this.Exist_Record == false) {
         this.bank_entry.BANK_GUID = UUID.UUID();
         this.bank_entry.TENANT_GUID = UUID.UUID();
         this.bank_entry.DESCRIPTION = 'Savings';
