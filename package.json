@@ -1,96 +1,4 @@
 {
-<<<<<<< HEAD
-    "name": "eclaimconferencetest",
-    "version": "0.0.1",
-    "description": "An Ionic project",
-    "license": "Apache-2.0",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ionic-team/ionic-conference-app.git"
-    },
-    "scripts": {
-        "build": "ionic-app-scripts build",
-        "clean": "ionic-app-scripts clean",
-        "ionic:build": "ionic-app-scripts build",
-        "ionic:serve": "ionic-app-scripts serve"
-    },
-    "dependencies": {
-        "@angular/common": "4.1.2",
-        "@angular/compiler": "4.1.2",
-        "@angular/compiler-cli": "4.1.2",
-        "@angular/core": "4.1.2",
-        "@angular/forms": "^4.1.2",
-        "@angular/http": "4.1.2",
-        "@angular/platform-browser": "4.1.2",
-        "@angular/platform-browser-dynamic": "4.1.2",
-        "@ionic-native/camera": "^4.1.0",
-        "@ionic-native/core": "3.10.2",
-        "@ionic-native/file": "^4.1.0",
-        "@ionic-native/file-path": "^4.1.0",
-        "@ionic-native/in-app-browser": "3.10.2",
-        "@ionic-native/splash-screen": "3.10.2",
-        "@ionic-native/status-bar": "^3.10.2",
-        "@ionic-native/transfer": "^3.14.0",
-        "@ionic/storage": "2.0.1",
-        "@ngx-translate/core": "^7.1.0",
-        "@ngx-translate/http-loader": "^0.1.0",
-        "angular2-uuid": "^1.1.1",
-        "cordova-android": "^6.2.3",
-        "cordova-ios": "4.3.1",
-        "cordova-plugin-camera": "^2.4.1",
-        "cordova-plugin-console": "^1.0.5",
-        "cordova-plugin-crosswalk-webview": "^2.2.0",
-        "cordova-plugin-device": "^1.1.4",
-        "cordova-plugin-file": "^4.3.3",
-        "cordova-plugin-file-transfer": "^1.6.3",
-        "cordova-plugin-filepath": "^1.0.2",
-        "cordova-plugin-inappbrowser": "^1.4.0",
-        "cordova-plugin-splashscreen": "^4.0.3",
-        "cordova-plugin-statusbar": "^2.2.1",
-        "cordova-plugin-whitelist": "^1.3.1",
-        "cordova-plugin-wkwebview-engine": "https://github.com/ionic-team/cordova-plugin-wkwebview-engine.git",
-        "ionic-angular": "3.3.0",
-        "ionic-plugin-keyboard": "^2.2.1",
-        "ionicons": "3.0.0",
-        "ng2-translate": "^5.0.0",
-        "rxjs": "5.1.1",
-        "sw-toolbox": "3.4.0",
-        "zone.js": "0.8.11"
-    },
-    "devDependencies": {
-        "@ionic/app-scripts": "1.3.7",
-        "@ionic/cli-plugin-ionic-angular": "1.4.1",
-        "ionic": "3.9.2",
-        "typescript": "2.3.3"
-    },
-    "config": {},
-    "cordova": {
-        "platforms": [
-            "android",
-            "ios"
-        ],
-        "plugins": {
-            "cordova-plugin-console": {},
-            "cordova-plugin-crosswalk-webview": {
-                "XWALK_VERSION": "22+",
-                "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
-                "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
-                "XWALK_MODE": "embedded",
-                "XWALK_MULTIPLEAPK": "true"
-            },
-            "cordova-plugin-device": {},
-            "cordova-plugin-inappbrowser": {},
-            "cordova-plugin-splashscreen": {},
-            "cordova-plugin-statusbar": {},
-            "cordova-plugin-whitelist": {},
-            "cordova-plugin-wkwebview-engine": {},
-            "ionic-plugin-keyboard": {},
-            "cordova-plugin-file-transfer": {},
-            "cordova-plugin-camera": {},
-            "cordova-plugin-file": {},
-            "cordova-plugin-filepath": {}
-        }
-=======
   "name": "eclaimconferencetest",
   "version": "0.0.1",
   "description": "An Ionic project",
@@ -181,7 +89,6 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
       "cordova-plugin-filepath": {}
->>>>>>> master
     }
   }
 }

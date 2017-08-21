@@ -41776,18 +41776,6 @@ page-account img {
   margin-top: 10px;
 }
 
-.eClaimSubTitle3 {
-  color: black;
-  font-size: 20px;
-  padding: 200px 50px;
-}
-
-.eClaimSubTitle4 {
-  color: black;
-  font-size: 20px;
-  padding: 10px 0px;
-}
-
 .scroll {
   height: calc(100% - 48px);
   overflow: scroll;
@@ -41797,100 +41785,15 @@ page-account img {
   height: 100%;
 }
 
-.Tabler {
-  width: 100%;
-  padding-top: 35px;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-tr.colth {
-  color: white;
-}
-
-th.lgl1 {
-  padding: 12px 5px;
-  border: none;
-}
-
-td.lgl1 {
-  padding: 8px;
+.Subtitle {
   text-align: center;
-  word-wrap: break-word;
-  border: none;
-  border-bottom: 1px solid gainsboro;
+  font-size: 1.12vw;
 }
 
-th.lgl2 {
-  padding: 5px 5px;
-  border: none;
-  font-size: 14px;
-}
-
-td.lgl2 {
-  font-size: 14px;
-  padding: 2px;
-  text-align: center;
-  word-wrap: break-word;
-  border: none;
-  border-bottom: 1px solid gainsboro;
-}
-
-.tblBrLeft {
-  border-radius: 5px 0 0 5px;
-}
-
-.tblBrRight {
-  border-radius: 0 5px 5px 0;
-}
-
-.tColor {
-  background-color: #ca9b24 !important;
-}
-
-.graphHeaderStyle {
-  border-top: 5px solid #ca9b24;
-  border-bottom: 1px solid #d6d6d6;
-}
-
-.fullWidth {
-  width: 100% !important;
-}
-
-page-speaker-list .Subtitle {
-  text-align: center;
-  font-size: 0.95vw;
-}
-
-page-speaker-list .iconf {
-  font-size: 5.5vw;
+.iconf {
+  font-size: 7vw;
   color: #ca9b24;
   transition: width 2s;
-}
-
-page-speaker-list .card-md + ion-card {
-  margin-top: 10px !important;
-}
-
-.cont {
-  border-radius: 10px;
-  max-width: 188px;
-  float: left;
-}
-
-.cont1 {
-  border-radius: 10px;
-  max-width: 294px;
-  float: left;
-}
-
-.num {
-  text-align: center;
-  font-size: 80px;
-}
-
-.eClaimSub {
-  padding: 0 30px;
 }
 
 .icon {
@@ -41901,6 +41804,10 @@ page-speaker-list .card-md + ion-card {
   .round {
     width: calc(100% - 20px);
     min-height: 100px;
+  }
+  .Subtitle {
+    text-align: center;
+    font-size: 3.5vw;
   }
   .iconf {
     font-size: 22vw;
