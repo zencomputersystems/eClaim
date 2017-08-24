@@ -20,12 +20,14 @@
 
     <ion-list>
         <ion-item class="bgColor-lightGrey">
+            <ion-label>S.No</ion-label>
             <ion-label class="textRight" item-end>NAME</ion-label>
             <ion-label class="textRight" item-end>DESCRIPTION</ion-label>
             <ion-label class="textRight" item-end>ACTION</ion-label>
         </ion-item>
 
-         <ion-item *ngFor="let paymenttype of paymenttypes">
+         <ion-item *ngFor="let paymenttype of paymenttypes; let i=index">
+            <ion-label item-start>{{i+1}}</ion-label>
             <ion-label item-start class="textRight">{{paymenttype.NAME}}</ion-label>
             <ion-label item-start class="textRight">{{paymenttype.DESCRIPTION}}</ion-label>
             <button ion-button item-end (click)="EditClick(paymenttype.PAYMENT_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>

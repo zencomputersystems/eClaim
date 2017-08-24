@@ -21,6 +21,7 @@
 
     <ion-list>
       <ion-item class="bgColor-lightGrey">
+          <ion-label>S.No</ion-label>
           <ion-label class="textRight" item-end>PLAN NAME</ion-label>
           <ion-label class="textRight" item-end>DURATION</ion-label>
           <ion-label class="textRight" item-end>RATE</ion-label>
@@ -30,7 +31,8 @@
           <ion-label class="textRight" item-end>ACTION</ion-label>
       </ion-item>
 
-      <ion-item *ngFor="let subscription of subscriptions">
+      <ion-item *ngFor="let subscription of subscriptions; let i=index">
+          <ion-label item-start>{{i+1}}</ion-label>
         <ion-label item-start class="textRight">{{subscription.PLAN_NAME}}</ion-label>
         <ion-label item-start class="textRight">{{subscription.DURATION}}</ion-label>
         <ion-label item-start class="textRight">{{subscription.RATE}}</ion-label>
