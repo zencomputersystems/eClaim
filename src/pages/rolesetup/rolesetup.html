@@ -29,8 +29,8 @@
 
       <ion-item *ngFor="let role of roles; let i=index">
           <ion-label item-start>{{i+1}}</ion-label>
-        <ion-label item-start class="textRight">{{role.NAME}}</ion-label>
-        <ion-label item-start class="textRight">{{role.DESCRIPTION}}</ion-label>
+        <ion-label item-start class="textRight">{{role.NAME | uppercase}}</ion-label>
+        <ion-label item-start class="textRight">{{role.DESCRIPTION | uppercase}}</ion-label>
         <!-- <ion-label item-start class="textRight">{{role.ACTIVATION_FLAG}}</ion-label> -->
               
          <ion-toggle *ngIf="role.ACTIVATION_FLAG==1" checked = true></ion-toggle> 

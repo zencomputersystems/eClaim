@@ -26,8 +26,8 @@
 
         <ion-item *ngFor="let claimtype of claimtypes; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{claimtype.NAME}}</ion-label>
-            <ion-label item-start class="textRight">{{claimtype.DESCRIPTION}}</ion-label>
+            <ion-label item-start class="textRight">{{claimtype.NAME | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{claimtype.DESCRIPTION | uppercase}}</ion-label>
             <button ion-button item-end (click)="EditClick(claimtype.CLAIM_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
             <button ion-button item-end (click)="DeleteClick(claimtype.CLAIM_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
         </ion-item>

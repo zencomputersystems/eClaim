@@ -36,7 +36,10 @@ export class RolesetupPage {
 public roles: RoleSetup_Model[] = [];
 
 public AddRoleClicked: boolean = false; 
-   public EditRoleClicked: boolean = false; 
+   public EditRoleClicked: boolean = false;
+   Exist_Record: boolean = false;
+   public role_details: any; public exist_record_details: any;
+  
 
     public AddRoleClick() { 
 
@@ -113,8 +116,22 @@ public AddRoleClicked: boolean = false;
     console.log('ionViewDidLoad RolesetupPage');
   }
 
- Save(value: any) {
+ Save() {
     if (this.Roleform.valid) {
+
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_role?filter=(NAME=" + this.role_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
       this.role_entry.ROLE_GUID = UUID.UUID();
       this.role_entry.TENANT_GUID = UUID.UUID();
       this.role_entry.CREATION_TS = new Date().toISOString();
@@ -131,13 +148,51 @@ public AddRoleClicked: boolean = false;
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Role is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+getBankList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.rolesetupservice.get_role(params)
+    .subscribe((roles: RoleSetup_Model[]) => {
+      self.roles = roles;
+    });
+}
 
   Update(ROLE_GUID: any) {  
-    if(this.role_entry.NAME==null){this.role_entry.NAME = this.role_entry.NAME;}
-    if(this.role_entry.DESCRIPTION==null){this.role_entry.DESCRIPTION = this.role_entry.DESCRIPTION;}
+    if (this.Roleform.valid) {
+      
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            let url: string;
+            url = "http://api.zen.com.my/api/v2/zcs/_table/main_role?filter=(NAME=" + this.role_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+            this.http.get(url, options)
+              .map(res => res.json())
+              .subscribe(
+              data => {
+                let res = data["resource"];
+                if (res.length == 0) {
+                  console.log("No records Found");
+                  if (this.Exist_Record == false) {
+    // if(this.role_entry.NAME==null){this.role_entry.NAME = this.role_entry.NAME;}
+    // if(this.role_entry.DESCRIPTION==null){this.role_entry.DESCRIPTION = this.role_entry.DESCRIPTION;}
 
     if (this.Roleform.valid) {
       this.role_entry.CREATION_TS = this.role.CREATION_TS
@@ -160,33 +215,23 @@ public AddRoleClicked: boolean = false;
     }
   }
 }
+else {
+  console.log("Records Found");
+  alert("The Role is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
+}
 
 
    
 
-// Roleform: FormGroup;
-//    public AddRoleClicked: boolean = false; 
-   
-//     public AddRoleClick() {
-
-//         this.AddRoleClicked = true; 
-//     }
-
-//       public CloseRoleClick() {
-
-//         this.AddRoleClicked = false; 
-//     }
-//   constructor(public navCtrl: NavController, public navParams: NavParams,fb:FormBuilder) {
-
-//     this.Roleform = fb.group({
-      
-//       rolename:'',
-     
-//     });
-//   }
-
-  // ionViewDidLoad() {
-  //   console.log('ionViewDidLoad RolesetupPage');
-  // }
 
 

@@ -42,6 +42,9 @@ export class MileagesetupPage {
 //  Mileageform: FormGroup;
    public AddMileageClicked: boolean = false; 
    public EditMileageClicked: boolean = false; 
+   Exist_Record: boolean = false;
+   public mileage_details: any; public exist_record_details: any;
+ 
    
    
     public AddMileageClick() {
@@ -122,6 +125,19 @@ export class MileagesetupPage {
 
  Save() {
     if (this.Mileageform.valid) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_mileage?filter=(CATEGORY=" + this.mileage_entry.CATEGORY + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
       this.mileage_entry.MILEAGE_GUID = UUID.UUID();
       this.mileage_entry.CREATION_TS = new Date().toISOString();
       this.mileage_entry.CREATION_USER_GUID = "1";
@@ -137,13 +153,50 @@ export class MileagesetupPage {
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
-Update(MILEAGE_GUID: any) {  
-    if(this.mileage_entry.CATEGORY==null){this.mileage_entry.CATEGORY = this.mileage_entry.CATEGORY;}
-    if(this.mileage_entry.RATE_PER_UNIT==null){this.mileage_entry.RATE_PER_UNIT = this.mileage_entry.RATE_PER_UNIT;}
+  else {
+    console.log("Records Found");
+    alert("The Mileage is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
 
+}
+}
+getMileageList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.mileagesetupservice.get_mileage(params)
+    .subscribe((mileages: MileageSetup_Model[]) => {
+      self.mileages = mileages;
+    });
+}
+Update(MILEAGE_GUID: any) {  
+    // if(this.mileage_entry.CATEGORY==null){this.mileage_entry.CATEGORY = this.mileage_entry.CATEGORY;}
+    // if(this.mileage_entry.RATE_PER_UNIT==null){this.mileage_entry.RATE_PER_UNIT = this.mileage_entry.RATE_PER_UNIT;}
+    if (this.Mileageform.valid) {
+      
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            let url: string;
+            url = "http://api.zen.com.my/api/v2/zcs/_table/main_mileage?filter=(CATEGORY=" + this.mileage_entry.CATEGORY + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+            this.http.get(url, options)
+              .map(res => res.json())
+              .subscribe(
+              data => {
+                let res = data["resource"];
+                if (res.length == 0) {
+                  console.log("No records Found");
+                  if (this.Exist_Record == false) {
     if (this.Mileageform.valid) {
       this.mileage_entry.CREATION_TS = this.mileage.CREATION_TS
       this.mileage_entry.CREATION_USER_GUID = this.mileage.CREATION_USER_GUID;
@@ -164,3 +217,18 @@ Update(MILEAGE_GUID: any) {
     }
   }
 }
+else {
+  console.log("Records Found");
+  alert("The Mileage is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
+}
+

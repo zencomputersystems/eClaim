@@ -28,8 +28,8 @@
 
          <ion-item *ngFor="let paymenttype of paymenttypes; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{paymenttype.NAME}}</ion-label>
-            <ion-label item-start class="textRight">{{paymenttype.DESCRIPTION}}</ion-label>
+            <ion-label item-start class="textRight">{{paymenttype.NAME | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{paymenttype.DESCRIPTION | uppercase}}</ion-label>
             <button ion-button item-end (click)="EditClick(paymenttype.PAYMENT_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
             <button ion-button item-end (click)="DeleteClick(paymenttype.PAYMENT_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
         </ion-item>

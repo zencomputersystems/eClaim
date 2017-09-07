@@ -36,9 +36,9 @@
       <ion-item *ngFor="let company of companys; let i=index">
         
         <ion-label item-start>{{i+1}}</ion-label>
-        <ion-label item-start class="textRight">{{company.NAME}}</ion-label>
+        <ion-label item-start class="textRight">{{company.NAME | uppercase}}</ion-label>
         <ion-label item-start class="textRight">{{company.REGISTRATION_NO}}</ion-label>
-        <ion-label item-start class="textRight">{{company.ADDRESS}}</ion-label>
+        <ion-label item-start class="textRight">{{company.ADDRESS | uppercase}}</ion-label>
         <ion-label item-start class="textRight">{{company.FAX}}</ion-label>
         <ion-label item-start class="textRight">{{company.PHONE}}</ion-label>
         <ion-label item-start class="textRight">{{company.EMAIL}}</ion-label>

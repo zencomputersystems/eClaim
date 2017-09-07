@@ -12,6 +12,7 @@ import { BankSetup_Service } from '../../services/banksetup_service';
 import { BaseHttpService } from '../../services/base-http';
 
 import { UUID } from 'angular2-uuid';
+import { GlobalFunction } from '../../shared/GlobalFunction';
 
 /**
  * Generated class for the BanksetupPage page.
@@ -22,9 +23,11 @@ import { UUID } from 'angular2-uuid';
 @IonicPage()
 @Component({
   selector: 'page-banksetup',
-  templateUrl: 'banksetup.html', providers: [BankSetup_Service, BaseHttpService]
+  templateUrl: 'banksetup.html', providers: [BankSetup_Service, BaseHttpService, GlobalFunction]
 })
 export class BanksetupPage {
+
+
   bank_entry: BankSetup_Model = new BankSetup_Model();
   Bankform: FormGroup;
   bank: BankSetup_Model = new BankSetup_Model();
@@ -36,7 +39,7 @@ export class BanksetupPage {
   public banks: BankSetup_Model[] = [];
 
   public AddBanksClicked: boolean = false; public EditBanksClicked: boolean = false; Exist_Record: boolean = false;
-  public bank_details: any;
+  public bank_details: any; public exist_record_details: any;
 
   public AddBanksClick() {
 
@@ -94,7 +97,7 @@ export class BanksetupPage {
     }); alert.present();
   }
 
-  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private banksetupservice: BankSetup_Service, private alertCtrl: AlertController) {
+  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private banksetupservice: BankSetup_Service, private alertCtrl: AlertController, public GlobalFunction: GlobalFunction) {
     this.http
       .get(this.baseResourceUrl)
       .map(res => res.json())
@@ -104,7 +107,8 @@ export class BanksetupPage {
     //this.getBankList();
 
     this.Bankform = fb.group({
-      NAME: ["", Validators.required]
+      NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
+     // NAME: ["", Validators.required],
     });
   }
 
@@ -114,36 +118,54 @@ export class BanksetupPage {
 
   Save_Bank() {
     if (this.Bankform.valid) {
-      //this.GetExistingRecord(this.bank_entry.NAME)
-      // alert("Im in save");
-      // var self = this;
-      // this.banksetupservice
-      //   .GetExistingRecord(this.bank_entry.NAME)
-      //   .subscribe((bank_details) => self.bank = bank_details);
-      //   alert("Save"+JSON.stringify(this.bank));
-      // this.ExistRecord();      
 
-      // if (this.Exist_Record == false) {
-        this.bank_entry.BANK_GUID = UUID.UUID();
-        this.bank_entry.TENANT_GUID = UUID.UUID();
-        this.bank_entry.DESCRIPTION = 'Savings';
-        this.bank_entry.CREATION_TS = new Date().toISOString();
-        this.bank_entry.CREATION_USER_GUID = '1';
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_bank?filter=(NAME=" + this.bank_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            
+            if (this.Exist_Record == false) {
+              this.bank_entry.BANK_GUID = UUID.UUID();
+              this.bank_entry.TENANT_GUID = UUID.UUID();
+              this.bank_entry.DESCRIPTION = 'Savings';
+              this.bank_entry.CREATION_TS = new Date().toISOString();
+              this.bank_entry.CREATION_USER_GUID = '1';
 
-        this.bank_entry.UPDATE_TS = new Date().toISOString();
-        this.bank_entry.UPDATE_USER_GUID = "";
+              this.bank_entry.UPDATE_TS = new Date().toISOString();
+              this.bank_entry.UPDATE_USER_GUID = "";
 
-        //alert(JSON.stringify(this.bank_entry));     
-
-        this.banksetupservice.save_bank(this.bank_entry)
-          .subscribe((response) => {
-            if (response.status == 200) {
-              alert('Bank Registered successfully');
-              //location.reload();
-              this.navCtrl.setRoot(this.navCtrl.getActive().component);
+              this.banksetupservice.save_bank(this.bank_entry)
+                .subscribe((response) => {
+                  if (response.status == 200) {
+                    alert('Bank Registered successfully');
+                    //this.GlobalFunction.showAlert_New('Bank Registered successfully !!');
+                    //location.reload();
+                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                  }
+                });
             }
-          })
-      //}
+          }
+          else {
+            console.log("Records Found");
+            alert("The Bank is already Added.")
+
+          }
+
+        },
+        err => {
+          this.Exist_Record = false;
+          console.log("ERROR!: ", err);
+        }
+        );
+
     }
   }
 
@@ -158,61 +180,58 @@ export class BanksetupPage {
 
   Update_Bank(BANK_GUID: any) {
     if (this.Bankform.valid) {
-      this.bank_entry.DESCRIPTION = this.bank.DESCRIPTION;
-      this.bank_entry.TENANT_GUID = this.bank.TENANT_GUID;
-      this.bank_entry.CREATION_TS = this.bank.CREATION_TS;
-      this.bank_entry.CREATION_USER_GUID = this.bank.CREATION_USER_GUID;
 
-      this.bank_entry.BANK_GUID = BANK_GUID;
-      // this.bank_entry.DESCRIPTION = 'Savings';
-      // this.bank_entry.TENANT_GUID = '1';
-      // this.bank_entry.CREATION_TS = new Date().toISOString();
-      // this.bank_entry.CREATION_USER_GUID ='1';
-      this.bank_entry.UPDATE_TS = new Date().toISOString();
-      this.bank_entry.UPDATE_USER_GUID = '1';
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_bank?filter=(NAME=" + this.bank_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
+              if (this.Bankform.valid) {
+                this.bank_entry.DESCRIPTION = this.bank.DESCRIPTION;
+                this.bank_entry.TENANT_GUID = this.bank.TENANT_GUID;
+                this.bank_entry.CREATION_TS = this.bank.CREATION_TS;
+                this.bank_entry.CREATION_USER_GUID = this.bank.CREATION_USER_GUID;
 
-      // alert(JSON.stringify(this.bank_entry));     
+                this.bank_entry.BANK_GUID = BANK_GUID;
+                // this.bank_entry.DESCRIPTION = 'Savings';
+                // this.bank_entry.TENANT_GUID = '1';
+                // this.bank_entry.CREATION_TS = new Date().toISOString();
+                // this.bank_entry.CREATION_USER_GUID ='1';
+                this.bank_entry.UPDATE_TS = new Date().toISOString();
+                this.bank_entry.UPDATE_USER_GUID = '1';
 
-      this.banksetupservice.update_bank(this.bank_entry)
-        .subscribe((response) => {
-          if (response.status == 200) {
-            alert('Bank updated successfully');
-            //location.reload();
-            this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                // alert(JSON.stringify(this.bank_entry));     
+
+                this.banksetupservice.update_bank(this.bank_entry)
+                  .subscribe((response) => {
+                    if (response.status == 200) {
+                      alert('Bank updated successfully');
+                      this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                    }
+                  })
+              }
+            }
           }
-        })
+          else {
+            console.log("Records Found");
+            alert("The Bank is already Added.")
+
+          }
+        },
+        err => {
+          this.Exist_Record = false;
+          console.log("ERROR!: ", err);
+        }
+        );
     }
   }
-
-  GetExistingRecord1(bank_name: string) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    let options = new RequestOptions({ headers: headers });
-    let url: string;
-    url = "http://api.zen.com.my/api/v2/zcs/_table/main_bank?filter=(NAME=" + bank_name + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-    alert(url)
-    this.http.get(url, options)
-      .map(res => res.json())
-      .subscribe(
-      data => {
-        this.Exist_Record = true;
-        alert(JSON.stringify(data));
-        console.log(data);
-      },
-      err => {
-        //this.Exist_Record = false;
-        console.log("ERROR!: ", err);
-      }
-      );
-  }
-  
-  ExistRecord(){
-    var self = this;
-      this.banksetupservice
-        .GetExistingRecord(this.bank_entry.NAME)
-        .subscribe((bank_details) => self.bank = bank_details);
-
-      return self.bank;
-  }
 }
+

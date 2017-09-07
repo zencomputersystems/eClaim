@@ -33,6 +33,28 @@ export class DesignationSetup_Service
 	   //localStorage.setItem('session_token', '');       
 	  return Observable.throw(errMsg);
 	}
+
+	query (params?:URLSearchParams): Observable<DesignationSetup_Model[]> 
+    {       
+        //let bank :any;
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');
+    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);    	
+		return this.httpService.http
+			.get(this.baseResourceUrl, { search: params, headers: queryHeaders})
+			.map((response) => {
+				var result: any = response.json();
+				let banks: Array<DesignationSetup_Model> = [];
+				
+				// result.resource.forEach((bank) => {
+				// 	banks.push(BankSetup_Model.fromJson(bank));
+				// });  
+				return banks;
+				
+			}).catch(this.handleError);
+	};
+	
 	
 	save (designation_main: DesignationSetup_Model): Observable<any> 
 	{
@@ -59,6 +81,26 @@ export class DesignationSetup_Service
 				return response;
 			});
 	}
+
+	get_bank (params?: URLSearchParams): Observable<DesignationSetup_Model[]> 
+	{
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');		
+    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		return this.httpService.http
+			.get(this.baseResourceUrl, { search: params ,headers: queryHeaders})
+			.map((response) => 
+			{
+				var result: any = response.json();
+				let banks: Array<DesignationSetup_Model> = [];
+				
+				// result.resource.forEach((bank) => {
+				//  	banks.push(BankSetup_Model.fromJson(bank));
+				//  });
+				return banks;
+			}).catch(this.handleError);
+	};
 	
 	remove (id: string) {
 		var queryHeaders = new Headers();

@@ -28,8 +28,8 @@
 
         <ion-item *ngFor="let designation of designations; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{designation.NAME}}</ion-label>
-            <ion-label item-start class="textRight">{{designation.DESCRIPTION}}</ion-label>
+            <ion-label item-start class="textRight">{{designation.NAME | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{designation.DESCRIPTION | uppercase}}</ion-label>
          <button ion-button item-end (click)="EditClick(designation.DESIGNATION_GUID)"><ion-icon name="md-create"></ion-icon></button>
          <button ion-button item-end (click)="DeleteClick(designation.DESIGNATION_GUID)"><ion-icon name="md-close"></ion-icon></button>
     </ion-item>

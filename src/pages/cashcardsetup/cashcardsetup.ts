@@ -99,13 +99,16 @@ export class CashcardsetupPage {
         });
     
       this.Cashform = fb.group({
-      CASHCARD_SNO: ["", Validators.required],
-      ACCOUNT_ID: ["", Validators.required],
-      ACCOUNT_PASSWORD: ["", Validators.required],
-      MANAGEMENT_URL: ["", Validators.required],
+        CASHCARD_SNO: [null, Validators.compose([Validators.pattern('^(?!(0))[0-9]*'), Validators.required])],
+     // CASHCARD_SNO: ["", Validators.required],
+      ACCOUNT_ID: [null, Validators.compose([Validators.pattern('^(?!(0))[0-9]*'), Validators.required])],
+      ACCOUNT_PASSWORD: [null, Validators.compose([Validators.pattern('((?=.*\)(?=.*[a-zA-Z]).{4,20})'), Validators.required])], 
+      //ACCOUNT_PASSWORD: ["", Validators.required],
+      MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$'), Validators.required])],
+      //MANAGEMENT_URL: ["", Validators.required],   ^(?!(0))[https://]*   /(\S+\.(com|net|org|edu|gov)(\/\S+)?)/
       DESCRIPTION: ["", Validators.required]
     });
-  }
+  } 
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CashcardsetupPage');
@@ -113,6 +116,20 @@ export class CashcardsetupPage {
 
   Save() {
     if (this.Cashform.valid) {
+
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_cashcard?filter=(ACCOUNT_ID=" + this.cashcard_entry.ACCOUNT_ID + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+if (this.Exist_Record == false) {
       this.cashcard_entry.CASHCARD_GUID = UUID.UUID();
       this.cashcard.ACTIVATION_FLAG = 1;
       this.cashcard_entry.CREATION_TS = new Date().toISOString();
@@ -128,16 +145,55 @@ export class CashcardsetupPage {
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Branch is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+
+getBranchList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.cashcardsetupservice.get_cashcard(params)
+    .subscribe((cashcards: CashcardSetup_Model[]) => {
+      self.cashcards = cashcards;
+    });
+}
 
   Update(CASHCARD_GUID: any) {
-    if(this.cashcard_entry.CASHCARD_SNO==null){this.cashcard_entry.CASHCARD_SNO = this.cashcard.CASHCARD_SNO;}
-    if(this.cashcard_entry.ACCOUNT_ID==null){this.cashcard_entry.ACCOUNT_ID = this.cashcard.ACCOUNT_ID;}
-    if(this.cashcard_entry.ACCOUNT_PASSWORD==null){this.cashcard_entry.ACCOUNT_PASSWORD = this.cashcard.ACCOUNT_PASSWORD;}
-    if(this.cashcard_entry.MANAGEMENT_URL==null){this.cashcard_entry.MANAGEMENT_URL = this.cashcard.MANAGEMENT_URL;}
-    if(this.cashcard_entry.DESCRIPTION==null){this.cashcard_entry.DESCRIPTION = this.cashcard.DESCRIPTION;}
+    if (this.Cashform.valid) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_cashcard?filter=(ACCOUNT_ID=" + this.cashcard_entry.ACCOUNT_ID + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
+             
+    // if(this.cashcard_entry.CASHCARD_SNO==null){this.cashcard_entry.CASHCARD_SNO = this.cashcard.CASHCARD_SNO;}
+    // if(this.cashcard_entry.ACCOUNT_ID==null){this.cashcard_entry.ACCOUNT_ID = this.cashcard.ACCOUNT_ID;}
+    // if(this.cashcard_entry.ACCOUNT_PASSWORD==null){this.cashcard_entry.ACCOUNT_PASSWORD = this.cashcard.ACCOUNT_PASSWORD;}
+    // if(this.cashcard_entry.MANAGEMENT_URL==null){this.cashcard_entry.MANAGEMENT_URL = this.cashcard.MANAGEMENT_URL;}
+    // if(this.cashcard_entry.DESCRIPTION==null){this.cashcard_entry.DESCRIPTION = this.cashcard.DESCRIPTION;}
 
     if (this.Cashform.valid) {
       this.cashcard_entry.CREATION_TS = this.cashcard.CREATION_TS;
@@ -160,3 +216,18 @@ export class CashcardsetupPage {
     }
   }
 }
+else {
+  console.log("Records Found");
+  alert("The Cashcard is already Added.") 
+}
+          },
+        
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
+}
+

@@ -35,8 +35,8 @@ export class ClaimtypePage {
 
   public claimtypes: ClaimTypeSetup_Model[] = [];
 
-  public AddClaimtypeClicked: boolean = false; public EditClaimTypeClicked: boolean = false;
-
+  public AddClaimtypeClicked: boolean = false; public EditClaimTypeClicked: boolean = false; Exist_Record: boolean = false;
+  public claimtype_details: any; public exist_record_details: any;
   public AddClaimtypeClick() {
 
     this.AddClaimtypeClicked = true;
@@ -100,7 +100,9 @@ export class ClaimtypePage {
       });
 
     this.Claimtypeform = fb.group({
-      NAME: ["", Validators.required],
+      NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
+      //DESCRIPTION: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
+      //NAME: ["", Validators.required],
       DESCRIPTION: ["", Validators.required]
     });
   }
@@ -111,6 +113,20 @@ export class ClaimtypePage {
 
   Save() {
     if (this.Claimtypeform.valid) {
+        
+              let headers = new Headers();
+              headers.append('Content-Type', 'application/json');
+              let options = new RequestOptions({ headers: headers });
+              let url: string;
+              url = "http://api.zen.com.my/api/v2/zcs/_table/main_claim_type?filter=(NAME=" + this.claimtype_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+              this.http.get(url, options)
+                .map(res => res.json())
+                .subscribe(
+                data => {
+                  let res = data["resource"];
+                  if (res.length == 0) {
+                    console.log("No records Found");
+     if (this.Exist_Record == false) {
       this.claimtype_entry.CLAIM_TYPE_GUID = UUID.UUID();
       this.claimtype_entry.TENANT_GUID = UUID.UUID();
       this.claimtype_entry.CREATION_TS = new Date().toISOString();
@@ -125,14 +141,50 @@ export class ClaimtypePage {
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Claimtype is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+getClaimtypeList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.claimtypesetupservice.get_claim(params)
+    .subscribe((claimtypes: ClaimTypeSetup_Model[]) => {
+      self.claimtypes = claimtypes;
+    });
+}
 
   Update(CLAIM_TYPE_GUID: any) {    
-    if(this.claimtype_entry.NAME==null){this.claimtype_entry.NAME = this.claimtype.NAME;}
-    if(this.claimtype_entry.DESCRIPTION==null){this.claimtype_entry.DESCRIPTION = this.claimtype.DESCRIPTION;}
-
+    // if(this.claimtype_entry.NAME==null){this.claimtype_entry.NAME = this.claimtype.NAME;}
+    // if(this.claimtype_entry.DESCRIPTION==null){this.claimtype_entry.DESCRIPTION = this.claimtype.DESCRIPTION;}
+    if (this.Claimtypeform.valid) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_claim_type?filter=(NAME=" + this.claimtype_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
     if (this.Claimtypeform.valid) {
       this.claimtype_entry.TENANT_GUID = this.claimtype.TENANT_GUID
       this.claimtype_entry.CREATION_TS = this.claimtype.CREATION_TS;
@@ -152,4 +204,18 @@ export class ClaimtypePage {
         })
     }
   }
+}
+else {
+  console.log("Records Found");
+  alert("The Claimtype is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
 }

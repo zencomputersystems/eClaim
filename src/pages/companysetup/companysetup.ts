@@ -37,6 +37,8 @@ export class CompanysetupPage {
  
    public AddCompanyClicked: boolean = false; 
    public EditCompanyClicked: boolean = false;
+   Exist_Record: boolean = false;
+   public bank_details: any; public exist_record_details: any;
    
     public AddCompanyClick() {
 
@@ -106,14 +108,16 @@ export class CompanysetupPage {
 
   this.Companyform = fb.group({
 
-    NAME: ["", Validators.required],
+    NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
+    //NAME: ["", Validators.required],
     REGISTRATION_NO: ["", Validators.required],
     ADDRESS: ["", Validators.required],
-    FAX: ["", Validators.required],
-    PHONE: ["", Validators.required],
-    EMAIL: ["", Validators.required],
-    
-
+    FAX: [null, Validators.compose([Validators.pattern('^(?!(0))[0-9]*'), Validators.required])],
+    //FAX: ["", Validators.required],
+    PHONE: [null, Validators.compose([Validators.pattern('^(?!(0))[0-9]*'), Validators.required])],
+    //PHONE: ["", Validators.required],
+    EMAIL: [null, Validators.compose([Validators.pattern('\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b'), Validators.required])],
+    //EMAIL: ["", Validators.required],
     });
   }
 
@@ -123,6 +127,19 @@ export class CompanysetupPage {
 
   Save() {
     if (this.Companyform.valid) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_company?filter=(NAME=" + this.company_entry.NAME + ")AND(EMAIL=" + this.company_entry.EMAIL + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
       this.company_entry.COMPANY_GUID = UUID.UUID();
       //this.department_entry.NAME = UUID.UUID();
       //this.department_entry.COMPANY = new Date().toISOString();
@@ -139,14 +156,51 @@ export class CompanysetupPage {
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Company is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+getCompanyList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.companysetupservice.get_company(params)
+    .subscribe((companys: CompanySetup_Model[]) => {
+      self.companys = companys;
+    });
+}
 
   Update(COMPANY_GUID: any) {  
-    if(this.company_entry.NAME==null){this.company_entry.NAME = this.company_entry.NAME;}
-    if(this.company_entry.REGISTRATION_NO==null){this.company_entry.REGISTRATION_NO = this.company_entry.REGISTRATION_NO;}
-
+    // if(this.company_entry.NAME==null){this.company_entry.NAME = this.company_entry.NAME;}
+    // if(this.company_entry.REGISTRATION_NO==null){this.company_entry.REGISTRATION_NO = this.company_entry.REGISTRATION_NO;}
+    if (this.Companyform.valid) {
+      
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            let url: string;
+            url = "http://api.zen.com.my/api/v2/zcs/_table/main_company?filter=(NAME=" + this.company_entry.NAME + ")AND(EMAIL=" + this.company_entry.EMAIL + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+            this.http.get(url, options)
+              .map(res => res.json())
+              .subscribe(
+              data => {
+                let res = data["resource"];
+                if (res.length == 0) {
+                  console.log("No records Found");
+                  if (this.Exist_Record == false) {
     if (this.Companyform.valid) {
       this.company_entry.CREATION_TS = this.company.CREATION_TS
       this.company_entry.CREATION_USER_GUID = this.company.CREATION_USER_GUID;
@@ -167,4 +221,18 @@ export class CompanysetupPage {
     }
   }
 
+}
+else {
+  console.log("Records Found");
+  alert("The Company is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
 }

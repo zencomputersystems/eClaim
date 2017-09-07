@@ -36,6 +36,9 @@ export class DesignationsetupPage {
 
   public designations: DesignationSetup_Model[] = [];
   public AddDesignationClicked: boolean = false; public EditDesignationClicked: boolean = false;
+  Exist_Record: boolean = false;
+  public designation_details: any; public exist_record_details: any;
+
 
   public AddDesignationClick() {
     this.AddDesignationClicked = true;
@@ -98,7 +101,9 @@ export class DesignationsetupPage {
 
 
     this.Designationform = fb.group({
-      NAME: ["", Validators.required],
+      NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])], 
+      //NAME: ["", Validators.required],
+      //DESCRIPTION: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
       DESCRIPTION: ["", Validators.required]
     });
   }
@@ -109,6 +114,19 @@ export class DesignationsetupPage {
 
   Save() {
     if (this.Designationform.valid) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_designation?filter=(NAME=" + this.designation_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
       this.designation_entry.DESIGNATION_GUID = UUID.UUID();
       this.designation_entry.CREATION_TS = new Date().toISOString();
       this.designation_entry.CREATION_USER_GUID = '1';
@@ -122,15 +140,52 @@ export class DesignationsetupPage {
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Designation is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+getBankList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.designationsetupservice.get_bank(params)
+    .subscribe((designations: DesignationSetup_Model[]) => {
+      self.designations = designations;
+    });
+}
+
 
   Update(DESIGNATION_GUID: any) { 
-    if(this.designation_entry.NAME==null){this.designation_entry.NAME = this.designation.NAME;}
-    if(this.designation_entry.DESCRIPTION==null){this.designation_entry.DESCRIPTION = this.designation.DESCRIPTION;}
-
+    // if(this.designation_entry.NAME==null){this.designation_entry.NAME = this.designation.NAME;}
+    // if(this.designation_entry.DESCRIPTION==null){this.designation_entry.DESCRIPTION = this.designation.DESCRIPTION;}
     if (this.Designationform.valid) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    let options = new RequestOptions({ headers: headers });
+    let url: string;
+    url = "http://api.zen.com.my/api/v2/zcs/_table/main_designation?filter=(NAME=" + this.designation_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+    this.http.get(url, options)
+      .map(res => res.json())
+      .subscribe(
+      data => {
+        let res = data["resource"];
+        if (res.length == 0) {
+          console.log("No records Found");
+          if (this.Exist_Record == false) {
+if (this.Designationform.valid) {
       this.designation_entry.CREATION_TS = this.designation.CREATION_TS;
       this.designation_entry.CREATION_USER_GUID = this.designation.CREATION_USER_GUID;
 
@@ -149,3 +204,18 @@ export class DesignationsetupPage {
     }
   }
 }
+else {
+  console.log("Records Found");
+  alert("The Designation is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
+}
+

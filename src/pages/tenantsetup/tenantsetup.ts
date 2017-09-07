@@ -39,7 +39,9 @@ export class TenantsetupPage {
 
    public AddTenantClicked: boolean = false;
    public EditTenantClicked: boolean = false; 
-   
+   Exist_Record: boolean = false;
+   public tenant_details: any; public exist_record_details: any;
+ 
     public AddTenantClick() {
 
         this.AddTenantClicked = true; 
@@ -110,13 +112,16 @@ export class TenantsetupPage {
 
     SITE_NAME: ["", Validators.required],
     REGISTRATION_NUM: ["", Validators.required],
-    ADDRESS1: ["", Validators.required],
-    EMAIL: ["", Validators.required],
-    CONTACT_NO: ["", Validators.required],
-    WEBSITE: ["", Validators.required],
-    CONTACT_PERSON: ["", Validators.required],
-    CONTACT_PERSON_CONTACT_NO: ["", Validators.required],
-    CONTACT_PERSON_EMAIL: ["", Validators.required],    
+    EMAIL: [null, Validators.compose([Validators.pattern('\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b'), Validators.required])],
+    //EMAIL: ["", Validators.required],
+    
+    // ADDRESS1: ["", Validators.required],
+    // EMAIL: ["", Validators.required],
+    // CONTACT_NO: ["", Validators.required],
+    // WEBSITE: ["", Validators.required],
+    // CONTACT_PERSON: ["", Validators.required],
+    // CONTACT_PERSON_CONTACT_NO: ["", Validators.required],
+    // CONTACT_PERSON_EMAIL: ["", Validators.required],    
 
     });
   }
@@ -126,6 +131,19 @@ export class TenantsetupPage {
   }
   Save() {
     if (this.Tenantform.valid) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/tenant_company_site?filter=(REGISTRATION_NUM=" + this.tenant_entry.REGISTRATION_NUM + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
       this.tenant_entry.TENANT_COMPANY_SITE_GUID = UUID.UUID();
       this.tenant_entry.TENANT_COMPANY_GUID = "298204b8-8c85-11e7-91cd-00155de7e742";
       this.tenant_entry.CREATION_TS = new Date().toISOString();
@@ -145,11 +163,48 @@ export class TenantsetupPage {
         })
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Tenant is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+getBankList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.tenantsetupservice.get_tenant(params)
+    .subscribe((tenants: TenantSetup_Model[]) => {
+      self.tenants = tenants;
+    });
+}
 
   Update(TENANT_COMPANY_SITE_GUID: any) {  
-    if(this.tenant_entry.SITE_NAME==null){this.tenant_entry.SITE_NAME = this.tenant_entry.SITE_NAME;}
-    if(this.tenant_entry.REGISTRATION_NUM==null){this.tenant_entry.REGISTRATION_NUM = this.tenant_entry.REGISTRATION_NUM;}
-
+    // if(this.tenant_entry.SITE_NAME==null){this.tenant_entry.SITE_NAME = this.tenant_entry.SITE_NAME;}
+    // if(this.tenant_entry.REGISTRATION_NUM==null){this.tenant_entry.REGISTRATION_NUM = this.tenant_entry.REGISTRATION_NUM;}
+    if (this.Tenantform.valid) {
+      
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            let url: string;
+            url = "http://api.zen.com.my/api/v2/zcs/_table/tenant_company_site?filter=(REGISTRATION_NUM=" + this.tenant_entry.REGISTRATION_NUM + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+            this.http.get(url, options)
+              .map(res => res.json())
+              .subscribe(
+              data => {
+                let res = data["resource"];
+                if (res.length == 0) {
+                  console.log("No records Found");
+                  if (this.Exist_Record == false) {
     if (this.Tenantform.valid) {
       this.tenant_entry.CREATION_TS = this.tenant.CREATION_TS;
       this.tenant_entry.CREATION_USER_GUID = this.tenant.CREATION_USER_GUID;
@@ -171,3 +226,17 @@ export class TenantsetupPage {
     }
   }
  }
+ else {
+  console.log("Records Found");
+  alert("The Tenant is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
+}

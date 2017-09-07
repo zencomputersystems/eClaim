@@ -31,6 +31,26 @@ export class QualificationSetup_Service {
         return Observable.throw(errMsg);
     }    
 
+    query(params?: URLSearchParams): Observable<QualificationSetup_Model[]> {
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        return this.httpService.http
+            .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
+            .map((response) => {
+                var result: any = response.json();
+                let branches: Array<QualificationSetup_Model> = [];
+
+                // result.resource.forEach((branch) => {
+                // 	branches.push(BranchSetup_Model.fromJson(branche));
+                // });  
+                return branches;
+
+            }).catch(this.handleError);
+    };
+
+
         save(qualificationsetup_main: QualificationSetup_Model): Observable<any> {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
@@ -54,6 +74,24 @@ export class QualificationSetup_Service {
                 return response;
             });
     }
+
+    get_qualification(params?: URLSearchParams): Observable<QualificationSetup_Model[]> {
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        return this.httpService.http
+            .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
+            .map((response) => {
+                var result: any = response.json();
+                let branches: Array<QualificationSetup_Model> = [];
+
+                // result.resource.forEach((branch) => {
+                //  	branches.push(BranchSetup_Model.fromJson(branch));
+                //  });
+                return branches;
+            }).catch(this.handleError);
+    };
 
         remove(id: string) {
         var queryHeaders = new Headers();

@@ -26,7 +26,7 @@
       BANK NAME
     </ion-list-header>
     <ion-item *ngFor="let bank of banks">
-      <!-- AMBANK -->{{bank.NAME}}
+      {{bank.NAME | uppercase}}
       <button ion-button item-end (click)="EditClick(bank.BANK_GUID)"><ion-icon name="md-create"></ion-icon></button>
       <button ion-button item-end (click)="DeleteClick(bank.BANK_GUID)"><ion-icon name="md-close"></ion-icon></button>
     </ion-item>

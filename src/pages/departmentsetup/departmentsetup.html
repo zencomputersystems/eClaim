@@ -33,9 +33,9 @@
       <ion-item *ngFor="let department of departments; let i=index">
         
         <ion-label item-start>{{i+1}}</ion-label>
-        <ion-label item-start class="textRight">{{department.NAME}}</ion-label>
-        <ion-label item-start class="textRight">{{department.COMPANY}}</ion-label>
-        <ion-label item-start class="textRight">{{department.DESCRIPTION}}</ion-label>
+        <ion-label item-start class="textRight">{{department.NAME | uppercase}}</ion-label>
+        <ion-label item-start class="textRight">{{department.COMPANY | uppercase}}</ion-label>
+        <ion-label item-start class="textRight">{{department.DESCRIPTION | uppercase}}</ion-label>
 
         <button ion-button item-end (click)="EditClick(department.DEPARTMENT_GUID)"><ion-icon name="md-create"></ion-icon></button>
         <button ion-button item-end (click)="DeleteClick(department.DEPARTMENT_GUID)"><ion-icon name="md-close"></ion-icon></button>

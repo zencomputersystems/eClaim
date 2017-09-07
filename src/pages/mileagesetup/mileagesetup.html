@@ -31,7 +31,7 @@
       </ion-item>
       <ion-item *ngFor="let mileage of mileages; let i=index">
           <ion-label item-start>{{i+1}}</ion-label>        
-        <ion-label item-start class="textRight">{{mileage.CATEGORY}}</ion-label>
+        <ion-label item-start class="textRight">{{mileage.CATEGORY | uppercase}}</ion-label>
         <ion-label item-start class="textRight">{{mileage.RATE_PER_UNIT}}</ion-label>
         <ion-label item-start class="textRight">{{mileage.RATE_DATE}}</ion-label>
               

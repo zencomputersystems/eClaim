@@ -35,6 +35,9 @@ export class SubsciptionsetupPage {
   public subscriptions: SubsciptionSetup_Model[] = []; 
   public AddSubscriptionClicked: boolean = false; 
   public EditSubscriptionClicked: boolean = false; 
+  Exist_Record: boolean = false;
+  public subscription_details: any; public exist_record_details: any;
+
   
    
     public AddSubscriptionClick() {
@@ -121,6 +124,20 @@ export class SubsciptionsetupPage {
 
   Save() {
     if (this.Subscriptionform.valid) {
+
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_subscription?filter=(PLAN_NAME=" + this.Subscription_entry.PLAN_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
       this.Subscription_entry.SUBSCRIPTION_GUID = UUID.UUID();
       this.Subscription_entry.CREATION_TS = new Date().toISOString();
       this.Subscription_entry.CREATION_USER_GUID = "1";
@@ -139,11 +156,48 @@ export class SubsciptionsetupPage {
         })
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Subscription is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+getBankList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.subscriptionsetupservice.get_subscription(params)
+    .subscribe((subscriptions: SubsciptionSetup_Model[]) => {
+      self.subscriptions = subscriptions;
+    });
+}
 
  Update(SUBSCRIPTION_GUID: any) {  
- if(this.Subscription_entry.PLAN_NAME==null){this.Subscription_entry.PLAN_NAME = this.Subscription_entry.PLAN_NAME;}
- if(this.Subscription_entry.DURATION==null){this.Subscription_entry.DURATION = this.Subscription_entry.DURATION;}
-
+//  if(this.Subscription_entry.PLAN_NAME==null){this.Subscription_entry.PLAN_NAME = this.Subscription_entry.PLAN_NAME;}
+//  if(this.Subscription_entry.DURATION==null){this.Subscription_entry.DURATION = this.Subscription_entry.DURATION;}
+if (this.Subscriptionform.valid) {
+  
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+        let url: string;
+        url = "http://api.zen.com.my/api/v2/zcs/_table/main_subscription?filter=(PLAN_NAME=" + this.Subscription_entry.PLAN_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+        this.http.get(url, options)
+          .map(res => res.json())
+          .subscribe(
+          data => {
+            let res = data["resource"];
+            if (res.length == 0) {
+              console.log("No records Found");
+              if (this.Exist_Record == false) {
     if (this.Subscriptionform.valid) {
       this.Subscription_entry.CREATION_TS = this.subscription.CREATION_TS
       this.Subscription_entry.CREATION_USER_GUID = this.subscription.CREATION_USER_GUID;
@@ -164,6 +218,20 @@ export class SubsciptionsetupPage {
     }
   }
 
+}
+else {
+  console.log("Records Found");
+  alert("The Subscription is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
 }
 
 

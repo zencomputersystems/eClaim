@@ -31,6 +31,27 @@ export class ClaimTypeSetup_Service {
         return Observable.throw(errMsg);
     }    
 
+    query (params?:URLSearchParams): Observable<ClaimTypeSetup_Model[]> 
+    {       
+        //let bank :any;
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');
+    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);    	
+		return this.httpService.http
+			.get(this.baseResourceUrl, { search: params, headers: queryHeaders})
+			.map((response) => {
+				var result: any = response.json();
+				let banks: Array<ClaimTypeSetup_Model> = [];
+				
+				// result.resource.forEach((bank) => {
+				// 	banks.push(BankSetup_Model.fromJson(bank));
+				// });  
+				return banks;
+				
+			}).catch(this.handleError);
+	};
+
     save(claim_type_main: ClaimTypeSetup_Model): Observable<any> {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
@@ -54,6 +75,26 @@ export class ClaimTypeSetup_Service {
                 return response;
             });
     }
+
+    get_claim (params?: URLSearchParams): Observable<ClaimTypeSetup_Model[]> 
+	{
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');		
+    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		return this.httpService.http
+			.get(this.baseResourceUrl, { search: params ,headers: queryHeaders})
+			.map((response) => 
+			{
+				var result: any = response.json();
+				let banks: Array<ClaimTypeSetup_Model> = [];
+				
+				// result.resource.forEach((bank) => {
+				//  	banks.push(BankSetup_Model.fromJson(bank));
+				//  });
+				return banks;
+			}).catch(this.handleError);
+	};
 
     remove(id: string) {
         var queryHeaders = new Headers();
@@ -82,4 +123,23 @@ export class ClaimTypeSetup_Service {
                 return claimtype;
             }).catch(this.handleError);
     };
+    GetExistingRecord (bank_name:string, params?: URLSearchParams): Observable<ClaimTypeSetup_Model> {		
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');
+		
+		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+		//queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		
+		let options = new RequestOptions({ headers: queryHeaders });
+		let url:string;
+		url = "http://api.zen.com.my/api/v2/zcs/_table/main_claim_type?filter=(NAME=" + bank_name + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+		
+		return this.httpService.http
+			.get(url, options)
+			.map((response) => {
+				var result: any = response.json();				
+				let bank: ClaimTypeSetup_Model = ClaimTypeSetup_Model.fromJson(result);alert("In GetExist"+JSON.stringify(result));
+				return bank; 
+			}).catch(this.handleError);	
+	};
 }

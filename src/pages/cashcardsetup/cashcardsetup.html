@@ -76,6 +76,7 @@
             <ion-label class="textRight" item-end>PASSWORD</ion-label>
             <ion-label class="textRight" item-end>MANAGEMENT URL</ion-label>
             <ion-label class="textRight" item-end>DESCRIPTION</ion-label>
+            <ion-label class="textRight" item-end>ACTION</ion-label>
         </ion-item>
 
         <ion-item *ngFor="let cashcard of cashcards; let i=index">
@@ -173,15 +174,18 @@
         </button>
             </ion-card-header>
             <ion-list>
+                    
                 <form [formGroup]="Cashform">
                     <ion-item>
                         <ion-label stacked>{{"CASHCARD NO."}}</ion-label>
-                        <ion-input type="text" formControlName="CASHCARD_SNO" [(ngModel)]="cashcard_entry.CASHCARD_SNO" placeholder="{{'Please fill in the cash card no.'}}"></ion-input>
+                        <ion-input type="number" formControlName="CASHCARD_SNO" [(ngModel)]="cashcard_entry.CASHCARD_SNO" placeholder="{{'Please fill in the cash card no.'}}"></ion-input>
+                    
                     </ion-item>
 
+    
                     <ion-item>
                         <ion-label stacked>{{"ACCOUNT NO."}}</ion-label>
-                        <ion-input type="text" formControlName="ACCOUNT_ID" [(ngModel)]="cashcard_entry.ACCOUNT_ID" placeholder="{{'Please fill in the account no.'}}"></ion-input>
+                        <ion-input type="number" formControlName="ACCOUNT_ID" [(ngModel)]="cashcard_entry.ACCOUNT_ID" placeholder="{{'Please fill in the account no.'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
@@ -203,6 +207,7 @@
                     <div class="btn">
                         <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Cashform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
                 </form>
+            
             </ion-list>
         </ion-card>
 

@@ -38,6 +38,8 @@ export class QualificationsetupPage {
   public qualificationsetups: QualificationSetup_Model[] = [];
 
   public AddQualifyClicked: boolean = false; public EditQualifyClicked: boolean = false;
+  Exist_Record: boolean = false;
+  public qualification_details: any; public exist_record_details: any;
 
 
 
@@ -88,8 +90,6 @@ export class QualificationsetupPage {
     }); alert.present();
   }
 
-
-
       public CloseQualifyClick() {
 
  if (this.AddQualifyClicked == true) {
@@ -121,6 +121,20 @@ this.Qualifyform = fb.group({
 
   Save() {
     if (this.Qualifyform.valid) {
+
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_qualification_type?filter=(TYPE_NAME=" + this.Qualify_entry.TYPE_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
       this.Qualify_entry.QUALIFICATION_TYPE_GUID = UUID.UUID();
       this.Qualify_entry.TENANT_GUID = UUID.UUID();
       this.Qualify_entry.CREATION_TS = new Date().toISOString();
@@ -135,14 +149,49 @@ this.Qualifyform = fb.group({
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
+  else {
+    console.log("Records Found");
+    alert("The Qualification is already Added.")
+    
+  } 
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
+getBankList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.qualificationsetupservice.get_qualification(params)
+    .subscribe((qualificationsetups: QualificationSetup_Model[]) => {
+      self.qualificationsetups = qualificationsetups;
+    });
+}
 
       Update(QUALIFICATION_TYPE_GUID: any) {    
-    if(this.Qualify_entry.TYPE_NAME==null){this.Qualify_entry.TYPE_NAME = this.qualificationsetup.TYPE_NAME;}
-    if(this.Qualify_entry.TYPE_DESC==null){this.Qualify_entry.TYPE_DESC = this.qualificationsetup.TYPE_DESC;}
-
+    // if(this.Qualify_entry.TYPE_NAME==null){this.Qualify_entry.TYPE_NAME = this.qualificationsetup.TYPE_NAME;}
+    // if(this.Qualify_entry.TYPE_DESC==null){this.Qualify_entry.TYPE_DESC = this.qualificationsetup.TYPE_DESC;}
+    if (this.Qualifyform.valid) {
+      
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            let url: string;
+            url = "http://api.zen.com.my/api/v2/zcs/_table/main_qualification_type?filter=(TYPE_NAME=" + this.Qualify_entry.TYPE_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+            this.http.get(url, options)
+              .map(res => res.json())
+              .subscribe(
+              data => {
+                let res = data["resource"];
+                if (res.length == 0) {
+                  console.log("No records Found");
+                  if (this.Exist_Record == false) {
     if (this.Qualifyform.valid) {
       this.Qualify_entry.TENANT_GUID = this.qualificationsetup.TENANT_GUID
       this.Qualify_entry.CREATION_TS = this.qualificationsetup.CREATION_TS;
@@ -164,3 +213,18 @@ this.Qualifyform = fb.group({
   }
 
 }
+else {
+  console.log("Records Found");
+  alert("The Qualification is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
+}
+

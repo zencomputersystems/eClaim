@@ -100,7 +100,8 @@ export class BranchsetupPage {
       });
 
     this.Branchform = fb.group({
-      NAME: ["", Validators.required]
+      NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
+      //NAME: ["", Validators.required]
     });
   }
 
@@ -110,6 +111,20 @@ export class BranchsetupPage {
 
   Save() {
     if (this.Branchform.valid) {
+      
+            let headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            let url: string;
+            url = "http://api.zen.com.my/api/v2/zcs/_table/main_branch?filter=(NAME=" + this.branch_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+            this.http.get(url, options)
+              .map(res => res.json())
+              .subscribe(
+              data => {
+                let res = data["resource"];
+                if (res.length == 0) {
+                  console.log("No records Found");
+    if (this.Exist_Record == false) {
       this.branch_entry.BRANCH_GUID = UUID.UUID();
       this.branch_entry.CREATION_TS = new Date().toISOString();
       this.branch_entry.CREATION_USER_GUID = '1';
@@ -127,8 +142,46 @@ export class BranchsetupPage {
     }
   }
 
+  else {
+    console.log("Records Found");
+    alert("The Branch is already Added.")
+    
+  }
+  
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+
+}
+}
+getBranchList() {
+  let self = this;
+  let params: URLSearchParams = new URLSearchParams();
+  self.branchsetupservice.get_branch(params)
+    .subscribe((branchs: BranchSetup_Model[]) => {
+      self.branchs = branchs;
+    });
+}
+
   Update(BRANCH_GUID: any) {
     if (this.Branchform.valid) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      let options = new RequestOptions({ headers: headers });
+      let url: string;
+      url = "http://api.zen.com.my/api/v2/zcs/_table/main_branch?filter=(NAME=" + this.branch_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+        data => {
+          let res = data["resource"];
+          if (res.length == 0) {
+            console.log("No records Found");
+            if (this.Exist_Record == false) {
+              if (this.Branchform.valid) {
       this.branch_entry.CREATION_TS = this.branch.CREATION_TS;
       this.branch_entry.CREATION_USER_GUID = this.branch.CREATION_USER_GUID;
 
@@ -146,4 +199,18 @@ export class BranchsetupPage {
         })
     }
   }
+}
+else {
+  console.log("Records Found");
+  alert("The Branch is already Added.")
+  
+}
+},
+err => {
+  this.Exist_Record = false;
+  console.log("ERROR!: ", err);
+}
+);
+}
+}
 }

@@ -30,8 +30,8 @@
 
          <ion-item *ngFor="let qualificationsetup of qualificationsetups; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_NAME}}</ion-label>
-            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_DESC}}</ion-label>
+            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_NAME | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_DESC | uppercase}}</ion-label>
             <button ion-button item-end (click)="EditClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
             <button ion-button item-end (click)="DeleteClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
         </ion-item>
@@ -101,7 +101,7 @@
     <ion-card>
       <ion-card-header class="icTitle headerColor-white ">
         <div class="icHeaderText">UPDATE NEW QUALIFICATION TYPE</div>
-        <button class="btnR" (click)="CloseQualificationSetupClick()">
+        <button class="btnR" (click)="CloseQualifyClick()">
           <ion-icon name="md-close"></ion-icon> 
         </button>
       </ion-card-header>

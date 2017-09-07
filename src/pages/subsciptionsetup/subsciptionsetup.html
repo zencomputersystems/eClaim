@@ -33,11 +33,11 @@
 
       <ion-item *ngFor="let subscription of subscriptions; let i=index">
           <ion-label item-start>{{i+1}}</ion-label>
-        <ion-label item-start class="textRight">{{subscription.PLAN_NAME}}</ion-label>
-        <ion-label item-start class="textRight">{{subscription.DURATION}}</ion-label>
+        <ion-label item-start class="textRight">{{subscription.PLAN_NAME | uppercase}}</ion-label>
+        <ion-label item-start class="textRight">{{subscription.DURATION | uppercase}}</ion-label>
         <ion-label item-start class="textRight">{{subscription.RATE}}</ion-label>
         <ion-label item-start class="textRight">{{subscription.EFFECTIVE_DATE}}</ion-label>
-        <ion-label item-start class="textRight">{{subscription.DESCRIPTION}}</ion-label>
+        <ion-label item-start class="textRight">{{subscription.DESCRIPTION | uppercase}}</ion-label>
         <ion-toggle *ngIf="subscription.ACTIVE_FLAG==1" checked = true></ion-toggle> 
         <ion-toggle *ngIf="subscription.ACTIVE_FLAG==0" checked = false></ion-toggle> 
         <!-- <ion-label item-start class="textRight">{{subscription.ACTIVE_FLAG}}</ion-label> -->
