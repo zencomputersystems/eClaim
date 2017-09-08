@@ -226,7 +226,7 @@
 
 
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Companyform.valid" (click)="Update(company.COMPANY_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="Companyform.valid" (click)="Update(company.COMPANY_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
      </ion-list>
       </ion-card>

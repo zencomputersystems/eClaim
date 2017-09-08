@@ -97,7 +97,7 @@ export class CompanysetupPage {
     }
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb:FormBuilder, public http: Http, private httpService: BaseHttpService, private companysetupservice: CompanySetup_Service, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private httpService: BaseHttpService, private companysetupservice: CompanySetup_Service, private alertCtrl: AlertController) {
 
     this.http
     .get(this.baseResourceUrl)
@@ -184,25 +184,29 @@ getCompanyList() {
 }
 
   Update(COMPANY_GUID: any) {  
-    // if(this.company_entry.NAME==null){this.company_entry.NAME = this.company_entry.NAME;}
-    // if(this.company_entry.REGISTRATION_NO==null){this.company_entry.REGISTRATION_NO = this.company_entry.REGISTRATION_NO;}
-    if (this.Companyform.valid) {
+    if(this.company_entry.NAME==null){this.company_entry.NAME = this.company.NAME;}
+    if(this.company_entry.REGISTRATION_NO==null){this.company_entry.REGISTRATION_NO = this.company.REGISTRATION_NO;}
+    if(this.company_entry.ADDRESS==null){this.company_entry.ADDRESS = this.company.ADDRESS;}
+    if(this.company_entry.FAX==null){this.company_entry.FAX = this.company.FAX;}
+    if(this.company_entry.PHONE==null){this.company_entry.PHONE = this.company.PHONE;}
+    if(this.company_entry.EMAIL==null){this.company_entry.EMAIL = this.company.EMAIL;}
+    // if (this.Companyform.valid) {
       
-            let headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            let options = new RequestOptions({ headers: headers });
-            let url: string;
-            url = "http://api.zen.com.my/api/v2/zcs/_table/main_company?filter=(NAME=" + this.company_entry.NAME + ")AND(EMAIL=" + this.company_entry.EMAIL + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-            this.http.get(url, options)
-              .map(res => res.json())
-              .subscribe(
-              data => {
-                let res = data["resource"];
-                if (res.length == 0) {
-                  console.log("No records Found");
-                  if (this.Exist_Record == false) {
-    if (this.Companyform.valid) {
-      this.company_entry.CREATION_TS = this.company.CREATION_TS
+    //         let headers = new Headers();
+    //         headers.append('Content-Type', 'application/json');
+    //         let options = new RequestOptions({ headers: headers });
+    //         let url: string;
+    //         url = "http://api.zen.com.my/api/v2/zcs/_table/main_company?filter=(NAME=" + this.company_entry.NAME + ")AND(EMAIL=" + this.company_entry.EMAIL + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+    //         this.http.get(url, options)
+    //           .map(res => res.json())
+    //           .subscribe(
+    //           data => {
+    //             let res = data["resource"];
+    //             if (res.length == 0) {
+    //               console.log("No records Found");
+    //               if (this.Exist_Record == false) {
+    // if (this.Companyform.valid) {
+      this.company_entry.CREATION_TS = this.company.CREATION_TS;
       this.company_entry.CREATION_USER_GUID = this.company.CREATION_USER_GUID;
       this.company_entry.UPDATE_TS = this.company.UPDATE_TS;
 
@@ -221,18 +225,18 @@ getCompanyList() {
     }
   }
 
-}
-else {
-  console.log("Records Found");
-  alert("The Company is already Added.")
+//}
+// else {
+//   console.log("Records Found");
+//   alert("The Company is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }
