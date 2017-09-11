@@ -122,7 +122,7 @@
             <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="claimtype_entry.DESCRIPTION" value="{{claimtype.DESCRIPTION}}" placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Claimtypeform.valid" (click)="Update(claimtype.CLAIM_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(claimtype.CLAIM_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

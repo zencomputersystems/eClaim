@@ -117,7 +117,7 @@
             <ion-input type="text" formControlName="TYPE_DESC" [(ngModel)]="Qualify_entry.TYPE_DESC" value="{{qualificationsetup.TYPE_DESC}}" placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Qualifyform.valid" (click)="Update(qualificationsetup.QUALIFICATION_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(qualificationsetup.QUALIFICATION_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

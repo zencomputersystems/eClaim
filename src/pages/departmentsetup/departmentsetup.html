@@ -56,7 +56,7 @@
   </div>
   <div class="popup" padding *ngIf="AddDepartmentClicked">
 
-    <ion-card>
+    <ion-card class="cm">
       <ion-card-header class="icTitle headerColor-white ">
 
         <div class="icHeaderText">REGISTER NEW DEPARTMENT</div>
@@ -93,7 +93,7 @@
    <div class="blackcontainer" *ngIf="EditDepartmentClicked">
   </div>
   <div class="popup" padding *ngIf="EditDepartmentClicked">
-    <ion-card>
+    <ion-card class="cm">
       <ion-card-header class="icTitle headerColor-white ">
         <div class="icHeaderText">UPDATE DEPARTMENT</div>
         <button class="btnR" (click)="CloseDepartmentClick()">
@@ -120,7 +120,7 @@
             <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="department_entry.DESCRIPTION" value="{{department.DESCRIPTION}}" placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Departmentform.valid" (click)="Update(department.DEPARTMENT_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(department.DEPARTMENT_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

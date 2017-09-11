@@ -169,23 +169,23 @@ getBankList() {
 
 
   Update(DESIGNATION_GUID: any) { 
-    // if(this.designation_entry.NAME==null){this.designation_entry.NAME = this.designation.NAME;}
-    // if(this.designation_entry.DESCRIPTION==null){this.designation_entry.DESCRIPTION = this.designation.DESCRIPTION;}
-    if (this.Designationform.valid) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let options = new RequestOptions({ headers: headers });
-    let url: string;
-    url = "http://api.zen.com.my/api/v2/zcs/_table/main_designation?filter=(NAME=" + this.designation_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-    this.http.get(url, options)
-      .map(res => res.json())
-      .subscribe(
-      data => {
-        let res = data["resource"];
-        if (res.length == 0) {
-          console.log("No records Found");
-          if (this.Exist_Record == false) {
-if (this.Designationform.valid) {
+    if(this.designation_entry.NAME==null){this.designation_entry.NAME = this.designation.NAME;}
+    if(this.designation_entry.DESCRIPTION==null){this.designation_entry.DESCRIPTION = this.designation.DESCRIPTION;}
+//     if (this.Designationform.valid) {
+//     let headers = new Headers();
+//     headers.append('Content-Type', 'application/json');
+//     let options = new RequestOptions({ headers: headers });
+//     let url: string;
+//     url = "http://api.zen.com.my/api/v2/zcs/_table/main_designation?filter=(NAME=" + this.designation_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+//     this.http.get(url, options)
+//       .map(res => res.json())
+//       .subscribe(
+//       data => {
+//         let res = data["resource"];
+//         if (res.length == 0) {
+//           console.log("No records Found");
+//           if (this.Exist_Record == false) {
+// if (this.Designationform.valid) {
       this.designation_entry.CREATION_TS = this.designation.CREATION_TS;
       this.designation_entry.CREATION_USER_GUID = this.designation.CREATION_USER_GUID;
 
@@ -203,19 +203,19 @@ if (this.Designationform.valid) {
         })
     }
   }
-}
-else {
-  console.log("Records Found");
-  alert("The Designation is already Added.")
+//}
+// else {
+//   console.log("Records Found");
+//   alert("The Designation is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }
 

@@ -126,7 +126,7 @@ export class DepartmentsetupPage {
       url = "http://api.zen.com.my/api/v2/zcs/_table/main_department?filter=(NAME=" + this.department_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
       this.http.get(url, options)
         .map(res => res.json())
-        .subscribe(
+        .subscribe( 
         data => {
           let res = data["resource"];
           if (res.length == 0) {
@@ -174,27 +174,29 @@ getBankList() {
       self.departments = departments;
     });
 }
-Update(DEPARTMENT_GUID: any) {  
-  if (this.Departmentform.valid) {
+Update(DEPARTMENT_GUID: any) {
+  if(this.department_entry.NAME==null){this.department_entry.NAME = this.department.NAME;}
+  if(this.department_entry.COMPANY==null){this.department_entry.COMPANY = this.department.COMPANY;}
+  if(this.department_entry.DESCRIPTION==null){this.department_entry.DESCRIPTION = this.department.DESCRIPTION;}
+  
+  // if (this.Departmentform.valid) {
     
-          let headers = new Headers();
-          headers.append('Content-Type', 'application/json');
-          let options = new RequestOptions({ headers: headers });
-          let url: string;
-          url = "http://api.zen.com.my/api/v2/zcs/_table/main_department?filter=(NAME=" + this.department_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-          this.http.get(url, options)
-            .map(res => res.json())
-            .subscribe(
-            data => {
-              let res = data["resource"];
-              if (res.length == 0) {
-                console.log("No records Found");
-                if (this.Exist_Record == false) {
-    // if(this.department_entry.NAME==null){this.department_entry.NAME = this.department_entry.NAME;}
-    // if(this.department_entry.DESCRIPTION==null){this.department_entry.DESCRIPTION = this.department_entry.DESCRIPTION;}
-
-    if (this.Departmentform.valid) {
-      this.department_entry.CREATION_TS = this.department.CREATION_TS
+  //         let headers = new Headers();
+  //         headers.append('Content-Type', 'application/json');
+  //         let options = new RequestOptions({ headers: headers });
+  //         let url: string;
+  //         url = "http://api.zen.com.my/api/v2/zcs/_table/main_department?filter=(NAME=" + this.department_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+  //         this.http.get(url, options)
+  //           .map(res => res.json())
+  //           .subscribe(
+  //           data => {
+  //             let res = data["resource"];
+  //             if (res.length == 0) {
+  //               console.log("No records Found");
+  //               if (this.Exist_Record == false) {
+    
+  //   if (this.Departmentform.valid) {
+      this.department_entry.CREATION_TS = this.department.CREATION_TS;
       this.department_entry.CREATION_USER_GUID = this.department.CREATION_USER_GUID;
       this.department_entry.UPDATE_TS = this.department.UPDATE_TS;
 
@@ -212,18 +214,18 @@ Update(DEPARTMENT_GUID: any) {
         })
     }
   }
-}
-else {
-  console.log("Records Found");
-  alert("The Department is already Added.")
+//}
+// else {
+//   console.log("Records Found");
+//   alert("The Department is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }

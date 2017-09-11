@@ -178,23 +178,23 @@ getBankList() {
 
 
     Update(PAYMENT_TYPE_GUID: any) {    
-    // if(this.Paymenttype_entry.NAME==null){this.Paymenttype_entry.NAME = this.paymenttype.NAME;}
-    // if(this.Paymenttype_entry.DESCRIPTION==null){this.Paymenttype_entry.DESCRIPTION = this.paymenttype.DESCRIPTION;}
-    if (this.Paymenttypeform.valid) {
+    if(this.Paymenttype_entry.NAME==null){this.Paymenttype_entry.NAME = this.paymenttype.NAME;}
+    if(this.Paymenttype_entry.DESCRIPTION==null){this.Paymenttype_entry.DESCRIPTION = this.paymenttype.DESCRIPTION;}
+    // if (this.Paymenttypeform.valid) {
       
-            let headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            let options = new RequestOptions({ headers: headers });
-            let url: string;
-            url = "http://api.zen.com.my/api/v2/zcs/_table/main_payment_type?filter=(NAME=" + this.Paymenttype_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-            this.http.get(url, options)
-              .map(res => res.json())
-              .subscribe(
-              data => {
-                let res = data["resource"];
-                if (res.length == 0) {
-                  console.log("No records Found");
-                  if (this.Exist_Record == false) {
+    //         let headers = new Headers();
+    //         headers.append('Content-Type', 'application/json');
+    //         let options = new RequestOptions({ headers: headers });
+    //         let url: string;
+    //         url = "http://api.zen.com.my/api/v2/zcs/_table/main_payment_type?filter=(NAME=" + this.Paymenttype_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+    //         this.http.get(url, options)
+    //           .map(res => res.json())
+    //           .subscribe(
+    //           data => {
+    //             let res = data["resource"];
+    //             if (res.length == 0) {
+    //               console.log("No records Found");
+    //               if (this.Exist_Record == false) {
     if (this.Paymenttypeform.valid) {
       this.Paymenttype_entry.TENANT_GUID = this.paymenttype.TENANT_GUID;
       this.Paymenttype_entry.CREATION_TS = this.paymenttype.CREATION_TS;
@@ -215,17 +215,17 @@ getBankList() {
     }
   }
 }
-  else {
-    console.log("Records Found");
-    alert("The Paymenttype is already Added.")
-  }
+//   else {
+//     console.log("Records Found");
+//     alert("The Paymenttype is already Added.")
+//   }
 
-},
-  err => {
-    this.Exist_Record = false;
-    console.log("ERROR!: ", err);
-  }
-  );
-}
-}
-}
+// },
+//   err => {
+//     this.Exist_Record = false;
+//     console.log("ERROR!: ", err);
+//   }
+//   );
+// }
+// }
+// }

@@ -175,23 +175,23 @@ getBankList() {
 }
 
       Update(QUALIFICATION_TYPE_GUID: any) {    
-    // if(this.Qualify_entry.TYPE_NAME==null){this.Qualify_entry.TYPE_NAME = this.qualificationsetup.TYPE_NAME;}
-    // if(this.Qualify_entry.TYPE_DESC==null){this.Qualify_entry.TYPE_DESC = this.qualificationsetup.TYPE_DESC;}
-    if (this.Qualifyform.valid) {
+     if(this.Qualify_entry.TYPE_NAME==null){this.Qualify_entry.TYPE_NAME = this.qualificationsetup.TYPE_NAME;}
+     if(this.Qualify_entry.TYPE_DESC==null){this.Qualify_entry.TYPE_DESC = this.qualificationsetup.TYPE_DESC;}
+    // if (this.Qualifyform.valid) {
       
-            let headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            let options = new RequestOptions({ headers: headers });
-            let url: string;
-            url = "http://api.zen.com.my/api/v2/zcs/_table/main_qualification_type?filter=(TYPE_NAME=" + this.Qualify_entry.TYPE_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-            this.http.get(url, options)
-              .map(res => res.json())
-              .subscribe(
-              data => {
-                let res = data["resource"];
-                if (res.length == 0) {
-                  console.log("No records Found");
-                  if (this.Exist_Record == false) {
+    //         let headers = new Headers();
+    //         headers.append('Content-Type', 'application/json');
+    //         let options = new RequestOptions({ headers: headers });
+    //         let url: string;
+    //         url = "http://api.zen.com.my/api/v2/zcs/_table/main_qualification_type?filter=(TYPE_NAME=" + this.Qualify_entry.TYPE_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+    //         this.http.get(url, options)
+    //           .map(res => res.json())
+    //           .subscribe(
+    //           data => {
+    //             let res = data["resource"];
+    //             if (res.length == 0) {
+    //               console.log("No records Found");
+    //               if (this.Exist_Record == false) {
     if (this.Qualifyform.valid) {
       this.Qualify_entry.TENANT_GUID = this.qualificationsetup.TENANT_GUID
       this.Qualify_entry.CREATION_TS = this.qualificationsetup.CREATION_TS;
@@ -213,18 +213,18 @@ getBankList() {
   }
 
 }
-else {
-  console.log("Records Found");
-  alert("The Qualification is already Added.")
+// else {
+//   console.log("Records Found");
+//   alert("The Qualification is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }
 

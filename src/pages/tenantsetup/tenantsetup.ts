@@ -188,24 +188,25 @@ getBankList() {
 }
 
   Update(TENANT_COMPANY_SITE_GUID: any) {  
-    // if(this.tenant_entry.SITE_NAME==null){this.tenant_entry.SITE_NAME = this.tenant_entry.SITE_NAME;}
-    // if(this.tenant_entry.REGISTRATION_NUM==null){this.tenant_entry.REGISTRATION_NUM = this.tenant_entry.REGISTRATION_NUM;}
-    if (this.Tenantform.valid) {
+     if(this.tenant_entry.SITE_NAME==null){this.tenant_entry.SITE_NAME = this.tenant.SITE_NAME;}
+     if(this.tenant_entry.REGISTRATION_NUM==null){this.tenant_entry.REGISTRATION_NUM = this.tenant.REGISTRATION_NUM;}
+     if(this.tenant_entry.EMAIL==null){this.tenant_entry.EMAIL = this.tenant.EMAIL;}
+    // if (this.Tenantform.valid) {
       
-            let headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            let options = new RequestOptions({ headers: headers });
-            let url: string;
-            url = "http://api.zen.com.my/api/v2/zcs/_table/tenant_company_site?filter=(REGISTRATION_NUM=" + this.tenant_entry.REGISTRATION_NUM + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-            this.http.get(url, options)
-              .map(res => res.json())
-              .subscribe(
-              data => {
-                let res = data["resource"];
-                if (res.length == 0) {
-                  console.log("No records Found");
-                  if (this.Exist_Record == false) {
-    if (this.Tenantform.valid) {
+    //         let headers = new Headers();
+    //         headers.append('Content-Type', 'application/json');
+    //         let options = new RequestOptions({ headers: headers });
+    //         let url: string;
+    //         url = "http://api.zen.com.my/api/v2/zcs/_table/tenant_company_site?filter=(REGISTRATION_NUM=" + this.tenant_entry.REGISTRATION_NUM + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+    //         this.http.get(url, options)
+    //           .map(res => res.json())
+    //           .subscribe(
+    //           data => {
+    //             let res = data["resource"];
+    //             if (res.length == 0) {
+    //               console.log("No records Found");
+    //               if (this.Exist_Record == false) {
+    // if (this.Tenantform.valid) {
       this.tenant_entry.CREATION_TS = this.tenant.CREATION_TS;
       this.tenant_entry.CREATION_USER_GUID = this.tenant.CREATION_USER_GUID;
       this.tenant_entry.UPDATE_TS = this.tenant.UPDATE_TS;
@@ -225,18 +226,18 @@ getBankList() {
         })
     }
   }
- }
- else {
-  console.log("Records Found");
-  alert("The Tenant is already Added.")
+ //}
+//  else {
+//   console.log("Records Found");
+//   alert("The Tenant is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }

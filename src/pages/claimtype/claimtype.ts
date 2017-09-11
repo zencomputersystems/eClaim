@@ -103,7 +103,7 @@ export class ClaimtypePage {
       NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
       //DESCRIPTION: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z ]+'), Validators.required])],
       //NAME: ["", Validators.required],
-      DESCRIPTION: ["", Validators.required]
+      DESCRIPTION: ["", Validators.required],
     });
   }
 
@@ -169,24 +169,24 @@ getClaimtypeList() {
 }
 
   Update(CLAIM_TYPE_GUID: any) {    
-    // if(this.claimtype_entry.NAME==null){this.claimtype_entry.NAME = this.claimtype.NAME;}
-    // if(this.claimtype_entry.DESCRIPTION==null){this.claimtype_entry.DESCRIPTION = this.claimtype.DESCRIPTION;}
-    if (this.Claimtypeform.valid) {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      let options = new RequestOptions({ headers: headers });
-      let url: string;
-      url = "http://api.zen.com.my/api/v2/zcs/_table/main_claim_type?filter=(NAME=" + this.claimtype_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-      this.http.get(url, options)
-        .map(res => res.json())
-        .subscribe(
-        data => {
-          let res = data["resource"];
-          if (res.length == 0) {
-            console.log("No records Found");
-            if (this.Exist_Record == false) {
-    if (this.Claimtypeform.valid) {
-      this.claimtype_entry.TENANT_GUID = this.claimtype.TENANT_GUID
+     if(this.claimtype_entry.NAME==null){this.claimtype_entry.NAME = this.claimtype.NAME;}
+     if(this.claimtype_entry.DESCRIPTION==null){this.claimtype_entry.DESCRIPTION = this.claimtype.DESCRIPTION;}
+    // if (this.Claimtypeform.valid) {
+    //   let headers = new Headers();
+    //   headers.append('Content-Type', 'application/json');
+    //   let options = new RequestOptions({ headers: headers });
+    //   let url: string;
+    //   url = "http://api.zen.com.my/api/v2/zcs/_table/main_claim_type?filter=(NAME=" + this.claimtype_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+    //   this.http.get(url, options)
+    //     .map(res => res.json())
+    //     .subscribe(
+    //     data => {
+    //       let res = data["resource"];
+    //       if (res.length == 0) {
+    //         console.log("No records Found");
+    //         if (this.Exist_Record == false) {
+    // if (this.Claimtypeform.valid) {
+      this.claimtype_entry.TENANT_GUID = this.claimtype.TENANT_GUID;
       this.claimtype_entry.CREATION_TS = this.claimtype.CREATION_TS;
       this.claimtype_entry.CREATION_USER_GUID = this.claimtype.CREATION_USER_GUID;
 
@@ -199,23 +199,23 @@ getClaimtypeList() {
           if (response.status == 200) {
             alert('Claim Type updated successfully');
             //location.reload();
-            this.navCtrl.setRoot(this.navCtrl.getActive().component);
+            this.navCtrl.setRoot(this.navCtrl.getActive().component); 
           }
         })
     }
   }
-}
-else {
-  console.log("Records Found");
-  alert("The Claimtype is already Added.")
+//}
+// else {
+//   console.log("Records Found");
+//   alert("The Claimtype is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }
