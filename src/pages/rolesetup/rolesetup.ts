@@ -27,7 +27,7 @@ import { UUID } from 'angular2-uuid';
 })
 export class RolesetupPage {
   role_entry: RoleSetup_Model = new RoleSetup_Model();
-  role: RoleSetup_Model = new RoleSetup_Model();
+  //role: RoleSetup_Model = new RoleSetup_Model();
   Roleform: FormGroup;
 
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_role' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -35,25 +35,48 @@ export class RolesetupPage {
 
 public roles: RoleSetup_Model[] = [];
 
-public AddRoleClicked: boolean = false; 
-   public EditRoleClicked: boolean = false;
-   Exist_Record: boolean = false;
-   public role_details: any; public exist_record_details: any;
-  
+public AddRoleClicked: boolean = false;
+public EditRoleClicked: boolean = false;
+public Exist_Record: boolean = false;
 
+public role_details:           any; 
+public exist_record_details:      any;  
+
+//Set the Model Name for Add------------------------------------------
+public NAME_ngModel_Add:                    any;
+public DESCRIPTION_ngModel_Add:    any;
+public ACTIVATION_FLAG_ngModel_Add:         any;  
+//---------------------------------------------------------------------
+
+//Set the Model Name for edit------------------------------------------
+public NAME_ngModel_Edit:            any;
+public DESCRIPTION_ngModel_Edit:     any;
+public ACTIVATION_FLAG_ngModel_Edit: any;  
+//---------------------------------------------------------------------
     public AddRoleClick() { 
-
-        this.AddRoleClicked = true; 
+         this.AddRoleClicked = true; 
+         this.ACTIVATION_FLAG_ngModel_Add=false;
     }
+
       public EditClick(ROLE_GUID: any) {
-    alert(ROLE_GUID);
     this.EditRoleClicked = true;
     var self = this;
     this.rolesetupservice
       .get(ROLE_GUID)
-      .subscribe((role) => self.role = role);
-    return self.role;
-  }
+      .subscribe((data) => 
+      {
+        self.role_details = data;
+
+        this.NAME_ngModel_Edit = self.role_details.NAME;
+        this.DESCRIPTION_ngModel_Edit = self.role_details.DESCRIPTION;
+        if(self.role_details.ACTIVATION_FLAG == "1"){
+          this.ACTIVATION_FLAG_ngModel_Edit = true;
+        }
+        else{
+          this.ACTIVATION_FLAG_ngModel_Edit = false;
+        }                
+      });
+   }
 
   public DeleteClick(ROLE_GUID: any) {
     let alert = this.alertCtrl.create({
@@ -123,7 +146,7 @@ public AddRoleClicked: boolean = false;
       headers.append('Content-Type', 'application/json');
       let options = new RequestOptions({ headers: headers });
       let url: string;
-      url = "http://api.zen.com.my/api/v2/zcs/_table/main_role?filter=(NAME=" + this.role_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      url = this.baseResource_Url+ "main_role?filter=(NAME=" + this.NAME_ngModel_Add + ')&api_key=' + constants.DREAMFACTORY_API_KEY;      
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
@@ -132,6 +155,10 @@ public AddRoleClicked: boolean = false;
           if (res.length == 0) {
             console.log("No records Found");
             if (this.Exist_Record == false) {
+              this.role_entry.NAME = this.NAME_ngModel_Add;
+              this.role_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Add;
+              this.role_entry.ACTIVATION_FLAG = this.ACTIVATION_FLAG_ngModel_Add;
+
       this.role_entry.ROLE_GUID = UUID.UUID();
       this.role_entry.TENANT_GUID = UUID.UUID();
       this.role_entry.CREATION_TS = new Date().toISOString();
@@ -176,28 +203,30 @@ getBankList() {
 }
 
   Update(ROLE_GUID: any) {  
-    if (this.Roleform.valid) {
+    if(this.role_entry.NAME==null){this.role_entry.NAME = this.NAME_ngModel_Edit;}
+    if(this.role_entry.DESCRIPTION==null){this.role_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Edit;}
+    if(this.role_entry.ACTIVATION_FLAG==null){this.role_entry.ACTIVATION_FLAG = this.ACTIVATION_FLAG_ngModel_Edit;}
+    // if (this.Roleform.valid) {
       
-            let headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            let options = new RequestOptions({ headers: headers });
-            let url: string;
-            url = "http://api.zen.com.my/api/v2/zcs/_table/main_role?filter=(NAME=" + this.role_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-            this.http.get(url, options)
-              .map(res => res.json())
-              .subscribe(
-              data => {
-                let res = data["resource"];
-                if (res.length == 0) {
-                  console.log("No records Found");
-                  if (this.Exist_Record == false) {
-    // if(this.role_entry.NAME==null){this.role_entry.NAME = this.role_entry.NAME;}
-    // if(this.role_entry.DESCRIPTION==null){this.role_entry.DESCRIPTION = this.role_entry.DESCRIPTION;}
+    //         let headers = new Headers();
+    //         headers.append('Content-Type', 'application/json');
+    //         let options = new RequestOptions({ headers: headers });
+    //         let url: string;
+    //         url = "http://api.zen.com.my/api/v2/zcs/_table/main_role?filter=(NAME=" + this.role_entry.NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+    //         this.http.get(url, options)
+    //           .map(res => res.json())
+    //           .subscribe(
+    //           data => {
+    //             let res = data["resource"];
+    //             if (res.length == 0) {
+    //               console.log("No records Found");
+    //               if (this.Exist_Record == false) {
+    
 
-    if (this.Roleform.valid) {
-      this.role_entry.CREATION_TS = this.role.CREATION_TS
-      this.role_entry.CREATION_USER_GUID = this.role.CREATION_USER_GUID;
-      this.role_entry.UPDATE_TS = this.role.UPDATE_TS;
+    // if (this.Roleform.valid) {
+      this.role_entry.CREATION_TS = this.role_details.CREATION_TS
+      this.role_entry.CREATION_USER_GUID = this.role_details.CREATION_USER_GUID;
+      this.role_entry.UPDATE_TS = this.role_details.UPDATE_TS;
 
       this.role_entry.ROLE_GUID = ROLE_GUID;
       this.role_entry.UPDATE_TS = new Date().toISOString();
@@ -207,28 +236,28 @@ getBankList() {
       this.rolesetupservice.update(this.role_entry)
         .subscribe((response) => {
           if (response.status == 200) {
-            alert('Mileage updated successfully');
+            alert('Role setup updated successfully');
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
         })
     }
   }
-}
-else {
-  console.log("Records Found");
-  alert("The Role is already Added.")
+//}
+// else {
+//   console.log("Records Found");
+//   alert("The Role is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }
 
 
    

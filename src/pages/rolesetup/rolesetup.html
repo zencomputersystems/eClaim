@@ -80,18 +80,18 @@
         <form [formGroup]="Roleform">
           <ion-item>            
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="role_entry.NAME"  placeholder="{{'Please fill in the name of the role'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Add"  placeholder="{{'Please fill in the name of the role'}}"></ion-input>
           </ion-item>
 
           <ion-item>            
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="role_entry.DESCRIPTION"  placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Add"  placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
 
           <ion-item>            
             <ion-label stacked>{{"ACTIVE FLAG"}}</ion-label>
             <!-- <ion-input type="text" formControlName="ACTIVATION_FLAG" [(ngModel)]="role_entry.ACTIVATION_FLAG"></ion-input> -->
-            <ion-toggle formControlName="ACTIVATION_FLAG" [(ngModel)]="role_entry.ACTIVATION_FLAG"></ion-toggle>  
+            <ion-toggle formControlName="ACTIVATION_FLAG" [(ngModel)]="ACTIVATION_FLAG_ngModel_Add"></ion-toggle>  
           </ion-item>
           <div class="btn">
           <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Roleform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
@@ -119,22 +119,22 @@
           <ion-item>
             
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="role_entry.NAME" value="{{role.NAME}}" placeholder="{{'Please fill in the name in the role'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Edit" [value]="NAME_ngModel" placeholder="{{'Please fill in the name in the role'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="role_entry.DESCRIPTION" value="{{role.DESCRIPTION}}" placeholder="{{'Please fill in the role'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Edit" [value]="DESCRIPTION_ngModel" placeholder="{{'Please fill in the role'}}"></ion-input>
           </ion-item>
 
            <ion-item>
             <ion-label stacked>{{"ACTIVE FLAG"}}</ion-label>
              <!-- <ion-toggle formControlName="ACTIVATION_FLAG" [(ngModel)]="mileage_entry.ACTIVATION_FLAG"></ion-toggle>  -->
-             <ion-toggle formControlName="ACTIVATION_FLAG" [(ngModel)]="role_entry.ACTIVATION_FLAG"></ion-toggle> 
+             <ion-toggle formControlName="ACTIVATION_FLAG" [(ngModel)]="ACTIVATION_FLAG_ngModel_Edit"></ion-toggle> 
           </ion-item>
 
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(role.ROLE_GUID)">{{"SUBMIT" | translate}}</button>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(role_details.ROLE_GUID)">{{"SUBMIT" | translate}}</button>
           </div>
         </form>
       </ion-list>

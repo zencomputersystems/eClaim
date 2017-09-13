@@ -4,7 +4,7 @@ export class RoleSetup_Model {
         public NAME: string = null,
         public DESCRIPTION: string = null,
         public TENANT_GUID: string = null,
-        public ACTIVATION_FLAG: number = null,
+        public ACTIVATION_FLAG: string = null,
         public CREATION_TS: string = null,
         public CREATION_USER_GUID: string = null,
         public UPDATE_TS: string = null,
