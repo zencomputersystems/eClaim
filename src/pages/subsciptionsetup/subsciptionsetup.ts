@@ -26,7 +26,7 @@ import { UUID } from 'angular2-uuid';
 })
 export class SubsciptionsetupPage {
   Subscription_entry: SubsciptionSetup_Model = new SubsciptionSetup_Model();
-  subscription: SubsciptionSetup_Model = new SubsciptionSetup_Model();
+  //subscription: SubsciptionSetup_Model = new SubsciptionSetup_Model();
   Subscriptionform: FormGroup;
 
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_subscription' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -36,25 +36,59 @@ export class SubsciptionsetupPage {
   public AddSubscriptionClicked: boolean = false; 
   public EditSubscriptionClicked: boolean = false; 
   Exist_Record: boolean = false;
-  public subscription_details: any; public exist_record_details: any;
+  public subscription_details: any; 
+  public exist_record_details: any;
+
+  //Set the Model Name for Add------------------------------------------
+  public PLAN_NAME_ngModel_Add:          any;
+  public DURATION_ngModel_Add:     any;
+  public RATE_ngModel_Add:         any;  
+  public EFFECTIVE_DATE_ngModel_Add:         any;  
+  public ACTIVE_FLAG_ngModel_Add:         any;  
+  public DESCRIPTION_ngModel_Add:         any;   
+  //---------------------------------------------------------------------
+
+  //Set the Model Name for edit------------------------------------------
+  public PLAN_NAME_ngModel_Edit:          any;
+  public DURATION_ngModel_Edit:     any;
+  public RATE_ngModel_Edit:         any;  
+  public EFFECTIVE_DATE_ngModel_Edit:         any;  
+  public ACTIVE_FLAG_ngModel_Edit:         any;  
+  public DESCRIPTION_ngModel_Edit:         any;  
+  //---------------------------------------------------------------------
 
   
    
     public AddSubscriptionClick() {
 
         this.AddSubscriptionClicked = true; 
+        this.ACTIVE_FLAG_ngModel_Add = false;
+        this.EFFECTIVE_DATE_ngModel_Add = "";
     }
 
     public EditClick(SUBSCRIPTION_GUID: any) {
-      //alert(MILEAGE_GUID);
       this.EditSubscriptionClicked = true;
       var self = this;
       this.subscriptionsetupservice
         .get(SUBSCRIPTION_GUID)
-        .subscribe((subscription) => self.subscription = subscription);
-      return self.subscription;
-    }
+        .subscribe((data) => 
+        {
+          self.subscription_details = data;
 
+          this.PLAN_NAME_ngModel_Edit = self.subscription_details.PLAN_NAME;
+          this.DURATION_ngModel_Edit = self.subscription_details. DURATION;
+          this.RATE_ngModel_Edit = self.subscription_details.RATE;
+          this.EFFECTIVE_DATE_ngModel_Edit = new Date(self.subscription_details.EFFECTIVE_DATE).toISOString();
+          this.DESCRIPTION_ngModel_Edit = self.subscription_details.DESCRIPTION;   
+          if(self.subscription_details.ACTIVE_FLAG == "1"){
+            this.ACTIVE_FLAG_ngModel_Edit = true;
+          }
+          else{
+            this.ACTIVE_FLAG_ngModel_Edit = false;
+          }    
+      });
+    }
+       
     public DeleteClick(SUBSCRIPTION_GUID: any) {
       let alert = this.alertCtrl.create({
         title: 'Remove Confirmation',
@@ -109,14 +143,11 @@ export class SubsciptionsetupPage {
       DURATION: ["", Validators.required],
       RATE: ["", Validators.required],
       EFFECTIVE_DATE: ["", Validators.required],
-      ACTIVE_FLAG: ["", Validators.required],
       DESCRIPTION: ["", Validators.required],
-       
+      ACTIVE_FLAG: ["", Validators.required],
+             
     });
   }
-
-  
-
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SubsciptionsetupPage');
@@ -129,7 +160,7 @@ export class SubsciptionsetupPage {
       headers.append('Content-Type', 'application/json');
       let options = new RequestOptions({ headers: headers });
       let url: string;
-      url = "http://api.zen.com.my/api/v2/zcs/_table/main_subscription?filter=(PLAN_NAME=" + this.Subscription_entry.PLAN_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+      url = this.baseResource_Url+ "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Add + ')&api_key=' + constants.DREAMFACTORY_API_KEY;      
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
@@ -138,6 +169,13 @@ export class SubsciptionsetupPage {
           if (res.length == 0) {
             console.log("No records Found");
             if (this.Exist_Record == false) {
+              this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Add;
+              this.Subscription_entry.DURATION = this.DURATION_ngModel_Add;
+              this.Subscription_entry.RATE = this.RATE_ngModel_Add;
+              this.Subscription_entry. EFFECTIVE_DATE = this. EFFECTIVE_DATE_ngModel_Add;
+              this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Add;
+              this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Add;
+
       this.Subscription_entry.SUBSCRIPTION_GUID = UUID.UUID();
       this.Subscription_entry.CREATION_TS = new Date().toISOString();
       this.Subscription_entry.CREATION_USER_GUID = "1";
@@ -153,7 +191,7 @@ export class SubsciptionsetupPage {
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
-        })
+        });
     }
   }
   else {
@@ -171,7 +209,7 @@ err => {
 
 }
 }
-getBankList() {
+getSubscriptionList() {
   let self = this;
   let params: URLSearchParams = new URLSearchParams();
   self.subscriptionsetupservice.get_subscription(params)
@@ -181,27 +219,31 @@ getBankList() {
 }
 
  Update(SUBSCRIPTION_GUID: any) {  
-//  if(this.Subscription_entry.PLAN_NAME==null){this.Subscription_entry.PLAN_NAME = this.Subscription_entry.PLAN_NAME;}
-//  if(this.Subscription_entry.DURATION==null){this.Subscription_entry.DURATION = this.Subscription_entry.DURATION;}
-if (this.Subscriptionform.valid) {
+ if(this.Subscription_entry.PLAN_NAME==null){this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit;}
+ if(this.Subscription_entry.DURATION==null){this.Subscription_entry.DURATION = this.DURATION_ngModel_Edit;}
+ if(this.Subscription_entry.RATE==null){this.Subscription_entry.RATE = this.RATE_ngModel_Edit;}
+ if(this.Subscription_entry.EFFECTIVE_DATE==null){this.Subscription_entry.EFFECTIVE_DATE = this.EFFECTIVE_DATE_ngModel_Edit;}
+ if(this.Subscription_entry.DESCRIPTION==null){this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Edit;}
+ if(this.Subscription_entry.ACTIVE_FLAG==null){this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Edit;}
+// if (this.Subscriptionform.valid) {
   
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        let options = new RequestOptions({ headers: headers });
-        let url: string;
-        url = "http://api.zen.com.my/api/v2/zcs/_table/main_subscription?filter=(PLAN_NAME=" + this.Subscription_entry.PLAN_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-        this.http.get(url, options)
-          .map(res => res.json())
-          .subscribe(
-          data => {
-            let res = data["resource"];
-            if (res.length == 0) {
-              console.log("No records Found");
-              if (this.Exist_Record == false) {
-    if (this.Subscriptionform.valid) {
-      this.Subscription_entry.CREATION_TS = this.subscription.CREATION_TS
-      this.Subscription_entry.CREATION_USER_GUID = this.subscription.CREATION_USER_GUID;
-      this.Subscription_entry.UPDATE_TS = this.subscription.UPDATE_TS;
+//         let headers = new Headers();
+//         headers.append('Content-Type', 'application/json');
+//         let options = new RequestOptions({ headers: headers });
+//         let url: string;
+//         url = "http://api.zen.com.my/api/v2/zcs/_table/main_subscription?filter=(PLAN_NAME=" + this.Subscription_entry.PLAN_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+//         this.http.get(url, options)
+//           .map(res => res.json())
+//           .subscribe(
+//           data => {
+//             let res = data["resource"];
+//             if (res.length == 0) {
+//               console.log("No records Found");
+//               if (this.Exist_Record == false) {
+//     if (this.Subscriptionform.valid) {
+      this.Subscription_entry.CREATION_TS = this.subscription_details.CREATION_TS
+      this.Subscription_entry.CREATION_USER_GUID = this.subscription_details.CREATION_USER_GUID;
+      this.Subscription_entry.UPDATE_TS = this.subscription_details.UPDATE_TS;
 
       this.Subscription_entry.SUBSCRIPTION_GUID = SUBSCRIPTION_GUID;
       this.Subscription_entry.UPDATE_TS = new Date().toISOString();
@@ -212,26 +254,26 @@ if (this.Subscriptionform.valid) {
           if (response.status == 200) {
             alert('Subscription updated successfully');
             //location.reload();
-            this.navCtrl.setRoot(this.navCtrl.getActive().component);
+            this.navCtrl.setRoot(this.navCtrl.getActive().component); 
           }
         })
     }
   }
 
-}
-else {
-  console.log("Records Found");
-  alert("The Subscription is already Added.")
+//}
+// else {
+//   console.log("Records Found");
+//   alert("The Subscription is already Added.")
   
-}
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-}
-);
-}
-}
-}
+// }
+// },
+// err => {
+//   this.Exist_Record = false;
+//   console.log("ERROR!: ", err);
+// }
+// );
+// }
+// }
+// }
 
 
