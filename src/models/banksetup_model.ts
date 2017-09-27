@@ -28,6 +28,7 @@ export class BankSetup_Model {
 	toJson(stringify?: boolean): any {
 		var doc = {
 			BANK_GUID:this.BANK_GUID,
+			
 			NAME:this.NAME,
             DESCRIPTION:this.DESCRIPTION,
 			TENANT_GUID:this.TENANT_GUID,

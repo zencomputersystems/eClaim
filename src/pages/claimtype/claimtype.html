@@ -26,8 +26,8 @@
 
         <ion-item *ngFor="let claimtype of claimtypes; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{claimtype.NAME | uppercase}}</ion-label>
-            <ion-label item-start class="textRight">{{claimtype.DESCRIPTION | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{claimtype.NAME}}</ion-label>
+            <ion-label item-start class="textRight">{{claimtype.DESCRIPTION}}</ion-label>
             <button ion-button item-end (click)="EditClick(claimtype.CLAIM_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
             <button ion-button item-end (click)="DeleteClick(claimtype.CLAIM_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
         </ion-item>
@@ -83,12 +83,14 @@
         <form [formGroup]="Claimtypeform">
           <ion-item>
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="claimtype_entry.NAME" placeholder="{{'Please fill in the name of claim'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Add"  
+            placeholder="{{'Please fill in the name of claim'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="claimtype_entry.DESCRIPTION" placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Add" 
+            placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
             <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Claimtypeform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
@@ -114,15 +116,17 @@
         <form [formGroup]="Claimtypeform">
           <ion-item>
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="claimtype_entry.NAME" value="{{claimtype.NAME}}" placeholder="{{'Please fill in the name of claim'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Edit" 
+             placeholder="{{'Please fill in the name of claim'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="claimtype_entry.DESCRIPTION" value="{{claimtype.DESCRIPTION}}" placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Edit" required
+              placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(claimtype.CLAIM_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Claimtypeform.valid" (click)="Update(claimtype_details.CLAIM_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

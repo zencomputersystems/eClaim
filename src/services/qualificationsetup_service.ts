@@ -56,7 +56,7 @@ export class QualificationSetup_Service {
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        let options = new RequestOptions({ headers: queryHeaders });alert(JSON.stringify(qualificationsetup_main));
+        let options = new RequestOptions({ headers: queryHeaders });//alert(JSON.stringify(qualificationsetup_main));
         return this.httpService.http.post(this.baseResourceUrl, qualificationsetup_main.toJson(true), options)
             .map((response) => {
                 return response;

@@ -32,9 +32,10 @@
       </ion-item>
       <ion-item *ngFor="let mileage of mileages; let i=index">
         <ion-label item-start>{{i+1}}</ion-label>
-        <ion-label item-start class="textRight">{{mileage.CATEGORY | uppercase}}</ion-label>
+        <ion-label item-start class="textRight">{{mileage.CATEGORY}}</ion-label>
         <ion-label item-start class="textRight">{{mileage.RATE_PER_UNIT}}</ion-label>
         <ion-label item-start class="textRight">{{mileage.RATE_DATE}}</ion-label>
+        <!-- <ion-datetime displayFormat="DD/MM/YYYY">{{mileage.RATE_DATE}}</ion-datetime> -->
   
         <ion-toggle *ngIf="mileage.ACTIVATION_FLAG==1" checked=true></ion-toggle>
         <ion-toggle *ngIf="mileage.ACTIVATION_FLAG==0" checked=false></ion-toggle>
@@ -62,17 +63,18 @@
           <form [formGroup]="Mileageform">
             <ion-item>
               <ion-label stacked>{{"CATEGORY"}}</ion-label>
-              <ion-input type="text" formControlName="CATEGORY" [(ngModel)]="CATEGORY_ngModel_Add" placeholder="{{'Please fill in the category of the mileage'}}"></ion-input>
-            </ion-item>
-  
+              <ion-input type="text" formControlName="CATEGORY" [(ngModel)]="CATEGORY_ngModel_Add"  
+               required placeholder="{{'Please fill in the category of the mileage'}}"></ion-input>
+            </ion-item> 
+   
             <ion-item>
               <ion-label stacked>{{"MILEAGE PER UNIT"}}</ion-label>
-              <ion-input type="number" formControlName="RATE_PER_UNIT" [(ngModel)]="RATE_PER_UNIT_ngModel_Add" placeholder="{{'Please fill in the unit of mileage'}}"></ion-input>
+              <ion-input type="text" formControlName="RATE_PER_UNIT" [(ngModel)]="RATE_PER_UNIT_ngModel_Add" placeholder="{{'Please fill in the unit of mileage'}}"></ion-input>
             </ion-item>
   
             <ion-item>
               <ion-label stacked>{{"EFFECTIVE DATE"}}</ion-label>
-              <ion-datetime displayFormat="YYYY/MM/DD" formControlName="RATE_DATE" [(ngModel)]="RATE_DATE_ngModel_Add" placeholder="{{'Please choose your effective date'}}"></ion-datetime>
+              <ion-datetime displayFormat="DD/MM/YYYY" formControlName="RATE_DATE" [(ngModel)]="RATE_DATE_ngModel_Add" placeholder="{{'Please choose your effective date'}}"></ion-datetime>
             </ion-item>
   
             <ion-item>
@@ -104,21 +106,26 @@
   
         <ion-list>
           <form [formGroup]="Mileageform">
-  
+            <!-- ng-pattern="/^[a-zA-Z][a-zA-Z0-9\\s]+$/" -->
             <ion-item>
               <ion-label stacked>{{"CATEGORY"}}</ion-label>
-              <ion-input type="text" formControlName="CATEGORY" [(ngModel)]="CATEGORY_ngModel_Edit" [value]="CATEGORY_ngModel" placeholder="{{'Please fill in the category in the mileage'}}"></ion-input>
+              <ion-input type="text" formControlName="CATEGORY" [(ngModel)]="CATEGORY_ngModel_Edit"  required placeholder="{{'Please fill in the category in the mileage'}}" required></ion-input>
             </ion-item>
+
+            <!-- <ion-item *ngIf="CATEGORY.hasError('required') && CATEGORY.touched" class="invalid">
+              <p>* category is required!</p>
+          </ion-item> -->
+  
   
             <ion-item>
               <ion-label stacked>{{"MILEAGE PER UNIT"}}</ion-label>
-              <ion-input type="text" formControlName="RATE_PER_UNIT" [(ngModel)]="RATE_PER_UNIT_ngModel_Edit" [value]="RATE_PER_UNIT_ngModel"
+              <ion-input type="text" formControlName="RATE_PER_UNIT" [(ngModel)]="RATE_PER_UNIT_ngModel_Edit" 
                 placeholder="{{'Please fill in the mileage'}}"></ion-input>
             </ion-item>
   
             <ion-item>
               <ion-label stacked>{{"EFFECTIVE DATE"}}</ion-label>
-              <ion-datetime displayFormat="YYYY/MM/DD" formControlName="RATE_DATE" [(ngModel)]="RATE_DATE_ngModel_Edit" placeholder="{{'Please choose your effective date'}}"></ion-datetime>
+              <ion-datetime displayFormat="DD/MM/YYYY" formControlName="RATE_DATE" [(ngModel)]="RATE_DATE_ngModel_Edit" placeholder="{{'Please choose your effective date'}}"></ion-datetime>
             </ion-item>
   
             <ion-item>
@@ -127,7 +134,7 @@
             </ion-item>
   
             <div class="btn">
-              <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(mileage_details.MILEAGE_GUID)">{{"SUBMIT" | translate}}</button>
+              <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Mileageform.valid" (click)="!Update(mileage_details.MILEAGE_GUID)">{{"SUBMIT" | translate}}</button>
             </div>
   
           </form>

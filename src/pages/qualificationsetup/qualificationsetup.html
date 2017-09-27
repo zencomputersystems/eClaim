@@ -30,8 +30,8 @@
 
          <ion-item *ngFor="let qualificationsetup of qualificationsetups; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_NAME | uppercase}}</ion-label>
-            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_DESC | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_NAME}}</ion-label>
+            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_DESC}}</ion-label>
             <button ion-button item-end (click)="EditClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
             <button ion-button item-end (click)="DeleteClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
         </ion-item>
@@ -77,12 +77,14 @@
         <form [formGroup]="Qualifyform">
           <ion-item>            
             <ion-label stacked>{{"QUALIFICATION"}}</ion-label>
-            <ion-input type="text" formControlName="TYPE_NAME" [(ngModel)]="Qualify_entry.TYPE_NAME"  placeholder="{{'Please fill in the qualification'}}"></ion-input>
+            <ion-input type="text" formControlName="TYPE_NAME" [(ngModel)]="TYPE_NAME_ngModel_Add"
+              placeholder="{{'Please fill in the qualification'}}"></ion-input>
           </ion-item>
 
           <ion-item>            
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="TYPE_DESC" [(ngModel)]="Qualify_entry.TYPE_DESC"  placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="TYPE_DESC" [(ngModel)]="TYPE_DESC_ngModel_Add"
+              placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
           <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Qualifyform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
@@ -109,15 +111,17 @@
         <form [formGroup]="Qualifyform">
           <ion-item>
             <ion-label stacked>{{"QUALIFICATION"}}</ion-label>
-            <ion-input type="text" formControlName="TYPE_NAME" [(ngModel)]="Qualify_entry.TYPE_NAME" value="{{qualificationsetup.TYPE_NAME}}" placeholder="{{'Please fill in the name of qualification'}}"></ion-input>
+            <ion-input type="text" formControlName="TYPE_NAME" [(ngModel)]="TYPE_NAME_ngModel_Edit"
+             placeholder="{{'Please fill in the name of qualification'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="TYPE_DESC" [(ngModel)]="Qualify_entry.TYPE_DESC" value="{{qualificationsetup.TYPE_DESC}}" placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="TYPE_DESC" [(ngModel)]="TYPE_DESC_ngModel_Edit" 
+             placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(qualificationsetup.QUALIFICATION_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(qualification_details.QUALIFICATION_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

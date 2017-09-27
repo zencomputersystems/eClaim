@@ -36,7 +36,7 @@ export class TenantSetup_Service {
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        let options = new RequestOptions({ headers: queryHeaders });alert(JSON.stringify(tenant_main));
+        let options = new RequestOptions({ headers: queryHeaders });//alert(JSON.stringify(tenant_main));
         return this.httpService.http.post(this.baseResourceUrl, tenant_main.toJson(true), options)
             .map((response) => {
                 return response;

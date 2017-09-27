@@ -25,63 +25,62 @@ import { UUID } from 'angular2-uuid';
   templateUrl: 'mileagesetup.html', providers: [MileageSetup_Service, BaseHttpService]
 })
 export class MileagesetupPage {
-  mileage_entry: MileageSetup_Model = new MileageSetup_Model();  
+  mileage_entry: MileageSetup_Model = new MileageSetup_Model();
   Mileageform: FormGroup;
- 
+
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_mileage' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';  
-  
+  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+
   public mileages: MileageSetup_Model[] = [];
 
   public AddMileageClicked: boolean = false;
   public EditMileageClicked: boolean = false;
   public Exist_Record: boolean = false;
 
-  public mileage_details:           any; 
-  public exist_record_details:      any;  
-  
+  public mileage_details: any;
+  public exist_record_details: any;
+
   //Set the Model Name for Add------------------------------------------
-  public CATEGORY_ngModel_Add:          any;
-  public RATE_PER_UNIT_ngModel_Add:     any;
-  public RATE_DATE_ngModel_Add:         any;  
-  public ACTIVATION_FLAG_ngModel_Add:   any;  
+  public CATEGORY_ngModel_Add: any;
+  public RATE_PER_UNIT_ngModel_Add: any;
+  public RATE_DATE_ngModel_Add: any;
+  public ACTIVATION_FLAG_ngModel_Add: any;
   //---------------------------------------------------------------------
 
   //Set the Model Name for edit------------------------------------------
-  public CATEGORY_ngModel_Edit:          any;
-  public RATE_PER_UNIT_ngModel_Edit:     any;
-  public RATE_DATE_ngModel_Edit:         any;  
-  public ACTIVATION_FLAG_ngModel_Edit:   any;  
+  public CATEGORY_ngModel_Edit: any;
+  public RATE_PER_UNIT_ngModel_Edit: any;
+  public RATE_DATE_ngModel_Edit: any;
+  public ACTIVATION_FLAG_ngModel_Edit: any;
   //---------------------------------------------------------------------
   public AddMileageClick() {
+    this.ClearControls();
     this.AddMileageClicked = true;
-    this.ACTIVATION_FLAG_ngModel_Add=false;
+    this.ACTIVATION_FLAG_ngModel_Add = false;
     this.RATE_DATE_ngModel_Add = "";
   }
 
-   public EditClick(MILEAGE_GUID: any) {
+  public EditClick(MILEAGE_GUID: any) {
+    this.ClearControls();
     this.EditMileageClicked = true;
     var self = this;
-
-     this.mileagesetupservice
+    this.mileagesetupservice
       .get(MILEAGE_GUID)
-      .subscribe((data) => 
-      {
+      .subscribe((data) => {
         self.mileage_details = data;
-
-        this.CATEGORY_ngModel_Edit = self.mileage_details.CATEGORY;
+        this.CATEGORY_ngModel_Edit = self.mileage_details.CATEGORY; localStorage.setItem('Prev_mi_Category', self.mileage_details.CATEGORY); //console.log(self.mileage_details.CATEGORY);
         this.RATE_PER_UNIT_ngModel_Edit = self.mileage_details.RATE_PER_UNIT;
         this.RATE_DATE_ngModel_Edit = new Date(self.mileage_details.RATE_DATE).toISOString();
-        if(self.mileage_details.ACTIVATION_FLAG == "1"){
+        if (self.mileage_details.ACTIVATION_FLAG == "1") {
           this.ACTIVATION_FLAG_ngModel_Edit = true;
         }
-        else{
+        else {
           this.ACTIVATION_FLAG_ngModel_Edit = false;
-        }                
+        }
       });
-   }
+  }
 
-   public DeleteClick(MILEAGE_GUID: any) {
+  public DeleteClick(MILEAGE_GUID: any) {
     let alert = this.alertCtrl.create({
       title: 'Remove Confirmation',
       message: 'Do you want to remove ?',
@@ -108,7 +107,7 @@ export class MileagesetupPage {
         }
       ]
     }); alert.present();
-   }
+  }
 
   public CloseMileageClick() {
 
@@ -127,8 +126,14 @@ export class MileagesetupPage {
         this.mileages = data.resource;
       });
     this.Mileageform = fb.group({
-      CATEGORY: ["", Validators.required],
-      RATE_PER_UNIT: ["", Validators.required],
+      //CATEGORY: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])],
+      CATEGORY: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      
+      //CATEGORY: [null, Validators.compose([Validators.pattern('^[a-zA-Z][a-zA-Z0-9\\s]+$'), Validators.required])],
+      //RATE_PER_UNIT: [null, Validators.compose([Validators.pattern('^[a-zA-Z][a-zA-Z0-9\\s]+$'), Validators.required])],
+      //RATE_PER_UNIT: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])], 
+      RATE_PER_UNIT: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],  
+      //RATE_PER_UNIT: ["", Validators.required],
       RATE_DATE: ["", Validators.required],
       ACTIVATION_FLAG: ["", Validators.required],
     });
@@ -144,7 +149,7 @@ export class MileagesetupPage {
       headers.append('Content-Type', 'application/json');
       let options = new RequestOptions({ headers: headers });
       let url: string;
-      url = this.baseResource_Url+ "main_mileage?filter=(CATEGORY=" + this.CATEGORY_ngModel_Add + ')&api_key=' + constants.DREAMFACTORY_API_KEY;      
+      url = this.baseResource_Url + "main_mileage?filter=(CATEGORY=" + this.CATEGORY_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
@@ -153,9 +158,10 @@ export class MileagesetupPage {
           if (res.length == 0) {
             console.log("No records Found");
             if (this.Exist_Record == false) {
-              this.mileage_entry.CATEGORY = this.CATEGORY_ngModel_Add;
-              this.mileage_entry.RATE_PER_UNIT = this.RATE_PER_UNIT_ngModel_Add;
-              this.mileage_entry.RATE_DATE = this.RATE_DATE_ngModel_Add;
+              this.mileage_entry.CATEGORY = this.CATEGORY_ngModel_Add.trim();
+
+              this.mileage_entry.RATE_PER_UNIT = this.RATE_PER_UNIT_ngModel_Add.trim();
+              this.mileage_entry.RATE_DATE = this.RATE_DATE_ngModel_Add.trim();
               this.mileage_entry.ACTIVATION_FLAG = this.ACTIVATION_FLAG_ngModel_Add;
 
               this.mileage_entry.MILEAGE_GUID = UUID.UUID();
@@ -176,7 +182,7 @@ export class MileagesetupPage {
           }
           else {
             console.log("Records Found");
-            alert("The Mileage is already Added.")
+            alert("The Mileage is already Exist.")
           }
         },
         err => {
@@ -195,26 +201,83 @@ export class MileagesetupPage {
       });
   }
 
-   Update(MILEAGE_GUID: any) {
-    if (this.mileage_entry.CATEGORY == null) { this.mileage_entry.CATEGORY = this.CATEGORY_ngModel_Edit; }
-    if (this.mileage_entry.RATE_PER_UNIT == null) { this.mileage_entry.RATE_PER_UNIT = this.RATE_PER_UNIT_ngModel_Edit; }
-    if (this.mileage_entry.RATE_DATE == null) { this.mileage_entry.RATE_DATE = this.RATE_DATE_ngModel_Edit; }
-    if (this.mileage_entry.ACTIVATION_FLAG == null) { this.mileage_entry.ACTIVATION_FLAG = this.ACTIVATION_FLAG_ngModel_Edit; }
-    
-    this.mileage_entry.CREATION_TS = this.mileage_details.CREATION_TS
-    this.mileage_entry.CREATION_USER_GUID = this.mileage_details.CREATION_USER_GUID;
-    this.mileage_entry.UPDATE_TS = this.mileage_details.UPDATE_TS;
+  Update(MILEAGE_GUID: any) {
+    if (this.Mileageform.valid) {
+      if (this.mileage_entry.CATEGORY == null) { this.mileage_entry.CATEGORY = this.CATEGORY_ngModel_Edit.trim(); }
+      if (this.mileage_entry.RATE_PER_UNIT == null) { this.mileage_entry.RATE_PER_UNIT = this.RATE_PER_UNIT_ngModel_Edit; }
+      if (this.mileage_entry.RATE_DATE == null) { this.mileage_entry.RATE_DATE = this.RATE_DATE_ngModel_Edit.trim(); }
+      if (this.mileage_entry.ACTIVATION_FLAG == null) { this.mileage_entry.ACTIVATION_FLAG = this.ACTIVATION_FLAG_ngModel_Edit; }
 
-    this.mileage_entry.MILEAGE_GUID = MILEAGE_GUID;
-    this.mileage_entry.UPDATE_TS = new Date().toISOString();
-    this.mileage_entry.UPDATE_USER_GUID = '1';
+      this.mileage_entry.CREATION_TS = this.mileage_details.CREATION_TS;
+      this.mileage_entry.CREATION_USER_GUID = this.mileage_details.CREATION_USER_GUID;
+      this.mileage_entry.UPDATE_TS = this.mileage_details.UPDATE_TS;
 
-    this.mileagesetupservice.update(this.mileage_entry)
-      .subscribe((response) => {
-        if (response.status == 200) {
-          alert('Mileage updated successfully');
-          this.navCtrl.setRoot(this.navCtrl.getActive().component);
-        }
-      })
-   }
+      this.mileage_entry.MILEAGE_GUID = MILEAGE_GUID;
+      this.mileage_entry.UPDATE_TS = new Date().toISOString();
+      this.mileage_entry.UPDATE_USER_GUID = '1';
+      //debugger;
+      if (this.CATEGORY_ngModel_Edit.trim() != localStorage.getItem('Prev_mi_Category')) {
+        // let headers = new Headers();
+        // headers.append('Content-Type', 'application/json');
+        // let options = new RequestOptions({ headers: headers });
+        let url: string;
+        url = this.baseResource_Url + "main_mileage?filter=(CATEGORY=" + this.CATEGORY_ngModel_Edit.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+        this.http.get(url)
+          .map(res => res.json())
+          .subscribe(
+          data => {
+            let res = data["resource"];
+            console.log('Current Category : ' + this.CATEGORY_ngModel_Edit + ', Previous Category : ' + localStorage.getItem('Prev_mi_Category'));
+
+            if (res.length == 0) {
+              console.log("No records Found");
+              this.mileage_entry.CATEGORY = this.CATEGORY_ngModel_Edit.trim();
+              
+              //**************Update service if it is new details*************************
+              this.mileagesetupservice.update(this.mileage_entry)
+                .subscribe((response) => {
+                  if (response.status == 200) {
+                    alert('Mileage updated successfully');
+                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                  }
+                });
+              //**************************************************************************
+            }
+            else {
+              console.log("Records Found");
+              alert("The Mileage is already Exist. ");
+            }
+          },
+          err => {
+            this.Exist_Record = false;
+            console.log("ERROR!: ", err);
+          });
+      }
+      else {
+        if (this.mileage_entry.CATEGORY == null) { this.mileage_entry.CATEGORY = localStorage.getItem('Prev_mi_Category'); }
+        //this.mileage_entry.CATEGORY = this.CATEGORY_ngModel_Edit;
+        //**************Update service if it is old details*************************
+        this.mileagesetupservice.update(this.mileage_entry)
+          .subscribe((response) => {
+            if (response.status == 200) {
+              alert('Mileage updated successfully');
+              this.navCtrl.setRoot(this.navCtrl.getActive().component);
+            }
+          });
+        //**************************************************************************
+      }
+    }
+  }
+  ClearControls()
+  {
+    this.CATEGORY_ngModel_Add = "";
+    this.RATE_PER_UNIT_ngModel_Add = "";
+    this.RATE_DATE_ngModel_Add = "";
+    this.ACTIVATION_FLAG_ngModel_Add = false;
+
+    this.CATEGORY_ngModel_Edit = "";
+    this.RATE_PER_UNIT_ngModel_Edit = "";
+    this.RATE_DATE_ngModel_Edit = "";
+    this.ACTIVATION_FLAG_ngModel_Edit = false;
+  }
 }

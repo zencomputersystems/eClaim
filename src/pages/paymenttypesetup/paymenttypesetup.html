@@ -28,8 +28,8 @@
 
          <ion-item *ngFor="let paymenttype of paymenttypes; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{paymenttype.NAME | uppercase}}</ion-label>
-            <ion-label item-start class="textRight">{{paymenttype.DESCRIPTION | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{paymenttype.NAME}}</ion-label>
+            <ion-label item-start class="textRight">{{paymenttype.DESCRIPTION}}</ion-label>
             <button ion-button item-end (click)="EditClick(paymenttype.PAYMENT_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
             <button ion-button item-end (click)="DeleteClick(paymenttype.PAYMENT_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
         </ion-item>
@@ -75,12 +75,14 @@
         <form [formGroup]="Paymenttypeform">
           <ion-item>            
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="Paymenttype_entry.NAME"  placeholder="{{'Please fill in the name of the payment'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Add" 
+             placeholder="{{'Please fill in the name of the payment'}}"></ion-input>
           </ion-item>
 
           <ion-item>            
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="Paymenttype_entry.DESCRIPTION"  placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Add" 
+             placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
           <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Paymenttypeform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
@@ -105,15 +107,17 @@
         <form [formGroup]="Paymenttypeform">
           <ion-item>
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="Paymenttype_entry.NAME" value="{{paymenttype.NAME}}" placeholder="{{'Please fill in the name of paymenttype'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Edit"
+            placeholder="{{'Please fill in the name of paymenttype'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="Paymenttype_entry.DESCRIPTION" value="{{paymenttype.DESCRIPTION}}" placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Edit"
+             placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(paymenttype.PAYMENT_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(paymenttype_details.PAYMENT_TYPE_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

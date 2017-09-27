@@ -28,8 +28,8 @@
 
         <ion-item *ngFor="let designation of designations; let i=index">
             <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{designation.NAME | uppercase}}</ion-label>
-            <ion-label item-start class="textRight">{{designation.DESCRIPTION | uppercase}}</ion-label>
+            <ion-label item-start class="textRight">{{designation.NAME}}</ion-label>
+            <ion-label item-start class="textRight">{{designation.DESCRIPTION}}</ion-label>
          <button ion-button item-end (click)="EditClick(designation.DESIGNATION_GUID)"><ion-icon name="md-create"></ion-icon></button>
          <button ion-button item-end (click)="DeleteClick(designation.DESIGNATION_GUID)"><ion-icon name="md-close"></ion-icon></button>
     </ion-item>
@@ -84,12 +84,14 @@
         <form [formGroup]="Designationform">
           <ion-item>
             <ion-label stacked>{{"TITLE"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="designation_entry.NAME" placeholder="{{'Please fill in the title of the designation'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Add" 
+            placeholder="{{'Please fill in the title of the designation'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="designation_entry.DESCRIPTION" placeholder="{{'Please fill in the description'}}"></ion-input>
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Add" 
+            placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
             <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Designationform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
@@ -117,16 +119,17 @@
         <form [formGroup]="Designationform">
           <ion-item>
             <ion-label stacked>{{"TITLE"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="designation_entry.NAME" value="{{designation.NAME}}" placeholder="{{'Please fill in the title of the designation'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Edit" 
+             placeholder="{{'Please fill in the title of the designation'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="designation_entry.DESCRIPTION" value="{{designation.DESCRIPTION}}"
+            <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Edit" 
               placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(designation.DESIGNATION_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(designation_details.DESIGNATION_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

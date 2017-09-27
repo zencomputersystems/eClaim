@@ -23,7 +23,7 @@
       BRANCH NAME
     </ion-list-header>
     <ion-item *ngFor="let branch of branchs">
-      <!-- MALAYSIA -->{{branch.NAME | uppercase}}
+      <!-- MALAYSIA -->{{branch.NAME}}
       <button ion-button item-end (click)="EditClick(branch.BRANCH_GUID)"><ion-icon name="md-create"></ion-icon></button>
       <button ion-button item-end (click)="DeleteClick(branch.BRANCH_GUID)"><ion-icon name="md-close"></ion-icon></button>
     </ion-item>
@@ -47,7 +47,8 @@
         <form [formGroup]="Branchform">
           <ion-item>
             <ion-label stacked>{{"BRANCH NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="branch_entry.NAME" placeholder="{{'Please fill in the branch name'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Add" 
+            placeholder="{{'Please fill in the branch name'}}"></ion-input>
           </ion-item>
           <div class="btn">
             <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Branchform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
@@ -76,10 +77,11 @@
         <form [formGroup]="Branchform">
           <ion-item>
             <ion-label stacked>{{"BRANCH NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="branch_entry.NAME" value="{{branch.NAME}}" placeholder="{{'Please fill in the branch name'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Edit" 
+            placeholder="{{'Please fill in the branch name'}}"></ion-input>
           </ion-item>
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(branch.BRANCH_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Branchform.valid" (click)="!Update(branch_details.BRANCH_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
       </ion-list>
     </ion-card>

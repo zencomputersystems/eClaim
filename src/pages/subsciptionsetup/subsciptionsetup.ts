@@ -33,40 +33,43 @@ export class SubsciptionsetupPage {
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
   public subscriptions: SubsciptionSetup_Model[] = []; 
+
   public AddSubscriptionClicked: boolean = false; 
   public EditSubscriptionClicked: boolean = false; 
-  Exist_Record: boolean = false;
+  public Exist_Record: boolean = false;
+  
   public subscription_details: any; 
   public exist_record_details: any;
 
   //Set the Model Name for Add------------------------------------------
-  public PLAN_NAME_ngModel_Add:          any;
-  public DURATION_ngModel_Add:     any;
-  public RATE_ngModel_Add:         any;  
-  public EFFECTIVE_DATE_ngModel_Add:         any;  
-  public ACTIVE_FLAG_ngModel_Add:         any;  
-  public DESCRIPTION_ngModel_Add:         any;   
+  public PLAN_NAME_ngModel_Add:      any;
+  public DURATION_ngModel_Add:       any;
+  public RATE_ngModel_Add:           any;  
+  public EFFECTIVE_DATE_ngModel_Add: any;  
+  public ACTIVE_FLAG_ngModel_Add:    any;  
+  public DESCRIPTION_ngModel_Add:    any;   
   //---------------------------------------------------------------------
 
   //Set the Model Name for edit------------------------------------------
-  public PLAN_NAME_ngModel_Edit:          any;
-  public DURATION_ngModel_Edit:     any;
-  public RATE_ngModel_Edit:         any;  
-  public EFFECTIVE_DATE_ngModel_Edit:         any;  
-  public ACTIVE_FLAG_ngModel_Edit:         any;  
-  public DESCRIPTION_ngModel_Edit:         any;  
+  public PLAN_NAME_ngModel_Edit:        any;
+  public DURATION_ngModel_Edit:         any;
+  public RATE_ngModel_Edit:             any;  
+  public EFFECTIVE_DATE_ngModel_Edit:   any;  
+  public ACTIVE_FLAG_ngModel_Edit:      any;  
+  public DESCRIPTION_ngModel_Edit:      any;  
   //---------------------------------------------------------------------
 
   
    
     public AddSubscriptionClick() {
-
+      this.ClearControls();
         this.AddSubscriptionClicked = true; 
         this.ACTIVE_FLAG_ngModel_Add = false;
         this.EFFECTIVE_DATE_ngModel_Add = "";
     }
 
     public EditClick(SUBSCRIPTION_GUID: any) {
+      this.ClearControls();
       this.EditSubscriptionClicked = true;
       var self = this;
       this.subscriptionsetupservice
@@ -75,8 +78,8 @@ export class SubsciptionsetupPage {
         {
           self.subscription_details = data;
 
-          this.PLAN_NAME_ngModel_Edit = self.subscription_details.PLAN_NAME;
-          this.DURATION_ngModel_Edit = self.subscription_details. DURATION;
+          this.PLAN_NAME_ngModel_Edit = self.subscription_details.PLAN_NAME; localStorage.setItem('Prev_sub_Name', self.subscription_details.PLAN_NAME);
+          this.DURATION_ngModel_Edit = self.subscription_details.DURATION;
           this.RATE_ngModel_Edit = self.subscription_details.RATE;
           this.EFFECTIVE_DATE_ngModel_Edit = new Date(self.subscription_details.EFFECTIVE_DATE).toISOString();
           this.DESCRIPTION_ngModel_Edit = self.subscription_details.DESCRIPTION;   
@@ -139,11 +142,24 @@ export class SubsciptionsetupPage {
     });
 
     this.Subscriptionform = fb.group({
-      PLAN_NAME: ["", Validators.required],
-      DURATION: ["", Validators.required],
-      RATE: ["", Validators.required],
+      //PLAN_NAME: ["", Validators.required],
+      //PLAN_NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])],
+      PLAN_NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      
+      //DURATION: ["", Validators.required],
+      DURATION: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      
+      //NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z0-9 ]+'), Validators.required])], 
+      //RATE: [null, Validators.compose([Validators.pattern('^[a-zA-Z][a-zA-Z0-9\\s]+$'), Validators.required])],
+      //RATE: ["", Validators.required],
+      //RATE: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])],
+      RATE: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      
       EFFECTIVE_DATE: ["", Validators.required],
-      DESCRIPTION: ["", Validators.required],
+      //DESCRIPTION: ["", Validators.required],
+      //DESCRIPTION: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])],
+      DESCRIPTION: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      
       ACTIVE_FLAG: ["", Validators.required],
              
     });
@@ -160,7 +176,7 @@ export class SubsciptionsetupPage {
       headers.append('Content-Type', 'application/json');
       let options = new RequestOptions({ headers: headers });
       let url: string;
-      url = this.baseResource_Url+ "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Add + ')&api_key=' + constants.DREAMFACTORY_API_KEY;      
+      url = this.baseResource_Url+ "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;      
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
@@ -169,11 +185,11 @@ export class SubsciptionsetupPage {
           if (res.length == 0) {
             console.log("No records Found");
             if (this.Exist_Record == false) {
-              this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Add;
-              this.Subscription_entry.DURATION = this.DURATION_ngModel_Add;
-              this.Subscription_entry.RATE = this.RATE_ngModel_Add;
+              this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Add.trim();
+              this.Subscription_entry.DURATION = this.DURATION_ngModel_Add.trim();
+              this.Subscription_entry.RATE = this.RATE_ngModel_Add.trim();
               this.Subscription_entry. EFFECTIVE_DATE = this. EFFECTIVE_DATE_ngModel_Add;
-              this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Add;
+              this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Add.trim();
               this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Add;
 
       this.Subscription_entry.SUBSCRIPTION_GUID = UUID.UUID();
@@ -196,17 +212,14 @@ export class SubsciptionsetupPage {
   }
   else {
     console.log("Records Found");
-    alert("The Subscription is already Added.")
+    alert("The Subscription is already Exist.")
     
-  }
-  
+  } 
 },
 err => {
   this.Exist_Record = false;
   console.log("ERROR!: ", err);
-}
-);
-
+});
 }
 }
 getSubscriptionList() {
@@ -219,12 +232,94 @@ getSubscriptionList() {
 }
 
  Update(SUBSCRIPTION_GUID: any) {  
- if(this.Subscription_entry.PLAN_NAME==null){this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit;}
- if(this.Subscription_entry.DURATION==null){this.Subscription_entry.DURATION = this.DURATION_ngModel_Edit;}
- if(this.Subscription_entry.RATE==null){this.Subscription_entry.RATE = this.RATE_ngModel_Edit;}
+
+  if (this.Subscriptionform.valid) {
+ if(this.Subscription_entry.PLAN_NAME==null){this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim();}
+ if(this.Subscription_entry.DURATION==null){this.Subscription_entry.DURATION = this.DURATION_ngModel_Edit.trim();}
+ if(this.Subscription_entry.RATE==null){this.Subscription_entry.RATE = this.RATE_ngModel_Edit.trim();}
  if(this.Subscription_entry.EFFECTIVE_DATE==null){this.Subscription_entry.EFFECTIVE_DATE = this.EFFECTIVE_DATE_ngModel_Edit;}
- if(this.Subscription_entry.DESCRIPTION==null){this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Edit;}
+ if(this.Subscription_entry.DESCRIPTION==null){this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Edit.trim();}
  if(this.Subscription_entry.ACTIVE_FLAG==null){this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Edit;}
+
+      this.Subscription_entry.CREATION_TS = this.subscription_details.CREATION_TS
+      this.Subscription_entry.CREATION_USER_GUID = this.subscription_details.CREATION_USER_GUID;
+      this.Subscription_entry.UPDATE_TS = this.subscription_details.UPDATE_TS;
+      this.Subscription_entry.SUBSCRIPTION_GUID = SUBSCRIPTION_GUID;
+      this.Subscription_entry.UPDATE_TS = new Date().toISOString();
+      this.Subscription_entry.UPDATE_USER_GUID = '1';
+      
+      //debugger;
+      if (this.PLAN_NAME_ngModel_Edit.trim() != localStorage.getItem('Prev_sub_Name')) {
+        let url: string;
+        url = this.baseResource_Url + "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Edit + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+        this.http.get(url)
+          .map(res => res.json())
+          .subscribe(
+          data => {
+            let res = data["resource"];
+            console.log('Current Name : ' + this.PLAN_NAME_ngModel_Edit.trim() + ', Previous Name : ' + localStorage.getItem('Prev_sub_Name'));
+
+            if (res.length == 0) {
+             
+              console.log("No records Found");
+              this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim();
+              
+              //**************Update service if it is new details*************************
+              this.subscriptionsetupservice.update(this.Subscription_entry)
+                .subscribe((response) => {
+                  if (response.status == 200) {
+                    alert('Subscription updated successfully');
+                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                  }
+                });
+              //**************************************************************************
+            }
+            else {
+              console.log("Records Found");
+              alert("The Subscription is already Exist. ");
+            }
+          },
+          err => {
+            this.Exist_Record = false;
+            console.log("ERROR!: ", err);
+          });
+      }
+      else {
+        if (this.Subscription_entry.PLAN_NAME == null) { this.Subscription_entry.PLAN_NAME = localStorage.getItem('Prev_sub_Name'); }
+        this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim();
+        
+        //**************Update service if it is old details************************
+      
+      this.subscriptionsetupservice.update(this.Subscription_entry)
+        .subscribe((response) => {
+          if (response.status == 200) {
+            alert('Subscription updated successfully');
+            //location.reload();
+            this.navCtrl.setRoot(this.navCtrl.getActive().component); 
+          }
+        });
+    }
+  }
+}
+ClearControls()
+{
+  this.PLAN_NAME_ngModel_Add = "";
+  this.DURATION_ngModel_Add = "";
+  this.RATE_ngModel_Add = "";
+  this.EFFECTIVE_DATE_ngModel_Add = "";
+  this.DESCRIPTION_ngModel_Add = "";
+  this.ACTIVE_FLAG_ngModel_Add = false;
+
+  this.PLAN_NAME_ngModel_Edit = "";
+  this.DURATION_ngModel_Edit = "";
+  this.RATE_ngModel_Edit = "";
+  this.EFFECTIVE_DATE_ngModel_Edit = "";
+  this.DESCRIPTION_ngModel_Edit = "";
+  this.ACTIVE_FLAG_ngModel_Edit = false;
+
+}
+}
+
 // if (this.Subscriptionform.valid) {
   
 //         let headers = new Headers();
@@ -241,24 +336,6 @@ getSubscriptionList() {
 //               console.log("No records Found");
 //               if (this.Exist_Record == false) {
 //     if (this.Subscriptionform.valid) {
-      this.Subscription_entry.CREATION_TS = this.subscription_details.CREATION_TS
-      this.Subscription_entry.CREATION_USER_GUID = this.subscription_details.CREATION_USER_GUID;
-      this.Subscription_entry.UPDATE_TS = this.subscription_details.UPDATE_TS;
-
-      this.Subscription_entry.SUBSCRIPTION_GUID = SUBSCRIPTION_GUID;
-      this.Subscription_entry.UPDATE_TS = new Date().toISOString();
-      this.Subscription_entry.UPDATE_USER_GUID = '1';
-      
-      this.subscriptionsetupservice.update(this.Subscription_entry)
-        .subscribe((response) => {
-          if (response.status == 200) {
-            alert('Subscription updated successfully');
-            //location.reload();
-            this.navCtrl.setRoot(this.navCtrl.getActive().component); 
-          }
-        })
-    }
-  }
 
 //}
 // else {
