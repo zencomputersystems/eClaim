@@ -178,31 +178,31 @@
                 <form [formGroup]="Cashform">
                     <ion-item>
                         <ion-label stacked>{{"CASHCARD NO."}}</ion-label>
-                        <ion-input type="number" formControlName="CASHCARD_SNO" [(ngModel)]="cashcard_entry.CASHCARD_SNO" value="{{cashcard.CASHCARD_SNO}}" placeholder="{{'Please fill in the cash card no.'}}"></ion-input>
+                        <ion-input type="text" formControlName="CASHCARD_SNO" [(ngModel)]="CASHCARD_SNO_ngModel_Add" placeholder="{{'Please fill in the cash card no.'}}"></ion-input>
 
                     </ion-item>
 
 
                     <ion-item>
                         <ion-label stacked>{{"ACCOUNT NO."}}</ion-label>
-                        <ion-input type="number" formControlName="ACCOUNT_ID" [(ngModel)]="cashcard_entry.ACCOUNT_ID" placeholder="{{'Please fill in the account no.'}}"></ion-input>
+                        <ion-input type="text" formControlName="ACCOUNT_ID" [(ngModel)]="ACCOUNT_ID_ngModel_Add" placeholder="{{'Please fill in the account no.'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"PASSWORD"}}</ion-label>
-                        <ion-input type="password" formControlName="ACCOUNT_PASSWORD" [(ngModel)]="cashcard_entry.ACCOUNT_PASSWORD" placeholder="{{'Please fill in yours password'}}"></ion-input>
+                        <ion-input type="password" formControlName="ACCOUNT_PASSWORD" [(ngModel)]="ACCOUNT_PASSWORD_ngModel_Add" placeholder="{{'Please fill in yours password'}}"></ion-input>
                     </ion-item>
 
 
                     <ion-item>
                         <ion-label stacked>{{"MANAGEMENT URL"}}</ion-label>
-                        <ion-input type="text" formControlName="MANAGEMENT_URL" [(ngModel)]="cashcard_entry.MANAGEMENT_URL" placeholder="{{'Please fill in the management URL'}}"></ion-input>
+                        <ion-input type="text" formControlName="MANAGEMENT_URL" [(ngModel)]="MANAGEMENT_URL_ngModel_Add" placeholder="{{'Please fill in the management URL'}}"></ion-input>
                     </ion-item>
 
 
                     <ion-item>
                         <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-                        <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="cashcard_entry.DESCRIPTION" placeholder="{{'Please fill in the description'}}"></ion-input>
+                        <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Add" placeholder="{{'Please fill in the description'}}"></ion-input>
                     </ion-item>
                     <div class="btn">
                         <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Cashform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
@@ -231,36 +231,36 @@
                 <form [formGroup]="Cashform">
                     <ion-item>
                         <ion-label stacked>{{"CASHCARD NO."}}</ion-label>
-                        <ion-input type="text" formControlName="CASHCARD_SNO" [(ngModel)]="cashcard_entry.CASHCARD_SNO" value="{{cashcard.CASHCARD_SNO}}"
+                        <ion-input type="text" formControlName="CASHCARD_SNO" [(ngModel)]="CASHCARD_SNO_ngModel_Edit"
                             placeholder="{{'Please fill in the cash card no.'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"ACCOUNT NO."}}</ion-label>
-                        <ion-input type="text" formControlName="ACCOUNT_ID" [(ngModel)]="cashcard_entry.ACCOUNT_ID"  value="{{cashcard.ACCOUNT_ID}}"
+                        <ion-input type="text" formControlName="ACCOUNT_ID" [(ngModel)]="ACCOUNT_ID_ngModel_Edit"  
                             placeholder="{{'Please fill in the account no.'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"PASSWORD"}}</ion-label>
-                        <ion-input type="password" formControlName="ACCOUNT_PASSWORD" [(ngModel)]="cashcard_entry.ACCOUNT_PASSWORD" value="{{cashcard.ACCOUNT_PASSWORD}}"
+                        <ion-input type="password" formControlName="ACCOUNT_PASSWORD" [(ngModel)]="ACCOUNT_PASSWORD_ngModel_Edit" 
                             placeholder="{{'Please fill in yours password'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"MANAGEMENT URL"}}</ion-label>
-                        <ion-input type="text" formControlName="MANAGEMENT_URL" [(ngModel)]="cashcard_entry.MANAGEMENT_URL" value="{{cashcard.MANAGEMENT_URL}}"
+                        <ion-input type="text" formControlName="MANAGEMENT_URL" [(ngModel)]="MANAGEMENT_URL_ngModel_Edit" 
                             placeholder="{{'Please fill in the management URL'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-                        <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="cashcard_entry.DESCRIPTION" value="{{cashcard.DESCRIPTION}}"
+                        <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Edit" 
                             placeholder="{{'Please fill in the description'}}"></ion-input>
                     </ion-item>
 
                     <div class="btn">
-                        <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(cashcard.CASHCARD_GUID)">{{"SUBMIT" | translate}}</button></div>
+                        <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Cashform.valid" (click)="!Update(cashcard_details.CASHCARD_GUID)">{{"SUBMIT" | translate}}</button></div>
                 </form>
             </ion-list>
         </ion-card>
