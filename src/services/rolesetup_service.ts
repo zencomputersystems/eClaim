@@ -14,7 +14,7 @@ class ServerResponse {
     constructor(public resource: any) {
 
     }
-};
+}; 
 
 @Injectable()
 export class RoleSetup_Service {

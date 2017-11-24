@@ -5,62 +5,94 @@
   Ionic pages and navigation.
 -->
 <ion-header>
+  
+    <ion-navbar>
+      <ion-title>ENTERTAINMENT CLAIM</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding>
+  
+    <div class="blackcontainer">
+  
+      <div class="popup" padding>
+  
+        <ion-card class="cm">
+          <ion-card-header class="icTitle headerColor-white ">
+  
+            <div class="icHeaderText">APPLY NEW ENTERTAINMENT CLAIM</div>
+  
+          </ion-card-header>
+          <ion-list class="scroll">
+            <form [formGroup]="Entertainmentform">
+              <ion-item>
+                <ion-label stacked>{{"DATE"}}</ion-label>
+                <ion-datetime displayFormat="DD/MM/YYYY" formControlName="entertainment_date" [(ngModel)]="Entertainment_Date_ngModel" placeholder="{{'Please choose yours date while you entertain with customer'}}"></ion-datetime>
+              </ion-item>
 
-  <ion-navbar>
-    <ion-title>ENTERTAINMENT CLAIM</ion-title>
-  </ion-navbar>
+              <ion-item>
+                  <ion-label stacked>SOC NUMBER</ion-label>
+                  <ion-select formControlName="soc_no" [(ngModel)]="Entertainment_SOC_No_ngModel" placeholder="SELECT" (ionChange)="GetSocNo()">
+                    <ion-option *ngFor="let soc of socs" selected="true">{{soc.SOC_NO}}</ion-option>
+                  </ion-select>
+              </ion-item>
+  
+  
+              <ion-item>
+                <ion-label stacked>{{"PROJECT NAME"}}</ion-label>
+                <ion-input type="text" formControlName="project_name" disabled = "true" [(ngModel)]="Entertainment_ProjectName_ngModel" placeholder="{{'Please fill in the name of yours project'}}"></ion-input>
+              </ion-item>
 
-</ion-header>
+              <ion-item>
+                <ion-label stacked>{{"CUSTOMER NAME"}}</ion-label>
+                <ion-input type="text" formControlName="customer_name"  disabled = "true" [(ngModel)]="Entertainment_CustomerName_ngModel" placeholder="{{'Please fill in the name of yours customer'}}"></ion-input>
+              </ion-item>
+  
+              <ion-item>
+                <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
+                <ion-input type="text" formControlName="description" [(ngModel)]="Entertainment_Description_ngModel" placeholder="{{'Please fill in the description'}}"></ion-input>
+              </ion-item>
+  
+  
+              <ion-item>
+                <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
+                <ion-input type="number" formControlName="claim_amount" [(ngModel)]="Entertainment_ClaimAmount_ngModel" placeholder="{{'Please fill in the amount of yours Entertainment Claim'}}"></ion-input>
+              </ion-item>
+  
+  
+              <!-- <ion-item>
+                <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
+  
+              </ion-item> -->
 
+              <ion-item>
+                <input type="file"  name="upresume_one"/>
+                <!-- <button ion-button (click)="uploadFile()">upload</button> -->
+                <!-- <img src="assets/img/uploadimage/aa.png" alt="Ionic Logo"> -->
+                    <!-- <p>Supported formats .doc,.docs and .pdf[Max file size: 500KB]</p> -->
+                </ion-item>
 
-<ion-content padding>
- <ion-list>
-    <form [formGroup]="Entertainmentform">
-      <ion-item>
-        <ion-label stacked>{{"DATE"}}</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" formControlName="entertainmentname" [(ngModel)]="Entertainmentform.fullname" placeholder="{{'Please choose yours date while you entertain with customer'}}"></ion-datetime>
-      </ion-item>
+                <!-- <ion-item>
+                  <h4>Image Preview</h4>
+                  <img src="{{imageFileName}}" *ngIf="imageFileName" alt="Ionic File" width="300" />
+                </ion-item> -->
 
-      <ion-item>
-        <ion-label stacked>{{"CUSTOMER NAME"}}</ion-label>
-        <ion-input type="text" formControlName="entertainmentname" [(ngModel)]="Entertainmentform.fullname" placeholder="{{'Please fill in the name of yours customer'}}"></ion-input>
-      </ion-item>
-
-
-
-      <ion-item>
-        <ion-label stacked>{{"SOC NO."}}</ion-label>
-        <ion-input type="text" formControlName="entertainmentname" [(ngModel)]="Entertainmentform.fullname" placeholder="{{'Please fill in the SOC number'}}"></ion-input>
-      </ion-item>
-
-
-
-      <ion-item>
-        <ion-label stacked>{{"PROJECT NAME"}}</ion-label>
-        <ion-input type="text" formControlName="entertainmentname" [(ngModel)]="Entertainmentform.fullname" placeholder="{{'Please fill in the name of yours project'}}"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-        <ion-input type="text" formControlName="entertainmentname" [(ngModel)]="Entertainmentform.fullname" placeholder="{{'Please fill in the description (if you have)'}}"></ion-input>
-      </ion-item>
-
-
-      <ion-item>
-        <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
-        <ion-input type="number" formControlName="entertainmentname" [(ngModel)]="Entertainmentform.fullname" placeholder="{{'Please fill in the amount of yours Entertainment Claim'}}"></ion-input>
-      </ion-item>
-
-
-      <ion-item>
-        <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
-
-      </ion-item>
-
-      <div class="btn">
-        <button ion-button>SUBMIT</button>
+                <!-- <ion-item>
+                  <button click="" full="" ion-button="" uploadFile="">Upload Image</button>
+                 </ion-item> -->
+                
+  
+              <div class="btn">
+                <!-- <button ion-button>SUBMIT</button> -->
+                <button ion-button (click)="save()">SUBMIT</button>
+              </div>
+  
+            </form>
+          </ion-list>
+        </ion-card>
+  
       </div>
-
-    </form>
-  </ion-list>
-</ion-content>
+    </div>
+  </ion-content>

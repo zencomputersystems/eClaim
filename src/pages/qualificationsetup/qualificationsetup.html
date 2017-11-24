@@ -21,44 +21,35 @@
 
 
     <ion-list>
-        <ion-item class="bgColor-lightGrey">
-            <ion-label>S.No</ion-label>
-            <ion-label class="textRight" item-end>QUALIFICATION</ion-label>
-            <ion-label class="textRight" item-end>DESCRIPTION</ion-label>
-            <ion-label class="textRight" item-end>ACTION</ion-label>
-        </ion-item>
-
-         <ion-item *ngFor="let qualificationsetup of qualificationsetups; let i=index">
-            <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_NAME}}</ion-label>
-            <ion-label item-start class="textRight">{{qualificationsetup.TYPE_DESC}}</ion-label>
-            <button ion-button item-end (click)="EditClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end (click)="DeleteClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
-        </ion-item>
+      <ion-item>
+        <table class="Tabler">
+          <tr class="linedsg TColor">
+            <th class="lgl1 tblBrLeft" style="width:60px">NO.</th>
+            <th class="lgl1">QUALIFICATION</th>
+            <th class="lgl1">DESCRIPTION</th>
+  
+            <th class="lgl1 tblBrRight" style="width:90px">ACTION</th>
+  
+          </tr>
+  
+          <tr class="col7" *ngFor="let qualificationsetup of qualificationsetups; let i=index">
+            <td class="lgl1">{{i+1}}</td>
+            <td class="lgl1">{{qualificationsetup.TYPE_NAME}}</td>
+            <td class="lgl1">{{qualificationsetup.TYPE_DESC}}</td>
+  
+            <td class="lgl1 fColor">
+              <button ion-button item-end (click)="EditClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-create"></ion-icon></button>
+              <button ion-button item-end (click)="DeleteClick(qualificationsetup.QUALIFICATION_TYPE_GUID)"><ion-icon name="md-close"></ion-icon></button>
+            </td>
+          </tr>
+  
+  
+        </table>
+      </ion-item>
     </ion-list>
-
- <!-- <ion-list>
-      <ion-list-header>
-     QUALIFICATION
-      </ion-list-header>
-      <ion-item>MASTER<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>PROF.<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-
-    </ion-list>
-
-    <ion-list>
-      <ion-list-header>
-     DESCRIPTION
-      </ion-list-header>
-      <ion-item>MASTER LEVEL<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>PROFESSIONAL LEVEL<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-
-    </ion-list> -->
-
+  
+  
+  
 
 <!-- add Qualifyform start-->
 <div class="blackcontainer" *ngIf="AddQualifyClicked">

@@ -17,147 +17,42 @@
     <ion-fab top right edge>
         <button ion-fab mini (click)="AddCashClick()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
-    <!-- <ion-list>
-        <ion-list-header>
-            <div class="row" style="border:2px;">
-                <div class="col">CASHCARD NO</div>
-                <div class="col">ACCOUNT NO</div>
-                <div class="col">PASSWORD</div>
-                <div class="col">MANAGEMENT URL</div>
-                <div class="col">DESCRIPTION</div>
-            </div>
-        </ion-list-header>
-    </ion-list>
 
     <ion-list>
         <ion-item>
-            <div class="row" style="border:2px;">
-                <div class="col">1234</div>
-                <div class="col">1234</div>
-                <div class="col">1234</div>
-                <div class="col">http://www.zen.com.my</div>
-                <div class="col">Test Desc</div>
-                <button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-                <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>
-            </div>
-        </ion-item>
-    </ion-list>
-    <ion-list>
-        <ion-item>
-            <div class="row" style="border:2px;">
-                <div class="col">1234</div>
-                <div class="col">1234</div>
-                <div class="col">1234</div>
-                <div class="col">http://www.zen.com.my</div>
-                <div class="col">Test Desc</div>
-                <button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-                <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>
-            </div>
-        </ion-item>
-    </ion-list>
-    <ion-list>
-        <ion-item>
-            <div class="row" style="border:2px;">
-                <div class="col">1234</div>
-                <div class="col">1234</div>
-                <div class="col">1234</div>
-                <div class="col">http://www.zen.com.my</div>
-                <div class="col">Test Desc</div>
-                <button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-                <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>
-            </div>
-        </ion-item>
-    </ion-list>  -->
-    <ion-list>
-        <ion-item class="bgColor-lightGrey">
-            <ion-label>S.No</ion-label>
-            <ion-label class="textRight" item-end>CASHCARD NO.</ion-label>
-            <ion-label class="textRight" item-end>ACCOUNT NO.</ion-label>
-            <ion-label class="textRight" item-end>PASSWORD</ion-label>
-            <ion-label class="textRight" item-end>MANAGEMENT URL</ion-label>
-            <ion-label class="textRight" item-end>DESCRIPTION</ion-label>
-            <ion-label class="textRight" item-end>ACTION</ion-label>
-        </ion-item>
+            <table class="Tabler ">
+                <tr class="linedsg TColor">
+                    <th class="lgl1 tblBrLeft" style="width:60px">NO.</th>
+                    <th class="lgl1">CASHCARD NO.</th>
+                    <th class="lgl1">ACCOUNT NO.</th>
+                    <th class="lgl1">PASSWORD</th>
+                    <th class="lgl1">MANAGEMENT URL</th>
+                    <th class="lgl1">DESCRIPTION</th>
+                    <th class="lgl1 tblBrRight" style="width:80px">ACTION</th>
 
-        <ion-item *ngFor="let cashcard of cashcards; let i=index">
-            <ion-label item-start>{{i+1}}</ion-label>
-            <ion-label item-start>{{cashcard.CASHCARD_SNO}}</ion-label>
-            <ion-label item-start class="textRight">{{cashcard.ACCOUNT_ID}}</ion-label>
-            <ion-label item-start class="textRight">{{cashcard.ACCOUNT_PASSWORD}}</ion-label>
-            <ion-label item-start class="textRight">{{cashcard.MANAGEMENT_URL}}</ion-label>
-            <ion-label item-start class="textRight">{{cashcard.DESCRIPTION}}</ion-label>
+                </tr>
+
+                <tr class="col7" *ngFor="let cashcard of cashcards; let i=index">
+                    <td class="lgl1">{{i+1}}</td>
+                    <td class="lgl1">{{cashcard.CASHCARD_SNO}}</td>
+                    <td class="lgl1">{{cashcard.ACCOUNT_ID}}</td>
+                    <td class="lgl1">{{cashcard.ACCOUNT_PASSWORD}}</td>
+                    <td class="lgl1">{{cashcard.MANAGEMENT_URL}}</td>
+                    <td class="lgl1">{{cashcard.DESCRIPTION}}</td>
+                    <td class="lgl1 fColor">
+                        <button ion-button item-end (click)="EditClick(cashcard.CASHCARD_GUID)"><ion-icon name="md-create"></ion-icon></button>
+                        <button ion-button item-end (click)="DeleteClick(cashcard.CASHCARD_GUID)"><ion-icon name="md-close"></ion-icon></button>
+                    </td>
+                </tr>
 
 
-            <!-- <ion-list>
-        <ion-list-header>
-            CASHCARD NO.            ACCOUNT NO.             PASSWORD            MANAGEMENT URL          DESCRIPTION
-        </ion-list-header> -->
-            <!-- <ion-item *ngFor="let cashcard of cashcards">{{cashcard.CASHCARD_SNO}}          {{cashcard.ACCOUNT_ID}}          {{cashcard.ACCOUNT_PASSWORD}}            {{cashcard.MANAGEMENT_URL}}          {{cashcard.DESCRIPTION}} -->
-            <button ion-button item-end (click)="EditClick(cashcard.CASHCARD_GUID)"><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end (click)="DeleteClick(cashcard.CASHCARD_GUID)"><ion-icon name="md-close"></ion-icon></button>
+            </table>
         </ion-item>
     </ion-list>
 
 
-    <!-- <ion-list>
-        <ion-list-header>
-            ACCOUNT NO.
-        </ion-list-header>
-        <ion-item>1234<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>12345<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>23489<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>958758784<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-    </ion-list>
 
 
-    <ion-list>
-        <ion-list-header>
-            PASSWORD
-        </ion-list-header>
-        <ion-item>1234<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>12345<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>23489<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>958758784<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-    </ion-list>
-
-
-
-    <ion-list>
-        <ion-list-header>
-            MANAGEMENT URL
-        </ion-list-header>
-        <ion-item>http://zentranet.zen.com.my/Pages/Home.aspx<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>http://www.zen.com.my/<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>http://intranet.zen.com.my/Pages/Home.aspx<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>http://zentranet.zen.com.my/Pages/Home.aspx<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-    </ion-list>
-
-
-    <ion-list>
-        <ion-list-header>
-            DESCRIPTION
-        </ion-list-header>
-        <ion-item>DESCRIBE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>DESCRIBE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>DESCRIBE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-        <ion-item>DESCRIBE<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-    </ion-list> -->
 
 
     <!-- add cash card form start-->
@@ -231,32 +126,27 @@
                 <form [formGroup]="Cashform">
                     <ion-item>
                         <ion-label stacked>{{"CASHCARD NO."}}</ion-label>
-                        <ion-input type="text" formControlName="CASHCARD_SNO" [(ngModel)]="CASHCARD_SNO_ngModel_Edit"
-                            placeholder="{{'Please fill in the cash card no.'}}"></ion-input>
+                        <ion-input type="text" formControlName="CASHCARD_SNO" [(ngModel)]="CASHCARD_SNO_ngModel_Edit" placeholder="{{'Please fill in the cash card no.'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"ACCOUNT NO."}}</ion-label>
-                        <ion-input type="text" formControlName="ACCOUNT_ID" [(ngModel)]="ACCOUNT_ID_ngModel_Edit"  
-                            placeholder="{{'Please fill in the account no.'}}"></ion-input>
+                        <ion-input type="text" formControlName="ACCOUNT_ID" [(ngModel)]="ACCOUNT_ID_ngModel_Edit" placeholder="{{'Please fill in the account no.'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"PASSWORD"}}</ion-label>
-                        <ion-input type="password" formControlName="ACCOUNT_PASSWORD" [(ngModel)]="ACCOUNT_PASSWORD_ngModel_Edit" 
-                            placeholder="{{'Please fill in yours password'}}"></ion-input>
+                        <ion-input type="password" formControlName="ACCOUNT_PASSWORD" [(ngModel)]="ACCOUNT_PASSWORD_ngModel_Edit" placeholder="{{'Please fill in yours password'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"MANAGEMENT URL"}}</ion-label>
-                        <ion-input type="text" formControlName="MANAGEMENT_URL" [(ngModel)]="MANAGEMENT_URL_ngModel_Edit" 
-                            placeholder="{{'Please fill in the management URL'}}"></ion-input>
+                        <ion-input type="text" formControlName="MANAGEMENT_URL" [(ngModel)]="MANAGEMENT_URL_ngModel_Edit" placeholder="{{'Please fill in the management URL'}}"></ion-input>
                     </ion-item>
 
                     <ion-item>
                         <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-                        <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Edit" 
-                            placeholder="{{'Please fill in the description'}}"></ion-input>
+                        <ion-input type="text" formControlName="DESCRIPTION" [(ngModel)]="DESCRIPTION_ngModel_Edit" placeholder="{{'Please fill in the description'}}"></ion-input>
                     </ion-item>
 
                     <div class="btn">

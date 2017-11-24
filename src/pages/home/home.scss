@@ -1,45 +1,55 @@
 ﻿page-speaker-list {
-
-   
-
-}
-    
-
-     
+  
     .Subtitle {
       text-align: center;
-      font-size: 1.12vw;
+      font-size: 1vw;
     }
-
-
+  
+  
     .iconf {
       font-size: 7vw;
       color: #ca9b24;
          transition: width 2s;
     }
-
- 
-
+    
+    .round1 {
+      float: left;
+      box-shadow: none !important;
+      width: calc(16% - 20px);
+      margin: 10px !important;
+      cursor: pointer;
+      border-radius: 5px;
+      min-height: 80px;
+    }
+  
+  
+  
+  
     .icon {
       text-align: center;
     }
-
-  // Todo: remove when this issue https://github.com/ionic-team/ionic/issues/11212 is fixed
-  @media(max-width: 700px) {
+  
+      
+  
+    // Todo: remove when this issue https://github.com/ionic-team/ionic/issues/11212 is fixed
+    @media(max-width: 700px) {
       .round {
-      width: calc(100% - 20px);
-      min-height: 100px;
-    }
-
-
-    .Subtitle {
-      text-align: center;
-      font-size: 3.5vw;
-    }
-
-
-    .iconf {
-      font-size: 22vw;
-      color: #ca9b24;
+        width: calc(100% - 20px);
+        min-height: 100px;
+      }
+  
+  
+      .Subtitle {
+        text-align: center;
+        font-size: 3.5vw;
+      }
+  
+  
+      .iconf {
+        font-size: 22vw;
+        color: #ca9b24;
+      }
     }
   }
+      
+     

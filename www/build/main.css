@@ -41761,12 +41761,14 @@ page-account img {
   color: black;
   font-size: 20px;
   padding: 10px 0px;
+  width: 100%;
 }
 
 .eClaimSubTitle1 {
   color: black;
   font-size: 16px;
   margin-left: 20px;
+  width: 100%;
 }
 
 .eClaimSubTitle2 {
@@ -41774,6 +41776,20 @@ page-account img {
   font-size: 16px;
   margin-left: 20px;
   margin-top: 10px;
+  width: 100%;
+}
+
+.eClaimSubTitle3 {
+  color: black;
+  font-size: 20px;
+  padding: 200px 50px;
+  width: 100%;
+}
+
+.eClaimSubTitle4 {
+  color: black;
+  font-size: 20px;
+  width: 100%;
 }
 
 .scroll {
@@ -41785,31 +41801,240 @@ page-account img {
   height: 100%;
 }
 
-.Subtitle {
-  text-align: center;
-  font-size: 1.12vw;
+.Tabler {
+  width: 100%;
+  padding-top: 35px;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
-.iconf {
+tr.colth {
+  color: white;
+}
+
+th.lgl1 {
+  padding: 10px 5px;
+  border: none;
+}
+
+td.lgl1 {
+  padding: 4px;
+  text-align: center;
+  word-wrap: break-word;
+  border: none;
+  border-bottom: 1px solid gainsboro;
+}
+
+th.lgl2 {
+  padding: 5px 5px;
+  border: none;
+  font-size: 14px;
+}
+
+td.lgl2 {
+  font-size: 14px;
+  padding: 2px;
+  text-align: center;
+  word-wrap: break-word;
+  border: none;
+  border-bottom: 1px solid gainsboro;
+}
+
+.tblBrLeft {
+  border-radius: 5px 0 0 5px !important;
+}
+
+.tblBrRight {
+  border-radius: 0 5px 5px 0 !important;
+}
+
+.TColor {
+  background: #CB9D2F;
+  color: white;
+}
+
+.linedsg {
+  border-bottom: 1px solid gainsboro;
+}
+
+.graphHeaderStyle {
+  border-top: 5px solid #ca9b24;
+  border-bottom: 1px solid gainsboro;
+}
+
+.fullWidth {
+  width: 100% !important;
+}
+
+ion-menu#loggedOutMenu {
+  min-width: 303px !important;
+  max-width: 14%  !important;
+  border-right: 1px solid #dedede;
+  border-left: 0;
+}
+
+ion-toggle.toggle.toggle-md {
+  padding-left: 80px !important;
+  padding-right: 0px !important;
+}
+
+ion-toggle.toggle.toggle-md.tog {
+  padding-left: 123px !important;
+  padding-right: 0px !important;
+}
+
+ion-toggle.toggle.toggle-md.stog {
+  padding-left: 53px !important;
+  padding-right: 0px !important;
+}
+
+.UPContent {
+  width: 100%;
+}
+
+page-entertainmentclaim .blackcontainer {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  position: fixed;
+  opacity: 0.7;
+}
+
+page-entertainmentclaim .popup {
+  width: 50%;
+  left: 258px;
+  top: 60px;
+  position: fixed;
+  height: 500px;
+}
+
+page-entertainmentclaim .btn {
+  text-align: center;
+  margin: 10px 0px;
+}
+
+page-entertainmentclaim .btnR {
+  width: 33px !important;
+  height: 38px;
+  right: 26px;
+  font-size: 22px !important;
+  top: 26px;
+  background: #ff6b6b;
+  color: #fff;
+  position: absolute !important;
+}
+
+page-entertainmentclaim .icHeaderText {
+  font-size: 15px !important;
+}
+
+page-entertainmentclaim .icTitle {
+  border-bottom: 1px solid !important;
+  margin-bottom: 10px !important;
+  padding: 10px !important;
+}
+
+page-entertainmentclaim .headerColor-white {
+  background: #ffffff !important;
+  border-color: #e8e8e8 !important;
+  color: #a5a3a3 !important;
+}
+
+page-entertainmentclaim .cm {
+  height: 100%;
+}
+
+page-giftclaim .blackcontainer {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  position: fixed;
+  opacity: 0.7;
+}
+
+page-giftclaim .popup {
+  width: 50%;
+  left: 258px;
+  top: 60px;
+  position: fixed;
+  height: 500px;
+}
+
+page-giftclaim .btn {
+  text-align: center;
+  margin: 10px 0px;
+}
+
+page-giftclaim .btnR {
+  width: 33px !important;
+  height: 38px;
+  right: 26px;
+  font-size: 22px !important;
+  top: 26px;
+  background: #ff6b6b;
+  color: #fff;
+  position: absolute !important;
+}
+
+page-giftclaim .icHeaderText {
+  font-size: 15px !important;
+}
+
+page-giftclaim .icTitle {
+  border-bottom: 1px solid !important;
+  margin-bottom: 10px !important;
+  padding: 10px !important;
+}
+
+page-giftclaim .headerColor-white {
+  background: #ffffff !important;
+  border-color: #e8e8e8 !important;
+  color: #a5a3a3 !important;
+}
+
+page-giftclaim .cm {
+  height: 100%;
+}
+
+page-speaker-list .Subtitle {
+  text-align: center;
+  font-size: 1vw;
+}
+
+page-speaker-list .iconf {
   font-size: 7vw;
   color: #ca9b24;
   transition: width 2s;
 }
 
-.icon {
+page-speaker-list .round1 {
+  float: left;
+  box-shadow: none !important;
+  width: calc(16% - 20px);
+  margin: 10px !important;
+  cursor: pointer;
+  border-radius: 5px;
+  min-height: 80px;
+}
+
+page-speaker-list .icon {
   text-align: center;
 }
 
 @media (max-width: 700px) {
-  .round {
+  page-speaker-list .round {
     width: calc(100% - 20px);
     min-height: 100px;
   }
-  .Subtitle {
+  page-speaker-list .Subtitle {
     text-align: center;
     font-size: 3.5vw;
   }
-  .iconf {
+  page-speaker-list .iconf {
     font-size: 22vw;
     color: #ca9b24;
   }
@@ -41831,6 +42056,168 @@ page-user .list {
 
 page-user input.text-input.text-input-md.ng-dirty.ng-valid.ng-touched {
   color: white !important;
+}
+
+page-medicalclaim .blackcontainer {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  position: fixed;
+  opacity: 0.7;
+}
+
+page-medicalclaim .popup {
+  width: 50%;
+  left: 258px;
+  top: 60px;
+  position: fixed;
+  height: 500px;
+}
+
+page-medicalclaim .btn {
+  text-align: center;
+  margin: 10px 0px;
+}
+
+page-medicalclaim .btnR {
+  width: 33px !important;
+  height: 38px;
+  right: 26px;
+  font-size: 22px !important;
+  top: 26px;
+  background: #ff6b6b;
+  color: #fff;
+  position: absolute !important;
+}
+
+page-medicalclaim .icHeaderText {
+  font-size: 15px !important;
+}
+
+page-medicalclaim .icTitle {
+  border-bottom: 1px solid !important;
+  margin-bottom: 10px !important;
+  padding: 10px !important;
+}
+
+page-medicalclaim .headerColor-white {
+  background: #ffffff !important;
+  border-color: #e8e8e8 !important;
+  color: #a5a3a3 !important;
+}
+
+page-medicalclaim .cm {
+  height: 100%;
+}
+
+page-overtimeclaim .blackcontainer {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  position: fixed;
+  opacity: 0.7;
+}
+
+page-overtimeclaim .popup {
+  width: 50%;
+  left: 258px;
+  top: 60px;
+  position: fixed;
+  height: 500px;
+}
+
+page-overtimeclaim .btn {
+  text-align: center;
+  margin: 10px 0px;
+}
+
+page-overtimeclaim .btnR {
+  width: 33px !important;
+  height: 38px;
+  right: 26px;
+  font-size: 22px !important;
+  top: 26px;
+  background: #ff6b6b;
+  color: #fff;
+  position: absolute !important;
+}
+
+page-overtimeclaim .icHeaderText {
+  font-size: 15px !important;
+}
+
+page-overtimeclaim .icTitle {
+  border-bottom: 1px solid !important;
+  margin-bottom: 10px !important;
+  padding: 10px !important;
+}
+
+page-overtimeclaim .headerColor-white {
+  background: #ffffff !important;
+  border-color: #e8e8e8 !important;
+  color: #a5a3a3 !important;
+}
+
+page-overtimeclaim .cm {
+  height: 100%;
+}
+
+page-printclaim .blackcontainer {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  position: fixed;
+  opacity: 0.7;
+}
+
+page-printclaim .popup {
+  width: 50%;
+  left: 258px;
+  top: 60px;
+  position: fixed;
+  height: 500px;
+}
+
+page-printclaim .btn {
+  text-align: center;
+  margin: 10px 0px;
+}
+
+page-printclaim .btnR {
+  width: 33px !important;
+  height: 38px;
+  right: 26px;
+  font-size: 22px !important;
+  top: 26px;
+  background: #ff6b6b;
+  color: #fff;
+  position: absolute !important;
+}
+
+page-printclaim .icHeaderText {
+  font-size: 15px !important;
+}
+
+page-printclaim .icTitle {
+  border-bottom: 1px solid !important;
+  margin-bottom: 10px !important;
+  padding: 10px !important;
+}
+
+page-printclaim .headerColor-white {
+  background: #ffffff !important;
+  border-color: #e8e8e8 !important;
+  color: #a5a3a3 !important;
+}
+
+page-printclaim .cm {
+  height: 100%;
 }
 
 page-schedule ion-item-sliding[track=ionic] ion-label {

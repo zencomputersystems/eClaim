@@ -18,19 +18,26 @@
     <button ion-button (click)="AddTravelClick()">SUMMARY</button>
 
       <form [formGroup]="Travelform">
-          <ion-item>
-            <ion-label stacked>{{"SOC NUMBER"}}</ion-label>
-            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the SOC NUMBER'}}"></ion-input>
-          </ion-item>
+          
 
+             
+        <ion-item>
+            <ion-label stacked>SOC NUMBER</ion-label>
+            <ion-select formControlName="soc_no" [(ngModel)]="Travel_SOC_No_ngModel" placeholder="SELECT" (ionChange)="GetSocNo()">
+              <ion-option *ngFor="let soc of socs" selected="true">{{soc.SOC_NO}}</ion-option>
+            </ion-select>
+          </ion-item>
+          
+     
+          
           <ion-item>
             <ion-label stacked>{{"PROJECT NAME"}}</ion-label>
-            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the project name'}}"></ion-input>
+            <ion-input type="text" formControlName="project_name" disabled="true" [(ngModel)]="Travel_ProjectName_ngModel" placeholder="{{'Please fill in the project name'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DATE"}}</ion-label>
-            <ion-datetime displayFormat="DD/MM/YYYY" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please choose yours date while you go to the place'}}"></ion-datetime>
+            <ion-datetime displayFormat="DD/MM/YYYY" formControlName="travel_date" [(ngModel)]="Travel_Date_ngModel" placeholder="{{'Please choose yours date while you go to the place'}}"></ion-datetime>
           </ion-item>
 
           <ion-item>
@@ -40,48 +47,48 @@
 
           <ion-item>
             <ion-label stacked>{{"FROM"}}</ion-label>
-            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the the place that you start car'}}"></ion-input>
+            <ion-input type="text" formControlName="from" [(ngModel)]="Travel_From_ngModel" placeholder="{{'Please fill in the the place that you start car'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESTINATION"}}</ion-label>
-            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the destination of the Claim'}}"></ion-input>
+            <ion-input type="text" formControlName="destination" [(ngModel)]="Travel_Destination_ngModel" placeholder="{{'Please fill in the destination of the Claim'}}"></ion-input>
           </ion-item>
 
 
           <ion-item>
             <ion-label stacked>{{"DISTANCE(KM)"}}</ion-label>
-            <ion-input type="number" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please choose the distance between the trip'}}"></ion-input>
+            <ion-input type="number" formControlName="distance" [(ngModel)]="Travel_Distance_ngModel" placeholder="{{'Please choose the distance between the trip'}}"></ion-input>
           </ion-item>
 
 
           <ion-item>
             <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
-            <ion-input type="number" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the amount of yours Travel Claim'}}"></ion-input>
+            <ion-input type="number" formControlName="claim_amount" [(ngModel)]="Travel_ClaimAmount_ngModel" placeholder="{{'Please fill in the amount of yours Travel Claim'}}"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-            <ion-input type="text" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the description (if you have)'}}"></ion-input>
+            <ion-input type="text" formControlName="description" [(ngModel)]="Travel_Description_ngModel" placeholder="{{'Please fill in the description'}}"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
 
           </ion-item>
 
-          <ion-item>
+          <!-- <ion-item>
             <ion-label stacked>{{"TOTAL AMOUNT(RM)"}}</ion-label>
-            <ion-input type="number" formControlName="travelname" [(ngModel)]="Travelform.fullname" placeholder="{{'Please fill in the amount for the total of the Travel Claim'}}"></ion-input>
-          </ion-item>
+            <ion-input type="number" formControlName="total_amount" [(ngModel)]="Travel_TotalAmount_ngModel" placeholder="{{'Please fill in the amount for the total of the Travel Claim'}}"></ion-input>
+          </ion-item> -->
           <div class="btn">
-            <button ion-button>SUBMIT</button></div>
+            <button ion-button (click)="save()">SUBMIT</button></div>
         </form>
   
 
  
 
   <!-- add Travel form start-->
-  <div class="blackcontainer" *ngIf="AddTravelClicked">
+  <!-- <div class="blackcontainer" *ngIf="AddTravelClicked">
   </div>
   <div class="popup" padding *ngIf="AddTravelClicked">
 
@@ -124,6 +131,6 @@
       </ion-list>
     </ion-card>
 
-  </div>
+  </div> -->
   <!-- add Travel form end-->
 </ion-content>

@@ -245,7 +245,6 @@ getCompanyList() {
             console.log(' Current Registration No : ' + this.REGISTRATION_NO_ngModel_Edit + ', Previous Reg : ' + localStorage.getItem('Prev_co_Reg'));
 
             if (res1.length == 0) {
-              alert('everything');
               console.log("No records Found");
               this.company_entry.REGISTRATION_NO = this.REGISTRATION_NO_ngModel_Edit.trim();
               this.company_entry.FAX = this.FAX_ngModel_Edit.trim();
@@ -404,7 +403,6 @@ getCompanyList() {
       this.companysetupservice.update(this.company_entry)
         .subscribe((response) => {
           if (response.status == 200) {
-            alert('previous values only');
             alert('Company Type updated successfully');
             //location.reload();
             this.navCtrl.setRoot(this.navCtrl.getActive().component);

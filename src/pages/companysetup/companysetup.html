@@ -14,117 +14,54 @@
 
 
 <ion-content padding>
-    <ion-fab top right edge>
-      <button ion-fab mini (click)="AddCompanyClick()"><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
+  <ion-fab top right edge>
+    <button ion-fab mini (click)="AddCompanyClick()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
 
-    <ion-list>
-      <!-- <ion-list-header>
-       TITLE
-      </ion-list-header> -->
-      <ion-item class="bgColor-lightGrey">
-        <ion-label>S.No</ion-label>
-        <ion-label class="textRight" item-end>NAME</ion-label>
-        <ion-label class="textRight" item-end>REG NO.</ion-label>
-        <ion-label class="textRight" item-end>ADDRESS</ion-label>
-        <ion-label class="textRight" item-end>FAX</ion-label>
-        <ion-label class="textRight" item-end>PHONE</ion-label>
-        <ion-label class="textRight" item-end>EMAIL</ion-label>
-        <ion-label class="textRight" item-end>ACTION</ion-label>
+  <ion-list>
+    <ion-item>
+      <table class="Tabler">
+        <tr class="linedsg TColor">
+          <th class="lgl1 tblBrLeft" style="width:40px">NO.</th>
+          <th class="lgl1">NAME</th>
+          <!-- <th class="lgl1">REG NO.</th> -->
+          <th class="lgl1">ADDRESS</th>
+          <th class="lgl1">FAX</th>
+          <th class="lgl1">PHONE</th>
+          <th class="lgl1">EMAIL</th>
+          <th class="lgl1 tblBrRight" style="width:90px">ACTION</th>
 
-      </ion-item>
-      <ion-item *ngFor="let company of companys; let i=index">
-        
-        <ion-label item-start>{{i+1}}</ion-label>
-        <ion-label item-start class="textRight">{{company.NAME}}</ion-label>
-        <ion-label item-start class="textRight">{{company.REGISTRATION_NO}}</ion-label>
-        <ion-label item-start class="textRight">{{company.ADDRESS}}</ion-label>
-        <ion-label item-start class="textRight">{{company.FAX}}</ion-label>
-        <ion-label item-start class="textRight">{{company.PHONE}}</ion-label>
-        <ion-label item-start class="textRight">{{company.EMAIL}}</ion-label>
-        
+        </tr>
 
-        <button ion-button item-end (click)="EditClick(company.COMPANY_GUID)"><ion-icon name="md-create"></ion-icon></button>
-        <button ion-button item-end (click)="DeleteClick(company.COMPANY_GUID)"><ion-icon name="md-close"></ion-icon></button>
-      </ion-item>
+        <tr class="col7" *ngFor="let company of companys; let i=index">
+          <td class="lgl1">{{i+1}}</td>
+          <td class="lgl1">{{company.NAME}}</td>
+          <!-- <td class="lgl1">{{company.REGISTRATION_NO}}</td> -->
+          <td class="lgl1">{{company.ADDRESS}}</td>
+          <td class="lgl1">{{company.FAX}}</td>
+          <td class="lgl1">{{company.PHONE}}</td>
+          <td class="lgl1">{{company.EMAIL}}</td>
+          <td class="lgl1 fColor">
+            <button ion-button item-end (click)="EditClick(company.COMPANY_GUID)"><ion-icon name="md-create"></ion-icon></button>
+            <button ion-button item-end (click)="DeleteClick(company.COMPANY_GUID)"><ion-icon name="md-close"></ion-icon></button>
+          </td>
+        </tr>
+
+
+      </table>
+    </ion-item>
   </ion-list>
-  
 
 
-    <!-- <ion-list>
-      <ion-list-header>
-          NAME
-      </ion-list-header>
-      <ion-item>ZEON<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>ZEON<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-   
-    </ion-list>
-
-    <ion-list>
-      <ion-list-header>
-          REG NO.
-      </ion-list-header>
-      <ion-item>ZEN12345<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>ZEON2222<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-
-    </ion-list>
-
-    <ion-list>
-      <ion-list-header>
-          ADDRESS
-      </ion-list-header>
-      <ion-item>4808-1-28, CBD Perdana 2 Persiaran Flora, Cyber 12 63000 Cyberjaya, Selangor, MALAYSIA	<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>4808-1-28, CBD Perdana 2 Persiaran Flora, Cyber 12 63000 Cyberjaya, Selangor, MALAYSIA<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>	</ion-item>
-   
-    </ion-list>
-
-    <ion-list>
-      <ion-list-header>
-       FAX
-      </ion-list-header>
-      <ion-item>+603-8686 2298<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>+603-8686 2222<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-  
-    </ion-list>
-
-    <ion-list>
-      <ion-list-header>
-       PHONE
-      </ion-list-header>
-      <ion-item>+603-8686 2268<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-      <ion-item>+603-8686 2268<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button></ion-item>
-
-    </ion-list>
 
 
-    <ion-list>
-      <ion-list-header>
-       EMAIL
-      </ion-list-header>
-      <ion-item>eyf@zen.com.my<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>	</ion-item>
-      <ion-item>e0yf@zen.com.my<button ion-button item-end><ion-icon name="md-create"></ion-icon></button>
-          <button ion-button item-end><ion-icon name="md-close"></ion-icon></button>	</ion-item>
 
-    </ion-list> -->
-
-
-     <!-- add company form start-->
-<div class="blackcontainer" *ngIf="AddCompanyClicked">
-</div>
+  <!-- add company form start-->
+  <div class="blackcontainer" *ngIf="AddCompanyClicked">
+  </div>
   <div class="popup" padding *ngIf="AddCompanyClicked">
 
-      <ion-card class="cm">
+    <ion-card class="cm">
       <ion-card-header class="icTitle headerColor-white ">
 
         <div class="icHeaderText">REGISTER NEW COMPANY</div>
@@ -132,63 +69,57 @@
           <ion-icon name="md-close"></ion-icon> 
         </button>
       </ion-card-header>
-     <ion-list class="scroll">
+      <ion-list class="scroll">
         <form [formGroup]="Companyform">
-          <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Add"  
-            placeholder="{{'Please fill in the name of company'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Add" placeholder="{{'Please fill in the name of company'}}"></ion-input>
           </ion-item>
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"REG NO."}}</ion-label>
-            <ion-input type="text" formControlName="REGISTRATION_NO" [(ngModel)]="REGISTRATION_NO_ngModel_Add"  
-            placeholder="{{'Please fill in the registration no. of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="REGISTRATION_NO" [(ngModel)]="REGISTRATION_NO_ngModel_Add" placeholder="{{'Please fill in the registration no. of the company'}}"></ion-input>
           </ion-item>
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"ADDRESS"}}</ion-label>
-            <ion-input type="text" formControlName="ADDRESS" [(ngModel)]="ADDRESS_ngModel_Add"  
-            placeholder="{{'Please fill in the address of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="ADDRESS" [(ngModel)]="ADDRESS_ngModel_Add" placeholder="{{'Please fill in the address of the company'}}"></ion-input>
           </ion-item>
 
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"FAX"}}</ion-label>
-            <ion-input type="text" formControlName="FAX" [(ngModel)]="FAX_ngModel_Add" 
-             placeholder="{{'Please fill in the fax no. of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="FAX" [(ngModel)]="FAX_ngModel_Add" placeholder="{{'Please fill in the fax no. of the company'}}"></ion-input>
           </ion-item>
 
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"PHONE"}}</ion-label>
-            <ion-input type="text" formControlName="PHONE" [(ngModel)]="PHONE_ngModel_Add"  
-            placeholder="{{'Please fill in the phone no. of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="PHONE" [(ngModel)]="PHONE_ngModel_Add" placeholder="{{'Please fill in the phone no. of the company'}}"></ion-input>
           </ion-item>
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"EMAIL"}}</ion-label>
-            <ion-input type="text" formControlName="EMAIL" [(ngModel)]="EMAIL_ngModel_Add"  
-            placeholder="{{'Please fill in the email of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="EMAIL" [(ngModel)]="EMAIL_ngModel_Add" placeholder="{{'Please fill in the email of the company'}}"></ion-input>
           </ion-item>
 
 
           <div class="btn">
             <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Companyform.valid" (click)="Save()">{{"SUBMIT" | translate}}</button></div>
         </form>
-     </ion-list>
-      </ion-card>
- 
- </div>
- <!-- add company form end-->
+      </ion-list>
+    </ion-card>
+
+  </div>
+  <!-- add company form end-->
 
 
   <!-- edit company form start-->
-<div class="blackcontainer" *ngIf="EditCompanyClicked">
-</div>
+  <div class="blackcontainer" *ngIf="EditCompanyClicked">
+  </div>
   <div class="popup" padding *ngIf="EditCompanyClicked">
 
-      <ion-card class="cm">
+    <ion-card class="cm">
       <ion-card-header class="icTitle headerColor-white ">
 
         <div class="icHeaderText">UPDATE COMPANY</div>
@@ -196,53 +127,47 @@
           <ion-icon name="md-close"></ion-icon> 
         </button>
       </ion-card-header>
-     <ion-list class="scroll">
+      <ion-list class="scroll">
         <form [formGroup]="Companyform">
-          <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"NAME"}}</ion-label>
-            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Edit" 
-             placeholder="{{'Please fill in the name of company'}}"></ion-input>
+            <ion-input type="text" formControlName="NAME" [(ngModel)]="NAME_ngModel_Edit" placeholder="{{'Please fill in the name of company'}}"></ion-input>
           </ion-item>
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"REG NO."}}</ion-label>
-            <ion-input type="text" formControlName="REGISTRATION_NO" [(ngModel)]="REGISTRATION_NO_ngModel_Edit"
-             placeholder="{{'Please fill in the registration no. of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="REGISTRATION_NO" [(ngModel)]="REGISTRATION_NO_ngModel_Edit" placeholder="{{'Please fill in the registration no. of the company'}}"></ion-input>
           </ion-item>
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"ADDRESS"}}</ion-label>
-            <ion-input type="text" formControlName="ADDRESS" [(ngModel)]="ADDRESS_ngModel_Edit" 
-             placeholder="{{'Please fill in the address of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="ADDRESS" [(ngModel)]="ADDRESS_ngModel_Edit" placeholder="{{'Please fill in the address of the company'}}"></ion-input>
           </ion-item>
 
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"FAX"}}</ion-label>
-            <ion-input type="text" formControlName="FAX" [(ngModel)]="FAX_ngModel_Edit" 
-             placeholder="{{'Please fill in the fax no. of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="FAX" [(ngModel)]="FAX_ngModel_Edit" placeholder="{{'Please fill in the fax no. of the company'}}"></ion-input>
           </ion-item>
 
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"PHONE"}}</ion-label>
-            <ion-input type="text" formControlName="PHONE" [(ngModel)]="PHONE_ngModel_Edit" 
-             placeholder="{{'Please fill in the phone no. of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="PHONE" [(ngModel)]="PHONE_ngModel_Edit" placeholder="{{'Please fill in the phone no. of the company'}}"></ion-input>
           </ion-item>
 
-           <ion-item>            
+          <ion-item>
             <ion-label stacked>{{"EMAIL"}}</ion-label>
-            <ion-input type="text" formControlName="EMAIL" [(ngModel)]="EMAIL_ngModel_Edit" 
-             placeholder="{{'Please fill in the email of the company'}}"></ion-input>
+            <ion-input type="text" formControlName="EMAIL" [(ngModel)]="EMAIL_ngModel_Edit" placeholder="{{'Please fill in the email of the company'}}"></ion-input>
           </ion-item>
 
 
           <div class="btn">
-            <button ion-button class="bgColor-grey fontColor-white btnStyle1"  (click)="Update(company_details.COMPANY_GUID)">{{"SUBMIT" | translate}}</button></div>
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" (click)="Update(company_details.COMPANY_GUID)">{{"SUBMIT" | translate}}</button></div>
         </form>
-     </ion-list>
-      </ion-card>
- 
- </div>
- <!-- edit company form end-->
+      </ion-list>
+    </ion-card>
+
+  </div>
+  <!-- edit company form end-->
 </ion-content>

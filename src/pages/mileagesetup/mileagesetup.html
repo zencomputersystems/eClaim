@@ -21,27 +21,35 @@
   
     <!--For Display Grid -->
     <ion-list>
-      <ion-item class="bgColor-lightGrey">
-        <ion-label>S.No</ion-label>
-        <ion-label class="textRight" item-end>CATEGORY</ion-label>
-        <ion-label class="textRight" item-end>MILAGE PER UNIT</ion-label>
-        <ion-label class="textRight" item-end>EFFECTIVE DATE</ion-label>
-        <ion-label class="textRight" item-end>ACTIVE FLAG</ion-label>
-        <ion-label class="textRight" item-end>ACTION</ion-label>
+      <ion-item>
+        <table class="Tabler">
+          <tr class="linedsg TColor">
+            <th class="lgl1 tblBrLeft" style="width:60px">NO.</th>
+            <th class="lgl1">CATEGORY</th>
+            <th class="lgl1">MILAGE PER UNIT</th>
+            <th class="lgl1">EFFECTIVE DATE</th>
+            <th class="lgl1">ACTIVE FLAG</th>
+            <th class="lgl1 tblBrRight" style="width:90px">ACTION</th>
   
-      </ion-item>
-      <ion-item *ngFor="let mileage of mileages; let i=index">
-        <ion-label item-start>{{i+1}}</ion-label>
-        <ion-label item-start class="textRight">{{mileage.CATEGORY}}</ion-label>
-        <ion-label item-start class="textRight">{{mileage.RATE_PER_UNIT}}</ion-label>
-        <ion-label item-start class="textRight">{{mileage.RATE_DATE}}</ion-label>
-        <!-- <ion-datetime displayFormat="DD/MM/YYYY">{{mileage.RATE_DATE}}</ion-datetime> -->
+          </tr>
   
-        <ion-toggle *ngIf="mileage.ACTIVATION_FLAG==1" checked=true></ion-toggle>
-        <ion-toggle *ngIf="mileage.ACTIVATION_FLAG==0" checked=false></ion-toggle>
+          <tr class="col7" *ngFor="let mileage of mileages; let i=index">
+            <td class="lgl1">{{i+1}}</td>
+            <td class="lgl1">{{mileage.CATEGORY}}</td>
+            <td class="lgl1">{{mileage.RATE_PER_UNIT}}</td>
+            <td class="lgl1">{{mileage.RATE_DATE}}</td>
+            <td class="lgl1">
+              <ion-toggle *ngIf="mileage.ACTIVATION_FLAG==1" checked=true></ion-toggle>
+              <ion-toggle *ngIf="mileage.ACTIVATION_FLAG==0" checked=false></ion-toggle>
+            </td>
+            <td class="lgl1 fColor">
+              <button ion-button item-end (click)="EditClick(mileage.MILEAGE_GUID)"><ion-icon name="md-create"></ion-icon></button>
+              <button ion-button item-end (click)="DeleteClick(mileage.MILEAGE_GUID)"><ion-icon name="md-close"></ion-icon></button>
+            </td>
+          </tr>
   
-        <button ion-button item-end (click)="EditClick(mileage.MILEAGE_GUID)"><ion-icon name="md-create"></ion-icon></button>
-        <button ion-button item-end (click)="DeleteClick(mileage.MILEAGE_GUID)"><ion-icon name="md-close"></ion-icon></button>
+  
+        </table>
       </ion-item>
     </ion-list>
     <!--Display Grid End-->

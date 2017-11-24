@@ -45,6 +45,13 @@ import { GiftclaimPage } from '../pages/giftclaim/giftclaim';
 import { OvertimeclaimPage } from '../pages/overtimeclaim/overtimeclaim';
 import { EntertainmentclaimPage } from '../pages/entertainmentclaim/entertainmentclaim';
 import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
+import { UserPage } from '../pages/user/user';
+
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
+import { FileTransfer,  FileTransferObject } from '@ionic-native/file-transfer';
+import {  FileUploadOptions  } from '@ionic-native/file-transfer';
 
 
 
@@ -80,7 +87,8 @@ import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
     QualificationsetupPage,
     SubsciptionsetupPage,
     TenantsetupPage,
-    TabsPage
+    TabsPage,
+    UserPage
   ],
   imports: [
     BrowserModule,
@@ -141,14 +149,22 @@ import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
     SubsciptionsetupPage,
     TenantsetupPage,
     SpeakerListPage,
-    TabsPage
+    TabsPage,
+    UserPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ConferenceData,
     UserData,
     InAppBrowser,
-    SplashScreen,StatusBar
+    SplashScreen,StatusBar,
+
+    Camera,
+    File,
+    FilePath,
+    FileTransfer,
+    //FileUploadOptions,
+    FileTransferObject
   ]
 })
 export class AppModule { }

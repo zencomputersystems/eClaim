@@ -13,6 +13,7 @@ import { QualificationsetupPage } from '../qualificationsetup/qualificationsetup
 import { SubsciptionsetupPage } from '../subsciptionsetup/subsciptionsetup';
 import { RolesetupPage } from '../rolesetup/rolesetup';
 import { TenantsetupPage } from '../tenantsetup/tenantsetup';
+import { UserPage } from '../user/user'
 /**
  * Generated class for the SetupPage page.
  *
@@ -48,6 +49,9 @@ export class SetupPage {
     this.navCtrl.push(ClaimtypePage)
   }
 
+  goToUser(){
+    this.navCtrl.push(UserPage)
+  }
   
   goToCompanysetup(){
     this.navCtrl.push(CompanysetupPage)

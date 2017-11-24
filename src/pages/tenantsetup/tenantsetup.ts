@@ -40,13 +40,26 @@ export class TenantsetupPage {
   //Set the Model Name for Add------------------------------------------
   public SITE_NAME_ngModel_Add: any;
   public REGISTRATION_NUM_ngModel_Add: any;
+  public ADDRESS_ngModel_Add: any;
   public EMAIL_ngModel_Add: any;
+  public CONTACT_NO_ngModel_Add: any;
+  public WEBSITE_ngModel_Add: any;
+  public CONTACT_PERSON_ngModel_Add: any;
+  public CONTACT_PERSON_CONTACT_NO_ngModel_Add: any;
+  public CONTACT_PERSON_EMAIL_ngModel_Add: any;
+  
   //---------------------------------------------------------------------
 
   //Set the Model Name for edit------------------------------------------
   public SITE_NAME_ngModel_Edit: any;
   public REGISTRATION_NUM_ngModel_Edit: any;
+  public ADDRESS_ngModel_Edit: any;
   public EMAIL_ngModel_Edit: any;
+  public CONTACT_NO_ngModel_Edit: any;
+  public WEBSITE_ngModel_Edit: any;
+  public CONTACT_PERSON_ngModel_Edit: any;
+  public CONTACT_PERSON_CONTACT_NO_ngModel_Edit: any;
+  public CONTACT_PERSON_EMAIL_ngModel_Edit: any;
   //---------------------------------------------------------------------
 
    public AddTenantClicked: boolean = false;
@@ -72,7 +85,13 @@ export class TenantsetupPage {
         self.tenant_details = data;
         this.SITE_NAME_ngModel_Edit = self.tenant_details.SITE_NAME; localStorage.setItem('Prev_ten_Category', self.tenant_details.SITE_NAME); //console.log(self.mileage_details.CATEGORY);
         this.REGISTRATION_NUM_ngModel_Edit = self.tenant_details.REGISTRATION_NUM;
+        this.ADDRESS_ngModel_Edit = self.tenant_details.ADDRESS;
         this.EMAIL_ngModel_Edit = self.tenant_details.EMAIL;
+        this.CONTACT_NO_ngModel_Edit = self.tenant_details.CONTACT_NO;
+        this.WEBSITE_ngModel_Edit = self.tenant_details.WEBSITE;
+        this.CONTACT_PERSON_ngModel_Edit = self.tenant_details.CONTACT_PERSON;
+        this.CONTACT_PERSON_CONTACT_NO_ngModel_Edit = self.tenant_details.CONTACT_PERSON_CONTACT_NO;
+        this.CONTACT_PERSON_EMAIL_ngModel_Edit = self.tenant_details.CONTACT_PERSON_EMAIL;
     });
   }
    
@@ -141,13 +160,13 @@ export class TenantsetupPage {
     
     //EMAIL: ["", Validators.required],
     
-    // ADDRESS1: ["", Validators.required],
+     ADDRESS: ["", Validators.required],
     // EMAIL: ["", Validators.required],
-    // CONTACT_NO: ["", Validators.required],
-    // WEBSITE: ["", Validators.required],
-    // CONTACT_PERSON: ["", Validators.required],
-    // CONTACT_PERSON_CONTACT_NO: ["", Validators.required],
-    // CONTACT_PERSON_EMAIL: ["", Validators.required],    
+     CONTACT_NO: ["", Validators.required],
+     WEBSITE: ["", Validators.required],
+     CONTACT_PERSON: ["", Validators.required],
+     CONTACT_PERSON_CONTACT_NO: ["", Validators.required],
+     CONTACT_PERSON_EMAIL: ["", Validators.required],    
 
     });
   }
@@ -172,7 +191,13 @@ export class TenantsetupPage {
             if (this.Exist_Record == false) {
               this.tenant_entry.SITE_NAME = this.SITE_NAME_ngModel_Add.trim();
               this.tenant_entry.REGISTRATION_NUM = this.REGISTRATION_NUM_ngModel_Add.trim();
+              this.tenant_entry.ADDRESS = this.ADDRESS_ngModel_Add.trim();
               this.tenant_entry.EMAIL = this.EMAIL_ngModel_Add.trim();
+              this.tenant_entry.CONTACT_NO = this.CONTACT_NO_ngModel_Add.trim();
+              this.tenant_entry.WEBSITE = this.WEBSITE_ngModel_Add.trim();
+              this.tenant_entry.CONTACT_PERSON = this.CONTACT_PERSON_ngModel_Add.trim();
+              this.tenant_entry.CONTACT_PERSON_CONTACT_NO = this.CONTACT_PERSON_CONTACT_NO_ngModel_Add.trim();
+              this.tenant_entry.CONTACT_PERSON_EMAIL = this.CONTACT_PERSON_EMAIL_ngModel_Add.trim();
 
       this.tenant_entry.TENANT_COMPANY_SITE_GUID = UUID.UUID();
       this.tenant_entry.TENANT_COMPANY_GUID = "298204b8-8c85-11e7-91cd-00155de7e742";
@@ -221,7 +246,13 @@ getBankList() {
     if (this.Tenantform.valid) {
      if(this.tenant_entry.SITE_NAME==null){this.tenant_entry.SITE_NAME = this.SITE_NAME_ngModel_Edit.trim();}
      if(this.tenant_entry.REGISTRATION_NUM==null){this.tenant_entry.REGISTRATION_NUM = this. REGISTRATION_NUM_ngModel_Edit.trim();}
+     if(this.tenant_entry.ADDRESS==null){this.tenant_entry.ADDRESS = this.ADDRESS_ngModel_Edit.trim();}
      if(this.tenant_entry.EMAIL==null){this.tenant_entry.EMAIL = this.EMAIL_ngModel_Edit.trim();}
+     if(this.tenant_entry.CONTACT_NO==null){this.tenant_entry.CONTACT_NO = this.CONTACT_NO_ngModel_Edit.trim();}
+     if(this.tenant_entry.WEBSITE==null){this.tenant_entry.WEBSITE = this.WEBSITE_ngModel_Edit.trim();}
+     if(this.tenant_entry.CONTACT_PERSON==null){this.tenant_entry.CONTACT_PERSON = this.CONTACT_PERSON_ngModel_Edit.trim();}
+     if(this.tenant_entry.CONTACT_PERSON_CONTACT_NO==null){this.tenant_entry.CONTACT_PERSON_CONTACT_NO = this.CONTACT_PERSON_CONTACT_NO_ngModel_Edit.trim();}
+     if(this.tenant_entry.CONTACT_PERSON_EMAIL==null){this.tenant_entry.CONTACT_PERSON_EMAIL = this.CONTACT_PERSON_EMAIL_ngModel_Edit.trim();}
     
       this.tenant_entry.CREATION_TS = this.tenant_details.CREATION_TS;
       this.tenant_entry.CREATION_USER_GUID = this.tenant_details.CREATION_USER_GUID;
@@ -268,6 +299,7 @@ getBankList() {
       else {
         if (this.tenant_entry.SITE_NAME == null) { this.tenant_entry.SITE_NAME = localStorage.getItem('Prev_ten_Category'); }
         this.tenant_entry.SITE_NAME = this.SITE_NAME_ngModel_Edit.trim();
+
         //**************Update service if it is old details*************************
       
       this.tenantsetupservice.update(this.tenant_entry)
@@ -286,10 +318,24 @@ getBankList() {
     this.SITE_NAME_ngModel_Add = "";
     this.REGISTRATION_NUM_ngModel_Add = "";
     this.EMAIL_ngModel_Add = "";
+    this.ADDRESS_ngModel_Add = "";
+    this.EMAIL_ngModel_Add = "";
+    this.CONTACT_NO_ngModel_Add = "";
+    this.WEBSITE_ngModel_Add = "";
+    this.CONTACT_PERSON_ngModel_Add = "";
+    this.CONTACT_PERSON_CONTACT_NO_ngModel_Add = "";
+    this.CONTACT_PERSON_EMAIL_ngModel_Add = "";
       
     this.SITE_NAME_ngModel_Edit = "";
     this.REGISTRATION_NUM_ngModel_Edit = "";
     this.EMAIL_ngModel_Edit = "";
+    this.ADDRESS_ngModel_Edit = "";
+    this.EMAIL_ngModel_Edit = "";
+    this.CONTACT_NO_ngModel_Edit = "";
+    this.WEBSITE_ngModel_Edit = "";
+    this.CONTACT_PERSON_ngModel_Edit = "";
+    this.CONTACT_PERSON_CONTACT_NO_ngModel_Edit = "";
+    this.CONTACT_PERSON_EMAIL_ngModel_Edit = "";
     
   }
 }

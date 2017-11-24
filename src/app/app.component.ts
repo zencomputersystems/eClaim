@@ -1,3 +1,4 @@
+import { BrowserModule } from '@angular/platform-browser';
 import { Component, ViewChild } from '@angular/core';
 import { Events, MenuController, Nav, Platform } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -20,6 +21,7 @@ import { EntertainmentclaimPage } from '../pages/entertainmentclaim/entertainmen
 import { TravelclaimPage } from '../pages/travelclaim/travelclaim';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
+import { UserPage } from '../pages/user/user';
 
 export interface PageInterface {
 

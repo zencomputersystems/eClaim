@@ -5,44 +5,58 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>MEDICAL CLAIM</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
-  <ion-list>
-    <form [formGroup]="Mcform">
-      <ion-item>
-        <ion-label stacked>{{"DATE"}}</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" formControlName="mcname" [(ngModel)]="Mcform.fullname" placeholder="{{'Please choose yours date while you take the medical leave'}}"></ion-datetime>
-      </ion-item>
-
-      <ion-item>
-        <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
-        <ion-input type="number" formControlName="mcname" [(ngModel)]="Mcform.fullname" placeholder="{{'Please fill in the amount of yours Medical Claim(Max RM50)'}}"></ion-input>
-      </ion-item>
-
-
-      
-      <ion-item>
-        <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
-        <ion-input type="text" formControlName="mcname" [(ngModel)]="Mcform.fullname" placeholder="{{'Please fill in the description (if you have)'}}"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
-
-      </ion-item>
-
-      <div class="btn">
-        <button ion-button>SUBMIT</button>
+  
+    <ion-navbar>
+      <ion-title>MEDICAL CLAIM</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding>
+    <div class="blackcontainer">
+  
+      <div class="popup" padding>
+  
+        <ion-card class="cm">
+          <ion-card-header class="icTitle headerColor-white ">
+  
+            <div class="icHeaderText">APPLY NEW MEDICAL CLAIM</div>
+  
+          </ion-card-header>
+          <ion-list class="scroll">
+            <form [formGroup]="Mcform">
+              <ion-item>
+                <ion-label stacked>{{"DATE"}}</ion-label>
+                <ion-datetime displayFormat="DD/MM/YYYY" formControlName="date" [(ngModel)]="Medical_Date_ngModel" placeholder="{{'Please choose yours date while you take the medical leave'}}"></ion-datetime>
+              </ion-item>
+  
+              <ion-item>
+                <ion-label stacked>{{"CLAIM AMOUNT(RM)"}}</ion-label>
+                <ion-input type="number" formControlName="amount" [(ngModel)]="Medical_Amount_ngModel" placeholder="{{'Please fill in the amount of yours Medical Claim(Max RM50)'}}"></ion-input>
+              </ion-item>
+  
+  
+  
+              <ion-item>
+                <ion-label stacked>{{"DESCRIPTION"}}</ion-label>
+                <ion-input type="text" formControlName="description" [(ngModel)]="Medical_Description_ngModel" placeholder="{{'Please fill in the description (if you have)'}}"></ion-input>
+              </ion-item>
+  
+              <ion-item>
+                <ion-label stacked>{{"ATTACHMENT"}}</ion-label>
+  
+              </ion-item>
+  
+              <div class="btn">
+                <button ion-button (click)="save()">SUBMIT</button>
+              </div>
+  
+            </form>
+          </ion-list>
+        </ion-card>
+  
       </div>
-
-    </form>
-  </ion-list>
-</ion-content>
+  
+    </div>
+  </ion-content>
