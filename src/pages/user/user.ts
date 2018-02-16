@@ -225,72 +225,72 @@ export class UserPage {
     this.http.get(url, options)
       .map(res => res.json())
       .subscribe(
-      data => {
-        // let res = data["resource"];
-        this.view_user_details = data["resource"];
-        //this.USER_GUID_FOR_CONTACT =this.view_user_details[0]["CONTACT_INFO_GUID"];
-        this.User_Name_Edit_ngModel = this.view_user_details[0]["NAME"];
+        data => {
+          // let res = data["resource"];
+          this.view_user_details = data["resource"];
+          //this.USER_GUID_FOR_CONTACT =this.view_user_details[0]["CONTACT_INFO_GUID"];
+          this.User_Name_Edit_ngModel = this.view_user_details[0]["NAME"];
 
-        this.User_Email_Edit_ngModel = this.view_user_details[0]["EMAIL"];
-        this.User_LoginId_Edit_ngModel = this.view_user_details[0]["LOGIN_ID"];
-        this.User_Password_Edit_ngModel = this.view_user_details[0]["PASSWORD"];
-        //this.User_PersonalNo_Edit_ngModel = this.view_user_details[0]["CONTACT_NO"];
-        //this.User_CompanyNo_Edit_ngModel = this.view_user_details[0]["companyno"];
-        this.User_Marital_Edit_ngModel = this.view_user_details[0]["MARITAL_STATUS"];
-        this.User_StaffID_Edit_ngModel = this.view_user_details[0]["PERSONAL_ID_TYPE"];
-        this.User_ICNo_Edit_ngModel = this.view_user_details[0]["PERSONAL_ID"];
-        this.User_DOB_Edit_ngModel = this.view_user_details[0]["DOB"];
-        this.User_Gender_Edit_ngModel = this.view_user_details[0]["GENDER"];
-      });
+          this.User_Email_Edit_ngModel = this.view_user_details[0]["EMAIL"];
+          this.User_LoginId_Edit_ngModel = this.view_user_details[0]["LOGIN_ID"];
+          this.User_Password_Edit_ngModel = this.view_user_details[0]["PASSWORD"];
+          //this.User_PersonalNo_Edit_ngModel = this.view_user_details[0]["CONTACT_NO"];
+          //this.User_CompanyNo_Edit_ngModel = this.view_user_details[0]["companyno"];
+          this.User_Marital_Edit_ngModel = this.view_user_details[0]["MARITAL_STATUS"];
+          this.User_StaffID_Edit_ngModel = this.view_user_details[0]["PERSONAL_ID_TYPE"];
+          this.User_ICNo_Edit_ngModel = this.view_user_details[0]["PERSONAL_ID"];
+          this.User_DOB_Edit_ngModel = this.view_user_details[0]["DOB"];
+          this.User_Gender_Edit_ngModel = this.view_user_details[0]["GENDER"];
+        });
     this.http.get(url2, options)
       .map(res => res.json())
       .subscribe(
-      data => {
-        // let res = data["resource"];
-        this.view_user_details = data["resource"];
-        this.USER_INFO_GUID_FOR_UPDATE = this.view_user_details[0]["USER_INFO_GUID"];
-        this.User_Designation_Edit_ngModel = this.view_user_details[0]["DESIGNATION_GUID"];
-        // this.User_Company_Edit_ngModel = this.view_user_details[0]["TENANT_COMPANY_GUID"];
-        this.User_Company_Edit_ngModel = this.view_user_details[0]["TENANT_COMPANY_GUID"];
-        this.User_Department_Edit_ngModel = this.view_user_details[0]["DEPT_GUID"];
-        this.User_JoinDate_Edit_ngModel = this.view_user_details[0]["JOIN_DATE"];
-        this.User_ConfirmationDate_Edit_ngModel = this.view_user_details[0]["CONFIRMATION_DATE"];
-        this.User_ResignationDate_Edit_ngModel = this.view_user_details[0]["RESIGNATION_DATE"];
-        this.User_Branch_Edit_ngModel = this.view_user_details[0]["BRANCH"];
-        this.User_EmployeeType_Edit_ngModel = this.view_user_details[0]["EMPLOYEE_TYPE"];
-        this.User_Approver1_Edit_ngModel = this.view_user_details[0]["APPROVER1"];
-        this.User_Approver2_Edit_ngModel = this.view_user_details[0]["APPROVER2"];
-        this.User_Employment_Edit_ngModel = this.view_user_details[0]["EMPLOYEE_STATUS"];
-      });
+        data => {
+          // let res = data["resource"];
+          this.view_user_details = data["resource"];
+          this.USER_INFO_GUID_FOR_UPDATE = this.view_user_details[0]["USER_INFO_GUID"];
+          this.User_Designation_Edit_ngModel = this.view_user_details[0]["DESIGNATION_GUID"];
+          // this.User_Company_Edit_ngModel = this.view_user_details[0]["TENANT_COMPANY_GUID"];
+          this.User_Company_Edit_ngModel = this.view_user_details[0]["TENANT_COMPANY_GUID"];
+          this.User_Department_Edit_ngModel = this.view_user_details[0]["DEPT_GUID"];
+          this.User_JoinDate_Edit_ngModel = this.view_user_details[0]["JOIN_DATE"];
+          this.User_ConfirmationDate_Edit_ngModel = this.view_user_details[0]["CONFIRMATION_DATE"];
+          this.User_ResignationDate_Edit_ngModel = this.view_user_details[0]["RESIGNATION_DATE"];
+          this.User_Branch_Edit_ngModel = this.view_user_details[0]["BRANCH"];
+          this.User_EmployeeType_Edit_ngModel = this.view_user_details[0]["EMPLOYEE_TYPE"];
+          this.User_Approver1_Edit_ngModel = this.view_user_details[0]["APPROVER1"];
+          this.User_Approver2_Edit_ngModel = this.view_user_details[0]["APPROVER2"];
+          this.User_Employment_Edit_ngModel = this.view_user_details[0]["EMPLOYEE_STATUS"];
+        });
     this.http.get(url3, options)
       .map(res => res.json())
       .subscribe(
-      data => {
-        // let res = data["resource"];
-        this.view_user_details = data["resource"];
-        this.USER_GUID_FOR_ADDRESS = this.view_user_details[0]["USER_ADDRESS_GUID"];
-        this.User_Address1_Edit_ngModel = this.view_user_details[0]["USER_ADDRESS1"];
-        this.User_Address2_Edit_ngModel = this.view_user_details[0]["USER_ADDRESS2"];
-        this.User_Address3_Edit_ngModel = this.view_user_details[0]["USER_ADDRESS3"];
-      });
+        data => {
+          // let res = data["resource"];
+          this.view_user_details = data["resource"];
+          this.USER_GUID_FOR_ADDRESS = this.view_user_details[0]["USER_ADDRESS_GUID"];
+          this.User_Address1_Edit_ngModel = this.view_user_details[0]["USER_ADDRESS1"];
+          this.User_Address2_Edit_ngModel = this.view_user_details[0]["USER_ADDRESS2"];
+          this.User_Address3_Edit_ngModel = this.view_user_details[0]["USER_ADDRESS3"];
+        });
     this.http.get(url4, options)
       .map(res => res.json())
       .subscribe(
-      data => {
-        // let res = data["resource"];
-        this.view_user_details = data["resource"];
-        this.USER_GUID_FOR_CONTACT = this.view_user_details[0]["CONTACT_INFO_GUID"];
-        this.User_PersonalNo_Edit_ngModel = this.view_user_details[0]["CONTACT_NO"];
-      });
+        data => {
+          // let res = data["resource"];
+          this.view_user_details = data["resource"];
+          this.USER_GUID_FOR_CONTACT = this.view_user_details[0]["CONTACT_INFO_GUID"];
+          this.User_PersonalNo_Edit_ngModel = this.view_user_details[0]["CONTACT_NO"];
+        });
     this.http.get(url5, options)
       .map(res => res.json())
       .subscribe(
-      data => {
-        // let res = data["resource"];
-        this.view_user_details = data["resource"];
-        this.USER_GUID_FOR_COMPANY_CONTACT = this.view_user_details[0]["USER_COMPANY_GUID"];
-        this.User_CompanyNo_Edit_ngModel = this.view_user_details[0]["COMPANY_CONTACT_NO"];
-      });
+        data => {
+          // let res = data["resource"];
+          this.view_user_details = data["resource"];
+          this.USER_GUID_FOR_COMPANY_CONTACT = this.view_user_details[0]["USER_COMPANY_GUID"];
+          this.User_CompanyNo_Edit_ngModel = this.view_user_details[0]["COMPANY_CONTACT_NO"];
+        });
   }
 
   public DeleteClick(USER_GUID: any) {
@@ -330,14 +330,14 @@ export class UserPage {
       this.GetCompany();
       this.GetDepartment();
       this.GetBranch();
-      
+
 
       this.http
         .get(this.baseResourceView1)
 
         .map(res => res.json())
         .subscribe(data => {
-          this.employees_local = data.resource;   
+          this.employees_local = data.resource;
           let i: number = 0;
           this.employees_local.forEach(element => {
             let temp: View_Dropdown_Model = element;
@@ -380,17 +380,17 @@ export class UserPage {
           //console.table(this.address)
         });
 
-    //     let headers = new Headers();
-    // headers.append('Content-Type', 'application/json');
-    // let options = new RequestOptions({ headers: headers });
-    // let url: string;
-    // url = this.baseResource_Url1 + "vw_tenantcompanysitedetails?filter=(TENANT_GUID=" + this.User_Company_ngModel + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // this.http.get(url, options)
-    //   .map(res => res.json())
-    //   .subscribe(
-    //   data => {
-    //     let res = data["resource"];
-    //   });
+      //     let headers = new Headers();
+      // headers.append('Content-Type', 'application/json');
+      // let options = new RequestOptions({ headers: headers });
+      // let url: string;
+      // url = this.baseResource_Url1 + "vw_tenantcompanysitedetails?filter=(TENANT_GUID=" + this.User_Company_ngModel + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      // this.http.get(url, options)
+      //   .map(res => res.json())
+      //   .subscribe(
+      //   data => {
+      //     let res = data["resource"];
+      //   });
 
       this.Userform = fb.group({
         NAME: ['', Validators.required],
@@ -506,8 +506,8 @@ export class UserPage {
       .map(res => res.json())
       .subscribe(data => {
         this.branches = data["resource"];
-      
-       
+
+
       });
   }
 
@@ -523,138 +523,175 @@ export class UserPage {
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
-        data => {
-          let res = data["resource"];
-          if (res.length == 0) {
-            console.log("No records Found");
-            if (this.Exist_Record == false) {
+          data => {
+            let res = data["resource"];
+            if (res.length == 0) {
+              console.log("No records Found");
+              if (this.Exist_Record == false) {
 
-              this.usermain_entry.EMAIL = this.User_Email_ngModel.trim();
-              //this.usermain_entry.STAFF_ID = this.User_StaffID_ngModel.trim();  
-              this.usermain_entry.USER_GUID = UUID.UUID();
-              this.usermain_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
-              //this.usermain_entry.USER_GUID = this.userinfo_entry.USER_GUID;
-              this.usermain_entry.LOGIN_ID = this.User_LoginId_ngModel.trim();
-              this.usermain_entry.PASSWORD = this.User_Password_ngModel.trim();
-              this.usermain_entry.ACTIVATION_FLAG = 1;
-              this.usermain_entry.CREATION_TS = new Date().toISOString();
-              this.usermain_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-              this.usermain_entry.UPDATE_TS = new Date().toISOString();
-              this.usermain_entry.UPDATE_USER_GUID = "";
+                this.usermain_entry.EMAIL = this.User_Email_ngModel.trim();
+                //this.usermain_entry.STAFF_ID = this.User_StaffID_ngModel.trim();  
+                this.usermain_entry.USER_GUID = UUID.UUID();
+                this.usermain_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
+                //this.usermain_entry.USER_GUID = this.userinfo_entry.USER_GUID;
+                this.usermain_entry.LOGIN_ID = this.User_LoginId_ngModel.trim();
+                this.usermain_entry.PASSWORD = this.User_Password_ngModel.trim();
+                this.usermain_entry.ACTIVATION_FLAG = 1;
+                this.usermain_entry.CREATION_TS = new Date().toISOString();
+                this.usermain_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
+                this.usermain_entry.UPDATE_TS = new Date().toISOString();
+                this.usermain_entry.UPDATE_USER_GUID = "";
 
-              this.userservice.save_user_main(this.usermain_entry)
-                .subscribe((response) => {
-                  if (response.status == 200) {
-                    alert('user_main Registered successfully');
-                    //location.reload();
+                this.userservice.save_user_main(this.usermain_entry)
+                  .subscribe((response) => {
+                    if (response.status == 200) {
+                      alert('user_main Registered successfully');
+                      //location.reload();
 
-                    this.userinfo_entry.FULLNAME = this.User_Name_ngModel.trim();
-                    this.userinfo_entry.MARITAL_STATUS = this.User_Marital_ngModel;
-                    this.userinfo_entry.PERSONAL_ID_TYPE = this.User_StaffID_ngModel.trim();
-                    this.userinfo_entry.PERSONAL_ID = this.User_ICNo_ngModel.trim();
-                    this.userinfo_entry.DOB = this.User_DOB_ngModel.trim();
-                    this.userinfo_entry.GENDER = this.User_Gender_ngModel;
-                    this.userinfo_entry.USER_INFO_GUID = UUID.UUID();
-                    this.userinfo_entry.USER_GUID = this.usermain_entry.USER_GUID;
-                    //this.userinfo_entry.USER_GUID = "254a0525-c725-11e6-bb9f-00155de7e742";
-                    this.userinfo_entry.TENANT_COMPANY_SITE_GUID = this.User_Branch_ngModel.trim();
-                    //this.userinfo_entry.TENANT_COMPANY_GUID = "254a0525-c725-11e6-bb9f-00155de7e742";
-                    this.userinfo_entry.CREATION_TS = new Date().toISOString();
-                    this.userinfo_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-                    this.userinfo_entry.UPDATE_TS = new Date().toISOString();
-                    this.userinfo_entry.UPDATE_USER_GUID = "";
-                    this.userinfo_entry.DESIGNATION_GUID = this.User_Designation_ngModel.trim();
-                    this.userinfo_entry.TENANT_COMPANY_GUID = this.User_Company_ngModel.trim();
+                      this.userinfo_entry.FULLNAME = this.User_Name_ngModel.trim();
+                      this.userinfo_entry.MARITAL_STATUS = this.User_Marital_ngModel;
+                      this.userinfo_entry.PERSONAL_ID_TYPE = this.User_StaffID_ngModel.trim();
+                      this.userinfo_entry.PERSONAL_ID = this.User_ICNo_ngModel.trim();
+                      this.userinfo_entry.DOB = this.User_DOB_ngModel.trim();
+                      this.userinfo_entry.GENDER = this.User_Gender_ngModel;
+                      this.userinfo_entry.USER_INFO_GUID = UUID.UUID();
+                      this.userinfo_entry.USER_GUID = this.usermain_entry.USER_GUID;
+                      //this.userinfo_entry.USER_GUID = "254a0525-c725-11e6-bb9f-00155de7e742";
+                      this.userinfo_entry.TENANT_COMPANY_SITE_GUID = this.User_Branch_ngModel.trim();
+                      //this.userinfo_entry.TENANT_COMPANY_GUID = "254a0525-c725-11e6-bb9f-00155de7e742";
+                      this.userinfo_entry.CREATION_TS = new Date().toISOString();
+                      this.userinfo_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
+                      this.userinfo_entry.UPDATE_TS = new Date().toISOString();
+                      this.userinfo_entry.UPDATE_USER_GUID = "";
+                      this.userinfo_entry.DESIGNATION_GUID = this.User_Designation_ngModel.trim();
+                      this.userinfo_entry.TENANT_COMPANY_GUID = this.User_Company_ngModel.trim();
 
-                    this.userinfo_entry.DEPT_GUID = this.User_Department_ngModel.trim();
-                    // alert(this.User_Department_ngModel.trim());
-                    this.userinfo_entry.JOIN_DATE = this.User_JoinDate_ngModel.trim();
-                    this.userinfo_entry.CONFIRMATION_DATE = this.User_ConfirmationDate_ngModel.trim();
-                    this.userinfo_entry.RESIGNATION_DATE = this.User_ResignationDate_ngModel.trim();
-                    this.userinfo_entry.BRANCH = this.User_Branch_ngModel.trim();
-                    this.userinfo_entry.EMPLOYEE_TYPE = this.User_EmployeeType_ngModel.trim();
-                    this.userinfo_entry.APPROVER1 = this.User_Approver1_ngModel.trim();
-                    this.userinfo_entry.APPROVER2 = this.User_Approver2_ngModel.trim();
-                    this.userinfo_entry.EMPLOYEE_STATUS = this.User_Employment_ngModel.trim();
+                      this.userinfo_entry.DEPT_GUID = this.User_Department_ngModel.trim();
+                      // alert(this.User_Department_ngModel.trim());
+                      this.userinfo_entry.JOIN_DATE = this.User_JoinDate_ngModel.trim();
+                      this.userinfo_entry.CONFIRMATION_DATE = this.User_ConfirmationDate_ngModel.trim();
+                      this.userinfo_entry.RESIGNATION_DATE = this.User_ResignationDate_ngModel.trim();
+                      this.userinfo_entry.BRANCH = this.User_Branch_ngModel.trim();
+                      this.userinfo_entry.EMPLOYEE_TYPE = this.User_EmployeeType_ngModel.trim();
+                      this.userinfo_entry.APPROVER1 = this.User_Approver1_ngModel.trim();
+                      this.userinfo_entry.APPROVER2 = this.User_Approver2_ngModel.trim();
+                      this.userinfo_entry.EMPLOYEE_STATUS = this.User_Employment_ngModel.trim();
 
-                    this.userservice.save_user_info(this.userinfo_entry)
-                      .subscribe((response) => {
-                        if (response.status == 200) {
-                          alert('user_info Registered successfully');
-                          this.navCtrl.setRoot(this.navCtrl.getActive().component);
-                        }
-                      });
-
-                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
-                  }
-                });
-
-              this.usercontact_entry.CONTACT_NO = this.User_PersonalNo_ngModel.trim();
-              this.usercontact_entry.CONTACT_INFO_GUID = UUID.UUID();
-              this.usercontact_entry.USER_GUID = this.usermain_entry.USER_GUID;
-              this.usercontact_entry.CREATION_TS = new Date().toISOString();
-              this.usercontact_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-              this.usercontact_entry.UPDATE_TS = new Date().toISOString();
-              this.usercontact_entry.UPDATE_USER_GUID = "";
-
-              this.userservice.save_user_contact(this.usercontact_entry)
-                .subscribe((response) => {
-                  if (response.status == 200) {
-                    alert('user_contact Registered successfully');
-                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
-                  }
-                });
+                      this.userservice.save_user_info(this.userinfo_entry)
+                        .subscribe((response) => {
+                          alert('Entered into 2');
+                          if (response.status == 200) {
+                            alert('user_info Registered successfully');
+                            // this.navCtrl.setRoot(this.navCtrl.getActive().component);
 
 
+                            this.usercontact_entry.CONTACT_NO = this.User_PersonalNo_ngModel.trim();
+                            this.usercontact_entry.CONTACT_INFO_GUID = UUID.UUID();
+                            this.usercontact_entry.USER_GUID = this.usermain_entry.USER_GUID;
+                            this.usercontact_entry.CREATION_TS = new Date().toISOString();
+                            this.usercontact_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
+                            this.usercontact_entry.UPDATE_TS = new Date().toISOString();
+                            this.usercontact_entry.UPDATE_USER_GUID = "";
 
-              this.usercompany_entry.COMPANY_CONTACT_NO = this.User_CompanyNo_ngModel.trim();
+                            this.userservice.save_user_contact(this.usercontact_entry)
+                              .subscribe((response) => {
+                                alert('Entered into 3');
+                                if (response.status == 200) { 
+                                  alert('user_contact Registered successfully');
+                                  // this.navCtrl.setRoot(this.navCtrl.getActive().component);
 
-              this.usercompany_entry.USER_COMPANY_GUID = UUID.UUID();
-              this.usercompany_entry.USER_GUID = this.usermain_entry.USER_GUID;
-              this.usercompany_entry.CREATION_TS = new Date().toISOString();
-              this.usercompany_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-              this.usercompany_entry.UPDATE_TS = new Date().toISOString();
-              this.usercompany_entry.UPDATE_USER_GUID = "";
 
-              this.userservice.save_user_company(this.usercompany_entry)
-                .subscribe((response) => {
-                  if (response.status == 200) {
-                    alert('user_company Registered successfully');
-                    //location.reload();
-                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
-                  }
-                });
+                                  this.usercompany_entry.COMPANY_CONTACT_NO = this.User_CompanyNo_ngModel.trim();
 
-              this.useraddress_entry.USER_ADDRESS1 = this.User_Address1_ngModel.trim();
-              this.useraddress_entry.USER_ADDRESS2 = this.User_Address2_ngModel.trim();
-              this.useraddress_entry.USER_ADDRESS3 = this.User_Address3_ngModel.trim();
-              this.useraddress_entry.USER_ADDRESS_GUID = UUID.UUID();
-              this.useraddress_entry.USER_GUID = this.usermain_entry.USER_GUID;
-              this.useraddress_entry.CREATION_TS = new Date().toISOString();
-              this.useraddress_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-              this.useraddress_entry.UPDATE_TS = new Date().toISOString();
-              this.useraddress_entry.UPDATE_USER_GUID = "";
+                                  this.usercompany_entry.USER_COMPANY_GUID = UUID.UUID();
+                                  this.usercompany_entry.USER_GUID = this.usermain_entry.USER_GUID;
+                                  this.usercompany_entry.CREATION_TS = new Date().toISOString();
+                                  this.usercompany_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
+                                  this.usercompany_entry.UPDATE_TS = new Date().toISOString();
+                                  this.usercompany_entry.UPDATE_USER_GUID = "";
 
-              this.userservice.save_user_address(this.useraddress_entry)
+                                  this.userservice.save_user_company(this.usercompany_entry)
+                                    .subscribe((response) => {
+                                      alert('Entered into 4');
+                                      if (response.status == 200) {
+                                        alert('user_company Registered successfully');
+                                        //location.reload();
+                                        // this.navCtrl.setRoot(this.navCtrl.getActive().component);
 
-                .subscribe((response) => {
-                  if (response.status == 200) {
-                    alert('user_address Registered successfully');
-                    //location.reload();
-                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
-                  }
-                });
+
+                                        this.useraddress_entry.USER_ADDRESS1 = this.User_Address1_ngModel.trim();
+                                        this.useraddress_entry.USER_ADDRESS2 = this.User_Address2_ngModel.trim();
+                                        this.useraddress_entry.USER_ADDRESS3 = this.User_Address3_ngModel.trim();
+                                        this.useraddress_entry.USER_ADDRESS_GUID = UUID.UUID();
+                                        this.useraddress_entry.USER_GUID = this.usermain_entry.USER_GUID;
+                                        this.useraddress_entry.CREATION_TS = new Date().toISOString();
+                                        this.useraddress_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
+                                        this.useraddress_entry.UPDATE_TS = new Date().toISOString();
+                                        this.useraddress_entry.UPDATE_USER_GUID = "";
+
+                                        this.userservice.save_user_address(this.useraddress_entry)
+
+                                          .subscribe((response) => {
+                                            alert('Entered into 5');
+                                            if (response.status == 200) {
+                                              alert('user_address Registered successfully');
+                                              this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                                              //location.reload();
+
+                                              if (this.usermain_entry.USER_GUID != null && this.userinfo_entry.USER_INFO_GUID != null &&
+                                                this.usercontact_entry.CONTACT_INFO_GUID != null && this.usercompany_entry.USER_COMPANY_GUID != null
+                                                && this.useraddress_entry.USER_ADDRESS_GUID != null) {
+
+                                                alert('all recors are inserted');
+                                              }
+
+                                              this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                                            } else {
+                                              alert('5 records not inserted');
+                                            }
+                                          });
+                                      } else {
+                                        alert('4 records not inserted');
+                                      }
+                                    });
+                                } else {
+                                  alert('3 records not inserted');
+                                }
+                              });
+                          }
+                          else {
+                            alert('2 records not inserted');
+                          }
+                        });
+
+                      // this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                    }
+                    else {
+                      alert('1 records not inserted');
+                      // if( this.usermain_entry.USER_GUID != null && this.userinfo_entry.USER_INFO_GUID != null &&
+                      //   this.usercontact_entry.CONTACT_INFO_GUID != null &&  this.usercompany_entry.USER_COMPANY_GUID != null
+                      //   && this.useraddress_entry.USER_ADDRESS_GUID != null){
+
+                      //   alert('all recors are inserted');
+                      // } 
+                      // else{
+                      //   alert('records not inserted');
+                      // }
+                    }
+                  });
+
+
+              }
             }
-          }
-          else {
-            console.log("Records Found");
-            alert("The User is already Exist.")
-          }
-        },
-        err => {
-          this.Exist_Record = false;
-          console.log("ERROR!: ", err);
-        });
+            else {
+              console.log("Records Found");
+              alert("The User is already Exist.")
+            }
+          },
+          err => {
+            this.Exist_Record = false;
+            console.log("ERROR!: ", err);
+          });
     }
   }
 

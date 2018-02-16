@@ -78,8 +78,27 @@
           </ion-item>
 
           <ion-item>
-            <ion-label stacked>{{"ACTIVE FLAG"}}</ion-label>
-            
+            <ion-label stacked>{{"ADD"}}</ion-label>            
+            <ion-toggle formControlName="ADD_PERMISSON" [(ngModel)]="ADD_ngModel_Add"></ion-toggle>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"EDIT"}}</ion-label>            
+            <ion-toggle formControlName="EDIT_PERMISSON" [(ngModel)]="EDIT_ngModel_Add"></ion-toggle>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"DELETE"}}</ion-label>            
+            <ion-toggle formControlName="DELETE_PERMISSON" [(ngModel)]="DELETE_ngModel_Add"></ion-toggle>
+          </ion-item>
+
+          <ion-item>
+            <ion-label stacked>{{"VIEW"}}</ion-label>            
+            <ion-toggle formControlName="VIEW_PERMISSON" [(ngModel)]="VIEW_ngModel_Add"></ion-toggle>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label stacked>{{"ACTIVE FLAG"}}</ion-label>            
             <ion-toggle formControlName="ACTIVATION_FLAG" [(ngModel)]="ACTIVATION_FLAG_ngModel_Add"></ion-toggle>
           </ion-item>
           <div class="btn">

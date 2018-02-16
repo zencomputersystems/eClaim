@@ -27,35 +27,33 @@
           <th class="lgl1 tblBrLeft" style="width:60px">NO.</th>
           <th class="lgl1">ROLE NAME</th>
           <th class="lgl1">MODULE NAME</th>
-          <th class="lgl1">ACTIVE FLAG</th>
+          <!-- <th class="lgl1">ACTIVE FLAG</th> -->
           <th class="lgl1 tblBrRight" style="width:90px">ACTION</th>
-
         </tr>
 
-        <tr class="col7">
-          <td class="lgl1">1</td>
-          <td class="lgl1">ROLE NAME</td>
-          <td class="lgl1">MODULE NAME</td>
-          <td class="lgl1">INACTIVE</td>
+        <tr class="col7" *ngFor="let rolemodule of Role_Module; let i=index">
+          <td class="lgl1">{{i+1}}</td>
+          <td class="lgl1">{{rolemodule.ROLE_NAME}}</td>
+          <td class="lgl1">{{rolemodule.MODULE_NAME}}</td>
+          <!-- <td class="lgl1">INACTIVE</td> -->
 
 
           <td class="lgl1 fColor">
             <button ion-button item-end>
-              <ion-icon name="md-create"></ion-icon>
+              <ion-icon name="md-create" (click)="EditClick(rolemodule.ROLE_GUID)"></ion-icon>
             </button>
             <button ion-button item-end>
-              <ion-icon name="md-close"></ion-icon>
+              <ion-icon name="md-close" (click)="DeleteClick(rolemodule.ROLE_GUID)"></ion-icon>
             </button>
           </td>
         </tr>
-
 
       </table>
     </ion-item>
   </ion-list>
 
 
-  <!-- add role module form start-->  
+  <!-- add role module form start-->
   <div class="blackcontainer" *ngIf="AddRoleModuleClicked">
   </div>
   <div class="popup" padding *ngIf="AddRoleModuleClicked">
@@ -70,45 +68,88 @@
 
       </ion-card-header>
       <ion-list>
+
         <form [formGroup]="Rolemoduleform">
           <ion-item>
             <ion-label stacked>{{"ROLE"}}</ion-label>
             <ion-select formControlName="ROLENAME" [(ngModel)]="ROLENAME_ngModel_Add" placeholder="{{'Select Role'}}">
-              <ion-option *ngFor="let role of roles" [value]="role.ROLE_GUID">{{role.NAME}}</ion-option>              
+              <ion-option *ngFor="let role of roles" [value]="role.ROLE_GUID">{{role.NAME}}</ion-option>
             </ion-select>
           </ion-item>
+          <div style="width: 47%">
+            <ion-card class="cb5 contentHeight3">
+              <ion-row>
+                <ion-item class="lgl1 bgColor-lightGrey posRelative">
+                  <ion-label item-start>{{"AVAILABLE MODULES" | translate}}</ion-label>
+                  <button item-end ion-button color="primary" class="posAbsolute fullHeight topZero rightZero btnStyle2 marginZero" (click)="SelectAllAvailableModule()">
+                    <ion-icon name="ios-arrow-forward"></ion-icon>
+                  </button>
+                </ion-item>
+              </ion-row>
+              <div class="contentHeight3 overflowTrue">
+                <ion-list>
+                  <ion-item *ngFor="let module of modules">
+                    <ion-label>{{module.NAME}}</ion-label>
+                    <ion-checkbox color="secondary" checked="false" (ionChange)="SelectFromAvailbleModule($event, module)" item-end></ion-checkbox>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </ion-card>
+          </div>
 
-          <ion-item>
+          <div style="width: 47%">
+            <ion-card class="cb5 contentHeight3">
+              <ion-row>
+                <ion-item class="lgl1 bgColor-lightGrey posRelative">
+                  <ion-label item-start>{{"ASSIGNED MODULES" | translate}}</ion-label>
+                  <button item-end ion-button color="primary" class="posAbsolute fullHeight topZero rightZero btnStyle2 marginZero" (click)="SelectAllAssignedModule()">
+                    <ion-icon name="ios-arrow-back"></ion-icon>
+                  </button>
+                </ion-item>
+              </ion-row>
+              <div class="contentHeight3 overflowTrue">
+                <ion-list>
+                  <ion-item *ngFor="let module_assigned of Module_Assign">
+                    <ion-label>{{module_assigned.MODULE_NAME}}</ion-label>
+                    <ion-checkbox color="secondary" checked="false" (ionChange)="RemoveSelectionFromAssignedModule($event,module_assigned)" item-end></ion-checkbox>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </ion-card>
+          </div>
+
+
+
+
+
+
+
+
+          <!-- <ion-item>
             <ion-grid>
               <ion-row>
                 <ion-col align-self-start>
-            
-                 <table class="Tabler">
+
+                  <table class="Tabler">
                     <tr class="linedsg TColor">
-                  
                       <th class="lgl1">MODULE </th>
-                
                     </tr>
 
                     <tr class="col7" *ngFor="let module of modules">
-     
                       <td class="lgl1">
-                          <input type="checkbox" name="vehicle1" value="Bike">
-                            
-                          {{module.NAME}}                          
+                        <input type="checkbox" formControlName="ROLEMAINMODULE" [(ngModel)]="module.checked" [value]="module.MODULE_GUID" checked="module.checked" (change)="change(module.MODULE_GUID)"> {{module.NAME}}
                       </td>
                     </tr>
-
                   </table>
-             
-                </ion-col>
 
+                </ion-col>
+                
                 <ion-col align-self-center class="over">
-                  <button ion-button>
+                  <button ion-button (click)="AddBackward()">
                     <ion-icon name="ios-arrow-back"></ion-icon>
                   </button>
 
-                  <button ion-button>
+                  <button ion-button (click)="AddForward()">
                     <ion-icon name="ios-arrow-forward"></ion-icon>
                   </button>
 
@@ -121,7 +162,7 @@
                     </tr>
 
                     <tr class="col7">
-               
+
                       <td class="lgl1">HOME</td>
                     </tr>
 
@@ -137,16 +178,92 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-          </ion-item>
+          </ion-item> -->
 
           <div class="btn">
             <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Rolemoduleform.valid" (click)="Save_RoleModule()">{{"SUBMIT" | translate}}</button>
           </div>
         </form>
+
       </ion-list>
     </ion-card>
 
   </div>
   <!-- add role module form end-->
+
+  <!-- edit role module form start-->
+  <div class="blackcontainer" *ngIf="EditRoleModuleClicked">
+  </div>
+  <div class="popup" padding *ngIf="EditRoleModuleClicked">
+
+    <ion-card>
+      <ion-card-header class="icTitle headerColor-white ">
+
+        <div class="icHeaderText">UPDATE ROLE MODULE</div>
+        <button class="btnR" (click)="CloseRoleModuleClick()">
+          <ion-icon name="md-close"></ion-icon>
+        </button>
+
+      </ion-card-header>
+      <ion-list>
+
+        <form [formGroup]="Rolemoduleform">
+          <ion-item>
+            <ion-label stacked>{{"ROLE"}}</ion-label>
+            <ion-select formControlName="ROLENAME" [(ngModel)]="ROLENAME_ngModel_Edit" placeholder="{{'Select Role'}}">
+              <ion-option *ngFor="let role of roles" [value]="role.ROLE_GUID">{{role.NAME}}</ion-option>
+            </ion-select>
+          </ion-item>
+          <div style="width: 47%">
+            <ion-card class="cb5 contentHeight3">
+              <ion-row>
+                <ion-item class="lgl1 bgColor-lightGrey posRelative">
+                  <ion-label item-start>{{"AVAILABLE MODULES" | translate}}</ion-label>
+                  <button item-end ion-button color="primary" class="posAbsolute fullHeight topZero rightZero btnStyle2 marginZero" (click)="SelectAllAvailableModule()">
+                    <ion-icon name="ios-arrow-forward"></ion-icon>
+                  </button>
+                </ion-item>
+              </ion-row>
+              <div class="contentHeight3 overflowTrue">
+                <ion-list>
+                  <ion-item *ngFor="let module of modules">
+                    <ion-label>{{module.NAME}}</ion-label>
+                    <ion-checkbox color="secondary" checked="false" (ionChange)="SelectFromAvailbleModule($event, module)" item-end></ion-checkbox>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </ion-card>
+          </div>
+
+          <div style="width: 47%">
+            <ion-card class="cb5 contentHeight3">
+              <ion-row>
+                <ion-item class="lgl1 bgColor-lightGrey posRelative">
+                  <ion-label item-start>{{"ASSIGNED MODULES" | translate}}</ion-label>
+                  <button item-end ion-button color="primary" class="posAbsolute fullHeight topZero rightZero btnStyle2 marginZero" (click)="SelectAllAssignedModule()">
+                    <ion-icon name="ios-arrow-back"></ion-icon>
+                  </button>
+                </ion-item>
+              </ion-row>
+              <div class="contentHeight3 overflowTrue">
+                <ion-list>
+                  <ion-item *ngFor="let module_assigned of Module_Assign">
+                    <ion-label>{{module_assigned.MODULE_NAME}}</ion-label>
+                    <ion-checkbox color="secondary" checked="false" (ionChange)="RemoveSelectionFromAssignedModule($event,module_assigned)" item-end></ion-checkbox>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </ion-card>
+          </div>
+          <div class="btn">
+            <button ion-button class="bgColor-grey fontColor-white btnStyle1" [disabled]="!Rolemoduleform.valid" (click)="Update_RoleModule()">{{"SUBMIT" | translate}}</button>
+          </div>
+        </form>
+
+      </ion-list>
+    </ion-card>
+
+  </div>
+  <!-- edit role module form end-->
 
 </ion-content>

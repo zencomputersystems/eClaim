@@ -3,17 +3,35 @@
   <!-- logged out menu -->
   <ion-menu id="loggedOutMenu" [content]="content">
 
-    <ion-header>
+    <!-- <ion-header>
       <ion-toolbar>
         <ion-title>eClaim</ion-title>
       </ion-toolbar>
+    </ion-header> -->
+
+    <ion-header>
+      <ion-navbar>
+        <div class="headerInfo">
+          <ion-fab top left>
+            <button ion-fab mini class="btnClear">
+              <ion-icon name="settings"></ion-icon>
+            </button>
+            <ion-fab-list class="settingBtnFab" side="right">
+              <button ion-fab class="bgColor-green" [class.menuHide]="translateToMalayClicked" (click)="translateToMalay()">ML</button>
+              <button ion-fab class="bgColor-green" [class.menuHide]="translateToEnglishClicked" (click)="translateToEnglish()">ENG</button>
+            </ion-fab-list>
+          </ion-fab>
+        </div>
+      </ion-navbar>
     </ion-header>
+
+    <!-- <ion-nav [root]="rootPage"></ion-nav> -->
 
     <ion-content class="outer-content">
 
       <ion-list>
         <ion-list-header>
-          Navigate
+          {{"NAVIGATE_LABEL" | translate}}
         </ion-list-header>
         
         <button ion-item menuClose *ngFor="let p of appPages" (click)="openPage(p)">
@@ -76,5 +94,6 @@
 
   <!-- main navigation -->
   <ion-nav [root]="rootPage" #content swipeBackEnabled="false" main></ion-nav>
+  <!-- <ion-nav [root]="rootPage"></ion-nav> -->
 
 </ion-split-pane>

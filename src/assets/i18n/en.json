@@ -38,5 +38,9 @@
   "AMOUNT_LABEL": "Amount",
   "START_DT_LABEL": "Start Date Time",
   "END_DT_LABEL": "End Date Time",
-  "PAY_BY_LABEL": "Pay By"
+
+  "PAY_BY_LABEL": "Pay By",
+  "NAVIGATE_LABEL": "Navigate Page"
+  
+
 }

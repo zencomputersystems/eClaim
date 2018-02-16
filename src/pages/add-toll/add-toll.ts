@@ -19,7 +19,11 @@ export class AddTollPage {
   paymentTypes: any; DetailsForm: any; ClaimMainGUID: any; ClaimMethodGUID: any;
   constructor(
     fb: FormBuilder,
+
+    public api: Services, 
+
     public travelservice: Services, 
+
     public http: Http, public navCtrl: NavController, 
     public navParams: NavParams, public viewCtrl: ViewController
   ) 
@@ -69,7 +73,11 @@ export class AddTollPage {
     claimReqRef.CREATION_TS = new Date().toISOString();
     claimReqRef.UPDATE_TS = new Date().toISOString();
 
+
+    this.api.postData('claim_request_detail', claimReqRef.toJson(true)).subscribe((response) => {
+
     this.travelservice.postData('claim_request_detail', claimReqRef.toJson(true)).subscribe((response) => {
+
       var postClaimRef = response.json();
       console.log(
         postClaimRef["resource"][0].CLAIM_REQUEST_DETAIL_GUID);

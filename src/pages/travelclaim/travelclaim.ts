@@ -59,8 +59,15 @@ export class TravelclaimPage {
  // baseResource_Url_soc: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
   vehicles: any;
   storeProjects: any;
+
+  public projects: any;
+  Travelform: FormGroup;
+
+  items: string[];  
+
   projects: any;
   Travelform: FormGroup;
+
 
   public Travel_SOC_No_ngModel: any;
   public Travel_ProjectName_ngModel: any;
@@ -186,6 +193,7 @@ export class TravelclaimPage {
       }
       else
         alert('Please select Valid Origin & Destination Places');
+
     });
   }
 
@@ -238,6 +246,8 @@ export class TravelclaimPage {
     });
   }
 
+
+    
   searchProject(searchString: any) {
     let val = searchString.target.value;
     if (!val || !val.trim()) {
@@ -257,10 +267,17 @@ export class TravelclaimPage {
 
   // filterProjects(params?: any) {
   //   if (!params) {
+
+  //     //return this.storeProjects;
+  //   }
+
+  //     return this.projects.filter((item) =>{
+
   //     return this.storeProjects;
   //   }
 
   //   return this.projects.filter((item) => {
+
   //     for (let key in params) {
   //       let field = item[key];
   //       if (typeof field == 'string' && field.toLowerCase().indexOf(params[key].toLowerCase()) >= 0) {
@@ -272,6 +289,24 @@ export class TravelclaimPage {
   //     return null;
   //   });
   // }
+
+
+  // filterProjects(ev: any) {
+  //   alert('search');
+  //   // Reset items back to all of the items
+  //   this.storeProjects();
+
+  //   // set val to the value of the searchbar
+  //   let val = ev.target.value;
+
+  //   // if the value is an empty string don't filter the items
+  //   if (val && val.trim() != '') {
+  //     this.items = this.items.filter((item) => {
+  //       return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+  //     })
+  //   }
+  // }
+
 
   
 

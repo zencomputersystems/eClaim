@@ -129,6 +129,10 @@ export class RolesetupPage {
       NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
       DESCRIPTION: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
       ACTIVATION_FLAG: ["", Validators.required],
+      ADD_PERMISSON:[null],
+      EDIT_PERMISSON:[null],
+      DELETE_PERMISSON:[null],
+      VIEW_PERMISSON:[null],
     });
   }
 

@@ -10,9 +10,12 @@
       <button ion-button menuToggle>
           <ion-icon name="menu"></ion-icon>
         </button>
-    <ion-title>TRAVEL CLAIM</ion-title>  
-  </ion-navbar>
 
+    <ion-title>{{ 'TRAVEL_CLAIM_HEADING' | translate }}</ion-title>  
+
+
+  </ion-navbar>
+ 
 </ion-header>
 
 
@@ -20,9 +23,12 @@
   <!-- <button ion-button (click)="AddTravelClick()">SUMMARY</button> -->
   <form [formGroup]="Travelform">
       <ion-card>
-          <ion-label stacked>{{ "PROJECT NAME" }}</ion-label>
+
+          <ion-label stacked>{{ "PROJECT_NAME_LABEL" | translate }}</ion-label>
         <ion-searchbar formControlName="project_name" [(ngModel)]="Travel_ProjectName_ngModel" (ionInput)="searchProject($event)" 
-          placeholder='{{ "PROJECT_NAME_PLACE_HOLDER" }}'></ion-searchbar>
+          placeholder='{{ "PROJECT_NAME_PLACE_HOLDER" | translate }}'></ion-searchbar>
+
+
         <ion-list>
           <ion-item-sliding *ngFor="let item of projects">
             <button ion-item (click)="GetSocNo(item.SOC_GUID)">
@@ -33,23 +39,30 @@
       </ion-card>
 
       <ion-item>
-          <ion-label stacked>{{ "SOC_NUMBER_LABEL" }}</ion-label>
+
+          <ion-label stacked>{{ "SOC_NUMBER_LABEL" | translate }}</ion-label>
           <ion-input type="text" formControlName="soc_no" disabled="true" [(ngModel)]="Travel_SOC_No_ngModel" 
-          placeholder="{{ 'SOC_NUMBER_PLACE_HOLDER' }}"></ion-input>
+          placeholder="{{ 'SOC_NUMBER_PLACE_HOLDER' | translate }}"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label stacked>{{ "TRAVEL_DATE_LABEL"  }}</ion-label>
+          <ion-label stacked>{{ "TRAVEL_DATE_LABEL" | translate  }}</ion-label>
+
+        
           <ion-datetime displayFormat="DD/MM/YYYY" formControlName="travel_date" max={{validDate}} placeholder="{{ 'TRAVEL_DATE_PLACE_HOLDER' | translate }}"></ion-datetime>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked>{{ "START_DT_LABEL"  }}</ion-label>
+
+          <ion-label stacked>{{ "START_DT_LABEL" | translate }}</ion-label>
+
           <ion-datetime displayFormat="DD/MM/YYYY HH:mm" formControlName="start_DT" max={{validDate}} placeholder="{{ 'START_DATETIME_PLACE_HOLDER' | translate }}"></ion-datetime>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked>{{ "END_DT_LABEL" }}</ion-label>
+
+          <ion-label stacked>{{ "END_DT_LABEL" | translate }}</ion-label>
+
           <ion-datetime displayFormat="DD/MM/YYYY HH:mm" formControlName="end_DT" max={{validDate}} placeholder="{{ 'END_DATETIME_PLACE_HOLDER' | translate }}"></ion-datetime>
         </ion-item>
     
@@ -60,7 +73,9 @@
     
     
         <ion-item>
-          <ion-label stacked> {{ "ORIGIN_PLACE_LABEL"  }} </ion-label>
+
+          <ion-label stacked> {{ "ORIGIN_PLACE_LABEL" | translate }} </ion-label>
+
           <ion-input [(ngModel)]="Travel_From_ngModel" type="text" formControlName="origin" placeholder=" {{ 'ORIGIN_PLACE_PLACE_HOLDER' | translate }} "></ion-input>
           <button ion-button outline item-end icon-left (click)="AddLookupClick()">
             <ion-icon name="eye"></ion-icon>
@@ -68,7 +83,9 @@
         </ion-item>
     
         <ion-item>
-          <ion-label stacked> {{ "DESTINATION_PLACE_LABEL"  }} </ion-label>
+
+          <ion-label stacked> {{ "DESTINATION_PLACE_LABEL" | translate }} </ion-label>
+
           <ion-input [(ngModel)]="Travel_Destination_ngModel" type="text" formControlName="destination" placeholder=" {{ 'DESTINATION_PLACE_PLACE_HOLDER' | translate }} "></ion-input>
           <button ion-button outline item-end icon-left (click)="AddToLookupClick()">
             <ion-icon name="eye"></ion-icon>
@@ -76,7 +93,9 @@
         </ion-item>
     
         <ion-item>
-          <ion-label stacked> {{ "DISTANCE_LABEL"  }} </ion-label>
+
+          <ion-label stacked> {{ "DISTANCE_LABEL" | translate }} </ion-label>
+
           <ion-input [(ngModel)]="Travel_Distance_ngModel" formControlName="distance" placeholder=" {{ 'DISTANCE_PLACE_HOLDER' | translate }} "></ion-input>
           <button ion-button outline item-end icon-left (click)="GetDistance()">
             <ion-icon name="eye"></ion-icon>
@@ -84,23 +103,29 @@
         </ion-item>
     
         <ion-item>
-          <ion-label stacked>{{ "TRAVEL_TYPE_LABEL" }}</ion-label>
+
+          <ion-label stacked>{{ "TRAVEL_TYPE_LABEL" | translate }}</ion-label>
+
           <ion-select formControlName="vehicleType" placeholder="{{ 'TRAVEL_TYPE_PLACE_HOLDER' | translate }}">
             <ion-option *ngFor="let vehicle of vehicles" (ionSelect)="SetPrice(vehicle)">{{vehicle.CATEGORY}}</ion-option>
           </ion-select>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked> {{ "CLAIM_AMOUNT_LABEL" }} {{ "CURRENCY_NAME_LABEL" }}</ion-label>
+
+          <ion-label stacked> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ "CURRENCY_NAME_LABEL" | translate }}</ion-label>
+
           <ion-input type="number" formControlName="vehicleType" [(ngModel)]="Travel_Amount_ngModel" placeholder=" {{ 'CLAIM_AMOUNT_PLACE_HOLDER' | translate }} "></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label stacked> {{ "DESCRIPTION_LABEL" }} </ion-label>
+
+          <ion-label stacked> {{ "DESCRIPTION_LABEL" | translate }} </ion-label>
           <ion-input type="text" formControlName="description" placeholder=" {{ 'DESCRIPTION_PLACE_HOLDER' | translate }} "></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label stacked> {{ "ATTACHMENT_LABEL" }} </ion-label>
+          <ion-label stacked> {{ "ATTACHMENT_LABEL" | translate }} </ion-label>
+
     
         </ion-item>
         <div class="btn">

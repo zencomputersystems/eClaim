@@ -69,7 +69,9 @@ export class ModulePageSetup_Service {
     }
 
     remove(id: string) {
-        let url = this.baseResource_Url + "main_modulepage?filter=(  MODULE_GUID=" + id + ")";
+
+        let url = this.baseResource_Url + "main_modulepage?filter=(	MODULE_GUID=" + id + ")";
+
 
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
