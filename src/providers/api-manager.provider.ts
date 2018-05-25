@@ -35,16 +35,16 @@ export class ApiManagerProvider {
         return this.http.get(url, { headers: queryHeaders }).map(res => res.json())
       }
 
-      updateApiModel(endPoint: string, modelJSON: any) {
-        var queryHeaders = new Headers();
-        queryHeaders.append('Content-Type', 'application/json');
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        let options = new RequestOptions({ headers: queryHeaders });
-        return this.http.patch(this.postUrl(endPoint), modelJSON, options)
-          .map((response) => {
-            return response;
-          }); 
-      }
+      // updateApiModel(endPoint: string, modelJSON: any) {
+      //   var queryHeaders = new Headers();
+      //   queryHeaders.append('Content-Type', 'application/json');
+      //   queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+      //   let options = new RequestOptions({ headers: queryHeaders });
+      //   return this.http.patch(this.postUrl(endPoint), modelJSON, options)
+      //     .map((response) => {
+      //       return response;
+      //     }); 
+      // }
 
       sendEmail() {
         let name: string; let email: string

@@ -1,69 +1,102 @@
-    {
-      "profile": {
-        "levels": {
-          "level": [
-            {
-              "-id": "1",
-              "approver": { "-directManager": "1" },
-              "conditions": {
-                "condition": [
-                  {
-                    "-status": "rejected",
-                    "nextlevel": { "-final": "false" }
-                  },
-                  {
-                    "-status": "approved",
-                    "nextlevel": {
-                      "-final": "false",
-                      "#text": "2"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "-id": "2",
-              "approver": {
-                "-keytype": "userGUID",
-                "#text": "64e8da16-e008-b53e-9e00-eca107d35a75"
+{
+  "profile": {
+    "levels": {
+      "level": [
+        {
+          "-id": "1",
+          "approver": {
+            "-directManager": "1"
+          },
+          "conditions": {
+            "condition": [
+              {
+                "-status": "rejected",
+                "nextlevel": {
+                  "-final": "false"
+                }
               },
-              "conditions": {
-                "condition": [
-                  {
-                    "-status": "rejected",
-                    "nextlevel": { "-final": "false" }
-                  },
-                  {
-                    "-status": "approved",
-                    "nextlevel": {
-                      "-final": "false",
-                      "#text": "3"
-                    }
-                  }
-                ]
+              {
+                "-status": "approved",
+                "nextlevel": {
+                  "-final": "false",
+                  "#text": "2"
+                }
               }
-            },
-            {
-              "-id": "3",
-              "approver": {
-                "-keytype": "userGUID",
-                "#text": "64e8da16-e008-b53e-9e00-eca107d35a75"
+            ]
+          }
+        },
+        {
+          "-id": "2",
+          "approver": {
+            "-keytype": "userGUID",
+            "#text": "a9653bdf-e42b-b4bd-2bb1-9224cd06646e"
+          },
+          "conditions": {
+            "condition": [
+              {
+                "-status": "rejected",
+                "nextlevel": {
+                  "-final": "false"
+                }
               },
-              "conditions": {
-                "condition": [
-                  {
-                    "-status": "rejected",
-                    "nextlevel": { "-final": "false" }
-                  },
-                  {
-                    "-status": "approved",
-                    "nextlevel": { "-final": "true" }
-                  }
-                ]
+              {
+                "-status": "approved",
+                "nextlevel": {
+                  "-final": "false",
+                  "#text": "3"
+                }
               }
-            }
-          ]
+            ]
+          }
+        },
+        {
+          "-id": "3",
+          "approver": {
+            "-keytype": "userGUID",
+            "#text": "ec96bcdf-258b-40a6-60ea-dc802692bb6c"
+          },
+          "conditions": {
+            "condition": [
+              {
+                "-status": "rejected",
+                "nextlevel": {
+                  "-final": "false"
+                }
+              },
+              {
+                "-status": "approved",
+                "nextlevel": {
+                  "-final": "false",
+                  "#text": "4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "-id": "4",
+          "approver": {
+            "-keytype": "userGUID",
+            "#text": "2b93fc11-23d5-db42-dd9f-bb9499071156"
+          },
+          "conditions": {
+            "condition": [
+              {
+                "-status": "rejected",
+                "nextlevel": {
+                  "-final": "false"
+                }
+              },
+              {
+                "-status": "approved",
+                "nextlevel": {
+                  "-final": "true"
+                }
+              }
+            ]
+          }
         }
-      }
+      ]
     }
-  
+  }
+}

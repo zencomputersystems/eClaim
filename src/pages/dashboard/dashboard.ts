@@ -121,13 +121,6 @@ export class DashboardPage {
           //   var result= y.toFixed(2);
           //   return result;
 
-
-          var x = a + b;
-          var y = parseFloat(x.toFixed(2));
-          return y;
-
-
-
         }, 0);
         var width = chart.chart.width,
           height = chart.chart.height,

@@ -433,7 +433,6 @@ export class EntertainmentclaimPage {
     }
     else {
       formValues.claimTypeGUID = 'f3217ecc-19d7-903a-6c56-78fdbd7bbcf1';
-      formValues.meal_allowance = this.allowanceGUID;
       formValues.attachment_GUID = imageGUID;
       this.travelAmount = formValues.claim_amount;
       formValues.soc_no = this.isCustomer ? this.Customer_GUID : this.Soc_GUID;
