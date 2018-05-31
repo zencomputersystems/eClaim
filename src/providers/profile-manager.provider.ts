@@ -22,16 +22,19 @@ export class ProfileManagerProvider {
     profileLevel: any; assignedTo: any; stage: any;
   
     UpdateProfileInfo(mainClaimReq: MainClaimRequestModel) {
+      debugger;
       this.api.updateClaimRequest(mainClaimReq).subscribe(res => console.log(res.json()))
     }    
   
     getMainClaimReqInfo(claimRef: ClaimWorkFlowHistoryModel, level: any, claimRequestGUID: any, isRemarksAccepted: any) {
+      debugger;
       this.level = level;
       this.claimRequestGUID = claimRequestGUID;
       this.isRemarksAccepted = isRemarksAccepted;
       //this.userGUID = localStorage.getItem('g_USER_GUID');
   
       this.api.getClaimRequestByClaimReqGUID(this.claimRequestGUID).subscribe(data => {
+        debugger;
         claimRef.ASSIGNED_TO = this.previousAssignedTo = data[0].ASSIGNED_TO;
         claimRef.PROFILE_LEVEL = this.previousLevel = data[0].PROFILE_LEVEL;
         // data[0].STAGE = this.stage;
@@ -44,8 +47,8 @@ export class ProfileManagerProvider {
   
         this.mainClaimReq = data[0];
   
-        this.SaveWorkFlow(claimRef);
-        this.processProfileJSON(data[0].PROFILE_JSON)
+        this.SaveWorkFlow(claimRef,data[0].PROFILE_JSON);
+       // this.processProfileJSON(data[0].PROFILE_JSON)
       })
     }
   
@@ -73,27 +76,50 @@ export class ProfileManagerProvider {
   
     }
   
-    SaveWorkFlow(claimRef: ClaimWorkFlowHistoryModel) {
+  //   SaveWorkFlow(claimRef: ClaimWorkFlowHistoryModel) {
+  // debugger;
+  //     this.api.postData('claim_work_flow_history', claimRef.toJson(true)).subscribe((response) => {
+  //       var postClaimMain = response.json();
+  //       this.api.sendEmail();
   
-      this.api.postData('claim_work_flow_history', claimRef.toJson(true)).subscribe((response) => {
-        var postClaimMain = response.json();
-        this.api.sendEmail();
+  //       this.mainClaimReq.STAGE = this.stage;
+  //       this.mainClaimReq.ASSIGNED_TO = this.assignedTo;
+  //       this.mainClaimReq.PROFILE_LEVEL = this.level;
+  //       this.mainClaimReq.UPDATE_TS =  new Date().toISOString();
+  //       if (this.level === '-1')
+  //       this.mainClaimReq.STATUS = 'Approved';
+  //       else if (this.level === '0' || this.isRemarksAccepted === false)
+  //       this.mainClaimReq.STATUS = 'Rejected';
+  //       this.UpdateProfileInfo(this.mainClaimReq);
+  //       alert('Claim action submitted successfully.')
   
-        this.mainClaimReq.STAGE = this.stage;
-        this.mainClaimReq.ASSIGNED_TO = this.assignedTo;
-        this.mainClaimReq.PROFILE_LEVEL = this.level;
-        this.mainClaimReq.UPDATE_TS =  new Date().toISOString();
-        if (this.level === '-1')
-        this.mainClaimReq.STATUS = 'Approved';
-        else if (this.level === '0' || this.isRemarksAccepted === false)
-        this.mainClaimReq.STATUS = 'Rejected';
-        this.UpdateProfileInfo(this.mainClaimReq);
-        alert('Claim action submitted successfully.')
-  
-      })
-    }
+  //     })
+  //   }
+  SaveWorkFlow(claimRef: ClaimWorkFlowHistoryModel,profile_Json:any) {
+    debugger;
+    var postClaimMain;
+        this.api.postData('claim_work_flow_history', claimRef.toJson(true)).subscribe((response) => {
+          postClaimMain = response.json();
+        });
+
+  debugger;
+     this.processProfileJSON(profile_Json)
+          this.api.sendEmail();
+          this.mainClaimReq.STAGE = this.stage;
+          this.mainClaimReq.ASSIGNED_TO = this.assignedTo;
+          this.mainClaimReq.PROFILE_LEVEL = this.level;
+          this.mainClaimReq.UPDATE_TS =  new Date().toISOString();
+          if (this.level === '-1')
+          this.mainClaimReq.STATUS = 'Approved';
+          else if (this.level === '0' || this.isRemarksAccepted === false)
+          this.mainClaimReq.STATUS = 'Rejected';
+          this.UpdateProfileInfo(this.mainClaimReq);
+          alert('Claim action submitted successfully.')
+
+      }
   
     ProcessProfileMng(remarks: any, approverGUID: any, level: any, claimRequestGUID: any, isRemarksAccepted: any) { 
+      debugger;
       this.TenantGUID = localStorage.getItem('g_TENANT_GUID');
       this.userGUID = localStorage.getItem('g_USER_GUID');
 
@@ -132,6 +158,7 @@ export class ProfileManagerProvider {
     }
 
     processProfileJSON(stringProfileJSON: any) {
+      debugger;
       let profileJSON = JSON.parse(stringProfileJSON);
       this.levels = profileJSON.profile.levels.level
       let nextLevel;

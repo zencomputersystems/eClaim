@@ -72,6 +72,7 @@ BindData()
   .subscribe(data => {
     this.userClaimhistorydetails= data["resource"];
     this.userClaimhistorydetails1=this.userClaimhistorydetails;
+    console.log(this.userClaimhistorydetails);
   });
 }
 

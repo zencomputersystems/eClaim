@@ -130,7 +130,7 @@ export class ClaimapprovertasklistPage {
     // alert(event.id);
     // alert(event.checked);
     // alert(claimRequestGuid);
-
+debugger;
     let checkboxData: Checkboxlist = new Checkboxlist(event.checked,claimRequestGuid,level);
     if (event.checked) {
       this.checkboxDataList.push(checkboxData);

@@ -138,6 +138,7 @@ export class ApiManagerProvider {
       }
 
       updateClaimRequest(claim_main: MainClaimRequestModel): Observable<any> {
+        debugger;
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
@@ -174,6 +175,7 @@ export class ApiManagerProvider {
     
 
       getClaimRequestByClaimReqGUID(claimReqGUID: string, params?: URLSearchParams): Observable<MainClaimRequestModel[]> {
+       debugger;
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
