@@ -52,7 +52,7 @@ export class UserclaimslistPage {
   searchboxValue: string;
 
   
-  constructor( private api: ApiManagerProvider,public navCtrl: NavController, public navParams: NavParams,public http: Http, private httpService: BaseHttpService) {
+  constructor( private api: ApiManagerProvider,public navCtrl: NavController, public navParams: NavParams,public http: Http, private httpService: BaseHttpService,private alertCtrl: AlertController) {
   //  this.claimrefguid=navParams.get("claimRefGuid");
   //  this.userguid=navParams.get("userGuid");
   //  this.month=navParams.get("Month");
@@ -157,9 +157,32 @@ this.userClaimhistorydetails=this.userClaimhistorydetails1;
   }
   DeleteClaimRequest(claimReqGuid:any,claimTypeGuid:any)
   {
-    this.api.deleteApiModel('main_claim_request',claimReqGuid).subscribe(res =>{
-      this.BindData();
-       alert('Claim has been deleted successfully.')});
+   // var deleteflag=false;
+       let alert1 = this.alertCtrl.create({
+        title: 'Confirm delete claim',
+        message: 'Are you sure you want to delete this claim?',
+        buttons: [
+            {
+                text: 'No',
+                handler: () => {
+                    return
+                }
+            },
+            {
+                text: 'Yes',
+                handler: () => {
+                  this.api.deleteApiModel('main_claim_request',claimReqGuid).subscribe(res =>{
+                    this.BindData();
+                    alert('Claim has been deleted successfully.')
+                   // deleteflag=true;
+                  });
+                }
+            }
+        ]
+    })
+    alert1.present();
+    // if(deleteflag)
+    // { }
   }
 
   ionViewDidLoad() {

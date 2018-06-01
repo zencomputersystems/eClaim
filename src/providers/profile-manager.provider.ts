@@ -47,7 +47,7 @@ export class ProfileManagerProvider {
   
         this.mainClaimReq = data[0];
   
-        this.SaveWorkFlow(claimRef,data[0].PROFILE_JSON);
+        this.SaveWorkFlow(claimRef,data[0].PROFILE_JSON,level);
        // this.processProfileJSON(data[0].PROFILE_JSON)
       })
     }
@@ -95,7 +95,7 @@ export class ProfileManagerProvider {
   
   //     })
   //   }
-  SaveWorkFlow(claimRef: ClaimWorkFlowHistoryModel,profile_Json:any) {
+  SaveWorkFlow(claimRef: ClaimWorkFlowHistoryModel,profile_Json:any,level:any) {
     debugger;
     var postClaimMain;
         this.api.postData('claim_work_flow_history', claimRef.toJson(true)).subscribe((response) => {
@@ -103,7 +103,7 @@ export class ProfileManagerProvider {
         });
 
   debugger;
-     this.processProfileJSON(profile_Json)
+     this.processProfileJSON(profile_Json,level)
           this.api.sendEmail();
           this.mainClaimReq.STAGE = this.stage;
           this.mainClaimReq.ASSIGNED_TO = this.assignedTo;
@@ -157,13 +157,13 @@ export class ProfileManagerProvider {
   
     }
 
-    processProfileJSON(stringProfileJSON: any) {
+    processProfileJSON(stringProfileJSON: any,level:any) {
       debugger;
       let profileJSON = JSON.parse(stringProfileJSON);
       this.levels = profileJSON.profile.levels.level
       let nextLevel;
       this.levels.forEach(element => {
-        if (element['-id'] == this.level) {
+        if (element['-id'] == level) {
           var temp: any[] =  element['conditions']['condition'];
                  temp.forEach(condElement => {          
             if (condElement['nextlevel']['-final'] === 'true')
