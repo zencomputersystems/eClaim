@@ -5,6 +5,10 @@ import { ClaimWorkFlowHistoryModel } from './../models/claim-work-flow-history.m
 import { MainClaimRequestModel } from './../models/main-claim-request.model';
 import { MainClaimReferanceModel } from './../models/main-claim-ref.model';
 import { UUID } from 'angular2-uuid';
+import { DashboardPage } from '../pages/dashboard/dashboard';
+import { NavController, App } from 'ionic-angular';
+import { ClaimapprovertasklistPage } from '../pages/claimapprovertasklist/claimapprovertasklist';
+
 
 @Injectable()
 
@@ -14,7 +18,9 @@ export class ProfileManagerProvider {
     userGUID: any; TenantGUID: any; previousLevel: number; previousAssignedTo: string; level: any;
     mainClaimReq: MainClaimRequestModel; claimRequestGUID: any; isRemarksAccepted: any;
   
-    constructor(public http: Http, public api: ApiManagerProvider) {
+    navCtrl:any;
+    constructor(public http: Http, public api: ApiManagerProvider, app : App) {
+      this.navCtrl = app.getActiveNav()
       this.TenantGUID = localStorage.getItem('g_TENANT_GUID');
       this.userGUID = localStorage.getItem('g_USER_GUID');
     }
@@ -22,8 +28,23 @@ export class ProfileManagerProvider {
     profileLevel: any; assignedTo: any; stage: any;
   
     UpdateProfileInfo(mainClaimReq: MainClaimRequestModel) {
+<<<<<<< HEAD
       debugger;
       this.api.updateClaimRequest(mainClaimReq).subscribe(res => console.log(res.json()))
+=======
+      this.api.updateClaimRequest(mainClaimReq).subscribe(res => 
+        {
+          if(mainClaimReq.STATUS==='Rejected')
+          alert('Claim has been '+mainClaimReq.STATUS +'.')
+          else
+          alert('Claim has been Approved.')
+         // alert('Claim has been '+mainClaimReq.STATUS+'.');
+          this.navCtrl.setRoot(ClaimapprovertasklistPage);
+      }
+      
+        // console.log(res.json())
+      )
+>>>>>>> master
     }    
   
     getMainClaimReqInfo(claimRef: ClaimWorkFlowHistoryModel, level: any, claimRequestGUID: any, isRemarksAccepted: any) {
@@ -47,35 +68,44 @@ export class ProfileManagerProvider {
   
         this.mainClaimReq = data[0];
   
+<<<<<<< HEAD
         this.SaveWorkFlow(claimRef,data[0].PROFILE_JSON,level);
        // this.processProfileJSON(data[0].PROFILE_JSON)
+=======
+        this.SaveWorkFlow(claimRef, data[0].PROFILE_JSON,level);
+        //this.processProfileJSON(data[0].PROFILE_JSON)
+>>>>>>> master
       })
     }
   
     GetDirectManagerByManagerGUID() {
+      return new Promise((resolve, reject) => {
       this.api.getApiModel('user_info', 'filter=USER_GUID=' + this.assignedTo).subscribe(res => {
         this.managerInfo = res["resource"]
         this.managerInfo.forEach(userElm => {
           this.stage = userElm.DEPT_GUID;
         })
-      })  
+      }) 
+      resolve(true);
+    }) 
     }
   
     GetDirectManager() {
+      return new Promise((resolve, reject) => {
       this.api.getApiModel('view_manager_details', 'filter=USER_GUID=' + this.userGUID).subscribe(res => {
         this.managerInfo = res["resource"]
         this.managerInfo.forEach(userElm => {
           // this.assignedTo = userElm.MANAGER_GUID;
           // this.stage = userElm.DEPT_GUID;
           this.assignedTo = userElm.MANAGER_GUID;
-          this.stage = userElm.MANAGER_DEPT_GUID;
-  
-        })
-  
+          this.stage = userElm.MANAGER_DEPT_GUID;  
+        })  
       })
-  
+      resolve(true);
+    })  
     }
   
+<<<<<<< HEAD
   //   SaveWorkFlow(claimRef: ClaimWorkFlowHistoryModel) {
   // debugger;
   //     this.api.postData('claim_work_flow_history', claimRef.toJson(true)).subscribe((response) => {
@@ -117,6 +147,35 @@ export class ProfileManagerProvider {
           alert('Claim action submitted successfully.')
 
       }
+=======
+    SaveWorkFlow(claimRef: ClaimWorkFlowHistoryModel, profile_Json: any,level:any) {
+  
+      this.api.postData('claim_work_flow_history', claimRef.toJson(true)).subscribe((response) => {
+        var postClaimMain = response.json();
+        //this.api.sendEmail();
+      })
+      this.processProfileJSON(profile_Json,level)
+        this.mainClaimReq.STAGE = this.stage;
+        this.mainClaimReq.ASSIGNED_TO = this.assignedTo;
+        this.mainClaimReq.PROFILE_LEVEL = this.level;
+        this.mainClaimReq.UPDATE_TS =  new Date().toISOString();
+        if (this.level === '-1')
+        this.mainClaimReq.STATUS = 'Approved';
+        else if (this.level === '0' || this.isRemarksAccepted === false){
+          this.mainClaimReq.STATUS = 'Rejected';
+          this.mainClaimReq.PROFILE_LEVEL = 0;
+          this.mainClaimReq.STAGE = null;
+          this.mainClaimReq.ASSIGNED_TO = null;
+        }
+        this.UpdateProfileInfo(this.mainClaimReq);
+        //alert('Claim action submitted successfully.')
+
+        // This is for Approval Send email to User and next approver
+        this.api.EmailNextApprover(this.mainClaimReq.CLAIM_REQUEST_GUID, this.mainClaimReq.CLAIM_REF_GUID, this.mainClaimReq.ASSIGNED_TO, this.mainClaimReq.CLAIM_TYPE_GUID, this.mainClaimReq.START_TS, this.mainClaimReq.END_TS, this.mainClaimReq.CREATION_TS, this.profileLevel);
+  
+     
+    }
+>>>>>>> master
   
     ProcessProfileMng(remarks: any, approverGUID: any, level: any, claimRequestGUID: any, isRemarksAccepted: any) { 
       debugger;
@@ -144,21 +203,13 @@ export class ProfileManagerProvider {
       //   alert('Claim action submitted successfully.')
   
       // })
-    }
-  
-    readProfile(level: any, claimRequestGUID: any, isRemarksAccepted: any) {
-      // this.level = level;
-      // this.claimRequestGUID = claimRequestGUID;
-      // this.isRemarksAccepted = isRemarksAccepted;
-      // this.userGUID =   localStorage.getItem('g_USER_GUID');
-  
-      // this.getMainClaimReqInfo();
-  
-  
-    }
+    }   
 
     processProfileJSON(stringProfileJSON: any,level:any) {
+<<<<<<< HEAD
       debugger;
+=======
+>>>>>>> master
       let profileJSON = JSON.parse(stringProfileJSON);
       this.levels = profileJSON.profile.levels.level
       let nextLevel;
@@ -200,18 +251,18 @@ export class ProfileManagerProvider {
         //   }
         // });
       }
-    }
+    }    
 
     getInfoLevels(levels: any[], level: any) {
       levels.forEach(element => {
         if (element['-id'] == level) {
           this.profileLevel = level;
           if (element['approver']['-directManager'] === '1') {
-            this.GetDirectManager();
+            let temp = this.GetDirectManager(); temp.then();
           }
           if (element['approver']['-keytype'] === 'userGUID') {
             this.assignedTo = element['approver']['#text'];
-            this.GetDirectManagerByManagerGUID();
+            let temp = this.GetDirectManagerByManagerGUID(); temp.then();
           }
         }
       });
@@ -254,9 +305,11 @@ export class ProfileManagerProvider {
       claimReqMainRef.ASSIGNED_TO = this.assignedTo;
       claimReqMainRef.PROFILE_LEVEL = this.profileLevel;
       claimReqMainRef.PROFILE_JSON = this.profileJSON;
-      claimReqMainRef.STATUS = 'Pending';
+      claimReqMainRef.STATUS = this.formValues.uuid === undefined ? 'Pending' : 'Drafting';
       claimReqMainRef.STAGE = this.stage;
       claimReqMainRef.ATTACHMENT_ID = this.formValues.attachment_GUID;
+      claimReqMainRef.TRAVEL_TYPE = this.formValues.travelType === 'Outstation' ? '1' : '0';
+
       if (this.isCustomer) {
         claimReqMainRef.CUSTOMER_GUID = this.formValues.soc_no;
       }
@@ -265,12 +318,17 @@ export class ProfileManagerProvider {
       }
       this.api.postData('main_claim_request', claimReqMainRef.toJson(true)).subscribe((response) => {
         var postClaimMain = response.json();
-        this.api.sendEmail();
+        this.api.sendEmail(this.formValues.claimTypeGUID, this.formValues.start_DT, this.formValues.end_DT, new Date().toISOString());
         localStorage.setItem("g_CR_GUID", postClaimMain["resource"][0].CLAIM_REQUEST_GUID);
         // this.ClaimRequestMain = postClaimMain["resource"][0].CLAIM_REQUEST_GUID;
         //this.MainClaimSaved = true;
-        this.formValues.uuid===undefined?alert('Your claim has submitted successfully.'):alert('Please click FAB icon to include additional details and submit your claim.')
-        // alert('Please click FAB icon to include additional details and submit your claim.')
+        if (this.formValues.uuid === undefined) {
+          //this.api.presentToast('Claim has submitted successfully.')
+           alert('Claim has registered successfully.')
+          this.navCtrl.setRoot(DashboardPage);
+        }
+        else
+          alert('Please click (+) icon to include additional details and submit your claim.')       
       })
     }
 
@@ -324,52 +382,5 @@ export class ProfileManagerProvider {
           })
   
       })
-    }
-  
-    // processProfileJSON(stringProfileJSON: any) {
-    //   let profileJSON = JSON.parse(stringProfileJSON);
-    //   this.levels = profileJSON.profile.levels.level
-    //   let nextLevel;
-    //   this.levels.forEach(element => {
-    //     if (element['-id'] == this.level) {
-    //         var temp: any[] =  element['conditions']['condition'];
-    //       temp.forEach(condElement => {
-  
-    //         if (condElement['nextlevel']['-final'] === 'true')
-    //           nextLevel = '-1';
-    //         else if (condElement['-status'] === 'approved') {
-    //           nextLevel = condElement['nextlevel']['#text'];
-  
-    //         }
-  
-    //         else if (condElement['-status'] === 'rejected') {  
-    //           nextLevel = '0';
-    //         }
-    //       });
-    //     }
-    //   });
-  
-    //   this.level = nextLevel;
-  
-    //   if (this.level === '-1' || this.level === '0') {
-    //     this.assignedTo = '';
-    //     this.stage = '';
-    //   }
-    //   else {
-    //     this.levels.forEach(element => {
-    //       // if (element['-id'] == this.level) {
-    //       //   this.profileLevel = this.level;
-    //       //   if (element['approver']['-directManager'] === '1') {
-    //       //     this.GetDirectManager();
-    //       //   }
-  
-    //       //   if (element['approver']['-keytype'] === 'userGUID') {
-    //       //     this.assignedTo = element['approver']['#text'];
-    //       //     this.GetDirectManagerByManagerGUID();
-    //       //   }
-    //       // }
-    //     });
-    //   }
-    // }
-  
+    }  
   }

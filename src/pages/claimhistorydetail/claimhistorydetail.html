@@ -6,10 +6,10 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary500">
     <ion-title>CLAIM HISTORY DETAILS</ion-title>
   </ion-navbar>
-  <ion-toolbar no-border-top>
+  <ion-toolbar no-border-top color="primary500">
     <ion-searchbar [(ngModel)]="searchboxValue" (ionChange)="onSearchInput($event)" ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
@@ -18,21 +18,14 @@
 <ion-content padding>
 
   <ion-item *ngFor="let userdetail of userdetails">
-    <ion-label>Name </ion-label>
-    <ion-label>:</ion-label>
-    <ion-label>{{userdetail.FULLNAME}}</ion-label>
-    <ion-label>Department </ion-label>
-    <ion-label>:</ion-label>
-    <ion-label>{{userdetail.DEPARTMENT}}</ion-label>
+    <ion-label>Name : {{userdetail.FULLNAME}}</ion-label>
+    <ion-label>Department : {{userdetail.DEPARTMENT}}</ion-label>
   </ion-item>
 
   <ion-item *ngFor="let userdetail of userdetails">
-    <ion-label>Designation </ion-label>
-    <ion-label>:</ion-label>
-    <ion-label>{{userdetail.DESIGNATION}}</ion-label>
-    <ion-label>Month </ion-label>
-    <ion-label>:</ion-label>
-    <ion-label>{{this.month}}</ion-label>
+    <ion-label>Designation : {{userdetail.DESIGNATION}} </ion-label>
+    <ion-label>Month : {{this.month}}</ion-label>
+
   </ion-item>
 
 
@@ -40,12 +33,12 @@
   <ion-item>
       <table class="Tabler ">
           <tr class="linedsg TColor">
-              <th class="lgl1 tblBrLeft" style="width:60px">NO.</th>
-              <th class="lgl1">CLAIM TYPE</th>
-              <th class="lgl1">DATE</th>
-              <th class="lgl1">STATUS</th>
+              <th class="lgl1 tblBrLeft" style="width:60px">No.</th>
+              <th class="lgl1">Claim Type</th>
+              <th class="lgl1">Date</th>
+              <th class="lgl1">Status</th>
               <!-- <th class="lgl1">STAGE</th> -->
-              <th class="lgl1 tblBrRight">AMOUNT</th>
+              <th class="lgl1 tblBrRight">Amount</th>
           </tr>
 
           <tr class="col7" *ngFor="let claimhistorydetail of claimhistorydetails; let i=index">

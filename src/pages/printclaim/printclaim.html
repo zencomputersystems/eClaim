@@ -3,23 +3,43 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-
-      <!-- <ion-fab top1 right>
-        <button ion-fab mini class="btnClear">
-          <ion-icon name="settings"></ion-icon>
-        </button>
-        <ion-fab-list class="settingBtnFab" side="left">
-          <button ion-fab color="light" [class.menuHide]="translateToMalayClicked" (click)="translateToMalay()">ML</button>
-          <button ion-fab color="light" [class.menuHide]="translateToEnglishClicked" (click)="translateToEnglish()">ENG</button>
-        </ion-fab-list>
-      </ion-fab> -->
-
     <ion-title>{{ 'PRINT_CLAIM_HEADING' | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
+    <ion-segment color="primary500" [(ngModel)]="claimFor">
+        <ion-segment-button value="seg_customer" (click)="claimForChanged()">
+          {{"CUSTOMER_TITLE" | translate }}
+        </ion-segment-button>
+        <ion-segment-button value="seg_project" (click)="claimForChanged()">
+          {{"PROJECT_TITLE" | translate }}
+        </ion-segment-button>
+      </ion-segment>
+
+    <div [ngSwitch]="claimFor">
+        <div *ngSwitchDefault  ngSelected="selected">
+         
+          <ion-item>
+            <ion-label color="primary500" stacked> {{ "CUSTOMER_NAME_LABEL" | translate }} </ion-label>
+            <ion-input (click)="CustomerLookup()" [ngModelOptions]="{standalone: true}" [(ngModel)]="Customer_Lookup_ngModel" type="text" [disabled]="true"></ion-input>
+          </ion-item>
+        </div>
+        <div *ngSwitchCase="'seg_project'">
+           
+          <ion-item>
+            <ion-label color="primary500" stacked> {{ "PROJECT_NAME_LABEL" | translate }} </ion-label>
+            <ion-input (click)="ProjectLookup()" [ngModelOptions]="{standalone: true}" [(ngModel)]="Project_Lookup_ngModel" [disabled]="true"
+              type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label color="primary500" stacked>{{ "SOC_NUMBER_LABEL" | translate }}</ion-label>
+            <ion-input [ngModelOptions]="{standalone: true}" [(ngModel)]="Print_SOC_No_ngModel" [ngModelOptions]="{standalone: true}"
+              type="text" disabled="true"></ion-input>
+          </ion-item>
+        </div>
+      </div>
 
   <form [formGroup]="Printform">
 
@@ -30,8 +50,8 @@
 
     <ion-item>
       <ion-label color="primary500" stacked> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ "CURRENCY_NAME_LABEL" | translate }}</ion-label>
-      <ion-label> {{travelAmount | number}} </ion-label>
-      <ion-input type="number" formControlName="claim_amount" [(ngModel)]="Printing_Amount_ngModel" placeholder=" {{ 'CLAIM_AMOUNT_PLACE_HOLDER' | translate }} "></ion-input>
+      <!-- <ion-label> {{travelAmount | number}} </ion-label> -->
+      <ion-input type="number" (change)='getCurrency($event.target.value)' formControlName="claim_amount" [(ngModel)]="Printing_Amount_ngModel" placeholder=" {{ 'CLAIM_AMOUNT_PLACE_HOLDER' | translate }} "></ion-input>
     </ion-item>
 
     <ion-item>
@@ -39,17 +59,107 @@
       <ion-input type="text" formControlName="description" [(ngModel)]="Printing_Description_ngModel" placeholder=" {{ 'DESCRIPTION_PLACE_HOLDER' | translate }} "></ion-input>
     </ion-item>
 
-    <ion-item>
-
+    <!-- <ion-item>
       <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
       <button ion-button type="button" (click)="clearFile()">clear file</button>
+    </ion-item> -->
+
+    <ion-item>
+      <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
+      <button ion-button type="primary"  (click)="saveIm()" [disabled]= "!chooseFile">upload image</button>    
     </ion-item>
+
+    <img style="width: 25%" height="50%" src={{imageURLEdit}} *ngIf="imageURLEdit!==null">
+
+    <div class="btn">     
+      <button ion-button color="primary500" (click)='submitAction(Printform.value)' [disabled]="(Printform.valid && !ImageUploadValidation) || !Printform.valid" >{{ 'SUBMIT'}}</button>    
+   </div>
    
-    <div class="btn">
+    <!-- <div class="btn">
         <button ion-button (click)='saveIm(Printform.value)' [disabled]="Printform.invalid || loading" >{{ 'SUBMIT' }}</button>
-    </div>    
-
-
+    </div>     -->
   </form>
+
+  <div class="blackcontainer" *ngIf="AddLookupClicked">
+    </div>
+    <div class="popup" padding *ngIf="AddLookupClicked">
+      <ion-card>
+        <ion-card-header class="icTitle headerColor-white ">
+  
+          <div class="icHeaderText">Search Location</div>
+          <button class="btnR" (click)="CloseLookupClick()">
+            <ion-icon name="md-close"></ion-icon>
+          </button>
+        </ion-card-header>
+        <ion-searchbar (ionInput)="searchLocation($event)" placeholder="Enter Keywords"></ion-searchbar>
+        <ion-list>
+          <ion-item-sliding *ngFor="let item of currentItems">
+            <button ion-item (click)="openItem(item)">
+              <ion-label> {{item.description}}</ion-label>
+            </button>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-card>
+    </div>
+  
+    <div class="blackcontainer" *ngIf="ProjectLookupClicked">
+    </div>
+    <div class="popup" padding *ngIf="ProjectLookupClicked">
+      <ion-card>
+        <ion-card-header class="icTitle headerColor-white ">
+          <div class="icHeaderText">{{ "PROJECT_NAME_LABEL" | translate }}</div>
+          <button class="btnR" (click)="CloseProjectLookup()">
+            <ion-icon name="md-close"></ion-icon>
+          </button>
+        </ion-card-header>
+        <ion-searchbar [(ngModel)]="Travel_ProjectName_ngModel" (ionInput)="searchProject($event)" placeholder='{{ "PROJECT_NAME_PLACE_HOLDER" | translate }}'></ion-searchbar>
+        <ion-list>
+          <ion-item-sliding *ngFor="let item of projects">
+            <button ion-item (click)="GetSocNo(item)">
+              <ion-label>{{item.project_name}}
+                <>{{item.soc}}</ion-label>
+            </button>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-card>
+    </div>
+  
+    <div class="blackcontainer" *ngIf="CustomerLookupClicked">
+    </div>
+    <div class="popup" padding *ngIf="CustomerLookupClicked">
+      <ion-card>
+        <ion-card-header class="icTitle headerColor-white ">
+          <div class="icHeaderText">{{ "CUSTOMER_NAME_LABEL" | translate }}</div>
+          <button class="btnR" (click)="CloseCustomerLookup()">
+            <ion-icon name="md-close"></ion-icon>
+          </button>
+        </ion-card-header>
+        <ion-searchbar [(ngModel)]="Travel_Customer_ngModel" (ionInput)="searchCustomer($event)" placeholder='{{ "CUSTOMER_NAME_PLACE_HOLDER" | translate }}'></ion-searchbar>
+        <ion-list>
+          <ion-item-sliding *ngFor="let item of customers">
+            <button ion-item (click)="GetCustomer(item.CUSTOMER_GUID,item.NAME)">
+              <ion-label>{{item.NAME}}</ion-label>
+            </button>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-card>
+    </div>
+
+    <ion-fab bottom right>
+      <button ion-fab  mini color="secondary400">
+        <ion-icon name="add"></ion-icon>
+      </button>
+      <ion-fab-list side="top">
+        <button ion-fab (click)='NavigateTravelClaim()'>
+          <ion-icon name="car"></ion-icon>
+          <ion-label>Travel Claim</ion-label>
+        </button>
+        <button ion-fab>
+          <ion-icon name="help"></ion-icon>
+          <ion-label>Help</ion-label>
+        </button>
+    
+      </ion-fab-list>
+    </ion-fab>
 
 </ion-content>

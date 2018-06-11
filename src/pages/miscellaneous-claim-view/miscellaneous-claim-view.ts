@@ -46,7 +46,7 @@ export class MiscellaneousClaimViewPage {
     this.isRemarksAccepted = val === 'accepted' ? true : false;
     if (!this.isRemarksAccepted) {
           if (this.Remarks_NgModel === undefined) {
-            alert('Please input valid remarks');
+            alert('Please enter valid remarks');
             return;
           }
         }

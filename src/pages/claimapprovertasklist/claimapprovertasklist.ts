@@ -22,15 +22,6 @@ import { PrintClaimViewPage } from '../../pages/print-claim-view/print-claim-vie
 import { GiftClaimViewPage } from '../../pages/gift-claim-view/gift-claim-view';
 import { MiscellaneousClaimViewPage } from '../../pages/miscellaneous-claim-view/miscellaneous-claim-view';
 
-/**
- * Generated class for the ClaimapprovertasklistPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
-
-
 @IonicPage()
 @Component({
   selector: 'page-claimapprovertasklist',

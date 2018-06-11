@@ -20,22 +20,14 @@
     
       <div [ngSwitch]="claimFor">
         <div *ngSwitchDefault>
-          <!-- <ion-item>
-            <button ion-button outline item-start icon-left (click)="CustomerLookup()">
-              <ion-icon name="eye"></ion-icon>
-              {{ "CUSTOMER_LOOKUP_BUTTON" | translate }} </button>
-          </ion-item> -->
+         
           <ion-item>
             <ion-label color="primary" stacked> {{ "CUSTOMER_NAME_LABEL" | translate }} </ion-label>
             <ion-input (click)="CustomerLookup()" [disabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="Customer_Lookup_ngModel" type="text"></ion-input>
           </ion-item>
         </div>
         <div *ngSwitchCase="'seg_project'">
-          <!-- <ion-item>
-            <button ion-button outline item-start icon-left (click)="ProjectLookup()">
-              <ion-icon name="eye"></ion-icon>
-              {{ "PROJECT_LOOKUP_BUTTON" | translate }} </button>
-          </ion-item> -->
+         
           <ion-item >
             <ion-label color="primary" stacked> {{ "PROJECT_NAME_LABEL" | translate }} </ion-label>
             <ion-input (click)="ProjectLookup()" [disabled]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="Project_Lookup_ngModel" [ngModelOptions]="{standalone: true}"
@@ -68,16 +60,49 @@
                   <ion-input type="text" formControlName="description" [(ngModel)]="Miscellaneous_Description_ngModel" ></ion-input>
                 </ion-item>
 
-              <ion-item>
+              <!-- <ion-item>
                 <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
                 <button ion-button type="button" (click)="clearFile()">clear file</button>
+              </ion-item> -->
+
+              <ion-item>
+                <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
+                <button ion-button type="primary"  (click)="saveIm()" [disabled]= "!chooseFile">upload image</button>               
               </ion-item>
-              
+
+              <img style="width: 25%" height="50%" src={{imageURLEdit}} *ngIf="imageURLEdit!==null">
+
               <div class="btn">     
+                <button ion-button color="primary500" (click)='submitAction(MiscellaneousForm.value)' [disabled]="(MiscellaneousForm.valid && !ImageUploadValidation) || !MiscellaneousForm.valid" >{{ 'SUBMIT'}}</button>               
+             </div>
+              
+              <!-- <div class="btn">     
               <button ion-button (click)='saveIm(MiscellaneousForm.value)' [disabled]="MiscellaneousForm.invalid || loading" >{{ 'SUBMIT'}}</button>
-              </div>               
+              </div>                -->
        
-          </form>   
+          </form>  
+          
+          <div class="blackcontainer" *ngIf="AddLookupClicked">
+          </div>
+          <div class="popup" padding *ngIf="AddLookupClicked">
+            <ion-card>
+              <ion-card-header class="icTitle headerColor-white ">
+        
+                <div class="icHeaderText">Search Location</div>
+                <button class="btnR" (click)="CloseLookupClick()">
+                  <ion-icon name="md-close"></ion-icon>
+                </button>
+              </ion-card-header>
+              <ion-searchbar (ionInput)="searchLocation($event)" placeholder="Enter Keywords"></ion-searchbar>
+              <ion-list>
+                <ion-item-sliding *ngFor="let item of currentItems">
+                  <button ion-item (click)="openItem(item)">
+                    <ion-label> {{item.description}}</ion-label>
+                  </button>
+                </ion-item-sliding>
+              </ion-list>
+            </ion-card>
+          </div>
  
       
     <div class="blackcontainer" *ngIf="ProjectLookupClicked">
@@ -122,25 +147,23 @@
           </ion-list>
         </ion-card>
       </div>
-      <!-- <image-comp  (change)="submitAction($event,MedicalForm.value)"></image-comp> -->
-
-      
+          
 
       <ion-fab bottom right>
-          <button ion-fab  mini color="secondary400">
-            <ion-icon name="add"></ion-icon>
+        <button ion-fab  mini color="secondary400">
+          <ion-icon name="add"></ion-icon>
+        </button>
+        <ion-fab-list side="top">
+          <button ion-fab (click)='NavigateTravelClaim()'>
+            <ion-icon name="car"></ion-icon>
+            <ion-label>Travel Claim</ion-label>
           </button>
-          <ion-fab-list side="top">
-            <button ion-fab>
-              <ion-icon name="car"></ion-icon>
-              <ion-label>Travel Claim</ion-label>
-            </button>
-            <button ion-fab>
-              <ion-icon name="help"></ion-icon>
-              <ion-label>Help</ion-label>
-            </button>
-        
-          </ion-fab-list>
-        </ion-fab>
+          <button ion-fab>
+            <ion-icon name="help"></ion-icon>
+            <ion-label>Help</ion-label>
+          </button>
+      
+        </ion-fab-list>
+      </ion-fab>
 
 </ion-content>

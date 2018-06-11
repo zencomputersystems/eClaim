@@ -30,6 +30,7 @@ export class MainClaimRequestModel {
     public UPDATE_TS: string = null,
     public UPDATE_USER_GUID: string = null,
     public ATTACHMENT_ID: string = null,
+    public TRAVEL_TYPE: string = null,
   ) { }
 
 
@@ -63,8 +64,8 @@ export class MainClaimRequestModel {
       json.CREATION_USER_GUID,
       json.UPDATE_TS,
       json.UPDATE_USER_GUID,
-      json.ATTACHMENT_ID
-
+      json.ATTACHMENT_ID,
+      json.TRAVEL_TYPE
     );
   }
 
@@ -97,7 +98,8 @@ export class MainClaimRequestModel {
       ATTACHMENT_ID: this.ATTACHMENT_ID,
       CREATION_USER_GUID: this.CREATION_USER_GUID,
       UPDATE_TS: this.UPDATE_TS,
-      UPDATE_USER_GUID: this.UPDATE_USER_GUID
+      UPDATE_USER_GUID: this.UPDATE_USER_GUID,
+      TRAVEL_TYPE: this.TRAVEL_TYPE
     };
     return stringify ? JSON.stringify({ resource: [doc] }) : doc;
   }

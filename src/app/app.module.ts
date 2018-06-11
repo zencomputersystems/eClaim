@@ -29,7 +29,6 @@ import { PaymenttypesetupPage } from '../pages/paymenttypesetup/paymenttypesetup
 import { QualificationsetupPage } from '../pages/qualificationsetup/qualificationsetup';
 import { SubsciptionsetupPage } from '../pages/subsciptionsetup/subsciptionsetup';
 import { SignupPage } from '../pages/signup/signup';
-import { SpeakerListPage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { TenantsetupPage } from '../pages/tenantsetup/tenantsetup';
 import { SetupPage } from '../pages/setup/setup';
@@ -101,6 +100,8 @@ import { CustomerSetupPage } from '../pages/customer-setup/customer-setup';
 
 import { ChangePasswordPage } from '../pages/change-password/change-password';
 import { DashboardPage } from '../pages/dashboard/dashboard';
+import { DatePipe } from '@angular/common'
+
 @NgModule({
   declarations: [
     ConferenceApp,
@@ -121,7 +122,6 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
     StatesetupPage,
     SetupguidePage,
     SignupPage,
-    SpeakerListPage,
     SubmodulesetupPage,
     SetupPage,
     BanksetupPage,
@@ -183,7 +183,8 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
     IonicModule.forRoot(ConferenceApp, {}, {
       links: [
         { component: TabsPage, name: 'TabsPage', segment: 'tabs' },
-        { component: SpeakerListPage, name: 'Home', segment: 'Home' },
+        // { component: DashboardPage, name: 'Home', segment: 'Home' },
+        { component: DashboardPage, name: 'DashboardPage', segment: 'DashboardPage' },
         { component: SetupPage, name: 'SetupPage', segment: 'Setup' },
         { component: AdminsetupPage, name: 'AdminsetupPage', segment: 'AdminsetupPage'},
         { component: LoginPage, name: 'LoginPage', segment: 'login' },
@@ -191,9 +192,18 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
         { component: SignupPage, name: 'SignupPage', segment: 'signup' },
         { component: ChangePasswordPage, name: 'ChangePasswordPage', segment: 'changepassword' },
 
+        { component: TravelclaimPage, name: 'TravelclaimPage', segment: 'TravelclaimPage' },
+        { component: EntertainmentclaimPage, name: 'EntertainmentclaimPage', segment: 'EntertainmentclaimPage' },
+        { component: GiftclaimPage, name: 'GiftclaimPage', segment: 'GiftclaimPage' },
+        { component: OvertimeclaimPage, name: 'OvertimeclaimPage', segment: 'OvertimeclaimPage' },
+        { component: PrintclaimPage, name: 'PrintclaimPage', segment: 'PrintclaimPage' },
+        { component: MiscellaneousClaimPage, name: 'MiscellaneousClaimPage', segment: 'MiscellaneousClaimPage' },
+
         { component: ClaimtasklistPage, name: 'ClaimtasklistPage', segment: 'ClaimtasklistPage' },
         { component: ClaimapprovertasklistPage, name: 'ClaimapprovertasklistPage', segment: 'ClaimapprovertasklistPage' },
-        { component: UserclaimslistPage, name: 'UserclaimslistPage', segment: 'UserclaimslistPage' }
+        { component: UserclaimslistPage, name: 'UserclaimslistPage', segment: 'UserclaimslistPage' },
+        { component: ClaimhistoryPage, name: 'ClaimhistoryPage', segment: 'ClaimhistoryPage' }
+        
       ]
     }),
     IonicStorageModule.forRoot()
@@ -237,7 +247,6 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
     SubsciptionsetupPage,
     TenantsetupPage,
     RolemodulesetupPage,
-    SpeakerListPage,
     TabsPage,
     ApproverTaskListPage,
     TravelClaimViewPage,
@@ -276,11 +285,11 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ConferenceData, HttpClientModule, ApiManagerProvider,
-    UserData,
+    UserData, DatePipe,
     InAppBrowser,
     SplashScreen, StatusBar, Services,
 
-    Camera, ProfileManagerProvider,
+    Camera, ProfileManagerProvider, 
     File,
     FilePath,
     FileTransfer,

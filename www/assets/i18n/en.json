@@ -142,7 +142,8 @@
   "GIFT_DATE_LABEL": "Gift Date", 
   "CLAIM_DATE_LABEL": "Miscellaneous Date",
   "CALENDAR_REF_LABEL": "Calendar Reference",
-  "TRAVEL_TYPE_LABEL": "Travel Mode",
+  "TRAVEL_MODE_LABEL": "Travel Mode",
+  "TRAVEL_TYPE_LABEL": "Travel Type",
   "ORIGIN_PLACE_LABEL": "Origin Place",
   "DESTINATION_PLACE_LABEL": "Destination Place",
   "DESCRIPTION_LABEL": "Description",
@@ -165,17 +166,25 @@
   "CLAIM_APPLIED_DATE_LABEL":"Claim Applied Date",
   "STATUS_LABEL":"Status", 
   "MILEAGE_AMOUNT_LABEL": "Mileage Amount", 
+<<<<<<< HEAD
   "TOTAL_CLAIM_AMOUNT_LABEL":"Claim Amount", 
+=======
+  "TOTAL_CLAIM_AMOUNT_LABEL":"Total Claim Amount", 
+>>>>>>> master
   "REMARKS_PLACE_HOLDER": "Please fill the Remarks",
  "STAGE_LABEL":"Stage",
  "BANK_NAME_LABEL": "Bank Name",  
- "CUSTOMER_TITLE": "CUSTOMER",
- "PROJECT_TITLE": "PROJECT",
+ "CUSTOMER_TITLE": "Customer",
+ "PROJECT_TITLE": "Project",
  "SUBMIT_ACTION_BUTTON": "SUBMIT",
  "EDIT_LABEL": "EDIT",
  "REMARKS_LABEL": "Remarks",
- "REJECT_BUTTON": "REJECT",
- "ACCEPT_BUTTON": "ACCEPT",
+ "REJECT_BUTTON": "Reject",
+ "ACCEPT_BUTTON": "Approve",
  "MISCELLANEOUS_CLAIM_HEADING": "Miscellaneous",
- "DASHBOARD_HEADING": "Dashboard"
+ "DASHBOARD_HEADING": "Dashboard",
+ "TOTAL_AMOUNT_LABEL": "Total Amount",
+ "NAVIGATE_LABEL": "Navigate",
+ "CLAIMS_LABEL": "Claims",
+ "Account_LABEL": "Account"
 } 

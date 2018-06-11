@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { NavParams, Tabs } from 'ionic-angular';
 
-import { SpeakerListPage } from '../home/home';
 import { SetupPage } from '../setup/setup';
 import { AdminsetupPage } from '../adminsetup/adminsetup';
 import { ApproverTaskListPage } from '../approver-task-list/approver-task-list';
 import { ClaimapprovertasklistPage } from '../claimapprovertasklist/claimapprovertasklist';
 import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 import { ClaimtasklistPage } from '../claimtasklist/claimtasklist';
-
+import { DashboardPage } from '../dashboard/dashboard';
 @Component({
   templateUrl: 'tabs.html'
 })
@@ -30,7 +29,7 @@ export class TabsPage {
       // { title: "ADMIN SETUP", root: AdminsetupPage, icon: "settings" },
       // { title: "APPROVER TASK", root: ClaimapprovertasklistPage, icon: "checkbox-outline" },
 
-      { title: "HOME", root: SpeakerListPage, icon: "apps" },
+      { title: "DASHBOARD", root: DashboardPage, icon: "apps" },
       { title: "MY CLAIM LIST", root: UserclaimslistPage, icon: "settings" },      
       { title: "APPROVER TASK", root: ClaimapprovertasklistPage, icon: "checkbox-outline" },
     ];

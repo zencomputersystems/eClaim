@@ -10,6 +10,7 @@ import { GiftClaim_Model } from '../../models/giftclaim_model';
 import { GiftClaim_Service } from '../../services/giftclaim_service';
 import { BaseHttpService } from '../../services/base-http';
 import { UUID } from 'angular2-uuid';
+import { DecimalPipe } from '@angular/common';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 //import {Camera} from 'ionic-native';
 import { File } from '@ionic-native/file';
@@ -21,19 +22,16 @@ import { MainClaimReferanceModel } from '../../models/main-claim-ref.model';
 import { MainClaimRequestModel } from '../../models/main-claim-request.model';
 import { ImageUpload_model } from '../../models/image-upload.model';
 import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import { UserclaimslistPage } from '../../pages/userclaimslist/userclaimslist';
-
-import { DashboardPage } from '../../pages/dashboard/dashboard';
-
-
+import { TravelclaimPage } from '../../pages/travel-claim/travel-claim.component';
 
 @IonicPage()
 @Component({
   selector: 'page-giftclaim',
-  templateUrl: 'giftclaim.html', providers: [GiftClaim_Service, BaseHttpService, FileTransfer]
+  templateUrl: 'giftclaim.html', providers: [GiftClaim_Service, BaseHttpService, FileTransfer, DecimalPipe]
 })
+<<<<<<< HEAD
 export class GiftclaimPage {
   Giftform: FormGroup;
   uploadFileName: string;
@@ -97,16 +95,117 @@ export class GiftclaimPage {
     this.http
       .get(Services.getUrl('main_claim_request', 'filter=CLAIM_REQUEST_GUID=' + this.claimRequestGUID))
       .map(res => res.json())
+=======
+export class GiftclaimPage {  
+    Giftform: FormGroup; 
+    uploadFileName: string;
+    loading = false;
+    CloudFilePath: string;
+    @ViewChild('fileInput') fileInput: ElementRef;
+    customers: any[]; 
+    storeProjects: any[];
+    storeCustomers: any[];  
+    public projects: any;     
+    items: string[];  
+    claimFor: string = 'seg_customer';
+  
+    public Gift_SOC_No_ngModel: any;
+    public Gift_ProjectName_ngModel: any;  
+    Gift_Date_ngModel: any;
+    Gift_Description_ngModel: any;    
+    Gift_Amount_ngModel: any;
+    Project_Lookup_ngModel: any;
+    Gift_Customer_ngModel: any;
+    Customer_Lookup_ngModel: any;
+    Customer_GUID: any;
+    Soc_GUID: any;
+    TenantGUID: any;
+    
+    userGUID: any;
+    public assignedTo: any;
+    public profileLevel: any; 
+    public stage: any;
+    public profileJSON: any;   
+  
+    public socGUID : any;
+    public AddTravelClicked: boolean = false;
+    ProjectLookupClicked: boolean = false;
+    CustomerLookupClicked: boolean = false;    
+    public AddLookupClicked: boolean = false;
+    public AddToLookupClicked: boolean = false;
+    currentItems: any;
+    public MainClaimSaved: boolean = false;   
+    VehicleId: any;
+    travelAmount: any;
+    validDate = new Date().toISOString();
+    ClaimRequestMain: any;
+    isCustomer: boolean = true;
+    ImageUploadValidation:boolean=false;
+    chooseFile: boolean = false;
+
+     /********FORM EDIT VARIABLES***********/
+   isFormEdit: boolean = false;
+   claimRequestGUID: any;
+   claimRequestData: any;
+
+  //  ngOnInit(): void {
+  //    this.userGUID = localStorage.getItem('g_USER_GUID');
+ 
+  //    this.isFormEdit = this.navParams.get('isFormEdit');
+  //     this.claimRequestGUID = this.navParams.get('cr_GUID'); //dynamic
+  //    //this.claimRequestGUID = 'aa124ed8-5c2d-4c39-d3bd-066857c45617';
+  //    if (this.isFormEdit)
+  //      this.GetDataforEdit();
+  //  } 
+
+  getCurrency(amount: number) {
+    this.Gift_Amount_ngModel = this.numberPipe.transform(amount, '1.2-2');
+  }
+
+  imageURLEdit: any = null
+  GetDataforEdit() {
+    this.apiMng.getApiModel('main_customer', 'filter=TENANT_GUID=' + this.TenantGUID)
+>>>>>>> master
       .subscribe(data => {
-        this.claimRequestData = data["resource"];
-        console.log(this.claimRequestData)
-        if (this.claimRequestData[0].SOC_GUID === null) {
-          this.claimFor = 'customer'
-          this.storeCustomers.forEach(element => {
-            if (element.CUSTOMER_GUID === this.claimRequestData[0].CUSTOMER_GUID) {
-              this.Customer_Lookup_ngModel = element.NAME
-            }
+        this.storeCustomers = this.customers = data["resource"];
+        this.apiMng.getApiModel('soc_registration', 'filter=TENANT_GUID=' + this.TenantGUID)
+          .subscribe(data => {
+            this.storeProjects = this.projects = data["resource"];
+
+            this.apiMng.getApiModel('main_claim_request', 'filter=CLAIM_REQUEST_GUID=' + this.claimRequestGUID)
+              .subscribe(data => {
+                this.claimRequestData = data["resource"];
+
+                if (this.claimRequestData[0].ATTACHMENT_ID !== null)
+                this.imageURLEdit = this.apiMng.getImageUrl(this.claimRequestData[0].ATTACHMENT_ID);
+                this.ImageUploadValidation = true;
+                this.getCurrency(this.claimRequestData[0].MILEAGE_AMOUNT)
+
+                if (this.claimRequestData[0].SOC_GUID === null) {
+                  this.claimFor = 'seg_customer'
+                  if (this.storeCustomers != undefined)
+                    this.storeCustomers.forEach(element => {
+                      if (element.CUSTOMER_GUID === this.claimRequestData[0].CUSTOMER_GUID) {
+                        this.Customer_Lookup_ngModel = element.NAME
+                      }
+                    });
+                }
+                else {
+                  this.claimFor = 'seg_project'
+                  if (this.storeCustomers != undefined)
+                    this.storeProjects.forEach(element => {
+                      if (element.SOC_GUID === this.claimRequestData[0].SOC_GUID) {
+                        this.Project_Lookup_ngModel = element.project_name
+                        this.Gift_SOC_No_ngModel = element.soc
+                      }
+                    });
+                }
+                this.Gift_Date_ngModel = new Date(this.claimRequestData[0].TRAVEL_DATE).toISOString();
+                // this.Gift_Amount_ngModel = this.claimRequestData[0].MILEAGE_AMOUNT;
+                this.Gift_Description_ngModel = this.claimRequestData[0].DESCRIPTION;
+              });
           });
+<<<<<<< HEAD
         }
         else {
           this.claimFor = 'project'
@@ -225,12 +324,66 @@ export class GiftclaimPage {
         return response;
       }).subscribe((response) => {
         alert(response.status);
+=======
+      })
+
+  }
+
+    constructor(public numberPipe: DecimalPipe, private apiMng: ApiManagerProvider,public profileMng: ProfileManagerProvider, platform: Platform, public navCtrl: NavController, public viewCtrl: ViewController, public translate: TranslateService, public navParams: NavParams, private api: Services, fb: FormBuilder, public http: Http, private httpService: BaseHttpService, private giftservice: GiftClaim_Service, private alertCtrl: AlertController, private camera: Camera, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, private file: File, private filePath: FilePath, private transfer: FileTransfer, public toastCtrl: ToastController) 
+    { 
+      this.userGUID = localStorage.getItem('g_USER_GUID');
+      this.isFormEdit = this.navParams.get('isFormEdit');
+      this.claimRequestGUID = this.navParams.get('cr_GUID'); //dynamic
+      this.TenantGUID = localStorage.getItem('g_TENANT_GUID');
+      if (this.isFormEdit)
+      this.GetDataforEdit();
+    else {
+      this.LoadCustomers();
+      this.LoadProjects();
+    } 
+ 
+  this.Giftform = fb.group({ 
+    avatar: null,
+    soc_no: '',   
+    travel_date:  ['', Validators.required],
+    description: ['', Validators.required],
+    claim_amount: ['', Validators.required],
+    attachment_GUID : ''
+  });  
+}
+
+GetSocNo(item: any){
+  this.Gift_SOC_No_ngModel = item.soc;
+  this.Project_Lookup_ngModel = item.project_name;
+  this.Soc_GUID = item.SOC_GUID;
+  this.CloseProjectLookup();
+}
+
+GetCustomer(guid: any, name: any) {
+  this.Customer_Lookup_ngModel = name;
+  this.Customer_GUID = guid;
+  this.CloseCustomerLookup();
+}
+
+onFileChange(event: any) {
+  const reader = new FileReader();
+  if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    this.Giftform.get('avatar').setValue(file);
+    this.uploadFileName = file.name;
+    reader.onload = () => {
+      this.Giftform.get('avatar').setValue({
+        filename: file.name,
+        filetype: file.type,
+        value: reader.result.split(',')[1]
+>>>>>>> master
       });
     setTimeout(() => {
       alert('done');
       this.loading = false;
     }, 1000);
   }
+<<<<<<< HEAD
 
   saveIm(formValues: any) {
     let uploadImage = this.UploadImage();
@@ -246,6 +399,32 @@ export class GiftclaimPage {
 
       // })
       // })
+=======
+  this.chooseFile = true;
+}
+
+imageGUID: any;
+saveIm() {
+  let uploadImage = this.UploadImage();
+  uploadImage.then((resJson) => {
+    this.imageGUID = this.uploadFileName;
+    this.chooseFile = false;
+    this.ImageUploadValidation=true;   
+  })  
+}
+
+SaveImageinDB() {
+  let objImage: ImageUpload_model = new ImageUpload_model();
+  objImage.Image_Guid = UUID.UUID();
+  objImage.IMAGE_URL = this.CloudFilePath + this.uploadFileName;
+  objImage.CREATION_TS = new Date().toISOString();
+  objImage.Update_Ts = new Date().toISOString();
+  return new Promise((resolve, reject) => {
+    this.api.postData('main_images', objImage.toJson(true)).subscribe((response) => {
+      // let res = response.json();
+      // let imageGUID = res["resource"][0].Image_Guid;
+      resolve(objImage.toJson());
+>>>>>>> master
     })
     // setTimeout(() => {
     //   this.loading = false;
@@ -265,6 +444,7 @@ export class GiftclaimPage {
         resolve(objImage.toJson());
       })
     })
+<<<<<<< HEAD
   }
 
   UploadImage() {
@@ -333,6 +513,36 @@ export class GiftclaimPage {
       this.CustomerLookupClicked = false;
     }
   }
+=======
+})
+}
+
+ claimForChanged() {
+  // console.log(this.claimFor)
+  if (this.claimFor == 'customer') this.isCustomer = true;
+  else this.isCustomer = false;
+}
+
+LoadProjects() {
+  this.http
+    .get(Services.getUrl('soc_registration', 'filter=TENANT_GUID=' + this.TenantGUID))
+    .map(res => res.json())
+    .subscribe(data => {
+    this.storeProjects=  this.projects = data["resource"];
+      console.table(this.projects)
+    });
+}
+
+LoadCustomers() {
+  this.http
+    .get(Services.getUrl('main_customer', 'filter=TENANT_GUID=' + this.TenantGUID))
+    .map(res => res.json())
+    .subscribe(data => {
+      this.storeCustomers = this.customers = data["resource"];
+      // console.table(this.projects)
+    });
+}
+>>>>>>> master
 
   public AddLookupClick() {
     this.AddLookupClicked = true;
@@ -367,6 +577,7 @@ export class GiftclaimPage {
     //   });
   }
 
+<<<<<<< HEAD
 
 
 
@@ -436,3 +647,90 @@ export class GiftclaimPage {
   }
 
 } 
+=======
+searchCustomer(searchString: any) {
+  let val = searchString.target.value;
+  if (!val || !val.trim()) {
+    this.customers = this.storeCustomers;
+    return;
+  }
+  // this.customers = this.filterCustomer({
+  //   NAME: val
+  // });
+}
+
+filterCustomer(params?: any) {
+  if (!params) {
+    return this.storeCustomers;
+  }
+
+  return this.customers.filter((item) => {
+    for (let key in params) {
+      let field = item[key];
+      if (typeof field == 'string' && field.toLowerCase().indexOf(params[key].toLowerCase()) >= 0) {
+        return item;
+      } else if (field == params[key]) {
+        return item;
+      }
+    }
+    return null;
+  });
+}
+
+clearFile() {
+  this.Giftform.get('avatar').setValue(null);
+  this.fileInput.nativeElement.value = '';
+}
+
+allowanceGUID: any;
+onAllowanceSelect(allowance: any) {
+  this.allowanceGUID = allowance.ALLOWANCE_GUID;
+}
+
+NavigateTravelClaim() {
+  this.navCtrl.setRoot(TravelclaimPage); 
+}
+
+submitAction(formValues: any) {
+  // alert(JSON.parse(formValues) )     
+  if (this.isFormEdit) {
+    this.apiMng.getApiModel('main_claim_request', 'filter=CLAIM_REQUEST_GUID=' + this.claimRequestGUID)
+      .subscribe(data => {
+        this.claimRequestData = data;
+        this.claimRequestData["resource"][0].ATTACHMENT_ID =  this.imageGUID;
+        this.claimRequestData["resource"][0].CLAIM_AMOUNT = formValues.claim_amount;
+        this.claimRequestData["resource"][0].MILEAGE_AMOUNT = formValues.claim_amount;
+        this.claimRequestData["resource"][0].TRAVEL_DATE = formValues.travel_date;
+        this.claimRequestData["resource"][0].DESCRIPTION = formValues.description;
+
+        //this.claimRequestData[0].claim_amount= formValues.claim_amount;
+        if (this.isCustomer) {
+          this.claimRequestData["resource"][0].CUSTOMER_GUID = this.Customer_GUID ;
+          this.claimRequestData["resource"][0].SOC_GUID = null;
+        }
+        else {
+          this.claimRequestData["resource"][0].SOC_GUID = this.Soc_GUID;
+          this.claimRequestData["resource"][0].CUSTOMER_GUID = null;
+        }
+        //this.claimRequestData[0].STATUS = 'Pending';
+       // this.apiMng.updateMyClaimRequest(this.claimRequestData[0]).subscribe(res => alert('Claim details are submitted successfully.'))
+       this.apiMng.updateApiModel('main_claim_request',this.claimRequestData).subscribe(res => 
+        {
+          alert('Claim details are submitted successfully.')
+          this.navCtrl.push(UserclaimslistPage);
+       });
+      })
+  }
+  else {
+  formValues.claimTypeGUID = '2d8d7c80-c9ae-9736-b256-4d592e7b7887';
+  formValues.meal_allowance = this.allowanceGUID;
+  formValues.attachment_GUID =  this.imageGUID;       
+  this.travelAmount = formValues.claim_amount;
+  formValues.soc_no = this.isCustomer ? this.Customer_GUID : this.Soc_GUID;
+  this.profileMng.save(formValues, this.travelAmount, this.isCustomer)
+  }
+ }  
+} 
+
+
+>>>>>>> master

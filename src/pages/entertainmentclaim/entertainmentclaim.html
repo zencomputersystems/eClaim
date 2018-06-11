@@ -3,17 +3,6 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-
-      <!-- <ion-fab top1 right>
-        <button ion-fab mini>
-          <ion-icon name="settings"></ion-icon>
-        </button>
-        <ion-fab-list class="settingBtnFab" side="left">
-          <button ion-fab color="light" [class.menuHide]="translateToMalayClicked" (click)="translateToMalay()">ML</button>
-          <button ion-fab color="light" [class.menuHide]="translateToEnglishClicked" (click)="translateToEnglish()">ENG</button>
-        </ion-fab-list>
-      </ion-fab> -->
-
     <ion-title>{{ 'ENTERTAINMENT_CLAIM_HEADING' | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
@@ -30,23 +19,13 @@
       </ion-segment>
     
       <div [ngSwitch]="claimFor">
-        <div *ngSwitchDefault>
-          <!-- <ion-item>
-            <button color="primary500" ion-button outline item-start icon-left (click)="CustomerLookup()">
-              <ion-icon name="eye"></ion-icon>
-              {{ "CUSTOMER_LOOKUP_BUTTON" | translate }} </button>
-          </ion-item> -->
+        <div *ngSwitchDefault>         
           <ion-item>
             <ion-label color="primary500" stacked> {{ "CUSTOMER_NAME_LABEL" | translate }} </ion-label>
             <ion-input (click)="CustomerLookup()" [ngModelOptions]="{standalone: true}" [(ngModel)]="Customer_Lookup_ngModel" type="text"></ion-input>
           </ion-item>
         </div>
-        <div *ngSwitchCase="'seg_project'">
-          <!-- <ion-item>
-            <button color="primary500" ion-button outline item-start icon-left (click)="ProjectLookup()">
-              <ion-icon name="eye"></ion-icon>
-              {{ "PROJECT_LOOKUP_BUTTON" | translate }} </button>
-          </ion-item> -->
+        <div *ngSwitchCase="'seg_project'">        
           <ion-item >
             <ion-label color="primary" stacked> {{ "PROJECT_NAME_LABEL" | translate }} </ion-label>
             <ion-input (click)="ProjectLookup()" [ngModelOptions]="{standalone: true}" [(ngModel)]="Project_Lookup_ngModel" [ngModelOptions]="{standalone: true}"
@@ -59,7 +38,6 @@
           </ion-item>
         </div>
       </div>
-
     
     <form [formGroup]="Entertainmentform">
         <ion-item>
@@ -70,8 +48,8 @@
 
     <ion-item>
       <ion-label color="primary" stacked> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ "CURRENCY_NAME_LABEL" | translate }}</ion-label>
-
-      <ion-input type="number" formControlName="claim_amount" [(ngModel)]="Entertainment_Amount_ngModel" placeholder=" {{ 'CLAIM_AMOUNT_PLACE_HOLDER' | translate }} "></ion-input>
+      <ion-input type="number" (change)='getCurrency($event.target.value)' formControlName="claim_amount" 
+      [(ngModel)]="Entertainment_Amount_ngModel" placeholder=" {{ 'CLAIM_AMOUNT_PLACE_HOLDER' | translate }} "></ion-input>
     </ion-item>
 
     <ion-item>
@@ -79,13 +57,23 @@
       <ion-input type="text" formControlName="description" [(ngModel)]="Entertainment_Description_ngModel" placeholder=" {{ 'DESCRIPTION_PLACE_HOLDER' | translate }} "></ion-input>
     </ion-item>
 
-    <ion-item>
+    <!-- <ion-item>
       <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
       <button ion-button type="button" (click)="clearFile()">clear file</button>
+    </ion-item> -->
+
+    <ion-item>
+        <!-- <img style="width: 25%" height="50%" src={{editImage}} *ngIf="editImage!==null"> -->
+      <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
+      <button ion-button type="primary"  (click)="saveIm()" [disabled]= "!chooseFile">upload image</button>      
     </ion-item>
+    <!-- <img style="width: 25%" height="50%" src={{editImage}} *ngIf="editImage!==null"> -->
+    <img style="width: 25%" height="50%" src={{imageURLEdit}} *ngIf="imageURLEdit!==null">
+   
+
 
     <div class="btn">     
-       <button ion-button color="primary500" (click)='saveIm(Entertainmentform.value)' [disabled]="Entertainmentform.invalid || loading" >{{ 'SUBMIT'}}</button>
+       <button ion-button color="primary500" (click)='submitAction(Entertainmentform.value)' [disabled]="(Entertainmentform.valid && !ImageUploadValidation) || !Entertainmentform.valid" >{{ 'SUBMIT'}}</button>
     </div>
   </form>
 

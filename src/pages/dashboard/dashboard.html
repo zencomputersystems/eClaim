@@ -90,4 +90,57 @@
   </ion-row>
 </ion-grid>
 
+<ion-card *ngFor="let year of Year_Card" (click)="Rejected_Click()"  class="round2">
+  <ion-card-header style="background:red;margin-bottom: 18pt;padding: 8pt 0 5pt 5pt;" ><h2 style="color:white !important">Rejected</h2></ion-card-header>
+  <ion-card-content text-center>
+     
+    <h1>RM {{Rejected_Claim_Amount}}</h1>
+    <h3># this month: {{Rejeted_Claim_Count}}</h3>
+
+    <hr>
+
+    <p color="graye">Amount YTD: RM {{year.RejectedClaimAmount_year}}</p>
+    <p color="graye"># YTD: {{year.RejectedClaimCount_year}}</p>
+
+  </ion-card-content>
+
+
+</ion-card>
+
+
+<ion-card  *ngFor="let year of Year_Card" (click)="Pending_Click()"  class="round2">
+    <ion-card-header style="background:orange;margin-bottom: 18pt;padding: 8pt 0 5pt 5pt;" ><h2 style="color:white !important">Pending</h2></ion-card-header>
+    <ion-card-content text-center>
+       
+      <h1>RM {{Pending_Claim_Amount}}</h1>
+      <h3># this month: {{Pending_Claim_Count}}</h3>
+
+      <hr>
+
+      <p color="graye">Amount YTD: RM {{year.PendingClaimAmount_year}}</p>
+      <p color="graye"># YTD: {{year.PendingClaimCount_year}}</p>
+
+    </ion-card-content>
+
+
+  </ion-card>
+
+  <ion-card *ngFor="let year of Year_Card" (click)="Approved_Click()"  class="round2">
+      <ion-card-header style="background:lightgreen;margin-bottom: 18pt;padding: 8pt 0 5pt 5pt;" ><h2 style="color:white !important">Approved</h2></ion-card-header>
+      <ion-card-content text-center>
+         
+        <h1>RM {{Approved_Claim_Amount}}</h1>
+        <h3># this month: {{Approved_Claim_Count}}</h3>
+
+        <hr>
+  
+        <p color="graye">Amount YTD: RM {{year.ApprovedClaimAmount_year}}</p>
+        <p color="graye"># YTD: {{year.ApprovedClaimCount_year}}</p>
+  
+      </ion-card-content>
+  
+  
+    </ion-card>
+  
+
 </ion-content>

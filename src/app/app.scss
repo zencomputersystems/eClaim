@@ -1,77 +1,22 @@
-// Media of at most the maximum breakpoint width. No query for the largest breakpoint.
-// Makes the @content apply to the given breakpoint and narrower.
-@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
-  $max: breakpoint-max($name, $breakpoints);
-  @if $max {
-    @media (max-width: $max) {
-      @content;
-    }
-  } @else {
-    @content;
-  }
-}
+// http://ionicframework.com/docs/theming/
 
 
-// Name of the next breakpoint, or null for the last breakpoint.
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
 //
-//    >> breakpoint-next(sm)
-//    md
-//    >> breakpoint-next(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
-//    md
-//    >> breakpoint-next(sm, $breakpoint-names: (xs sm md lg xl))
-//    md
-@function breakpoint-next($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map-keys($breakpoints)) {
-  $n: index($breakpoint-names, $name);
-  @return if($n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
-}
-
-
-// Maximum breakpoint width. Null for the largest (last) breakpoint.
-// The maximum value is calculated as the minimum of the next one less 0.1.
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
 //
-//    >> breakpoint-max(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px))
-//    767px
-@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
-  $next: breakpoint-next($name, $breakpoints);
-  @return if($next, breakpoint-min($next, $breakpoints) - 1px, null);
-}
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
 
 
-// Creates text alignment classes based on screen size
-// TODO this would be nice to add to the framework
-@each $breakpoint in map-keys($grid-breakpoints) {
-  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
-
-  @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
-    // Provide text `[text-{bp}]` attributes for aligning text based on screen size
-    [text#{$infix}-center] {
-      text-align: center;
-    }
-
-    [text#{$infix}-left] {
-      text-align: left;
-    }
-
-    [text#{$infix}-right] {
-      text-align: right;
-    }
-
-    [hidden#{$infix}-up] {
-      display: none;
-    }
-  }
-
-  @include media-breakpoint-down($breakpoint, $grid-breakpoints) {
-    [hidden#{$infix}-down] {
-      display: none;
-    }
-  }
-
-
-//start
-
-
-  ion-fab[top1] {
+ion-fab[top1] {
     top: 0 !important;
   }
 
@@ -108,11 +53,20 @@
 
 .popup2{
     width: 83%;
-    left: 25px;
+    left: 21px;
     top: 38px;
     position: fixed;
     height: 480px;
 
+}
+
+
+.popup3{
+    width: 83%;
+left: 125px;
+top: 38px;
+position: fixed;
+height: 480px;
 }
 
 .btn{
@@ -126,7 +80,7 @@
     height: 38px;
     right: 16px;
     font-size: 22px !important;
-    top: 15px;
+    top: 17px;
     position: absolute !important ;
     background: #EF5350;
     color: white;
@@ -152,10 +106,361 @@
 .tnUserRow {border-bottom: 2px solid #efefef;}
 
 
+.Subtitle {
+    text-align: center;
+    font-size: 0.8vw;
+  }
+  
+  .container{
+    width: calc(50% - 23px);
+    display: inline-block;
+  }
 
 
+  .iconf {
+    font-size: 3.5vw;
+    color: #009688;
+
+       transition: width 2s;
+  }
+  
+  .round1 {
+    float: left;
+    width: calc(15% - 7px);
+    margin: 10px !important;
+    cursor: pointer;
+    border-radius: 5px;
+    min-height: 80px;
+  }
+
+  .round2 {
+    float: left;
+    width: calc(32% - 7px);
+    margin: 10px !important;
+    padding: 10pt 0;
+    cursor: pointer;
+    border-radius: 5px;
+    min-height: 80px;
+  }
+
+
+
+  .icon {
+    text-align: center;
+  }
+
+    
+    
+.popscroll{
+    width: 96%;
+    top: 60px;
+    position: fixed;
+    height: calc(100% - 89px);
+    overflow-y: auto;
+}
+
+/**  STYLE 11 */
+
+.popscroll::-webkit-scrollbar {
+    width: 10px;
+    background-color: none;
+}
+
+.popscroll::-webkit-scrollbar-track {
+border-radius: 10px ;
+background: rgba(0,0,0,0.1);
+border: none;
+}
+
+.popscroll::-webkit-scrollbar-thumb {
+border-radius: 10px;
+background: #89937A;
+border: 1px solid #aaa;
+}
+
+.popscroll::-webkit-scrollbar-thumb:hover {
+background: #fff;
+}
+
+.popscroll::-webkit-scrollbar-thumb:active {
+background: linear-gradient(left, #22ADD4, #1E98BA);
+}
+
+.btn{
+
+    text-align: center;
+    margin: 10px 0px;
+}
+
+.btnR{
+    width: 33px !important;
+    height: 37px !important;
+    right: 16px !important;
+    font-size: 22px !important;
+    top: 16px !important;
+    background: #ff6b6b !important;
+    color: #fff !important;
+    position: absolute !important ;
+}
+
+
+.icHeaderText {
+    font-size: 15px !important;
+    
+}
+
+.icTitle {
+    border-bottom: 1px solid !important;
+    margin-bottom: 10px !important;
+    padding: 10px !important;
+}
+
+.icTitle2 {
+    border-bottom: 1px solid !important;
+    margin-bottom: 0px !important;
+    padding: 10px !important;
+}
+
+
+
+
+.headerColor-white {
+    background: #ffffff !important;
+    border-color: #e8e8e8 !important;
+    color: #a5a3a3 !important;
+}
+
+
+.eClaimSubTitle {
+    color: black;
+    font-size: 16px;
+    padding: 10px 0px;
+    width: 100%;
+    font-weight: bold;
+} 
+
+.eClaimSubTitle1 {
+    color: black;
+    font-size: 16px;
+    margin-left: 20px;
+    width: 100%;
+} 
+
+.eClaimSubTitle2 {
+    color: black;
+    font-size: 18px;
+    margin-left: 15px;
+    margin-top: 10px;
+    width: 100%;
+} 
+
+.eClaimSubTitle3 {
+    color: black;
+    font-size: 20px;
+    padding:200px 50px;
+    width: 100%;
+} 
+
+.eClaimSubTitle4 {
+    color: black;
+    font-size: 20px;
+    width: 100%;
+} 
+.scroll{
+    height: calc(100% - 48px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.cm{
+    height: 100%;
+}
+
+
+.Tabler {
+    width: 100%;
+    padding-top: 35px;
+    border-collapse: collapse;
+     table-layout:fixed; 
+}
+
+.Tabler tr.col7 td {
+    padding: 10px;
+	text-align: center;
+	word-wrap: break-word;
+	border: none;
+	border-bottom: 1px solid gainsboro;
+}
+
+    tr.colth {
+        color: white;
+    }
+    
+    th.lgl1 {
+        padding: 10px 5px;
+        border: none;
+        
+    }
+        
+
+
+        th.lgl2 {
+        padding: 5px 5px;
+        border: none;
+        font-size: 14px;
+    }
+        
+    td.lgl2 {
+        font-size: 14px;
+         padding: 2px;
+         text-align: center;
+       word-wrap: break-word;
+       border: none;
+         border-bottom: 1px solid gainsboro;
+         white-space: normal !important;
+    }
+
+    .tblBrLeft { border-radius: 5px 0 0 5px !important;}
+    .tblBrRight { border-radius: 0 5px 5px 0 !important;}
+    .TColor{background: #A9A9A9 ;color: white;}
+.linedsg {border-bottom: 1px solid gainsboro ;}
+.graphHeaderStyle {border-top: 5px solid #A9A9A9 ;border-bottom: 1px solid gainsboro;}
+.fullWidth {width: 100% !important;}
+.row {
+
+    border-bottom: 1px solid gainsboro !important;
+}
+
+
+::-moz-placeholder {
+    font-size: 15px;
+  }
+  
+  :-ms-input-placeholder {
+    font-size: 15px;
+  }
+  
+::-webkit-input-placeholder {
+    font-size: 15px;
+  }
+
+  .datetime-md .datetime-placeholder { font-size: 15px; }
+
+ion-item.item.item-block.item-md.item-checkbox {
+    background: none !important;
+} 
+
+
+
+.split-pane-md.split-pane-visible > .split-pane-side {
+    min-width: 264px;
+    max-width: 22%;
+    border-right: 1px solid #dedede;
+    border-left: 0;
+}
+
+
+.UPContent{
+    width:100%;
+}
+
+button.item.item-block.item-md {
+    font-size: 14px !important;
+}
+
+page-user input.text-input.text-input-md.ng-dirty.ng-valid.ng-touched{
+    color: black !important;
+}
+
+button.item.item-block.item-md{
+    font-size: 1.45rem;
+
+}
+
+.LeftMenu{
+    max-width: 150px;
+    height: 100%;
+    
+}
+
+.label-md[stacked] {
+    font-size: 14px !important;
+}
+
+.container{
+    max-height: 465px;
+    overflow-y: auto;
+
+}
+
+
+.scroll-content {
+
+    overflow-y: auto !important;
+
+  }
+
+
+  .over{
+      max-width: width 100px !important;
+  }
+
+
+      // Todo: remove when this issue https://github.com/ionic-team/ionic/issues/11212 is fixed
+      @media(max-width: 700px) {
+        .round1 {
+          width: calc(100% - 20px);
+          min-height: 100px;
+        }
+    
+    
+        .Subtitle {
+          text-align: center;
+          font-size: 3.5vw;
+        }
+    
+    
+        .iconf {
+          font-size: 10vw;
+          color  :#009688,
+
+  
+        }
+    }    
 
 //overwrite default css
+.text-input-md {
+    margin: 11px 8px;
+}
+
+
+.text-input-ios {
+    margin: 11px 8px;
+}
+
+ion-toggle.toggle.toggle-md{
+    padding-left: 95px !important;
+    padding-right: 0px !important;
+}
+
+ion-toggle.toggle.toggle-md.tog{
+    padding-left: 123px !important;
+    padding-right: 0px !important;
+}
+ion-toggle.toggle.toggle-md.yui{
+    padding-left: 40px !important;
+    padding-right: 0px !important;
+}
+
+ion-toggle.toggle.toggle-md.stog{
+    padding-left: 53px !important;
+    padding-right: 0px !important;
+}
+
+.toggle-md.toggle-checked .toggle-icon{
+
+background-color: #5F9EA0,;
+}
 
 button[ion-fab] {
     overflow: visible;
@@ -177,8 +482,14 @@ button[ion-fab] {
 
 .item-input ion-input, .item-input ion-textarea {
     border-radius: 5px;
+    background: rgb(242, 255, 227);
+    padding-left: 5pt;
+}
+
+.item-input ion-input.cocus.input{
+    border-radius: 5px;
     background: whitesmoke;
-    padding-left: 5pt 0 !important;
+    padding-left: 5pt;
 }
 
 .item-input ion-input, .item-input ion-textarea.ng-dirty.ng-valid.ng-touched {
@@ -188,8 +499,9 @@ button[ion-fab] {
 
 ion-datetime.datetime.datetime-md{
     border-radius: 5px;
-    background: whitesmoke;
-    padding-left: 5pt 0 !important;
+    background: rgb(242, 255, 227);
+    padding-left: 5pt;
+
 }
 
 
@@ -203,21 +515,20 @@ ion-datetime.datetime.datetime-ios.ng-dirty.ng-valid.ng-touched {
 
 ion-datetime.datetime.datetime-ios{
     border-radius: 5px;
-    background: whitesmoke;
-    padding-left: 5pt 0 !important;
-
+    background: rgb(242, 255, 227);
+    padding-left: 5pt;
 }
 
 ion-select.select.select-md{
     border-radius: 5px;
-    background: whitesmoke;
-    padding-left: 5pt 0 !important;
+    background: rgb(242, 255, 227);
+    padding-left: 5pt;
 }
 
 ion-select.select.select-ios{
     border-radius: 5px;
-    background: whitesmoke;
-    padding-left: 5pt 0 !important;
+    background: rgb(242, 255, 227);
+    padding-left: 5pt;
 }
 
 ion-select.select.select-ios.ng-dirty.ng-valid.ng-touched{
@@ -227,7 +538,14 @@ ion-select.select.select-md.ng-dirty.ng-valid.ng-touched{
     border: 0;
 }
 
-
+.item-md.item-label-stacked [item-right], .item-md.item-label-floating [item-right], .item-md.item-label-stacked [item-end], .item-md.item-label-floating [item-end] {
+    margin-top: 29px;
+    margin-left: 5px;
+}
+.item-ios.item-label-stacked [item-right], .item-ios.item-label-floating [item-right], .item-ios.item-label-stacked [item-end], .item-ios.item-label-floating [item-end] {
+    margin-top: 30px;
+    margin-left: 5px;
+}
 .action-sheet-group {
     overflow: auto !important; 
 }
@@ -253,7 +571,9 @@ ion-select.select.select-md.ng-dirty.ng-valid.ng-touched{
     display: inline-block !important;
 }
 
-
+  .label-md[stacked] {
+    font-size: 12px !important;
+  }
 
 //color scheme workout
 
@@ -261,8 +581,7 @@ ion-select.select.select-md.ng-dirty.ng-valid.ng-touched{
     color: white !important;
  }
 
+// .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default, .bar-button-default-ios, .bar-button-default.bar-button-ios-default, .bar-button-clear-ios-default {
+//     color: black !important;
+// }
 
-//end
-
-
-}

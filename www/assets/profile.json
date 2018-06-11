@@ -29,7 +29,11 @@
           "-id": "2",
           "approver": {
             "-keytype": "userGUID",
+<<<<<<< HEAD
             "#text": "a9653bdf-e42b-b4bd-2bb1-9224cd06646e"
+=======
+            "#text": "0cc543ea-2dc6-ce6e-d10d-a11a9e946c2f"
+>>>>>>> master
           },
           "conditions": {
             "condition": [
@@ -53,7 +57,11 @@
           "-id": "3",
           "approver": {
             "-keytype": "userGUID",
+<<<<<<< HEAD
             "#text": "ec96bcdf-258b-40a6-60ea-dc802692bb6c"
+=======
+            "#text": "bd73724a-14fe-935d-52f6-f2cd118338a0"
+>>>>>>> master
           },
           "conditions": {
             "condition": [
@@ -77,7 +85,11 @@
           "-id": "4",
           "approver": {
             "-keytype": "userGUID",
+<<<<<<< HEAD
             "#text": "2b93fc11-23d5-db42-dd9f-bb9499071156"
+=======
+            "#text": "ba1f8461-5912-368f-3317-4fc2fe4e03a5"
+>>>>>>> master
           },
           "conditions": {
             "condition": [

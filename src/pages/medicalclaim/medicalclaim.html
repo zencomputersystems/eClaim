@@ -4,15 +4,6 @@
       <ion-icon name="menu"></ion-icon>
     </button>       
 
-      <ion-fab top1 right>
-        <button ion-fab mini>
-          <ion-icon name="settings"></ion-icon>
-        </button>
-        <ion-fab-list class="settingBtnFab" side="left">
-          <button ion-fab color="light" [class.menuHide]="translateToMalayClicked" (click)="translateToMalay()">ML</button>
-          <button ion-fab color="light" [class.menuHide]="translateToEnglishClicked" (click)="translateToEnglish()">ENG</button>
-        </ion-fab-list>
-      </ion-fab>
 
     <ion-title>{{ 'MEDICAL_CLAIM_HEADING' | translate }}</ion-title>
   </ion-navbar>

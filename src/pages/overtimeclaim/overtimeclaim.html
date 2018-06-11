@@ -3,17 +3,6 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-
-      <!-- <ion-fab top1 right>
-        <button ion-fab mini class="btnClear">
-          <ion-icon name="settings"></ion-icon>
-        </button>
-        <ion-fab-list class="settingBtnFab" side="left">
-          <button ion-fab color="light" [class.menuHide]="translateToMalayClicked" (click)="translateToMalay()">ML</button>
-          <button ion-fab color="light" [class.menuHide]="translateToEnglishClicked" (click)="translateToEnglish()">ENG</button>
-        </ion-fab-list>
-      </ion-fab> -->
-
     <ion-title>{{ 'OVERTIME_CLAIM_HEADING' | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
@@ -31,11 +20,7 @@
   
       <div [ngSwitch]="claimFor">
         <div *ngSwitchDefault>
-          <!-- <ion-item>
-              <button color="primary500" ion-button outline item-start icon-left (click)="CustomerLookup()">
-                  <ion-icon name="eye"></ion-icon>
-                  {{ "CUSTOMER_LOOKUP_BUTTON" | translate }} </button>
-          </ion-item> -->
+          
           <ion-item>
             <ion-label color="primary500" stacked> {{ "CUSTOMER_NAME_LABEL" | translate }} </ion-label>
             <ion-input (click)="CustomerLookup()" [ngModelOptions]="{standalone: true}" [(ngModel)]="Customer_Lookup_ngModel" type="text"></ion-input>
@@ -60,13 +45,7 @@
       </div>
 
 
-    <form [formGroup]="OTform">
-
-    <!-- <ion-item>
-      <ion-label color="primary500" stacked>{{ "OVERTIME_DATE_LABEL" | translate }}</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="OT_Date_ngModel" formControlName="travel_date" 
-        placeholder="{{ 'DATE_PLACE_HOLDER' | translate }}"></ion-datetime>
-    </ion-item> -->
+    <form [formGroup]="OTform">    
 
     <ion-item>
       <ion-label color="primary500" stacked>{{ "START_DT_LABEL" | translate }}</ion-label>
@@ -90,15 +69,26 @@
       <ion-label color="primary500" stacked> {{ "DESCRIPTION_LABEL" | translate }} </ion-label>
       <ion-input type="text" formControlName="description" [(ngModel)]="OT_Description_ngModel" placeholder=" {{ 'DESCRIPTION_PLACE_HOLDER' | translate }} "></ion-input>
     </ion-item>
-
+<!-- 
     <ion-item>
       <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
       <button ion-button type="button" (click)="clearFile()">clear file</button>
+    </ion-item> -->
+
+    <ion-item>
+      <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
+      <button ion-button type="primary"  (click)="saveIm()" [disabled]= "!chooseFile">upload image</button>     
     </ion-item>
 
-    <div class="btn">
+    <img style="width: 25%" height="50%" src={{imageURLEdit}} *ngIf="imageURLEdit!==null">
+
+    <div class="btn">     
+      <button ion-button color="primary500" (click)='submitAction(OTform.value)' [disabled]="(OTform.valid && !ImageUploadValidation) || !OTform.valid" >{{ 'SUBMIT'}}</button>     
+   </div>
+
+    <!-- <div class="btn">
       <button ion-button (click)='saveIm(OTform.value)' [disabled]="OTform.invalid || loading" >{{ 'SUBMIT' }}</button>
-    </div>
+    </div> -->
   </form>
 
   <div class="blackcontainer" *ngIf="AddLookupClicked">

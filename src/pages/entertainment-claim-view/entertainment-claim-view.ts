@@ -6,7 +6,6 @@ import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { Services } from '../Services';
 import * as constants from '../../config/constants';
 import { ClaimWorkFlowHistoryModel } from '../../models/claim-work-flow-history.model';
-import {TravelclaimPage} from '../../pages/travelclaim/travelclaim';
 import {EntertainmentclaimPage} from '../../pages/entertainmentclaim/entertainmentclaim';
 import { UUID } from 'angular2-uuid';
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
@@ -53,7 +52,7 @@ export class EntertainmentClaimViewPage {
     this.isRemarksAccepted = val === 'accepted' ? true : false;
     if (!this.isRemarksAccepted) {
           if (this.Remarks_NgModel === undefined) {
-            alert('Please input valid remarks');
+            alert('Please enter valid remarks');
             return;
           }
         }

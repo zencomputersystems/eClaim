@@ -8,48 +8,12 @@
           <div *ngIf="ClaimMethodName == 'Meal Allowance'">{{ 'ADD_MEAL_ALLOWANCE_HEADING' | translate }}</div>
     
         </ion-title>
-      </ion-navbar>
-
-  <!-- <ion-toolbar>
-    <ion-title>{{ 'ADD_TOLL_HEADING' }}</ion-title>
-    <ion-buttons start (click)="CloseAddTollPage()">
-      <button>
-        <ion-icon name="md-close"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-toolbar> -->
+      </ion-navbar>  
 </ion-header>
+
 <ion-content class="login-content" padding>
     <form [formGroup]="DetailsForm" >
-
-        <!-- <ion-list>
-            <ion-item *ngIf="ClaimMethodName != 'Accommodation' && ClaimMethodName != 'Meal Allowance'">
-              <ion-label color="primary">{{ 'PAY_BY_LABEL' | translate }}</ion-label>
-              <ion-select [(ngModel)]="PayType"  placeholder="Cash">
-                <ion-option *ngFor="let item of paymentTypes" value={{item.PAYMENT_TYPE_GUID}}>{{ item.NAME}}</ion-option>
-              </ion-select>
-            </ion-item>
-             <ion-item *ngIf="ClaimMethodName === 'Meal Allowance'">
-              <ion-label color="primary" stacked>{{ "MEAL_ALLOWANCE_LABEL" | translate }}</ion-label>
-              <ion-select >
-                <ion-option *ngFor="let allowance of allowanceList" (ionSelect)="onAllowanceSelect(allowance)">{{allowance.ALLOWANCE_NAME}} - {{allowance.ALLOWANCE_AMOUNT}}</ion-option>
-              </ion-select>
-            </ion-item>
-            <ion-item *ngIf="ClaimMethodName !== 'Meal Allowance'">
-              <ion-label color="primary" fixed>{{ 'AMOUNT_LABEL' | translate }}{{ 'CURRENCY_NAME_LABEL' | translate }}</ion-label>
-              <ion-input [(ngModel)]="Amount" type="number" placeholder="0.00"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label color="primary" fixed>{{ 'DESCRIPTION_LABEL' | translate }}</ion-label>
-              <ion-input [(ngModel)]="Description" placeholder="Add Description"></ion-input>
-            </ion-item>
-          </ion-list>
-
-          <ion-item>
-              <button (click)='save()' [disabled]="DetailsForm.invalid || loading" ion-button round style="width:100px;">{{ 'SUBMIT_BUTTON'  }}</button>
-            </ion-item> -->
-
-
+      
             <ion-list>
               <ion-item *ngIf="ClaimMethodName != 'Accommodation' && ClaimMethodName != 'Meal Allowance'">
                 <ion-label color="primary">{{ 'PAY_BY_LABEL' | translate }}</ion-label>
@@ -70,7 +34,8 @@
 
             <ion-item *ngIf="ClaimMethodName !== 'Meal Allowance'">
               <ion-label color="primary" fixed>{{ 'AMOUNT_LABEL' | translate  }}{{ 'CURRENCY_NAME_LABEL' | translate}}</ion-label>
-              <ion-input [ngModelOptions]="{standalone: true}" [(ngModel)]="Amount" type="number" placeholder="0.00"></ion-input>
+              <ion-input (change)='getCurrency($event.target.value)' [ngModelOptions]="{standalone: true}" 
+              [(ngModel)]="Amount" type="number" placeholder="0.00"></ion-input>
             </ion-item>
             <!-- [ngModelOptions]="{standalone: true}" -->
 
@@ -80,52 +45,30 @@
             </ion-item>
             <!-- [ngModelOptions]="{standalone: true}" -->
 
-            <div class="form-group">          
+            <!-- <div class="form-group">          
               <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
               <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">clear file</button>
-            </div>
+            </div> -->
+
+            <!-- this -->
+            <ion-item *ngIf="ClaimMethodName != 'Meal Allowance'">
+              <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
+              <button ion-button type="primary"  (click)="saveIm()" [disabled]= "!chooseFile">upload image</button>             
+            </ion-item>
          
 
           <!-- <ion-item>
             <button (click)='save()' [disabled]="DetailsForm.invalid || loading" ion-button round style="width:100px;">{{ 'SUBMIT'  }}</button>
           </ion-item> -->
-          <div class="btn">
+          <div class="btn" *ngIf="ClaimMethodName != 'Meal Allowance'">
               <!-- *ngIf="ClaimMethodName === 'Meal Allowance'" -->
-              <button ion-button color="primary" (click)='save(true)' >{{ "SUBMIT_BUTTON" | translate }}</button>
+              <button ion-button color="primary" (click)='Save(false)'  [disabled]="!ImageUploadValidation">{{ "SUBMIT_BUTTON" | translate }}</button>
+            </div>
+
+            <div class="btn" *ngIf="ClaimMethodName === 'Meal Allowance'">
+              <button ion-button color="primary" (click)='Save(true)'>{{ "SUBMIT_BUTTON" | translate }}</button>
             </div>
         </ion-list>
-            </form>
-
-
-          
-
-    <!-- <ion-list>
-      <ion-item>
-        <ion-label color="primary">{{ 'PAY_BY_LABEL'  }}</ion-label>
-        <ion-select  [ngModelOptions]="{standalone: true}" [(ngModel)]="PayType" placeholder='{{ "PAYMENT_TYPE_PLACE_HOLDER"  }}'>
-          <ion-option *ngFor="let item of paymentTypes" value={{item.PAYMENT_TYPE_GUID}} >{{ item.NAME}}</ion-option>
-        </ion-select>
-      </ion-item>
-
-      <ion-item>
-        <ion-label color="primary" fixed>{{ 'AMOUNT_LABEL'  }}{{ 'CURRENCY_NAME_LABEL'}}</ion-label>
-        <ion-input [ngModelOptions]="{standalone: true}" [(ngModel)]="Amount" type="number" placeholder="0.00"></ion-input>
-      </ion-item>
-      <ion-item>
-          <ion-label color="primary" fixed>{{ 'DESCRIPTION_LABEL' }}</ion-label>
-          <ion-input [ngModelOptions]="{standalone: true}" [(ngModel)]="Description" placeholder="Add Description"></ion-input>
-        </ion-item>
-
-        <div class="form-group">
-          
-          <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
-          <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">clear file</button>
-        </div>
-        
-      <ion-item>
-        <button (click)='save()' [disabled]="DetailsForm.invalid || loading" ion-button round style="width:100px;">{{ 'SUBMIT_BUTTON'  }}</button>
-      </ion-item>
-    </ion-list>
-    </form> -->
+            </form>  
 
 </ion-content>

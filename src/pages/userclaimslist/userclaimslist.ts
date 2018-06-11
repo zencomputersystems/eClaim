@@ -155,6 +155,7 @@ this.userClaimhistorydetails=this.userClaimhistorydetails1;
       cr_GUID: this.claimRequestGUID
     });
   }
+<<<<<<< HEAD
   DeleteClaimRequest(claimReqGuid:any,claimTypeGuid:any)
   {
    // var deleteflag=false;
@@ -184,6 +185,33 @@ this.userClaimhistorydetails=this.userClaimhistorydetails1;
     // if(deleteflag)
     // { }
   }
+=======
+  // DeleteClaimRequest(claimReqGuid:any,claimTypeGuid:any)
+  // {
+  //      let alert1 = this.alertCtrl.create({
+  //       title: 'Confirm delete claim',
+  //       message: 'Are you sure you want to delete this claim?',
+  //       buttons: [
+  //           {
+  //               text: 'No',
+  //               handler: () => {
+  //                   return
+  //               }
+  //           },
+  //           {
+  //               text: 'Yes',
+  //               handler: () => {
+  //                 this.api.deleteApiModel('main_claim_request',claimReqGuid).subscribe(res =>{
+  //                   this.BindData();
+  //                   alert('Claim has been deleted successfully.')
+  //                 });
+  //               }
+  //           }
+  //       ]
+  //   })
+  //   alert1.present();
+  // }
+>>>>>>> master
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad UserclaimslistPage');
