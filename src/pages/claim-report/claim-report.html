@@ -67,12 +67,12 @@
                     <th class="lgl1">Customer</th>
                     <!-- <th class="lgl1">Remarks(Location- if is not at customer location)</th> -->
                     <!-- <th class="lgl1">Recommended Post Code</th> -->
-                    <th class="lgl1">From</th>
-                    <th class="lgl1">To</th>
-                    <th class="lgl1">Distance (KM)</th>
+                    <th class="lgl1" *ngIf="travelClaimType">From</th>
+                    <th class="lgl1" *ngIf="travelClaimType">To</th>
+                    <th class="lgl1" *ngIf="travelClaimType">Distance (KM)</th>
                     <!-- <th class="lgl1">Distance(Outstn/Oths)KM</th> -->
                     <!-- <th class="lgl1">Type</th> -->
-                    <th class="lgl1">Mileage(RM)</th>
+                    <th class="lgl1" *ngIf="travelClaimType">Mileage(RM)</th>
                     <!-- <th class="lgl1">Parking(GST Inclusive)</th> -->
                     <!-- <th class="lgl1">Parking (Without GST)</th> -->
                     <!-- <th class="lgl1">TnGo</th>
@@ -87,10 +87,10 @@
                     <td class="lgl1">{{claim.TRAVEL_DATE | date:'M/d/y'}}</td>
                     <td class="lgl1">{{claim.SOC_NO}}</td>
                     <td class="lgl1">{{claim.CUSTOMER_NAME}}</td>
-                    <td class="lgl1">{{claim.FROM}}</td>
-                    <td class="lgl1">{{claim.TO}}</td>
-                    <td class="lgl1">{{claim.DISTANCE_KM}}</td>
-                    <td class="lgl1">{{claim.MILEAGE_AMOUNT | number:'1.2-2'}}</td>
+                    <td class="lgl1" *ngIf="travelClaimType">{{claim.FROM}}</td>
+                    <td class="lgl1" *ngIf="travelClaimType">{{claim.TO}}</td>
+                    <td class="lgl1" *ngIf="travelClaimType">{{claim.DISTANCE_KM}}</td>
+                    <td class="lgl1" *ngIf="travelClaimType">{{claim.MILEAGE_AMOUNT | number:'1.2-2'}}</td>
                     <td class="lgl1">{{claim.CLAIM_AMOUNT | number:'1.2-2'}}</td>
                 </tr>
 

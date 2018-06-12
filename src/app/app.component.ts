@@ -326,6 +326,7 @@ export class ConferenceApp {
             { title: 'APPROVER TASK LIST', name: 'ClaimapprovertasklistPage', component: ClaimapprovertasklistPage, icon: 'checkbox-outline' },
             { title: 'FINANCE TASK LIST', name: 'ClaimtasklistPage', component: ClaimtasklistPage, icon: 'md-clipboard' },
             { title: 'CLAIM HISTORY', name: 'ClaimhistoryPage', component: ClaimhistoryPage, icon: 'ios-list-box-outline' },
+            { title: 'CLAIM REPORT', name: 'ClaimReportPage', component: ClaimReportPage, icon: 'ios-list-box-outline' },
           ];
           this.claimPages = [
             { title: 'TRAVEL CLAIM', name: 'TravelclaimPage', component: TravelclaimPage, icon: 'car' },
