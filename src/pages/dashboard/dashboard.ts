@@ -42,9 +42,9 @@ export class DashboardPage {
   baseResourceUrl_Card: any; Year_Card: any;
   RejectedClaimCount_year: any;PendingClaimCount_year: any;ApprovedClaimCount_year: any;
   PaidClaimCount_year:any;
-  PaidReqCount:any;
+  PaidReqCount= 0;
   PendingClaimAmount_year: any; RejectedClaimAmount_year: any;ApprovedClaimAmount_year: any;
-  PaidClaimAmount:any;
+  PaidClaimAmount = '0.00';
   PaidClaimAmount_year:any;
   loading: Loading;
   constructor(public numberPipe: DecimalPipe,public fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, public config: Config,
@@ -382,6 +382,7 @@ export class DashboardPage {
           this.claimAmountData = [parseFloat(approveAmount), parseFloat(pendingAmount), parseFloat(rejectedAmount), parseFloat(PaidClaimAmount)];
 
           // console.log(this.claimAmountData)
+          
           // For Display Data In Ion-cards
           this.Rejected_Claim_Count = this.claimrequestdetails.RejectedReqCount;
           this.Pending_Claim_Count = this.claimrequestdetails.PendingReqCount;

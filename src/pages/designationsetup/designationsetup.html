@@ -10,6 +10,9 @@
   <ion-navbar  color="primary200">
     <ion-title>{{ 'DESIGNATION_SETUP_HEADING' | translate }}</ion-title>
   </ion-navbar>
+  <ion-toolbar no-border-top color="primary200">
+    <ion-searchbar [(ngModel)]="search_ngModel" (ionInput)="search($event)" placeholder='Search'></ion-searchbar>
+  </ion-toolbar>  
 
 </ion-header>
 
@@ -22,7 +25,6 @@
     </button>
   </ion-fab>
   
-  <ion-searchbar [(ngModel)]="search_ngModel" (ionInput)="search($event)" placeholder='Search'></ion-searchbar>
   <ion-list>
     <ion-item>
       <table class="Tabler">

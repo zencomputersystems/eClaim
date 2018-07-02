@@ -73,7 +73,7 @@
         </button>
       </ion-list>
 
-      <ion-list>
+      <ion-list class="hiset">
 
         <ion-list-header>
           Setup
@@ -168,8 +168,9 @@
           {{p.title}}
         </button>
       </ion-list>
+      
+      <ion-list  class="hiset">
 
-      <ion-list>
 
         <ion-list-header>
           Setup
@@ -265,15 +266,17 @@
         </button>
       </ion-list>
 
-      <ion-list *ngIf="blnSetup_loggedInMenu_User">
-        <ion-list-header>
-          Setup
-        </ion-list-header>
-        <button ion-item menuClose *ngFor="let p of setupsPages " (click)="openPage(p) ">
-          <ion-icon item-start [name]="p.icon " [color]="isActive(p) "></ion-icon>
-          {{p.title}}
-        </button>
-      </ion-list>
+
+      <ion-list *ngIf = "blnSetup_loggedInMenu_User"  class="hiset">
+          <ion-list-header>
+           Setup
+          </ion-list-header>
+          <button ion-item menuClose *ngFor="let p of setupsPages " (click)="openPage(p) ">
+            <ion-icon item-start [name]="p.icon " [color]="isActive(p) "></ion-icon>
+            {{p.title}}
+          </button>
+        </ion-list>
+
 
 
       <ion-list *ngIf="blnAccount_loggedInMenu_User">

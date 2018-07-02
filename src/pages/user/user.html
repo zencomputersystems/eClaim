@@ -3,9 +3,9 @@
     <ion-navbar color="primary200">
         <ion-title>{{ 'USER_REGISTRATION_HEADING' | translate }}</ion-title>
     </ion-navbar>
-    <!-- <ion-toolbar no-border-top color="primary500">
-        <ion-searchbar [(ngModel)]="user_search_ngModel" (ionInput)="searchUser($event)" placeholder='Search'></ion-searchbar>
-    </ion-toolbar>     -->
+  <ion-toolbar no-border-top color="primary200">
+    <ion-searchbar [(ngModel)]="user_search_ngModel" (ionInput)="searchUser($event)" placeholder='Search'></ion-searchbar>
+    </ion-toolbar>     
 </ion-header>
 
 
@@ -17,7 +17,6 @@
         </button>
     </ion-fab>
     
-    <ion-searchbar [(ngModel)]="user_search_ngModel" (ionInput)="searchUser($event)" placeholder='Search'></ion-searchbar>
     <ion-list>
         <ion-item>
             <table class="Tabler">
