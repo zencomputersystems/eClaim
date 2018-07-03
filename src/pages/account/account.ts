@@ -138,6 +138,7 @@ export class AccountPage {
 
       this.Userform = fb.group({
         // -------------------PERSONAL DETAILS--------------------
+        avatar: null,
         avatar1: null,
         avatar2: null,
         avatar3: null,
@@ -335,6 +336,13 @@ export class AccountPage {
           this.User_DOB_Edit_ngModel = this.view_user_details[0]["DOB"];
           this.User_Gender_Edit_ngModel = this.view_user_details[0]["GENDER"];
 
+          if (this.view_user_details[0]["ATTACHMENT_ID"] == null || this.view_user_details[0]["ATTACHMENT_ID"] == '') {
+            this.Profile_Image_Display = "assets/img/profile_no_preview.png";
+          }
+          else {
+            this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/eclaim/" + this.view_user_details[0]["ATTACHMENT_ID"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
+          }
+
           //------------------------EMPLOYMENT DETAILS----------------------------------
           this.USER_INFO_GUID_FOR_UPDATE = this.view_user_details[0]["USER_INFO_GUID"];
 
@@ -437,17 +445,17 @@ export class AccountPage {
         });
 
     //------------------------Profile Image------------------------
-    this.http.get(url_user_Image, options)
-      .map(res => res.json())
-      .subscribe(
-        data => {
-          if (data["resource"].length <= 0) {            
-            this.Profile_Image_Display = "assets/img/profile_no_preview.png";
-          }
-          else {
-            this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/" + data["resource"][0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
-          }
-        });
+    // this.http.get(url_user_Image, options)
+    //   .map(res => res.json())
+    //   .subscribe(
+    //     data => {
+    //       if (data["resource"].length <= 0) {
+    //         this.Profile_Image_Display = "assets/img/profile_no_preview.png";
+    //       }
+    //       else {
+    //         this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/" + data["resource"][0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
+    //       }
+    //     });
 
     //------------------------Role-------------------------------
     let CheckRole: any = [];
@@ -544,7 +552,7 @@ export class AccountPage {
       console.log(err);
     });
   }
-  
+
   branches: any;
   GetBranch(TableName: string, FilterField: String, SortField: string) {
     // debugger;
@@ -668,8 +676,8 @@ export class AccountPage {
       this.MaritalStatusMarried = false;
     }
   }
-  
-  CertificateSaveFlag: boolean = false; 
+
+  CertificateSaveFlag: boolean = false;
   AddProfessionalCertificationForEdit() {
     if (this.User_Certification_Edit_ngModel != undefined && this.User_Certification_Edit_ngModel.trim() != "") {
       if (this.User_CertificationGrade_Edit_ngModel != undefined && this.User_CertificationGrade_Edit_ngModel.trim() != "") {
@@ -703,7 +711,7 @@ export class AccountPage {
     else {
       alert("Fill Certificate Name !!");
     }
-  }  
+  }
 
   EditProfessionalCertificationForEdit(CERTIFICATE_GUID: string) {
     for (var item in this.ProfessionalCertification) {
@@ -728,8 +736,8 @@ export class AccountPage {
       alert('Sorry!! You are in Edit Mode.');
     }
   }
-  
-  SpouseSaveFlag: boolean = false; 
+
+  SpouseSaveFlag: boolean = false;
   AddFamilyDetailsForEdit() {
     if (this.User_Spouse_Name_Edit_ngModel != undefined && this.User_Spouse_Name_Edit_ngModel.trim() != "") {
       if (this.User_Spouse_IcNumber_Edit_ngModel != undefined && this.User_Spouse_IcNumber_Edit_ngModel.trim() != "") {
@@ -777,7 +785,7 @@ export class AccountPage {
     }
 
   }
-  
+
   public ChildSaveFlag: boolean = false;
   AddChildrenForEdit() {
     if (this.User_Child_Name_Edit_ngModel != undefined && this.User_Child_Name_Edit_ngModel.trim() != "") {
@@ -905,19 +913,20 @@ export class AccountPage {
     this.MaritalStatusMarried = false;
 
     this.ROLE_ngModel_Edit = "";
-  }  
-  
-  EditProfileClicked: boolean = false; isReadonly: boolean = false; isDisabled: boolean = true; 
+    localStorage.removeItem("Unique_File_Name");
+  }
 
-  Readonly() {    
+  EditProfileClicked: boolean = false; isReadonly: boolean = false; isDisabled: boolean = true;
+
+  Readonly() {
     this.isReadonly = true;
     return this.isReadonly;
-  }  
-
-  EditProfile(){    
-    this.EditProfileClicked = true; 
   }
-  
+
+  EditProfile() {
+    this.EditProfileClicked = true;
+  }
+
   usermain_entry: UserMain_Model = new UserMain_Model();
   userinfo_entry: UserInfo_Model = new UserInfo_Model();
   useraddress_entry: UserAddress_Model = new UserAddress_Model();
@@ -940,7 +949,7 @@ export class AccountPage {
       this.loading.dismissAll();
     }
   }
-  
+
   Update_User_Main(USER_GUID: any) {
     // debugger;
     ///Bind the Tenant Guid through Tenant company Guid.----------------------
@@ -978,7 +987,7 @@ export class AccountPage {
     // debugger;
     this.userinfo_entry.USER_INFO_GUID = this.USER_INFO_GUID_FOR_UPDATE;
     this.userinfo_entry.USER_GUID = this.usermain_entry.USER_GUID;
-    this.userinfo_entry.FULLNAME = this.titlecasePipe.transform(this.User_Name_Edit_ngModel.trim());    
+    this.userinfo_entry.FULLNAME = this.titlecasePipe.transform(this.User_Name_Edit_ngModel.trim());
     this.userinfo_entry.MANAGER_USER_GUID = this.User_Approver1_Edit_ngModel.trim();
     this.userinfo_entry.PERSONAL_ID_TYPE = this.User_StaffID_Edit_ngModel.trim();
     this.userinfo_entry.PERSONAL_ID = this.User_ICNo_Edit_ngModel.trim();
@@ -1011,9 +1020,16 @@ export class AccountPage {
     this.userinfo_entry.PR_INCOMETAX_NUMBER = this.User_INCOMETAX_NO_Edit_ngModel;
     this.userinfo_entry.BANK_GUID = this.User_BANK_NAME_Edit_ngModel;
     this.userinfo_entry.PR_ACCOUNT_NUMBER = this.User_ACCOUNT_NUMBER_Edit_ngModel;
-    
+
     //Added by bijay on 27/06/2018
-    this.userinfo_entry.ATTACHMENT_ID = this.view_user_details[0]["ATTACHMENT_ID"];
+    // this.userinfo_entry.ATTACHMENT_ID = this.view_user_details[0]["ATTACHMENT_ID"];
+    
+    if(localStorage.getItem("Unique_File_Name") != undefined && localStorage.getItem("Unique_File_Name") != ""){
+      this.userinfo_entry.ATTACHMENT_ID = localStorage.getItem("Unique_File_Name");
+    }
+    else{
+      this.userinfo_entry.ATTACHMENT_ID = this.view_user_details[0]["ATTACHMENT_ID"];
+    }
 
     this.userservice.update_user_info(this.userinfo_entry)
       .subscribe((response) => {
@@ -1027,7 +1043,7 @@ export class AccountPage {
     // debugger;
     this.useraddress_entry.USER_ADDRESS_GUID = this.USER_GUID_FOR_ADDRESS;
     this.useraddress_entry.USER_GUID = this.usermain_entry.USER_GUID;
-    
+
     this.useraddress_entry.USER_ADDRESS1 = this.titlecasePipe.transform(this.User_Address1_Edit_ngModel);
     this.useraddress_entry.USER_ADDRESS2 = this.titlecasePipe.transform(this.User_Address2_Edit_ngModel);
     this.useraddress_entry.USER_ADDRESS3 = this.titlecasePipe.transform(this.User_Address3_Edit_ngModel);
@@ -1093,13 +1109,13 @@ export class AccountPage {
           //   imageResult.then((objImage: ImageUpload_model) => {
           //     let result = this.Update_User_Qualification(objImage.Image_Guid);
 
-              // if (this.view_user_details[0]["QUALIFICATION_GUID"] != "") {
-              //   let result = this.Update_User_Qualification(objImage.Image_Guid);
-              // }
-              // else {
-              //   let result = this.Save_User_Qualification(objImage.Image_Guid);
-              // }
-            // })
+          // if (this.view_user_details[0]["QUALIFICATION_GUID"] != "") {
+          //   let result = this.Update_User_Qualification(objImage.Image_Guid);
+          // }
+          // else {
+          //   let result = this.Save_User_Qualification(objImage.Image_Guid);
+          // }
+          // })
           // })
           this.Update_User_Qualification();
         }
@@ -1109,7 +1125,7 @@ export class AccountPage {
   Update_User_Qualification() {
     // debugger;
     this.userqualification_entry.USER_QUALIFICATION_GUID = this.USER_QUALIFICATION_GUID_FOR_UPDATE;
-    this.userqualification_entry.QUALIFICATION_GUID = this.User_HighestQualification_Edit_ngModel;    
+    this.userqualification_entry.QUALIFICATION_GUID = this.User_HighestQualification_Edit_ngModel;
     this.userqualification_entry.USER_GUID = this.usermain_entry.USER_GUID;
 
     this.userqualification_entry.CREATION_TS = this.usermain_entry.CREATION_TS;
@@ -1298,6 +1314,75 @@ export class AccountPage {
             //-----------------------------------------------------------------------------------------
           }
         });
+  }
+
+  fileName1: string; ProfileImage: any; imageGUID: any; uploadFileName: string; chooseFile: boolean = false; newImage: boolean = true; ImageUploadValidation: boolean = false;
+  private ProfileImageDisplay(e: any, fileChoose: string): void {
+    let reader = new FileReader();
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      this.Userform.get(fileChoose).setValue(file);
+      if (fileChoose === 'avatar1')
+        this.fileName1 = file.name;
+
+      reader.onload = (event: any) => {
+        this.ProfileImage = event.target.result;
+        this.Profile_Image_Display = event.target.result
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    this.imageGUID = this.uploadFileName;
+    this.chooseFile = true;
+    this.newImage = false;
+    this.onFileChange(e);
+    this.ImageUploadValidation = false;
+  }
+
+  onFileChange(event: any) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.Userform.get('avatar').setValue(file);
+      this.uploadFileName = file.name;
+      reader.onload = () => {
+        this.Userform.get('avatar').setValue({
+          filename: file.name,
+          filetype: file.type,
+          value: reader.result.split(',')[1]
+        });
+      };
+    }
+  }
+
+  saveIm() {
+    let uploadImage = this.UploadImage();
+    uploadImage.then((resJson) => {
+      this.imageGUID = this.uploadFileName;
+      this.chooseFile = false;
+      this.ImageUploadValidation = true;
+    })
+  }
+
+  CloudFilePath: string;
+  UploadImage() {
+    this.CloudFilePath = 'eclaim/'
+    // this.loading = true;
+    let uniqueName = new Date().toISOString() + this.uploadFileName; console.log(uniqueName); localStorage.setItem("Unique_File_Name", uniqueName);
+    const queryHeaders = new Headers();
+    queryHeaders.append('filename', this.uploadFileName);
+    queryHeaders.append('Content-Type', 'multipart/form-data');
+    queryHeaders.append('fileKey', 'file');
+    queryHeaders.append('chunkedMode', 'false');
+    queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+    const options = new RequestOptions({ headers: queryHeaders });
+    return new Promise((resolve, reject) => {
+      this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + uniqueName, this.Userform.get('avatar').value, options)
+        .map((response) => {
+          return response;
+        }).subscribe((response) => {
+          resolve(response.json());
+        })
+    })
   }
 
 }

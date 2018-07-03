@@ -3,9 +3,9 @@
     <ion-navbar color="primary200">
         <ion-title>{{ 'USER_REGISTRATION_HEADING' | translate }}</ion-title>
     </ion-navbar>
-  <ion-toolbar no-border-top color="primary200">
-    <ion-searchbar [(ngModel)]="user_search_ngModel" (ionInput)="searchUser($event)" placeholder='Search'></ion-searchbar>
-    </ion-toolbar>     
+    <ion-toolbar no-border-top color="primary200">
+        <ion-searchbar [(ngModel)]="user_search_ngModel" (ionInput)="searchUser($event)" placeholder='Search'></ion-searchbar>
+    </ion-toolbar>
 </ion-header>
 
 
@@ -16,7 +16,7 @@
             <ion-icon name="add"></ion-icon>
         </button>
     </ion-fab>
-    
+
     <ion-list>
         <ion-item>
             <table class="Tabler">
@@ -37,7 +37,7 @@
                 </tr>
 
                 <tr class="col7" *ngFor="let user of userview; let i=index" [hidden]="button_View_Disable">
-                <!-- <tr class="col7" *ngFor="let user of storeUsers; let i=index" [hidden]="button_View_Disable"> -->
+                    <!-- <tr class="col7" *ngFor="let user of storeUsers; let i=index" [hidden]="button_View_Disable"> -->
 
                     <td class="lgl1">{{i+1}}</td>
                     <td class="lgl1" text-wrap>{{user.FULLNAME}}</td>
@@ -269,16 +269,24 @@
                         </ion-select>
                     </ion-item>
 
-                    <ion-item class="text">
+                    <!-- <ion-item class="text">
                         <ion-label id="profile_image" stacked>{{ 'PROFILE_PHOTO' | translate }}</ion-label>
                         <ion-input type="file" id="avatar1" (change)="ProfileImageDisplay($event, 'avatar1')" #fileInput1></ion-input>
-                        <button ion-button type="button" (click)="clearFile('avatar1')">clear file</button>
-                        <!-- <ion-button ion-button type="button" (click)="clearFile('avatar1')">clear file> </ion-button> -->
+                        <button ion-button type="button" (click)="clearFile('avatar1')">clear file</button>                        
                     </ion-item>
                     <ion-item>
                         <img src="{{ProfileImage}}" style="width: 20%">
-                    </ion-item>
+                    </ion-item> -->
 
+
+                    <ion-item class="text">
+                        <ion-label stacked>{{ 'PROFILE PHOTO' | translate }}</ion-label>
+                        <ion-input type="file" id="avatar1" (change)="ProfileImageDisplay($event, 'avatar1')" #fileInput1></ion-input>
+                        <button ion-button item-end color="primary500" (click)="saveIm()" [disabled]="!chooseFile">Upload image</button>
+                    </ion-item>
+                    <ion-item class="text">
+                        <img [src]="Profile_Image_Display" style="width: 20%">
+                    </ion-item>
 
 
                     <div class="eClaimSubTitle2">
@@ -760,9 +768,14 @@
                     </ion-item>
 
                     <ion-item class="text">
-                        <!-- <img style="width: 10%" height="80px" src="http://api.zen.com.my/api/v2/files/eclaim/car1.jpg?api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881"> -->
+                        <ion-label stacked>{{ 'PROFILE PHOTO' | translate }}</ion-label>
+                        <ion-input type="file" id="avatar1" (change)="ProfileImageDisplay($event, 'avatar1')" #fileInput1></ion-input>
+                        <button ion-button item-end color="primary500" (click)="saveIm()" [disabled]="!chooseFile">Upload image</button>
+                    </ion-item>
+                    <ion-item class="text">
                         <img [src]="Profile_Image_Display" style="width: 20%">
                     </ion-item>
+
 
                     <div class="eClaimSubTitle2">
                         <b>{{ 'EMPLOYMENT_DETAILS' | translate }}</b>

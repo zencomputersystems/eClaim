@@ -84,12 +84,12 @@ export class LoginPage {
               localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
               localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
               localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
-
+              debugger;
               if(res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == ''){
                 localStorage.setItem("g_IMAGE_URL", "../assets/img/profile_no_preview.png");
               }
               else{                
-                localStorage.setItem("g_IMAGE_URL",constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/" + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
+                localStorage.setItem("g_IMAGE_URL",constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/eclaim/" + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
               }
 
               // //Keep all the module to an array.-------------------------------------------
@@ -466,7 +466,7 @@ export class LoginPage {
 
               let url: string;
               url = this.baseResource_Url + "vw_login?filter=(EMAIL=" + data.userPrincipalName + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-
+debugger;
               this.http
                 .get(url)
                 .map(res => res.json())
@@ -486,7 +486,7 @@ export class LoginPage {
                       localStorage.setItem("g_IMAGE_URL", "../assets/img/profile_no_preview.png");
                     }
                     else{
-                      localStorage.setItem("g_IMAGE_URL",constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/" + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
+                      localStorage.setItem("g_IMAGE_URL",constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/eclaim/" + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
                     }
 
                     //Setup Guide for only Hq Users
