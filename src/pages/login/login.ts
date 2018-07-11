@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import CryptoJS from 'crypto-js';
 
 import { UserData } from '../../providers/user-data';
-import { SignupPage } from '../signup/signup';
+// import { SignupPage } from '../signup/signup';
 import * as constants from '../../app/config/constants';
 import { SetupguidePage } from '../setupguide/setupguide';
 import { DashboardPage } from '../dashboard/dashboard';
@@ -46,7 +46,7 @@ export class LoginPage {
 
         //this.navCtrl.push(AdminsetupPage);
 //        this.navCtrl.push(SetupGuidePage); //original
-        this.navCtrl.push(DashboardPage);
+        this.navCtrl.setRoot(DashboardPage);
       }
       else {
         let url: string;
@@ -79,11 +79,11 @@ export class LoginPage {
               //Setup Guide for only Hq Users
               if (res[0]["ISHQ"] == "1" && res[0]["IS_TENANT_ADMIN"] == "1") {
                 //this.navCtrl.push(SetupguidePage);
-                this.navCtrl.push(DashboardPage);
+                this.navCtrl.setRoot(DashboardPage);
               }
               else {
                 //this.navCtrl.push(SetupPage);
-                this.navCtrl.push(DashboardPage);
+                this.navCtrl.setRoot(DashboardPage);
               }
 
               //Get the role of that particular user----------------------------------------------
@@ -132,9 +132,11 @@ export class LoginPage {
     }
   }
 
+  /*
   onSignup() {
     this.navCtrl.push(SignupPage);
   }
+*/
 
   ForgotPasswordForm: FormGroup;
   ForgotPasswordClicked: boolean;
@@ -265,7 +267,7 @@ export class LoginPage {
       .map(res => res.json())
       .subscribe(() => {
           alert('Password has sent to your eMail Id.');
-          this.navCtrl.push(LoginPage);
+//          this.navCtrl.push(LoginPage);
         });
   }
 
@@ -339,7 +341,7 @@ export class LoginPage {
 
       //navigate to app.component page
       this.userData.login(this.login.username);
-      this.navCtrl.push(SetupguidePage);
+      this.navCtrl.setRoot(SetupguidePage);
       // this.loading.dismissAll();
     }
     else {
@@ -365,7 +367,7 @@ export class LoginPage {
 
               //navigate to app.component page
               this.userData.login(this.login.username);
-              this.navCtrl.push(SetupguidePage);
+              this.navCtrl.setRoot(SetupguidePage);
 
               // this.loading.dismissAll();
             }
@@ -399,10 +401,10 @@ export class LoginPage {
 
                     //Setup Guide for only Hq Users
                     if (res[0]["ISHQ"] == "1" && res[0]["IS_TENANT_ADMIN"] == "1") {
-                      this.navCtrl.push(DashboardPage);
+                      this.navCtrl.setRoot(DashboardPage);
                     }
                     else {
-                      this.navCtrl.push(DashboardPage);
+                      this.navCtrl.setRoot(DashboardPage);
                     }
                     // this.loading.dismissAll();
 
