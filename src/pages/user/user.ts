@@ -1,19 +1,15 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ViewController, Item } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
+import { IonicPage, NavController, NavParams, AlertController, ViewController } from 'ionic-angular';
 import CryptoJS from 'crypto-js';
 import { TitleCasePipe } from '@angular/common';
-
-import { FormControlDirective, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Transfer } from '@ionic-native/transfer';
 import { LoadingController, ActionSheetController, Platform, Loading, ToastController } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Camera } from '@ionic-native/camera';
 import { FilePath } from '@ionic-native/file-path';
 import { File } from '@ionic-native/file';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-
-import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
-
+import { FileTransfer } from '@ionic-native/file-transfer';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { GlobalFunction } from '../../shared/GlobalFunction';
 import * as constants from '../../app/config/constants';
 import { UserInfo_Model } from '../../models/usersetup_info_model';
@@ -30,19 +26,13 @@ import { View_Dropdown_Model } from '../../models/view_dropdown';
 import { UserSetup_Service } from '../../services/usersetup_service';
 import { BaseHttpService } from '../../services/base-http';
 import { Services } from '../Services';
-
 import { UserRole_Model } from '../../models/user_role_model'
-
 import { UUID } from 'angular2-uuid';
-
-import { elementDef } from '@angular/core/src/view/element';
-
 declare var cordova: any;
-
 import { LoginPage } from '../login/login';
-import { Conditional } from '@angular/compiler';
 import { ImageUpload_model } from '../../models/image-upload.model';
-declare var cordova: any;
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
+
 /**
  * Generated class for the UserPage page.
  *
@@ -102,28 +92,11 @@ export class UserPage {
   user_details: any;
   Userform: FormGroup;
 
-  BaseTableURL: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-  Key_Param: string = 'api_key=' + constants.DREAMFACTORY_API_KEY;
+  Key_Param: string = 'api_key='+constants.DREAMFACTORY_API_KEY;
   banks: any; qualifications: any; tenants: any; countries: any; states: any; userview: any[];
   varTenant_Guid: string;
 
-  //baseResourceUrl1: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_info' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  //baseResource_Url1: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-  //baseResourceUrl2: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_main' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResourceUrl2_URL: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-  //baseResourceUrl3: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_contact' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  //baseResourceUrl4: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_company' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/zcs/_table/user_address?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-  //baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-  //baseResourceUrl_designation: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_designation' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  //baseResourceUrl_company: string = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/zcs/_table/tenant_company?filter=(TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-  //baseResourceUrl_department: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_department' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-
-
-  //baseResourceUrl_branch: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_tenantcompanysitedetails' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  //baseResourceView: string = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/zcs/_table/view_user_display?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-  //baseResourceView1: string = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/zcs/_table/view_dropdown?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-
+  baseResourceUrl: string = constants.DREAMFACTORY_TABLE_URL+"user_address?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&'+this.Key_Param;
 
   //public users: UserMain_Model[] = [];
   public multipleid: any;
@@ -300,14 +273,13 @@ export class UserPage {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({ headers: headers });
-    let url_user_edit = this.baseResourceUrl2_URL + "view_user_edit?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let url_user_Professional_Certification = this.baseResourceUrl2_URL + "user_certification?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let url_user_Spouse = this.baseResourceUrl2_URL + "user_spouse?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let url_user_Children = this.baseResourceUrl2_URL + "user_children?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let url_user_Image = this.baseResourceUrl2_URL + "view_image_retrieve?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let url_user_edit = constants.DREAMFACTORY_TABLE_URL + "view_user_edit?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
+    let url_user_Professional_Certification = constants.DREAMFACTORY_TABLE_URL + "user_certification?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
+    let url_user_Spouse = constants.DREAMFACTORY_TABLE_URL + "user_spouse?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
+    let url_user_Children = constants.DREAMFACTORY_TABLE_URL + "user_children?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
 
     //----------------Get the Details from Db and bind Controls---------------------------------
-    this.http.get(url_user_edit, options)
+    this.http.get(sanitizeURL(url_user_edit), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -335,7 +307,7 @@ export class UserPage {
             this.Profile_Image_Display = "assets/img/profile_no_preview.png";
           }
           else {
-            this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/eclaim/" + this.view_user_details[0]["ATTACHMENT_ID"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
+            this.Profile_Image_Display = constants.DREAMFACTORY_IMAGE_URL + this.view_user_details[0]["ATTACHMENT_ID"] + "?"+this.Key_Param;
           }
 
           //------------------------EMPLOYMENT DETAILS----------------------------------
@@ -412,7 +384,7 @@ export class UserPage {
         });
 
     //------------------------PROFESSIONAL CERTIFICATIONS--------------------------
-    this.http.get(url_user_Professional_Certification, options)
+    this.http.get(sanitizeURL(url_user_Professional_Certification), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -423,7 +395,7 @@ export class UserPage {
 
     //------------------------FAMILY DETAILS---------------------------------------
     //------------------------SPOUSE--------------------------        
-    this.http.get(url_user_Spouse, options)
+    this.http.get(sanitizeURL(url_user_Spouse), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -433,7 +405,7 @@ export class UserPage {
         });
 
     //------------------------CHILDREN------------------------        
-    this.http.get(url_user_Children, options)
+    this.http.get(sanitizeURL(url_user_Children), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -441,26 +413,12 @@ export class UserPage {
             this.ChildrenDetails.push({ CHILD_GUID: data["resource"][item]["CHILD_GUID"], NAME: data["resource"][item]["NAME"], ICNO: data["resource"][item]["ICNO"], GENDER: data["resource"][item]["GENDER"], SPOUSE: data["resource"][item]["SPOUSE"] });
           }
         });
-
-    //------------------------Profile Image------------------------
-    // this.http.get(url_user_Image, options)
-    //   .map(res => res.json())
-    //   .subscribe(
-    //     data => {
-    //       if (data["resource"].length <= 0) {
-    //         this.Profile_Image_Display = "assets/img/noPreview.png";
-    //       }
-    //       else {
-    //         this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/" + data["resource"][0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
-    //       }
-    //     });
-
     //------------------------Role-------------------------------
     let CheckRole: any = []; let CheckAdditionalRole: any = [];
-    let User_Role_url = this.baseResourceUrl2_URL + "user_role?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let User_Role_url = constants.DREAMFACTORY_TABLE_URL + "user_role?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
 
     this.http
-      .get(User_Role_url)
+      .get(sanitizeURL(User_Role_url))
       .map(res => res.json())
       .subscribe(data => {
         this.roles = data.resource;
@@ -508,7 +466,7 @@ export class UserPage {
   }
 
   button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, fb: FormBuilder, public http: Http, private httpService: BaseHttpService, private api: Services, private userservice: UserSetup_Service, private alertCtrl: AlertController, private camera: Camera, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, private file: File, private filePath: FilePath, private transfer: Transfer, public toastCtrl: ToastController, public platform: Platform, private fileTransfer_new: FileTransfer, private titlecasePipe: TitleCasePipe) {
+  constructor(public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, fb: FormBuilder, public http: Http, private api: Services, private userservice: UserSetup_Service, private alertCtrl: AlertController, private camera: Camera, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, private file: File, private filePath: FilePath, public toastCtrl: ToastController, public platform: Platform, private titlecasePipe: TitleCasePipe) {
     this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
     localStorage.removeItem("Unique_File_Name");
 
@@ -643,62 +601,14 @@ export class UserPage {
 
   public attachment_ref: any;
 
-  // onFileChange(event: any, fileChoose: string) {
-  //   const reader = new FileReader();
-  //   if (event.target.files && event.target.files.length > 0) {
-  //     const file = event.target.files[0];
-  //     this.Userform.get(fileChoose).setValue(file);
-  //     if (fileChoose === 'avatar1')
-  //       this.fileName1 = file.name;
-  //     if (fileChoose === 'avatar2')
-  //       this.fileName2 = file.name;
-  //     if (fileChoose === 'avatar3')
-  //       this.fileName3 = file.name;
-  //     //alert(file.name); 
-  //     this.attachment_ref = file.name;
-  //     //alert(this.attachment_ref);
-  //     // this.uploadFileName = file.name;
-  //     reader.onload = () => {
-  //       this.Userform.get(fileChoose).setValue({
-  //         filename: file.name,
-  //         filetype: file.type,
-  //         value: reader.result.split(',')[1]
-  //       });
-  //     };
-  //   }
-  // }
-
-  // onSubmit() {
-  //   this.load = true;
-  //   const queryHeaders = new Headers();
-  //   queryHeaders.append('filename', this.uploadFileName);
-  //   queryHeaders.append('Content-Type', 'multipart/form-data');
-  //   queryHeaders.append('fileKey', 'file');
-  //   queryHeaders.append('chunkedMode', 'false');
-  //   queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-  //   const options = new RequestOptions({ headers: queryHeaders });
-  //   this.http.post('http://api.zen.com.my/api/v2/files/' + this.uploadFileName, this.Userform.get('avatar').value, options)
-  //     .map((response) => {
-  //       return response;
-  //     }).subscribe((response) => {
-  //       //alert(response.status);
-  //     });
-  //   setTimeout(() => {
-  //     //alert('done');
-  //     this.load = false;
-  //   }, 1000);
-  // }
-
   SaveImageinDB(fileName: string) {
     let objImage: ImageUpload_model = new ImageUpload_model();
     objImage.Image_Guid = UUID.UUID();
     objImage.IMAGE_URL = this.CloudFilePath + fileName;
     objImage.CREATION_TS = new Date().toISOString();
     objImage.Update_Ts = new Date().toISOString();
-    return new Promise((resolve, reject) => {
-      this.api.postData('main_images', objImage.toJson(true)).subscribe((response) => {
-        // let res = response.json();
-        // let imageGUID = res["resource"][0].Image_Guid;
+    return new Promise((resolve) => {
+      this.api.postData('main_images', objImage.toJson(true)).subscribe(() => {
         resolve(objImage.toJson());
       })
     })
@@ -715,8 +625,8 @@ export class UserPage {
     queryHeaders.append('chunkedMode', 'false');
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     const options = new RequestOptions({ headers: queryHeaders });
-    return new Promise((resolve, reject) => {
-      this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + fileName, this.Userform.get(fileChoose).value, options)
+    return new Promise((resolve) => {
+      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + fileName, this.Userform.get(fileChoose).value, options)
         .map((response) => {
           return response;
         }).subscribe((response) => {
@@ -782,16 +692,8 @@ export class UserPage {
     this.loading.present();
 
     let TableURL_User: string;
-    // if (localStorage.getItem("g_USER_GUID") == "sva" || localStorage.getItem("g_ROLE_NAME") == "Finance Executive" || localStorage.getItem("g_ROLE_NAME") == "Finance Admin" || localStorage.getItem("g_ROLE_NAME") == "Finance Manager") {
-    //   TableURL_User = this.BaseTableURL + ViewName + '?' + this.Key_Param;
-    // }
-    // else if (localStorage.getItem("g_ISHQ") == "1" && localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
-    //   TableURL_User = this.BaseTableURL + ViewName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + this.Key_Param;
-    // }
-    // else {
-    //   TableURL_User = this.BaseTableURL + ViewName + '?filter=(USER_GUID=' + localStorage.getItem("g_USER_GUID") + ')&' + this.Key_Param;
-    // }
-    TableURL_User = this.BaseTableURL + ViewName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + this.Key_Param;
+ 
+    TableURL_User = constants.DREAMFACTORY_TABLE_URL + ViewName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + this.Key_Param;
     this.http
       .get(TableURL_User)
       .map(res => res.json())
@@ -812,7 +714,7 @@ export class UserPage {
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
 
       this.http
         .get(TableURL)
@@ -830,11 +732,11 @@ export class UserPage {
   GetCompany(TableName: string, SortField: string) {
     let TableURL: string;
     if (localStorage.getItem("g_USER_GUID") == "sva") {
-      //TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + this.User_Company_ngModel +')&' + 'order='+ SortField + '&' + this.Key_Param;
-      TableURL = this.BaseTableURL + TableName + '?order=' + SortField + '&' + this.Key_Param;
+      //TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + this.User_Company_ngModel +')&' + 'order='+ SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
     }
     else {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
     }
     this.http
       .get(TableURL)
@@ -856,7 +758,7 @@ export class UserPage {
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
 
       this.http
         .get(TableURL)
@@ -874,14 +776,14 @@ export class UserPage {
   GetBranch(TableName: string, FilterField: String, SortField: string) {
     let TableURL: string;
     if (this.User_Company_ngModel != undefined) {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_COMPANY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_COMPANY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
     }
     else {
       if (localStorage.getItem("g_USER_GUID") == "sva") {
-        TableURL = this.BaseTableURL + TableName + '?' + 'order=' + SortField + '&' + this.Key_Param;
+        TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?' + 'order=' + SortField + '&' + this.Key_Param;
       }
       else {
-        TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_COMPANY_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+        TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_COMPANY_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
       }
     }
 
@@ -895,7 +797,7 @@ export class UserPage {
 
   BindCountry(TableName: string, SortField: string) {
     let TableURL: string;
-    TableURL = this.BaseTableURL + TableName + '?order=' + SortField + '&' + this.Key_Param;
+    TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
 
     this.http
       .get(TableURL)
@@ -907,7 +809,7 @@ export class UserPage {
 
   BindState(TableName: string, FilterField: string, SortField: string) {
     let TableURL: string;
-    TableURL = this.BaseTableURL + TableName + '?filter=(COUNTRY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+    TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(COUNTRY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
 
     this.http
       .get(TableURL)
@@ -929,7 +831,7 @@ export class UserPage {
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
 
       this.http
         .get(TableURL)
@@ -947,13 +849,13 @@ export class UserPage {
   BindQualification(TableName: string, SortField: string) {
     let TableURL: string;
     // if (localStorage.getItem("g_USER_GUID") == "sva") {
-    //   //TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + this.User_Company_ngModel +')&' + 'order='+ SortField + '&' + this.Key_Param;
-    //   TableURL = this.BaseTableURL + TableName + '?order=' + SortField + '&' + this.Key_Param;
+    //   //TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + this.User_Company_ngModel +')&' + 'order='+ SortField + '&' + this.Key_Param;
+    //   TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
     // }
     // else {
-    //   TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+    //   TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
     // }
-    TableURL = this.BaseTableURL + TableName + '?order=' + SortField + '&' + this.Key_Param;
+    TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
     this.http
       .get(TableURL)
       .map(res => res.json())
@@ -975,14 +877,14 @@ export class UserPage {
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
       if (this.AddUserClicked == true) {
-        TableURL_Approver = this.BaseTableURL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')&' + this.Key_Param;
+        TableURL_Approver = constants.DREAMFACTORY_TABLE_URL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')&' + this.Key_Param;
       }
       else {
         if (localStorage.getItem("g_USER_GUID") == "sva" || localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
-          TableURL_Approver = this.BaseTableURL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')&' + this.Key_Param;
+          TableURL_Approver = constants.DREAMFACTORY_TABLE_URL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')&' + this.Key_Param;
         }
         else {
-          TableURL_Approver = this.BaseTableURL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')AND(USER_GUID!=' + this.view_user_details[0]["USER_GUID"] + ')&' + this.Key_Param;
+          TableURL_Approver = constants.DREAMFACTORY_TABLE_URL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')AND(USER_GUID!=' + this.view_user_details[0]["USER_GUID"] + ')&' + this.Key_Param;
         }
       }
 
@@ -1001,7 +903,7 @@ export class UserPage {
 
   roles: any
   BindRole() {
-    let roleUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_role' + '?order=NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let roleUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_role' + '?order=NAME&'+this.Key_Param;
     this.http
       .get(roleUrl)
       .map(res => res.json())
@@ -1346,8 +1248,8 @@ export class UserPage {
   }
 
   GetTenant_GUID(Tenant_company_guid: string) {
-    let TableURL = this.BaseTableURL + "tenant_company" + '?filter=(TENANT_COMPANY_GUID=' + Tenant_company_guid + ')&' + this.Key_Param;
-    return new Promise((resolve, reject) => {
+    let TableURL = constants.DREAMFACTORY_TABLE_URL + "tenant_company" + '?filter=(TENANT_COMPANY_GUID=' + Tenant_company_guid + ')&' + this.Key_Param;
+    return new Promise((resolve) => {
       this.http
         .get(TableURL)
         .map(res => res.json())
@@ -1443,8 +1345,6 @@ export class UserPage {
 
   // Save_User_Info(imageGUID: string) {
   Save_User_Info() {
-    //debugger;
-    let userinfo_entry: UserInfo_Model = new UserInfo_Model();
     this.userinfo_entry.USER_INFO_GUID = UUID.UUID();
     this.userinfo_entry.USER_GUID = this.usermain_entry.USER_GUID;
     this.userinfo_entry.FULLNAME = this.titlecasePipe.transform(this.User_Name_ngModel.trim());
@@ -1690,11 +1590,10 @@ export class UserPage {
         if (response.status == 200) {
           //alert('5');
           let uploadImage = this.UploadImage_Old('avatar2', this.fileName2);
-          uploadImage.then((resJson) => {
+          uploadImage.then(() => {
             // console.table(resJson)
             let imageResult = this.SaveImageinDB(this.fileName2);
             imageResult.then((objImage: ImageUpload_model) => {
-              let result = this.Save_User_Qualification(objImage.Image_Guid);
 
 
               //alert("User Contact inserted");
@@ -1720,11 +1619,10 @@ export class UserPage {
       .subscribe((response) => {
         if (response.status == 200) {
           let uploadImage = this.UploadImage_Old('avatar2', this.fileName2);
-          uploadImage.then((resJson) => {
+          uploadImage.then(() => {
             // console.table(resJson)
             let imageResult = this.SaveImageinDB(this.fileName2);
             imageResult.then((objImage: ImageUpload_model) => {
-              let result = this.Update_User_Qualification(objImage.Image_Guid);
 
               // if (this.view_user_details[0]["QUALIFICATION_GUID"] != "") {
               //   let result = this.Update_User_Qualification(objImage.Image_Guid);
@@ -1764,11 +1662,10 @@ export class UserPage {
           if (response.status == 200) {
 
             let uploadImage = this.UploadImage_Old('avatar3', this.fileName3);
-            uploadImage.then((resJson) => {
+            uploadImage.then(() => {
               // console.table(resJson)
               let imageResult = this.SaveImageinDB(this.fileName3);
               imageResult.then((objImage: ImageUpload_model) => {
-                let result = this.Save_User_Certification(objImage.Image_Guid);
                 //alert("User Qualification inserted");
               })
             })
@@ -1783,7 +1680,7 @@ export class UserPage {
           }
         });
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.api.postData('user_qualification', userqualification_entry.toJson(true)).subscribe((data) => {
 
         let res = data.json();
@@ -1819,11 +1716,10 @@ export class UserPage {
           if (response.status == 200) {
 
             let uploadImage = this.UploadImage_Old('avatar3', this.fileName3);
-            uploadImage.then((resJson) => {
+            uploadImage.then(() => {
               // console.table(resJson)
               let imageResult = this.SaveImageinDB(this.fileName3);
               imageResult.then((objImage: ImageUpload_model) => {
-                let result = this.Update_User_Certification(objImage.Image_Guid);
               })
             })
 
@@ -1837,7 +1733,7 @@ export class UserPage {
           }
         });
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.api.postData('user_qualification', userqualification_entry.toJson(true)).subscribe((data) => {
 
         let res = data.json();
@@ -1876,7 +1772,7 @@ export class UserPage {
             }
           });
 
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.api.postData('user_certification', UserCertification_Entry.toJson(true)).subscribe((data) => {
 
           let res = data.json();
@@ -2050,9 +1946,9 @@ export class UserPage {
       headers.append('Content-Type', 'application/json');
       let options = new RequestOptions({ headers: headers });
       let url: string;
-      url = this.baseResourceUrl2_URL + "user_main?filter=(EMAIL=" + this.User_Email_ngModel.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      url = constants.DREAMFACTORY_TABLE_URL + "user_main?filter=(EMAIL=" + this.User_Email_ngModel.trim() + ')&'+this.Key_Param;
 
-      this.http.get(url, options)
+      this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -2101,10 +1997,10 @@ export class UserPage {
 
       // let url: string;
       // //let request_id = UUID.UUID();
-      // //url = this.baseResource_Url + "claim_request_detail?filter=(DESCRIPTION=" + this.Travel_Description_ngModel + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-      // //url = this.baseResourceUrl2 + "user_main?filter=(USER_GUID=" + request_id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      // //url = this.baseResource_Url + "claim_request_detail?filter=(DESCRIPTION=" + this.Travel_Description_ngModel + ')&'+this.Key_Param;
+      // //url = this.baseResourceUrl2 + "user_main?filter=(USER_GUID=" + request_id + ')&'+this.Key_Param;
 
-      // // url = this.baseResourceUrl2_URL + "user_main?filter=(EMAIL=" + this.User_Email_Edit_ngModel + ')&api_key=' + constants.DREAMFACTORY_API_KEY;          
+      // // url = constants.DREAMFACTORY_TABLE_URL + "user_main?filter=(EMAIL=" + this.User_Email_Edit_ngModel + ')&'+this.Key_Param;          
       // // this.http.get(url)
       // //   .map(res => res.json())
       // //   .subscribe(
@@ -2541,7 +2437,7 @@ export class UserPage {
         var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
       }
-    }, (err) => {
+    }, () => {
       this.presentToast('Error while selecting image.');
     });
   }
@@ -2554,9 +2450,9 @@ export class UserPage {
   }
 
   private copyFileToLocalDir(namePath: any, currentName: any, newFileName: any) {
-    this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+    this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(() => {
       this.lastImage = newFileName;
-    }, error => {
+    }, () => {
       this.presentToast('Error while storing file.');
     });
   }
@@ -2564,24 +2460,9 @@ export class UserPage {
   ProfileImage: any;
   fileList: FileList;
 
-  private ProfileImageDisplay_old(e: any, fileChoose: string): void {
-    let reader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-
-      const file = e.target.files[0];
-      this.Userform.get(fileChoose).setValue(file);
-      if (fileChoose === 'avatar1')
-        this.fileName1 = file.name;
-
-      reader.onload = (event: any) => {
-        this.ProfileImage = event.target.result;
-      }
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  }
 
   public ImageField: any;
-  baseUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/files/eclaim/car1.jpg' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+  baseUrl: string = constants.DREAMFACTORY_IMAGE_URL+'car1.jpg' + '?'+this.Key_Param;
 
   DisplayFamily() {
     if (this.User_Marital_ngModel == "1") {
@@ -2613,26 +2494,6 @@ export class UserPage {
   newImage: boolean = true;
   ImageUploadValidation: boolean = false;
 
-  private ProfileImageDisplay(e: any, fileChoose: string): void {
-    let reader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      this.Userform.get(fileChoose).setValue(file);
-      if (fileChoose === 'avatar1')
-        this.fileName1 = file.name;
-
-      reader.onload = (event: any) => {
-        this.ProfileImage = event.target.result;
-        this.Profile_Image_Display = event.target.result
-      }
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    this.imageGUID = this.uploadFileName;
-    this.chooseFile = true;
-    this.newImage = false;
-    this.onFileChange(e);
-    this.ImageUploadValidation = false;
-  }
 
   onFileChange(event: any) {
     const reader = new FileReader();
@@ -2652,7 +2513,7 @@ export class UserPage {
 
   saveIm() {
     let uploadImage = this.UploadImage();
-    uploadImage.then((resJson) => {
+    uploadImage.then(() => {
       this.imageGUID = this.uploadFileName;
       this.chooseFile = false;
       this.ImageUploadValidation = true;
@@ -2671,8 +2532,8 @@ export class UserPage {
     queryHeaders.append('chunkedMode', 'false');
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     const options = new RequestOptions({ headers: queryHeaders });
-    return new Promise((resolve, reject) => {
-      this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + uniqueName, this.Userform.get('avatar').value, options)
+    return new Promise((resolve) => {
+      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + uniqueName, this.Userform.get('avatar').value, options)
         .map((response) => {
           return response;
         }).subscribe((response) => {
@@ -2731,8 +2592,8 @@ export class UserPage {
   }
 
   GetUserMain(USER_GUID: any) {
-    let UserActivationUrl = this.baseResourceUrl2_URL + "user_main?filter=(USER_GUID=" + USER_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(UserActivationUrl)
+    let UserActivationUrl = constants.DREAMFACTORY_TABLE_URL + "user_main?filter=(USER_GUID=" + USER_GUID + ')&'+this.Key_Param;
+    this.http.get(sanitizeURL(UserActivationUrl))
       .map(res => res.json())
       .subscribe(
         data => {

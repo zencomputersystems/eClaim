@@ -14,6 +14,7 @@ import { BaseHttpService } from '../../services/base-http';
 import { UUID } from 'angular2-uuid';
 import { GlobalFunction } from '../../shared/GlobalFunction';
 import { LoginPage } from '../login/login';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 /**
  * Generated class for the ProfileSetupPage page.
  *
@@ -146,7 +147,7 @@ export class ProfileSetupPage {
       let url: string;
       url = this.baseResource_Url + "main_profile?filter=(PROFILE_NAME=" + this.PROFILENAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
 
-      this.http.get(url, options)
+      this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -212,7 +213,7 @@ export class ProfileSetupPage {
       if (this.PROFILENAME_ngModel_Edit.trim() != localStorage.getItem('Prev_Name')) {
         let url: string;
         url = this.baseResource_Url + "main_profile?filter=(PROFILE_NAME=" + this.PROFILENAME_ngModel_Edit.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-        this.http.get(url)
+        this.http.get(sanitizeURL(url))
           .map(res => res.json())
           .subscribe(
             data => {

@@ -425,7 +425,7 @@ export class BanksetupPage {
           '<div style="FONT-FAMILY: Century Gothic">'+
               '<div style="MIN-WIDTH: 500px">'+
                   '<br>'+
-                  '<div style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src="http://api.zen.com.my/api/v2/files/eclaim/2018-09-17T13:33:42.429Zzen2.png></div>'+
+                  '<div style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src="http://api.zen.com.my/api/v2/azurefs/azurefs/2018-09-17T13:33:42.429Zzen2.png?api_key=' + constants.DREAMFACTORY_API_KEY+'"></div>'+
                   '<div style="MARGIN: 0 30px;">'+
                       '<div style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><b>Test mail</b></div>'+
                   '</div>'+

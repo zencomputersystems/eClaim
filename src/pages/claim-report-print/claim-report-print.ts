@@ -29,40 +29,4 @@ export class ClaimReportPrintPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ClaimReportPrintPage');
   }
-  // ionViewWillEnter()
-  // {
-  //   this.getSocSummary();
-  // }
-
-  // ngOnInit()
-  // {
-  //   this.getSocSummary();
-  // }
-  // ngAfterContentInit()
-  // {
-  //   this.getSocSummary();
-  // }
-  // ngAfterViewInit()
-  // {
-  //   this.getSocSummary();
-  // }
-  // getSocSummary() {
-  //   if (this.claimsListPrint.length != 0) {
-  //     this.claimsListPrint.forEach(element => {
-
-  //       if (element.SOC_GUID != null && this.claimsSocSummary.find(e => e.SOC_GUID == element.SOC_GUID) === undefined) {
-  //         this.claimsSocSummary.push([{ "SOC_GUID": element.SOC_GUID, "SOC": element.SOC, "Total": element.Total }]);
-  //       }
-  //       else if (element.CUSTOMER_GUID != null && this.claimsSocSummary.find(e => e.SOC_GUID == element.CUSTOMER_GUID) === undefined) {
-  //         this.claimsSocSummary.push([{ "SOC_GUID": element.CUSTOMER_GUID, "SOC": element.CUSTOMER_NAME, "Total": element.Total }]);
-  //       }
-  //       else {
-  //         if (element.SOC_GUID != null)
-  //           this.claimsSocSummary.find(e => e.SOC_GUID === element.SOC_GUID).Total += element.Total;
-  //         else
-  //           this.claimsSocSummary.find(e => e.SOC_GUID === element.CUSTOMER_GUID).Total += element.Total;
-  //       }
-  //     });
-  //   }
-  // }
 }

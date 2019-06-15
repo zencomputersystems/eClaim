@@ -1,11 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
-// import { DatePipe } from '@angular/common'
-import { test_model } from '../../models/testmodel';
 import { SocCustomer_Model } from '../../models/soc_customer_model';
 import { SocProject_Model } from '../../models/soc_project_model';
 import { SocMain_Model } from '../../models/socmain_model';
-
 import { SocCustomerLocation_Model } from '../../models/soc_customer_location_model';
 import { UserMain_Model } from '../../models/user_main_model';
 import { UserInfo_Model } from '../../models/usersetup_info_model';
@@ -18,27 +15,15 @@ import { Main_Attendance_Model } from '../../models/main_attendance_model';
 import { Device_Raw_Data_Model } from '../../models/device_raw_data_model';
 import { User_Attendance_Main_Model } from '../../models/user_attendance_main_model';
 import { Leave_Raw_Data_Model } from '../../models/leave_raw_data_model';
-
 import * as constants from '../../app/config/constants';
-
 import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
-
 import * as XLSX from 'xlsx';
 import { UUID } from 'angular2-uuid';
-import { Constants } from './../util/constants';
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import moment from 'moment';
 import { Observable } from 'rxjs/Rx';
-// import {Observable} from 'rxjs/Observable';
 import { saveAs as importedSaveAs } from "file-saver";
-
-// import { ExcelService } from '../../providers/excel.service';
-// // import { Transfer, FileUploadOptions, TransferObject } from '@ionic-native/transfer';
-// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-// import { saveAs } from 'file-saver/FileSaver';
-
-// import { ConfigService } from 'app/common/services/config.service';
-// import { getFileNameFromResponseContentDisposition, saveFile } from 'app/core/helpers/file-download-helper';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the ImportExcelDataPage page.
@@ -110,7 +95,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.main_customer_Url, this.SocCustomer_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -140,7 +125,7 @@ export class ImportExcelDataPage {
   main_customer_click() {
     this.main_customer_Url = constants.DREAMFACTORY_TABLE_URL + '/main_customer?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_main_customer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_main_customer);
       var arr = new Array();
@@ -206,7 +191,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.baseResourceurl_Excel, this.test_model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -238,7 +223,7 @@ export class ImportExcelDataPage {
     this.baseResourceurl_Excel = constants.DREAMFACTORY_TABLE_URL + '/main_project?&api_key=' + constants.DREAMFACTORY_API_KEY;
     // this.baseResourceurl_Excel = constants.DREAMFACTORY_TABLE_URL + '/soc_main?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
@@ -257,37 +242,6 @@ export class ImportExcelDataPage {
       // {
       this.new_data.forEach(element => {
         this.duplicateCheck_mainProject(element);
-
-        // 2)For main_project table
-        // this.test_model.PROJECT_GUID = element.PROJECT_GUID;
-        // this.test_model.NAME = element.NAME;
-        // this.test_model.CUSTOMER_GUID = element.CUSTOMER_GUID;
-        // this.test_model.CUSTOMER_LOCATION_GUID = element.CUSTOMER_LOCATION_GUID;
-        // this.test_model.TENANT_GUID = element.TENANT_GUID;
-        // this.test_model.ACTIVATION_FLAG = element.ACTIVATION_FLAG;
-        // // this.test_model.ACTIVATION_FLAG = "1";
-
-        // this.test_model.CREATION_TS = new Date().toISOString();;
-        // this.test_model.CREATION_USER_GUID = 'sva_test';
-        // this.test_model.UPDATE_TS = new Date().toISOString();;
-        // this.test_model.UPDATE_USER_GUID = 'sva_test';      
-
-
-        // var queryHeaders = new Headers();
-        // queryHeaders.append('Content-Type', 'application/json');
-        // //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        // queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        // let options = new RequestOptions({ headers: queryHeaders });
-        // return new Promise((resolve, reject) => {
-        //   this.http.post(this.baseResourceurl_Excel, this.test_model.toJson(true), options)
-        //     .map((response) => {
-        //       return response;
-
-        //     }).subscribe((response) => {
-        //       resolve(response.json());
-        //     })
-        // })
-
       });
     }
     fileReader.readAsArrayBuffer(this.file);
@@ -325,7 +279,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.main_customer_location_Url, this.SocCustomerLocation_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -351,7 +305,7 @@ export class ImportExcelDataPage {
   main_customer_location_click() {
     this.main_customer_location_Url = constants.DREAMFACTORY_TABLE_URL + '/main_customer_location?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_main_customer_location = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_main_customer_location);
       var arr = new Array();
@@ -369,42 +323,6 @@ export class ImportExcelDataPage {
 
       this.main_customer_location_data.forEach(element => {
         this.duplicateCheck_mainCustomerLocation(element);
-
-        // For main_customer_location
-        // this.SocCustomerLocation_Model.CUSTOMER_GUID = element.CUSTOMER_GUID;
-        // this.SocCustomerLocation_Model.CUSTOMER_LOCATION_GUID = element.CUSTOMER_LOCATION_GUID;
-        // this.SocCustomerLocation_Model.NAME = element.NAME;
-        // this.SocCustomerLocation_Model.DESCRIPTION = element.DESCRIPTION;
-        // this.SocCustomerLocation_Model.REGISTRATION_NO = element.REGISTRATION_NO;
-        // this.SocCustomerLocation_Model.ADDRESS1 = element.ADDRESS1;
-        // this.SocCustomerLocation_Model.ADDRESS2 = element.ADDRESS2;
-        // this.SocCustomerLocation_Model.ADDRESS3 = element.ADDRESS3;
-        // this.SocCustomerLocation_Model.CONTACT_PERSON = element.CONTACT_PERSON;
-        // this.SocCustomerLocation_Model.CONTACT_PERSON_MOBILE_NO = element.CONTACT_PERSON_MOBILE_NO;
-        // this.SocCustomerLocation_Model.CONTACT_NO1 = element.CONTACT_NO1;
-        // this.SocCustomerLocation_Model.CONTACT_NO2 = element.CONTACT_NO2;
-        // this.SocCustomerLocation_Model.EMAIL = element.EMAIL;
-        // this.SocCustomerLocation_Model.DIVISION = element.DIVISION;
-
-
-        // this.SocCustomerLocation_Model.CREATION_TS = new Date().toISOString();;
-        // this.SocCustomerLocation_Model.CREATION_USER_GUID = 'sva_test';
-        // this.SocCustomerLocation_Model.UPDATE_TS = new Date().toISOString();;
-        // this.SocCustomerLocation_Model.UPDATE_USER_GUID = 'sva_test';
-
-
-        // var queryHeaders = new Headers();
-        // queryHeaders.append('Content-Type', 'application/json');
-        // queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        // let options = new RequestOptions({ headers: queryHeaders });
-        // return new Promise((resolve, reject) => {
-        //   this.http.post(this.main_customer_location_Url, this.SocCustomerLocation_Model.toJson(true), options)
-        //     .map((response) => {
-        //       return response;
-        //     }).subscribe((response) => {
-        //       resolve(response.json());
-        //     })
-        // })
       });
     }
     fileReader.readAsArrayBuffer(this.file);
@@ -432,7 +350,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.soc_main_Url, this.SocMain_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -462,7 +380,7 @@ export class ImportExcelDataPage {
   soc_main_click() {
     this.soc_main_Url = constants.DREAMFACTORY_TABLE_URL + '/soc_main?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_main_customer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_main_customer);
       var arr = new Array();
@@ -479,31 +397,6 @@ export class ImportExcelDataPage {
 
       this.soc_main_data.forEach(element => {
         this.duplicateCheck_SOCMain(element);
-        // For soc_main table
-        // this.SocMain_Model.SOC_GUID = element.SOC_GUID;
-        // this.SocMain_Model.SOC_NO = element.SOC_NO;
-        // this.SocMain_Model.PROJECT_GUID = element.PROJECT_GUID;
-        // this.SocMain_Model.TENANT_GUID = element.TENANT_GUID;
-        // this.SocMain_Model.ACTIVATION_FLAG = element.ACTIVATION_FLAG;
-
-        // this.SocMain_Model.CREATION_TS = new Date().toISOString();;
-        // this.SocMain_Model.CREATION_USER_GUID = 'sva_test';
-        // this.SocMain_Model.UPDATE_TS = new Date().toISOString();;
-        // this.SocMain_Model.UPDATE_USER_GUID='sva_test';
-
-
-        // var queryHeaders = new Headers();
-        // queryHeaders.append('Content-Type', 'application/json');
-        // queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        // let options = new RequestOptions({ headers: queryHeaders });
-        // return new Promise((resolve, reject) => {
-        //   this.http.post(this.soc_main_Url, this.SocMain_Model.toJson(true), options)
-        //     .map((response) => {
-        //       return response;
-        //     }).subscribe((response) => {
-        //       resolve(response.json());
-        //     })
-        // })
       });
     }
     fileReader.readAsArrayBuffer(this.file_soc_main);
@@ -533,7 +426,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_main_Url, this.UserMain_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -561,7 +454,7 @@ export class ImportExcelDataPage {
   user_main_click() {
     this.user_main_Url = constants.DREAMFACTORY_TABLE_URL + '/user_main?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_main = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_main);
       var arr = new Array();
@@ -579,34 +472,6 @@ export class ImportExcelDataPage {
 
       this.main_customer_location_data.forEach(element => {
         this.duplicateCheck_userMain(element);
-        // For user_main
-        //  this.UserMain_Model.USER_GUID = element.USER_GUID;
-        //  this.UserMain_Model.TENANT_GUID = element.TENANT_GUID;
-        //  this.UserMain_Model.STAFF_ID = element.STAFF_ID;
-        //  this.UserMain_Model.LOGIN_ID = element.LOGIN_ID;
-        //  this.UserMain_Model.PASSWORD = element.PASSWORD;
-        //  this.UserMain_Model.EMAIL = element.EMAIL;
-        //  this.UserMain_Model.ACTIVATION_FLAG = element.ACTIVATION_FLAG;
-        //  this.UserMain_Model.IS_TENANT_ADMIN = element.IS_TENANT_ADMIN;
-
-        //  this.UserMain_Model.CREATION_TS = new Date().toISOString();;
-        //  this.UserMain_Model.CREATION_USER_GUID = 'sva_test';
-        //  this.UserMain_Model.UPDATE_TS = new Date().toISOString();;
-        //  this.UserMain_Model.UPDATE_USER_GUID = 'sva_test';
-
-
-        //  var queryHeaders = new Headers();
-        //  queryHeaders.append('Content-Type', 'application/json');
-        //  queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        //  let options = new RequestOptions({ headers: queryHeaders });
-        //  return new Promise((resolve, reject) => {
-        //    this.http.post(this.user_main_Url, this.UserMain_Model.toJson(true), options)
-        //      .map((response) => {
-        //        return response;
-        //      }).subscribe((response) => {
-        //        resolve(response.json());
-        //      })
-        //  })
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_main);
@@ -629,11 +494,6 @@ export class ImportExcelDataPage {
           this.UserInfo_Model.DOB = checkData.DOB;
           this.UserInfo_Model.GENDER = checkData.GENDER;
           this.UserInfo_Model.JOIN_DATE = checkData.JOIN_DATE;
-          //  let x=new Date(element.JOIN_DATE); 
-          // this.UserInfo_Model.JOIN_DATE =this.fd(element.JOIN_DATE, 'd MMM yy HH:mm', 'en');;
-          // this.UserInfo_Model.JOIN_DATE = XLSX.utils.format_cell(element.JOIN_DATE, {dateNF:"YYYY-MM-DD"});
-          // this.UserInfo_Model.JOIN_DATE = this.datepipe.transform(element.JOIN_DATE, 'yyyy-MM-dd');
-          // ;Constants.DATE_TIME_FMT
           this.UserInfo_Model.MARITAL_STATUS = checkData.MARITAL_STATUS;
           this.UserInfo_Model.BRANCH = checkData.BRANCH;
           this.UserInfo_Model.EMPLOYEE_TYPE = checkData.EMPLOYEE_TYPE;
@@ -667,7 +527,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_info_Url, this.UserInfo_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -697,7 +557,7 @@ export class ImportExcelDataPage {
   user_info_click() {
     this.user_info_Url = constants.DREAMFACTORY_TABLE_URL + '/user_info?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_info = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_info);
       var arr = new Array();
@@ -717,68 +577,6 @@ export class ImportExcelDataPage {
 
       this.main_customer_location_data.forEach(element => {
         this.duplicateCheck_userInfo(element);
-
-        // this.date=new Date();
-        // let latest_date =this.datepipe.transform(this.date, 'yyyy-MM-dd');
-        // For user_info
-        //          this.UserInfo_Model.USER_INFO_GUID = element.USER_INFO_GUID;
-        //          this.UserInfo_Model.USER_GUID = element.USER_GUID;
-        //          this.UserInfo_Model.FULLNAME = element.FULLNAME;
-        //          this.UserInfo_Model.NICKNAME = element.NICKNAME;
-        //          this.UserInfo_Model.SALUTATION = element.SALUTATION;
-        //          this.UserInfo_Model.MANAGER_USER_GUID = element.MANAGER_USER_GUID;
-        //          this.UserInfo_Model.PERSONAL_ID_TYPE = element.PERSONAL_ID_TYPE;
-        //          this.UserInfo_Model.PERSONAL_ID = element.PERSONAL_ID;
-        //          this.UserInfo_Model.DOB = element.DOB;
-        //          this.UserInfo_Model.GENDER = element.GENDER;
-        //          this.UserInfo_Model.JOIN_DATE = element.JOIN_DATE;
-        // //  let x=new Date(element.JOIN_DATE); 
-        //           // this.UserInfo_Model.JOIN_DATE =this.fd(element.JOIN_DATE, 'd MMM yy HH:mm', 'en');;
-        //         // this.UserInfo_Model.JOIN_DATE = XLSX.utils.format_cell(element.JOIN_DATE, {dateNF:"YYYY-MM-DD"});
-        //         // this.UserInfo_Model.JOIN_DATE = this.datepipe.transform(element.JOIN_DATE, 'yyyy-MM-dd');
-        //         // ;Constants.DATE_TIME_FMT
-        //          this.UserInfo_Model.MARITAL_STATUS = element.MARITAL_STATUS;
-        //          this.UserInfo_Model.BRANCH = element.BRANCH;
-        //          this.UserInfo_Model.EMPLOYEE_TYPE = element.EMPLOYEE_TYPE;
-        //          this.UserInfo_Model.APPROVER1 = element.APPROVER1;
-        //          this.UserInfo_Model.APPROVER2 = element.APPROVER2;
-        //          this.UserInfo_Model.EMPLOYEE_STATUS = element.EMPLOYEE_STATUS;
-        //          this.UserInfo_Model.DEPT_GUID = element.DEPT_GUID;
-        //          this.UserInfo_Model.DESIGNATION_GUID = element.DESIGNATION_GUID;
-        //          this.UserInfo_Model.RESIGNATION_DATE = element.RESIGNATION_DATE;
-        //          this.UserInfo_Model.TENANT_COMPANY_GUID = element.TENANT_COMPANY_GUID;
-        //          this.UserInfo_Model.CONFIRMATION_DATE = element.CONFIRMATION_DATE;
-        //          this.UserInfo_Model.TENANT_COMPANY_SITE_GUID = element.TENANT_COMPANY_SITE_GUID;
-        //          this.UserInfo_Model.EMG_CONTACT_NAME_1 = element.EMG_CONTACT_NAME_1;
-        //          this.UserInfo_Model.EMG_RELATIONSHIP_1 = element.EMG_RELATIONSHIP_1;
-        //          this.UserInfo_Model.EMG_CONTACT_NUMBER_1 = element.EMG_CONTACT_NUMBER_1;
-        //          this.UserInfo_Model.EMG_CONTACT_NAME_2 = element.EMG_CONTACT_NAME_2;
-        //          this.UserInfo_Model.EMG_RELATIONSHIP_2 = element.EMG_RELATIONSHIP_2;
-        //          this.UserInfo_Model.EMG_CONTACT_NUMBER_2 = element.EMG_CONTACT_NUMBER_2;
-        //          this.UserInfo_Model.PR_EPF_NUMBER = element.PR_EPF_NUMBER;
-        //          this.UserInfo_Model.PR_INCOMETAX_NUMBER = element.PR_INCOMETAX_NUMBER;
-        //          this.UserInfo_Model.BANK_GUID = element.BANK_GUID;
-        //          this.UserInfo_Model.PR_ACCOUNT_NUMBER = element.PR_ACCOUNT_NUMBER;
-        //          this.UserInfo_Model.ATTACHMENT_ID = element.ATTACHMENT_ID;
-
-        //          this.UserInfo_Model.CREATION_TS = new Date().toISOString();;
-        //          this.UserInfo_Model.CREATION_USER_GUID = 'sva_test';
-        //          this.UserInfo_Model.UPDATE_TS = new Date().toISOString();;
-        //          this.UserInfo_Model.UPDATE_USER_GUID = 'sva_test';
-
-
-        //          var queryHeaders = new Headers();
-        //          queryHeaders.append('Content-Type', 'application/json');
-        //          queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        //          let options = new RequestOptions({ headers: queryHeaders });
-        //          return new Promise((resolve, reject) => {
-        //            this.http.post(this.user_info_Url, this.UserInfo_Model.toJson(true), options)
-        //              .map((response) => {
-        //                return response;
-        //              }).subscribe((response) => {
-        //                resolve(response.json());
-        //              })
-        //          })
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_info);
@@ -810,7 +608,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_address_Url, this.UserAddress_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -840,7 +638,7 @@ export class ImportExcelDataPage {
   user_address_click() {
     this.user_address_Url = constants.DREAMFACTORY_TABLE_URL + '/user_address?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_address = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_address);
       var arr = new Array();
@@ -859,35 +657,6 @@ export class ImportExcelDataPage {
       this.user_address_data.forEach(element => {
         this.duplicateCheck_userAddress(element);
 
-        // For user_address
-        // this.UserAddress_Model.USER_ADDRESS_GUID = element.USER_ADDRESS_GUID;
-        // this.UserAddress_Model.USER_GUID = element.USER_GUID;
-        // this.UserAddress_Model.ADDRESS_TYPE = element.ADDRESS_TYPE;
-        // this.UserAddress_Model.USER_ADDRESS1 = element.USER_ADDRESS1;
-        // this.UserAddress_Model.USER_ADDRESS2 = element.USER_ADDRESS2;
-        // this.UserAddress_Model.USER_ADDRESS3 = element.USER_ADDRESS3;
-        // this.UserAddress_Model.POST_CODE = element.POST_CODE;
-        // this.UserAddress_Model.COUNTRY_GUID = element.COUNTRY_GUID;
-        // this.UserAddress_Model.STATE_GUID = element.STATE_GUID;        
-
-        // this.UserAddress_Model.CREATION_TS = new Date().toISOString();;
-        // this.UserAddress_Model.CREATION_USER_GUID = 'sva_test';
-        // this.UserAddress_Model.UPDATE_TS = new Date().toISOString();;
-        // this.UserAddress_Model.UPDATE_USER_GUID = 'sva_test';
-
-
-        // var queryHeaders = new Headers();
-        // queryHeaders.append('Content-Type', 'application/json');
-        // queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        // let options = new RequestOptions({ headers: queryHeaders });
-        // return new Promise((resolve, reject) => {
-        //   this.http.post(this.user_address_Url, this.UserAddress_Model.toJson(true), options)
-        //     .map((response) => {
-        //       return response;
-        //     }).subscribe((response) => {
-        //       resolve(response.json());
-        //     })
-        // })
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_address);
@@ -914,7 +683,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_company_Url, this.UserCompany_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -944,7 +713,7 @@ export class ImportExcelDataPage {
   user_company_click() {
     this.user_company_Url = constants.DREAMFACTORY_TABLE_URL + '/user_company?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_company = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_company);
       var arr = new Array();
@@ -963,30 +732,6 @@ export class ImportExcelDataPage {
       this.user_company_data.forEach(element => {
         this.duplicateCheck_userCompany(element);
 
-        // For user_company
-        //  this.UserCompany_Model.USER_COMPANY_GUID = element.USER_COMPANY_GUID;
-        //  this.UserCompany_Model.USER_GUID = element.USER_GUID;
-        //  this.UserCompany_Model.TENANT_COMPANY_SITE_GUID = element.TENANT_COMPANY_SITE_GUID;
-        //  this.UserCompany_Model.COMPANY_CONTACT_NO = element.COMPANY_CONTACT_NO;
-
-        //  this.UserCompany_Model.CREATION_TS = new Date().toISOString();;
-        //  this.UserCompany_Model.CREATION_USER_GUID = 'sva_test';
-        //  this.UserCompany_Model.UPDATE_TS = new Date().toISOString();;
-        //  this.UserCompany_Model.UPDATE_USER_GUID = 'sva_test';
-
-
-        //  var queryHeaders = new Headers();
-        //  queryHeaders.append('Content-Type', 'application/json');
-        //  queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        //  let options = new RequestOptions({ headers: queryHeaders });
-        //  return new Promise((resolve, reject) => {
-        //    this.http.post(this.user_company_Url, this.UserCompany_Model.toJson(true), options)
-        //      .map((response) => {
-        //        return response;
-        //      }).subscribe((response) => {
-        //        resolve(response.json());
-        //      })
-        //  })
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_company);
@@ -1015,7 +760,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_contact_Url, this.UserContact_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1045,7 +790,7 @@ export class ImportExcelDataPage {
   user_contact_click() {
     this.user_contact_Url = constants.DREAMFACTORY_TABLE_URL + '/user_contact?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_contact = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_contact);
       var arr = new Array();
@@ -1063,33 +808,6 @@ export class ImportExcelDataPage {
 
       this.user_contact_data.forEach(element => {
         this.duplicateCheck_userContact(element);
-
-        // For user_contact
-        // this.UserContact_Model.CONTACT_INFO_GUID = element.CONTACT_INFO_GUID;
-        // this.UserContact_Model.USER_GUID = element.USER_GUID;
-        // this.UserContact_Model.TYPE = element.TYPE;
-        // this.UserContact_Model.CONTACT_NO = element.CONTACT_NO;
-        // this.UserContact_Model.DESCRIPTION = element.DESCRIPTION;
-        // this.UserContact_Model.REMARKS = element.REMARKS;
-
-        // this.UserContact_Model.CREATION_TS = new Date().toISOString();;
-        // this.UserContact_Model.CREATION_USER_GUID = 'sva_test';
-        // this.UserContact_Model.UPDATE_TS = new Date().toISOString();;
-        // this.UserContact_Model.UPDATE_USER_GUID = 'sva_test';
-
-
-        // var queryHeaders = new Headers();
-        // queryHeaders.append('Content-Type', 'application/json');
-        // queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        // let options = new RequestOptions({ headers: queryHeaders });
-        // return new Promise((resolve, reject) => {
-        //   this.http.post(this.user_contact_Url, this.UserContact_Model.toJson(true), options)
-        //     .map((response) => {
-        //       return response;
-        //     }).subscribe((response) => {
-        //       resolve(response.json());
-        //     })
-        // })
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_contact);
@@ -1120,7 +838,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_qualification_Url, this.UserQualification_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1150,7 +868,7 @@ export class ImportExcelDataPage {
   user_qualification_click() {
     this.user_qualification_Url = constants.DREAMFACTORY_TABLE_URL + '/user_qualification?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_qualification = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_qualification);
       var arr = new Array();
@@ -1168,34 +886,6 @@ export class ImportExcelDataPage {
 
       this.user_qualification_data.forEach(element => {
         this.duplicateCheck_userQualification(element);
-
-        // For user_qualification
-        // this.UserQualification_Model.USER_QUALIFICATION_GUID = element.USER_QUALIFICATION_GUID;
-        // this.UserQualification_Model.QUALIFICATION_GUID = element.QUALIFICATION_GUID;
-        // this.UserQualification_Model.USER_GUID = element.USER_GUID;
-        // this.UserQualification_Model.HIGHEST_QUALIFICATION = element.HIGHEST_QUALIFICATION;
-        // this.UserQualification_Model.MAJOR = element.MAJOR;
-        // this.UserQualification_Model.UNIVERSITY = element.UNIVERSITY;
-        // this.UserQualification_Model.YEAR = element.YEAR;
-        // this.UserQualification_Model.ATTACHMENT = element.ATTACHMENT;
-
-        // this.UserQualification_Model.CREATION_TS = new Date().toISOString();;
-        // this.UserQualification_Model.CREATION_USER_GUID = 'sva_test';
-        // this.UserQualification_Model.UPDATE_TS = new Date().toISOString();;
-        // this.UserQualification_Model.UPDATE_USER_GUID = 'sva_test';    
-
-        // var queryHeaders = new Headers();
-        // queryHeaders.append('Content-Type', 'application/json');
-        // queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        // let options = new RequestOptions({ headers: queryHeaders });
-        // return new Promise((resolve, reject) => {
-        //   this.http.post(this.user_qualification_Url, this.UserQualification_Model.toJson(true), options)
-        //     .map((response) => {
-        //       return response;
-        //     }).subscribe((response) => {
-        //       resolve(response.json());
-        //     })
-        // })
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_qualification);
@@ -1221,7 +911,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_role_Url, this.UserRole_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1252,7 +942,7 @@ export class ImportExcelDataPage {
   user_role_click() {
     this.user_role_Url = constants.DREAMFACTORY_TABLE_URL + '/user_role?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_role = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_role);
       var arr = new Array();
@@ -1270,30 +960,6 @@ export class ImportExcelDataPage {
 
       this.user_role_data.forEach(element => {
         this.duplicateCheck_userRole(element);
-
-        // For user_role
-        //  this.UserRole_Model.USER_ROLE_GUID = element.USER_ROLE_GUID;
-        //  this.UserRole_Model.USER_GUID = element.USER_GUID;
-        //  this.UserRole_Model.ROLE_GUID = element.ROLE_GUID;
-        //  this.UserRole_Model.ACTIVATION_FLAG = element.ACTIVATION_FLAG;
-
-        //  this.UserRole_Model.CREATION_TS = new Date().toISOString();;
-        //  this.UserRole_Model.CREATION_USER_GUID = 'sva_test';
-        //  this.UserRole_Model.UPDATE_TS = new Date().toISOString();;
-        //  this.UserRole_Model.UPDATE_USER_GUID = 'sva_test';    
-
-        //  var queryHeaders = new Headers();
-        //  queryHeaders.append('Content-Type', 'application/json');
-        //  queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-        //  let options = new RequestOptions({ headers: queryHeaders });
-        //  return new Promise((resolve, reject) => {
-        //    this.http.post(this.user_role_Url, this.UserRole_Model.toJson(true), options)
-        //      .map((response) => {
-        //        return response;
-        //      }).subscribe((response) => {
-        //        resolve(response.json());
-        //      })
-        //  })
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_role);
@@ -1315,88 +981,12 @@ export class ImportExcelDataPage {
     this.file_main_attendance = event.target.files[0];
   }
 
-
-  // main_attendance_click() {
-  //   this.main_attendance_Url = constants.DREAMFACTORY_TABLE_URL + '/main_attendance?&api_key=' + constants.DREAMFACTORY_API_KEY;
-  //   let fileReader = new FileReader();
-
-  //   // this.loading = this.loadingCtrl.create({
-  //   //   content: 'Please wait...',
-  //   // });
-  //   // this.loading.present();
-
-  //   fileReader.onload = (e) => {
-  //     this.arrayBuffer_main_attendance = fileReader.result;
-  //     var data = new Uint8Array(this.arrayBuffer_main_attendance);
-  //     var arr = new Array();
-  //     for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-  //     var bstr = arr.join("");
-  //     var workbook = XLSX.read(bstr, { type: "binary" });
-  //     // zero for first sheet
-  //     var first_sheet_name = workbook.SheetNames[0];
-  //     var worksheet = workbook.Sheets[first_sheet_name];
-  //     this.main_attendance_data = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-
-  //     this.main_attendance_data.forEach(element => {
-  //       //Check duplicate & insert record to db---------------------------------
-  //       this.duplicateCheck_main_attendance(element);
-  //       //----------------------------------------------------------------------
-  //     });
-  //   }
-
-  //   fileReader.readAsArrayBuffer(this.file_main_attendance);
-  // }
-
-  // duplicateCheck_main_attendance(checkData: any) {
-  //   this.apiMng.getApiModel('main_attendance', 'filter=(user_id=' + checkData.UserID.trim() + ') AND (attendance_time=' + checkData.Att_Time + ')')
-  //     .subscribe(data => {
-  //       let checkDataFromDB = data["resource"];
-  //       if (checkDataFromDB.length == 0) {
-  //         this.Main_Attendance_Model.user_id = checkData.UserID;
-  //         this.Main_Attendance_Model.employee_code = checkData.EmployeeCode;
-  //         this.Main_Attendance_Model.employee_name = checkData.Name;
-  //         this.Main_Attendance_Model.dept = checkData.Dept;
-  //         this.Main_Attendance_Model.attendance_time = checkData.Att_Time;
-  //         this.Main_Attendance_Model.att_id = checkData.Att_ID;
-  //         this.Main_Attendance_Model.dev_id = checkData.Dev_ID;
-  //         this.Main_Attendance_Model.photo_id = checkData.Photo_ID;
-
-  //         this.Main_Attendance_Model.CREATION_TS = new Date().toISOString();;
-  //         this.Main_Attendance_Model.CREATION_USER_GUID = 'sva_test';
-  //         this.Main_Attendance_Model.UPDATE_TS = new Date().toISOString();;
-  //         this.Main_Attendance_Model.UPDATE_USER_GUID = 'sva_test';
-
-  //         var queryHeaders = new Headers();
-  //         queryHeaders.append('Content-Type', 'application/json');
-  //         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-  //         let options = new RequestOptions({ headers: queryHeaders });
-  //         return new Promise((resolve, reject) => {
-  //           this.http.post(this.main_attendance_Url, this.Main_Attendance_Model.toJson(true), options)
-  //             .map((response) => {
-  //               return response;
-  //             }).subscribe((response) => {
-  //               resolve(response.json());
-
-  //               this.fileInputAttendance.nativeElement.value = '';
-  //               this.chooseFile_main_attendance = false;
-  //             })
-  //         })
-  //       }
-  //       else {
-  //         this.fileInputAttendance.nativeElement.value = '';
-  //         this.chooseFile_main_attendance = false;
-  //         return;
-  //       }
-  //     })
-  // }
-
-
   attendance_Url: string = "";
   attendance_click() {
     this.attendance_Url = constants.DREAMFACTORY_TABLE_URL + '/device_raw_data?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
 
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_main_attendance = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_main_attendance);
       var arr = new Array();
@@ -1407,12 +997,6 @@ export class ImportExcelDataPage {
       var first_sheet_name = workbook.SheetNames[0];
       var worksheet = workbook.Sheets[first_sheet_name];
       this.attendance_data = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-
-      // this.TempArray = this.attendance_data.filter((thing: any, index: any, self: any) =>
-      //   index === self.findIndex((t: any) => (
-      //     t.LEAVE_ID === thing.LEAVE_ID
-      //   ))
-      // )
 
       this.TempArray = this.attendance_data.sort((n1, n2) => n1.UserID - n2.UserID || + new Date(n1.Att_Time) - +new Date(n2.Att_Time));
 
@@ -1448,7 +1032,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.attendance_Url, this.Device_Raw_Data_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1507,18 +1091,11 @@ export class ImportExcelDataPage {
       this.User_Attendance_Main_Model.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
       this.User_Attendance_Main_Model.UPDATE_TS = new Date().toISOString();
       this.User_Attendance_Main_Model.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-
-      // this.InsertAttRecord();
-      // });
-      // this.apiMng.getApiModel('user_attendance_main', 'filter=(USER_GUID=' + this.User_Attendance_Main_Model.USER_GUID.trim() + ') AND (ATTENDANCE_DATE=' + this.User_Attendance_Main_Model.ATTENDANCE_DATE + ') AND (IN_TS=' + this.User_Attendance_Main_Model.IN_TS + ') AND (OUT_TS=' + this.User_Attendance_Main_Model.OUT_TS + ')')
-      //   .subscribe(data => {
-      //     let checkDataFromDB = data["resource"];
-      //     if (checkDataFromDB.length == 0) {
       var queryHeaders = new Headers();
       queryHeaders.append('Content-Type', 'application/json');
       queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
       let options = new RequestOptions({ headers: queryHeaders });
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.http.post(this.attendance_main_Url, this.User_Attendance_Main_Model.toJson(true), options)
           .map((response) => {
             return response;
@@ -1526,25 +1103,6 @@ export class ImportExcelDataPage {
             resolve(response.json());
           });
       });
-      // }
-      // else
-      // {
-      //   this.User_Attendance_Main_Model.USER_ATTENDANCE_GUID = checkDataFromDB[0]["USER_ATTENDANCE_GUID"];
-      //   var queryHeaders = new Headers();
-      //   queryHeaders.append('Content-Type', 'application/json');
-      //   queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-      //   let options = new RequestOptions({ headers: queryHeaders });
-      //   return new Promise((resolve, reject) => {
-      //     this.http.patch(this.attendance_main_Url, this.User_Attendance_Main_Model.toJson(true), options)
-      //       .map((response) => {
-      //         return response;
-      //       }).subscribe((response) => {
-      //         resolve(response.json());
-      //       })
-      //   })
-      // }
-
-      // });
     });
 
 
@@ -1552,7 +1110,7 @@ export class ImportExcelDataPage {
   }
 
   GetUser_Id(STAFF_ID: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.apiMng.getApiModel('user_main', 'filter=STAFF_ID=' + STAFF_ID)
         .map((response) => {
           return response;
@@ -1566,51 +1124,8 @@ export class ImportExcelDataPage {
     })
   }
 
-  // user_template uploading start
-  // ------------------------
-  // update_bank(bank_main: Main_Template_Model): Observable<any> {
-  // 	var queryHeaders = new Headers();
-  // 	queryHeaders.append('Content-Type', 'application/json');
-  // 	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-  // 	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-  // 	let options = new RequestOptions({ headers: queryHeaders });
-  // 	return this.httpService.http.patch(this.user_main_template_Url, bank_main.toJson(true), options)
-  // 		.map((response) => {
-  // 			return response;
-  // 		});
-  // }
-  // get_bank(params?: URLSearchParams): Observable<BankSetup_Model[]> {
-  // 	var queryHeaders = new Headers();
-  // 	queryHeaders.append('Content-Type', 'application/json');
-  // 	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-  // 	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-  // 	return this.httpService.http
-  // 		.get(this.baseResourceUrl, { search: params, headers: queryHeaders })
-  // 		.map((response) => {
-  // 			let banks: Array<BankSetup_Model> = [];
-
-  // 			// result.resource.forEach((bank) => {
-  // 			//  	banks.push(BankSetup_Model.fromJson(bank));
-  // 			//  });
-  // 			return banks;
-  // 		}).catch(this.handleError);
-  // };
-  // GetTenant_GUID(Tenant_company_guid: string) {
-  //   let TableURL = this.BaseTableURL + "tenant_company" + '?filter=(TENANT_COMPANY_GUID=' + Tenant_company_guid + ')&' + this.Key_Param;
-  //   return new Promise((resolve) => {
-  //     this.http
-  //       .get(TableURL)
-  //       .map(res => res.json())
-  //       .subscribe(data => {
-  //         this.tenants = data["resource"];
-  //         //this.varTenant_Guid = this.tenants
-  //         resolve(this.tenants[0].TENANT_GUID);
-  //       });
-  //   });
-  // }
-
   GetBank_Id(checkData: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.apiMng.getApiModel('main_bank', 'filter=NAME=' + checkData)
         .map((response) => {
           return response;
@@ -1628,7 +1143,7 @@ export class ImportExcelDataPage {
   }
 
   GetDesignation_Id(checkData: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.apiMng.getApiModel('main_designation', 'filter=NAME=' + checkData)
         .map((response) => {
           return response;
@@ -1646,7 +1161,7 @@ export class ImportExcelDataPage {
   }
 
   GetDepartment_Id(checkData: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.apiMng.getApiModel('main_department', 'filter=NAME=' + checkData)
         .map((response) => {
           return response;
@@ -1664,7 +1179,7 @@ export class ImportExcelDataPage {
   }
 
   GetQualification_Id(checkData: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.apiMng.getApiModel('main_qualification_type', 'filter=TYPE_NAME=' + checkData)
         .map((response) => {
           return response;
@@ -1682,7 +1197,7 @@ export class ImportExcelDataPage {
   }
 
   GetRole_Id(checkData: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.apiMng.getApiModel('main_role', 'filter=NAME=' + checkData)
         .map((response) => {
           return response;
@@ -1698,25 +1213,11 @@ export class ImportExcelDataPage {
         })
     })
   }
-
-
-  // Get_GUID(table_name: string, filter_field_name: string, filter_field_value: string): string {
-  //   let GUID: string = "";
-  //   this.apiMng.getApiModel(table_name, 'filter=' + filter_field_name + '=' + filter_field_value)
-  //     .subscribe(data => {
-  //       let checkDataFromDB = data["resource"];
-  //       GUID = checkDataFromDB[0]["BANK_GUID"];
-  //     })
-  //   return GUID;
-  // }
-
-
-
-
   //duplicate check for user_main_template
   duplicateCheck_user_main(checkData: any) {
     this.apiMng.getApiModel('user_main', 'filter=EMAIL=' + checkData.EMAIL)
       .subscribe(data => {
+        var queryHeaders = new Headers();
         let checkDataFromDB = data["resource"];
         console.log(checkDataFromDB);
 
@@ -1741,11 +1242,10 @@ export class ImportExcelDataPage {
           //  localStorage.setItem('t_USER_GUID',  this.Main_Template_Model.USER_GUID);
           console.log(this.Main_Template_Model);
           console.table(this.Main_Template_Model);
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_main_template_Url, this.Main_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1761,12 +1261,10 @@ export class ImportExcelDataPage {
 
           this.Main_Template_Model.USER_GUID = checkDataFromDB[0]["USER_GUID"];
           alert('main updating record');
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.user_main_template_Url, this.Main_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1787,11 +1285,9 @@ export class ImportExcelDataPage {
   duplicateCheck_user_info(checkData: any) {
     this.apiMng.getApiModel('user_info', 'filter=FULLNAME=' + checkData.FULLNAME)
       .subscribe(data => {
+        var queryHeaders = new Headers();
         let checkDataFromDB = data["resource"];
         console.log(checkDataFromDB);
-
-        // this.Info_Template_Model.USER_INFO_GUID = checkData.USER_INFO_GUID;
-        // this.Info_Template_Model.USER_GUID =  this.Main_Template_Model.USER_GUID;
         this.Info_Template_Model.USER_GUID = this.Main_Template_Model.USER_GUID;
         this.Info_Template_Model.FULLNAME = checkData.FULLNAME;
         this.Info_Template_Model.NICKNAME = checkData.NICKNAME;
@@ -1805,14 +1301,10 @@ export class ImportExcelDataPage {
 
         this.Info_Template_Model.MARITAL_STATUS = (checkData.MARITAL_STATUS = "SINGLE" ? 0 : 1).toString();
         this.Info_Template_Model.BRANCH = localStorage.getItem("g_TENANT_COMPANY_SITE_GUID");
-        // this.Info_Template_Model.EMPLOYEE_TYPE = checkData.EMPLOYEE_TYPE;
-        // this.Info_Template_Model.EMPLOYEE_TYPE = (checkData.EMPLOYEE_TYPE = "PERMANENT" ? 0 : (checkData.EMPLOYEE_TYPE = "CONTRACT" ? 1 : 2)).toString();
         this.Info_Template_Model.EMPLOYEE_TYPE = (checkData.EMPLOYEE_TYPE == "PERMANENT" ? 0 : (checkData.EMPLOYEE_TYPE == "CONTRACT" ? 1 : 2)).toString();
         this.Info_Template_Model.APPROVER1 = checkData.APPROVER1;
         this.Info_Template_Model.APPROVER2 = checkData.APPROVER2;
         this.Info_Template_Model.EMPLOYEE_STATUS = (checkData.EMPLOYEE_STATUS == "PROBATION" ? 0 : (checkData.EMPLOYEE_STATUS == "CONFIRMED" ? 1 : 2)).toString();
-        // this.Info_Template_Model.DEPT_GUID = localStorage.getItem("g_USER_GUID");0-PROBATION, 1-CONFIRMED, 2-TERMINATED
-        // this.Info_Template_Model.DESIGNATION_GUID = localStorage.getItem("g_USER_GUID");
         this.Info_Template_Model.RESIGNATION_DATE = checkData.RESIGNATION_DATE;
         this.Info_Template_Model.TENANT_COMPANY_GUID = localStorage.getItem("g_USER_GUID");
         this.Info_Template_Model.CONFIRMATION_DATE = checkData.CONFIRMATION_DATE;
@@ -1836,32 +1328,20 @@ export class ImportExcelDataPage {
         let val = this.GetBank_Id(checkData.BANK_NAME);
         val.then((res) => {
           this.Info_Template_Model.BANK_GUID = res.toString();
-          console.log(this.t_bank)
-          console.log(this.Info_Template_Model.BANK_GUID);
-
           let val = this.GetDesignation_Id(checkData.DESIGNATION_NAME);
           val.then((res) => {
             this.Info_Template_Model.DESIGNATION_GUID = res.toString();
-            console.log(this.t_designation)
-            console.log(this.Info_Template_Model.DESIGNATION_GUID);
-
             let val = this.GetDepartment_Id(checkData.DEPT_NAME);
             val.then((res) => {
               this.Info_Template_Model.DEPT_GUID = res.toString();
-              console.log(this.t_department)
-              console.log(this.Info_Template_Model.DEPT_GUID);
 
               if (checkDataFromDB.length == 0) {
                 alert('info inserting record');
-
-
                 this.Info_Template_Model.USER_INFO_GUID = UUID.UUID();
-                console.log(this.Info_Template_Model);
-                var queryHeaders = new Headers();
                 queryHeaders.append('Content-Type', 'application/json');
                 queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
                 let options = new RequestOptions({ headers: queryHeaders });
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                   this.http.post(this.user_info_template_Url, this.Info_Template_Model.toJson(true), options)
                     .map((response) => {
                       return response;
@@ -1877,13 +1357,10 @@ export class ImportExcelDataPage {
               else {
                 this.Info_Template_Model.USER_INFO_GUID = checkDataFromDB[0]["USER_INFO_GUID"];
                 alert('info updating record');
-
-
-                var queryHeaders = new Headers();
                 queryHeaders.append('Content-Type', 'application/json');
                 queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
                 let options = new RequestOptions({ headers: queryHeaders });
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                   this.http.patch(this.user_info_template_Url, this.Info_Template_Model.toJson(true), options)
                     .map((response) => {
                       return response;
@@ -1906,6 +1383,7 @@ export class ImportExcelDataPage {
   duplicateCheck_user_address(checkData: any) {
     this.apiMng.getApiModel('user_address', 'filter=USER_ADDRESS1=' + checkData.USER_ADDRESS1)
       .subscribe(data => {
+        var queryHeaders = new Headers();
         let checkDataFromDB = data["resource"];
         console.log(checkDataFromDB);
 
@@ -1932,11 +1410,10 @@ export class ImportExcelDataPage {
           this.Address_Template_Model.USER_ADDRESS_GUID = UUID.UUID();
           console.log(this.Address_Template_Model);
           console.table(this.Address_Template_Model);
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_address_template_Url, this.Address_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1952,13 +1429,10 @@ export class ImportExcelDataPage {
 
           this.Address_Template_Model.USER_ADDRESS_GUID = checkDataFromDB[0]["USER_ADDRESS_GUID"];
           alert('address updating record');
-
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.user_address_template_Url, this.Address_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -1978,6 +1452,7 @@ export class ImportExcelDataPage {
   duplicateCheck_user_company(checkData: any) {
     this.apiMng.getApiModel('user_company', 'filter=COMPANY_CONTACT_NO=' + checkData.COMPANY_CONTACT_NO)
       .subscribe(data => {
+        var queryHeaders = new Headers();
         let checkDataFromDB = data["resource"];
         console.log(checkDataFromDB);
 
@@ -1998,11 +1473,10 @@ export class ImportExcelDataPage {
           this.Company_Template_Model.USER_COMPANY_GUID = UUID.UUID();
           console.log(this.Company_Template_Model);
           console.table(this.Company_Template_Model);
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_company_template_Url, this.Company_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2015,16 +1489,12 @@ export class ImportExcelDataPage {
           })
         }
         else {
-
           this.Company_Template_Model.USER_COMPANY_GUID = checkDataFromDB[0]["USER_COMPANY_GUID"];
           alert('company updating record');
-
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.user_company_template_Url, this.Company_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2070,7 +1540,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.user_contact_template_Url, this.Contact_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2092,7 +1562,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.user_contact_template_Url, this.Contact_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2116,10 +1586,8 @@ export class ImportExcelDataPage {
         let checkDataFromDB = data["resource"];
         console.log(checkDataFromDB);
 
-        // this.Qualification_Template_Model.USER_QUALIFICATION_GUID = checkData.USER_QUALIFICATION_GUID;
         this.Qualification_Template_Model.QUALIFICATION_GUID = checkData.QUALIFICATION_GUID;
         this.Qualification_Template_Model.USER_GUID = this.Main_Template_Model.USER_GUID;
-        // this.Qualification_Template_Model.HIGHEST_QUALIFICATION = checkData.HIGHEST_QUALIFICATION;
         this.Qualification_Template_Model.MAJOR = checkData.MAJOR;
         this.Qualification_Template_Model.UNIVERSITY = checkData.UNIVERSITY;
         this.Qualification_Template_Model.YEAR = checkData.YEAR;
@@ -2149,7 +1617,7 @@ export class ImportExcelDataPage {
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
               this.http.post(this.user_qualification_template_Url, this.Qualification_Template_Model.toJson(true), options)
                 .map((response) => {
                   return response;
@@ -2172,7 +1640,7 @@ export class ImportExcelDataPage {
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
               this.http.patch(this.user_qualification_template_Url, this.Qualification_Template_Model.toJson(true), options)
                 .map((response) => {
                   return response;
@@ -2225,7 +1693,7 @@ export class ImportExcelDataPage {
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
               this.http.post(this.user_role_template_Url, this.Role_Template_Model.toJson(true), options)
                 .map((response) => {
                   return response;
@@ -2244,7 +1712,7 @@ export class ImportExcelDataPage {
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
               this.http.patch(this.user_role_template_Url, this.Role_Template_Model.toJson(true), options)
                 .map((response) => {
                   return response;
@@ -2294,7 +1762,7 @@ export class ImportExcelDataPage {
     this.user_role_template_Url = constants.DREAMFACTORY_TABLE_URL + '/user_role?&api_key=' + constants.DREAMFACTORY_API_KEY;
 
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_user_template = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_user_template);
       var arr = new Array();
@@ -2314,13 +1782,6 @@ export class ImportExcelDataPage {
       this.user_template_data.forEach(element => {
         if (element.STAFF_ID != "*")
           this.duplicateCheck_user_main(element);
-        // this.duplicateCheck_user_info(element);
-        // this.duplicateCheck_user_address(element);
-        // this.duplicateCheck_user_company(element);
-        // this.duplicateCheck_user_contact(element);
-        // this.duplicateCheck_user_qualification(element);
-        // this.duplicateCheck_user_role(element);
-
       });
     }
     fileReader.readAsArrayBuffer(this.file_user_template);
@@ -2342,8 +1803,6 @@ export class ImportExcelDataPage {
 
   Customer_Template_Model: SocCustomer_Model = new SocCustomer_Model();
   CustomerLocation_Template_Model: SocCustomerLocation_Model = new SocCustomerLocation_Model();
-  // Project_Template_Model: SocProject_Model = new SocProject_Model();
-  // SOC_Template_Model: SocMain_Model = new SocMain_Model();
   customer_template_data: any[];
 
   customer_templa(event: any) {
@@ -2354,11 +1813,9 @@ export class ImportExcelDataPage {
   customer_template_click() {
     this.customer_template_Url = constants.DREAMFACTORY_TABLE_URL + '/main_customer?&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.customer_location_template_Url = constants.DREAMFACTORY_TABLE_URL + '/main_customer_location?&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // this.project_template_Url = constants.DREAMFACTORY_TABLE_URL + '/main_project?&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // this.soc_template_Url = constants.DREAMFACTORY_TABLE_URL + '/soc_main?&api_key=' + constants.DREAMFACTORY_API_KEY;
 
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_customer_template = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_customer_template);
       var arr = new Array();
@@ -2377,16 +1834,9 @@ export class ImportExcelDataPage {
       this.customer_template_data.forEach(element => {
         if (element.CustomerName != "*")
           this.duplicateCheck_customer(element);
-        //  this.duplicateCheck_customer_location(element);
-        //  this.duplicateCheck_project(element);
-        //  this.duplicateCheck_soc(element);       
-
       });
     }
     fileReader.readAsArrayBuffer(this.file_customer_template);
-    //  localStorage.removeItem("t_CUSTOMER_GUID");
-    //  localStorage.removeItem("t_CUSTOMER_LOCATION_GUID");
-    //  localStorage.removeItem("t_PROJECT_GUID");
   }
 
   // SOC end
@@ -2398,9 +1848,6 @@ export class ImportExcelDataPage {
     this.apiMng.getApiModel('main_customer', 'filter=CUSTOMER_GUID=' + checkData.CUSTOMER_GUID)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
-        console.log(checkDataFromDB);
-
-        // this.Customer_Template_Model.CUSTOMER_GUID = checkData.CUSTOMER_GUID;
         this.Customer_Template_Model.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
         this.Customer_Template_Model.NAME = checkData.CustomerName;
         this.Customer_Template_Model.DESCRIPTION = checkData.DESCRIPTION;
@@ -2412,14 +1859,11 @@ export class ImportExcelDataPage {
         if (checkDataFromDB.length == 0) {
 
           this.Customer_Template_Model.CUSTOMER_GUID = UUID.UUID();
-          //  localStorage.setItem("t_CUSTOMER_GUID",  this.Customer_Template_Model.CUSTOMER_GUID);         
-          console.log(this.Customer_Template_Model);
-          console.table(this.Customer_Template_Model);
           var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.customer_template_Url, this.Customer_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2439,7 +1883,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.customer_template_Url, this.Customer_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2459,11 +1903,7 @@ export class ImportExcelDataPage {
     this.apiMng.getApiModel('main_customer_location', 'filter=CUSTOMER_LOCATION_GUID=' + checkData.CUSTOMER_LOCATION_GUID)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
-        console.log(checkDataFromDB);
-
-        // this.CustomerLocation_Template_Model.CUSTOMER_GUID =  localStorage.getItem("t_CUSTOMER_GUID");
         this.CustomerLocation_Template_Model.CUSTOMER_GUID = this.Customer_Template_Model.CUSTOMER_GUID;
-        // this.CustomerLocation_Template_Model.CUSTOMER_LOCATION_GUID = checkData.CUSTOMER_LOCATION_GUID;
         this.CustomerLocation_Template_Model.NAME = 'NA';
         this.CustomerLocation_Template_Model.DESCRIPTION = checkData.DESCRIPTION;
         this.CustomerLocation_Template_Model.REGISTRATION_NO = checkData.REGISTRATION_NO;
@@ -2476,8 +1916,6 @@ export class ImportExcelDataPage {
         this.CustomerLocation_Template_Model.CONTACT_NO2 = checkData.CONTACT_NO2;
         this.CustomerLocation_Template_Model.EMAIL = checkData.EMAIL;
         this.CustomerLocation_Template_Model.DIVISION = checkData.DIVISION;
-
-
         this.CustomerLocation_Template_Model.CREATION_TS = new Date().toISOString();;
         this.CustomerLocation_Template_Model.CREATION_USER_GUID = 'sva_test';
         this.CustomerLocation_Template_Model.UPDATE_TS = new Date().toISOString();;
@@ -2486,17 +1924,13 @@ export class ImportExcelDataPage {
         if (checkDataFromDB.length == 0) {
 
           this.CustomerLocation_Template_Model.CUSTOMER_LOCATION_GUID = UUID.UUID();
-          //  localStorage.setItem("t_CUSTOMER_LOCATION_GUID",  this.CustomerLocation_Template_Model.CUSTOMER_LOCATION_GUID);
-
-          // alert('customer guid is in location' + this.CustomerLocation_Template_Model.CUSTOMER_GUID);
-
           console.log(this.CustomerLocation_Template_Model);
           console.table(this.CustomerLocation_Template_Model);
           var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.customer_location_template_Url, this.CustomerLocation_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2513,7 +1947,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.customer_location_template_Url, this.CustomerLocation_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2554,7 +1988,7 @@ export class ImportExcelDataPage {
     this.soc_template_Url = constants.DREAMFACTORY_TABLE_URL + '/soc_main?&api_key=' + constants.DREAMFACTORY_API_KEY;
 
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_soc_template = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_soc_template);
       var arr = new Array();
@@ -2564,18 +1998,13 @@ export class ImportExcelDataPage {
       // zero for first sheet
       var first_sheet_name = workbook.SheetNames[0];
       var worksheet = workbook.Sheets[first_sheet_name];
-      // console.log(XLSX.utils.sheet_to_json(worksheet,{raw:true}));
-
       this.soc_template_data = XLSX.utils.sheet_to_json(worksheet, { raw: true })
       console.log(this.soc_template_data)
       console.log(this.soc_template_data.length)
 
       this.soc_template_data.forEach(element => {
         if (element.SOC_NO != "*")
-          // this.duplicateCheck_customer(element);
-          //  this.duplicateCheck_customer_location(element);
           this.duplicateCheck_project(element);
-        //  this.duplicateCheck_soc(element);       
 
       });
     }
@@ -2588,11 +2017,8 @@ export class ImportExcelDataPage {
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
         console.log(checkDataFromDB);
-        // this.Project_Template_Model.PROJECT_GUID = checkData.PROJECT_GUID;
         this.Project_Template_Model.NAME = checkData.ProjectName;
-        // this.Project_Template_Model.CUSTOMER_GUID = localStorage.getItem("t_CUSTOMER_GUID");
         this.Project_Template_Model.CUSTOMER_GUID = 'NA';
-        // this.Project_Template_Model.CUSTOMER_LOCATION_GUID = localStorage.getItem("t_CUSTOMER_LOCATION_GUID");
         this.Project_Template_Model.CUSTOMER_LOCATION_GUID = 'NA';
         this.Project_Template_Model.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
         this.Project_Template_Model.ACTIVATION_FLAG = '1';
@@ -2604,14 +2030,13 @@ export class ImportExcelDataPage {
         if (checkDataFromDB.length == 0) {
 
           this.Project_Template_Model.PROJECT_GUID = UUID.UUID();
-          //  localStorage.setItem("t_PROJECT_GUID",  this.Project_Template_Model.PROJECT_GUID);          
           console.log(this.Project_Template_Model);
           console.table(this.Project_Template_Model);
           var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.project_template_Url, this.Project_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2631,7 +2056,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.project_template_Url, this.Project_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2676,7 +2101,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.soc_template_Url, this.SOC_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2693,7 +2118,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.soc_template_Url, this.SOC_Template_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2712,11 +2137,17 @@ export class ImportExcelDataPage {
   Templates_ngModel: any;
   download_file_name: string = "";
 
+  /**
+   * TO FIX
+   *
+   * @returns {Observable<Blob>}
+   * @memberof ImportExcelDataPage
+   */
   downloadFile_service_user(): Observable<Blob> {
-    const url = 'http://api.zen.com.my/api/v2/files/Templates/user_template.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+    const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/user_template.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
-    return this.http.get(url, options)
+    return this.http.get(sanitizeURL(url), options)
       .map(res => res.blob())
   }
 
@@ -2726,11 +2157,17 @@ export class ImportExcelDataPage {
     })
   }
 
+  /**
+   * TO FIX
+   *
+   * @returns {Observable<Blob>}
+   * @memberof ImportExcelDataPage
+   */
   downloadFile_service_soc(): Observable<Blob> {
-    const url = 'http://api.zen.com.my/api/v2/files/Templates/SOC.xlsx?api_key=' + constants.DREAMFACTORY_API_KEY;
+    const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/SOC.xlsx?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
-    return this.http.get(url, options)
+    return this.http.get(sanitizeURL(url), options)
       .map(res => res.blob())
   }
 
@@ -2740,11 +2177,17 @@ export class ImportExcelDataPage {
     })
   }
 
+  /**
+   * TO FIX
+   *
+   * @returns {Observable<Blob>}
+   * @memberof ImportExcelDataPage
+   */
   downloadFile_service_customer(): Observable<Blob> {
-    const url = 'http://api.zen.com.my/api/v2/files/Templates/Customer.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+    const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/Customer.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
-    return this.http.get(url, options)
+    return this.http.get(sanitizeURL(url), options)
       .map(res => res.blob())
   }
 
@@ -2782,7 +2225,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.post(this.attendance_main_Url, this.User_Attendance_Main_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2797,7 +2240,7 @@ export class ImportExcelDataPage {
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.http.patch(this.attendance_main_Url, this.User_Attendance_Main_Model.toJson(true), options)
               .map((response) => {
                 return response;
@@ -2834,7 +2277,7 @@ export class ImportExcelDataPage {
     this.leave_Url = constants.DREAMFACTORY_TABLE_URL + '/user_leave_raw_data?&api_key=' + constants.DREAMFACTORY_API_KEY;
     let fileReader = new FileReader();
 
-    fileReader.onload = (e) => {
+    fileReader.onload = () => {
       this.arrayBuffer_main_leave = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer_main_leave);
       var arr = new Array();
@@ -2885,7 +2328,7 @@ export class ImportExcelDataPage {
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
               this.http.post(this.leave_Url, this.Leave_Raw_Data_Model.toJson(true), options)
                 .map((response) => {
                   return response;

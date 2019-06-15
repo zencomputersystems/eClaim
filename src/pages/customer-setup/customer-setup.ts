@@ -19,6 +19,7 @@ import { BaseHttpService } from '../../services/base-http';
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
 import { resolveDefinition } from '@angular/core/src/view/util';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the CustomerSetupPage page.
@@ -91,7 +92,7 @@ export class CustomerSetupPage {
     var self = this;
     let CustomerEditUrl = this.baseResource_Url + "view_customer_details?filter=(CUSTOMER_GUID=" + CUSTOMER_GUID + ')AND(CUSTOMER_LOCATION_GUID=' + CUSTOMER_LOCATION_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
 
-    this.http.get(CustomerEditUrl)
+    this.http.get(sanitizeURL(CustomerEditUrl))
       .map(res => res.json())
       .subscribe(
         data => {
@@ -620,7 +621,7 @@ export class CustomerSetupPage {
 
   GetCustomerDetails(CUSTOMER_GUID: any) {
     let CustomerActivationUrl = this.baseResource_Url + "main_customer?filter=(CUSTOMER_GUID=" + CUSTOMER_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(CustomerActivationUrl)
+    this.http.get(sanitizeURL(CustomerActivationUrl))
       .map(res => res.json())
       .subscribe(
         data => {

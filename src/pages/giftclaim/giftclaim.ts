@@ -122,11 +122,7 @@ export class GiftclaimPage {
                       }
                     });
                 }
-                // this.Gift_Date_ngModel = new Date(this.claimRequestData[0].TRAVEL_DATE).toISOString();
                 this.Gift_Date_ngModel = moment(this.claimRequestData[0].TRAVEL_DATE).format('YYYY-MM-DD');
-                // this.Gift_Date_ngModel = new Date(this.claimRequestData.TRAVEL_DATE).toISOString();
-                // this.Gift_Date_ngModel = this.claimRequestData[0].TRAVEL_DATE;
-                // this.Gift_Amount_ngModel = this.claimRequestData[0].MILEAGE_AMOUNT;
                 this.Gift_Description_ngModel = this.claimRequestData[0].DESCRIPTION;
               });
           });
@@ -137,7 +133,7 @@ export class GiftclaimPage {
   claimAmount: number = 0;
   getCurrency(amount: number) {
     amount = Number(amount);
-    if (amount > 99999) {
+    if (amount > 99999.99) {
       // alert('Amount should not exceed RM 9,9999.00.')
       // this.Gift_Amount_ngModel = null
       // this.claimAmount = 0;
@@ -177,7 +173,6 @@ export class GiftclaimPage {
     if (this.max_claim_amount == null) {
       this.max_claim_amount = Settings.ClaimAmountConstants.MAX_CLAIM_AMOUNT
     }
-    let currency = localStorage.getItem("cs_default_currency");
     // Lakshman
     this.profileMng.CheckSessionOut();
     this.userGUID = localStorage.getItem('g_USER_GUID');
@@ -275,6 +270,7 @@ export class GiftclaimPage {
   }
 
 
+
   imageGUID: any;
   saveIm() {
     let uploadImage = this.UploadImage();
@@ -301,7 +297,7 @@ export class GiftclaimPage {
 
     const options = new RequestOptions({ headers: queryHeaders });
     return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + this.uniqueName, this.Giftform.get('avatar').value, options)
+      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Giftform.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
           return response;
@@ -336,26 +332,6 @@ export class GiftclaimPage {
         this.storeCustomers = this.customers = data["resource"];
       })
   }
-
-  // LoadProjects() {
-  //   this.http
-  //     .get(Services.getUrl('soc_registration', 'filter=TENANT_GUID=' + this.TenantGUID))
-  //     .map(res => res.json())
-  //     .subscribe(data => {
-  //     this.storeProjects=  this.projects = data["resource"];
-  //       console.table(this.projects)
-  //     });
-  // }
-
-  // LoadCustomers() {
-  //   this.http
-  //     .get(Services.getUrl('view_customer', 'filter=TENANT_GUID=' + this.TenantGUID))
-  //     .map(res => res.json())
-  //     .subscribe(data => {
-  //       this.storeCustomers = this.customers = data["resource"];
-  //       // console.table(this.projects)
-  //     });
-  // }
 
   public CloseTravelClick() {
     this.AddToLookupClicked = false;
@@ -526,22 +502,11 @@ export class GiftclaimPage {
               this.apiMng.getApiModel('main_claim_ref', 'filter=(USER_GUID=' + this.userGUID + ')AND(MONTH=' + month + ')AND(YEAR=' + year + ')')
                 .subscribe(claimRefdata => {
                   this.claimRequestData["resource"][0].CLAIM_REF_GUID = claimRefdata["resource"][0].CLAIM_REF_GUID;
-                  this.apiMng.updateApiModel('main_claim_request', this.claimRequestData, true).subscribe(res => {
+                  this.apiMng.updateApiModel('main_claim_request', this.claimRequestData, true).subscribe(() => {
                     alert('Claim details updated successfully.')
                     this.navCtrl.push(UserclaimslistPage);
                   });
                 })
-              // this.apiMng.updateApiModel('main_claim_request', this.claimRequestData, true).subscribe(() => {
-              //   //Send Email------------------------------------------------
-              //   let start_DT: string = "";
-              //   let end_DT: string = "";
-              //   // this.apiMng.sendEmail(this.claimRequestData["resource"][0].CLAIM_TYPE_GUID, start_DT, end_DT, this.claimRequestData["resource"][0].CREATION_TS, formValues.travel_date, this.claimRequestGUID);
-              //   //Commented By bijay on 24/09/2018 as per scheduler implemented
-              //   // this.apiMng.sendEmail_New(this.claimRequestData["resource"][0].CLAIM_TYPE_GUID, "", "", moment(this.claimRequestData["resource"][0].CREATION_TS).format('YYYY-MM-DDTHH:mm'), formValues.travel_date, this.claimRequestGUID, "", "", formValues.description, this.Soc_GUID, this.Customer_GUID);
-              //   //-----------------------------------------------------------
-              //   alert('Claim details updated successfully.');
-              //   this.navCtrl.push(UserclaimslistPage);
-              // });
             })
         }
         else {
@@ -559,15 +524,6 @@ export class GiftclaimPage {
     this.displayImage = false;
   }
   imageURL: string;
-  // DisplayImage(val: any) {
-  //   this.displayImage = true;
-  //   this.imageURL = val;
-  //   if (val !== null) { 
-  //     this.imageURL = this.apiMng.getImageUrl(val); 
-  //     this.displayImage = true; 
-  //     this.isImage = this.apiMng.isFileImage(val); 
-  //   }
-  // }
 }
 
 

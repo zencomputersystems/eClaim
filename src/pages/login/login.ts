@@ -74,7 +74,7 @@ export class LoginPage {
                 localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
               }
               else {
-                localStorage.setItem("g_IMAGE_URL", constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/eclaim/" + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
+                localStorage.setItem("g_IMAGE_URL", constants.DREAMFACTORY_IMAGE_URL + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
               }
 
               //Setup Guide for only Hq Users
@@ -225,7 +225,7 @@ export class LoginPage {
 
   emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
   sendEmail(strName: string, strEmail: string, strPassword: string) {
-    let ImgageSrc: string = "http://api.zen.com.my/api/v2/files/eclaim/" + localStorage.getItem("cs_email_logo") + "?api_key=" + constants.DREAMFACTORY_API_KEY;
+    let ImgageSrc: string = constants.DREAMFACTORY_IMAGE_URL + localStorage.getItem("cs_email_logo") + "?api_key=" + constants.DREAMFACTORY_API_KEY;
     let name: string; let email: string
     name = strName; email = strEmail;
     var queryHeaders = new Headers();
@@ -423,7 +423,7 @@ export class LoginPage {
                       localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
                     }
                     else {
-                      localStorage.setItem("g_IMAGE_URL", constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/eclaim/" + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
+                      localStorage.setItem("g_IMAGE_URL", constants.DREAMFACTORY_IMAGE_URL + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
                     }
 
                     //Setup Guide for only Hq Users

@@ -24,6 +24,7 @@ import { BaseHttpService } from '../../services/base-http';
 import { UserRole_Model } from '../../models/user_role_model'
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 @Component({
   selector: 'page-account',
@@ -298,7 +299,7 @@ export class AccountPage {
     let url_user_Children = this.baseResourceUrl2_URL + "user_children?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     // debugger;
     //----------------Get the Details from Db and bind Controls---------------------------------
-    this.http.get(url_user_edit, options)
+    this.http.get(sanitizeURL(url_user_edit), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -327,7 +328,7 @@ export class AccountPage {
             this.Profile_Image_Display = "assets/img/profile_no_preview.png";
           }
           else {
-            this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/eclaim/" + this.view_user_details[0]["ATTACHMENT_ID"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
+            this.Profile_Image_Display = constants.DREAMFACTORY_IMAGE_URL + this.view_user_details[0]["ATTACHMENT_ID"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
           }
 
           //------------------------EMPLOYMENT DETAILS----------------------------------
@@ -401,7 +402,7 @@ export class AccountPage {
         });
 
     //------------------------PROFESSIONAL CERTIFICATIONS--------------------------
-    this.http.get(url_user_Professional_Certification, options)
+    this.http.get(sanitizeURL(url_user_Professional_Certification), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -412,7 +413,7 @@ export class AccountPage {
 
     //------------------------FAMILY DETAILS---------------------------------------
     //------------------------SPOUSE--------------------------        
-    this.http.get(url_user_Spouse, options)
+    this.http.get(sanitizeURL(url_user_Spouse), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -422,7 +423,7 @@ export class AccountPage {
         });
 
     //------------------------CHILDREN------------------------        
-    this.http.get(url_user_Children, options)
+    this.http.get(sanitizeURL(url_user_Children), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -440,7 +441,7 @@ export class AccountPage {
     //         this.Profile_Image_Display = "assets/img/profile_no_preview.png";
     //       }
     //       else {
-    //         this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/files/" + data["resource"][0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
+    //         this.Profile_Image_Display = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/azurefs/" + data["resource"][0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY;
     //       }
     //     });
 
@@ -465,14 +466,12 @@ export class AccountPage {
         this.ADDITIONAL_ROLE_ngModel_Edit = CheckAdditionalRole;
       });
   }
-
-  BaseTableURL: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
   Key_Param: string = 'api_key=' + constants.DREAMFACTORY_API_KEY;
   tenants: any;
 
   GetTenant_GUID(Tenant_company_guid: string) {
     // debugger;
-    let TableURL = this.BaseTableURL + "tenant_company" + '?filter=(TENANT_COMPANY_GUID=' + Tenant_company_guid + ')&' + this.Key_Param;
+    let TableURL = constants.DREAMFACTORY_TABLE_URL + "tenant_company" + '?filter=(TENANT_COMPANY_GUID=' + Tenant_company_guid + ')&' + this.Key_Param;
     return new Promise((resolve) => {
       this.http
         .get(TableURL)
@@ -491,7 +490,7 @@ export class AccountPage {
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
 
       this.http
         .get(TableURL)
@@ -510,10 +509,10 @@ export class AccountPage {
   GetCompany(TableName: string, SortField: string) {
     let TableURL: string;
     if (localStorage.getItem("g_USER_GUID") == "sva") {
-      TableURL = this.BaseTableURL + TableName + '?order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
     }
     else {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
     }
     this.http
       .get(TableURL)
@@ -531,7 +530,7 @@ export class AccountPage {
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
 
       this.http
         .get(TableURL)
@@ -551,7 +550,7 @@ export class AccountPage {
     // debugger;
     let TableURL: string;
     if (this.User_Company_Edit_ngModel != undefined) {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_COMPANY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_COMPANY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
     }
 
     this.http
@@ -565,7 +564,7 @@ export class AccountPage {
   countries: any;
   BindCountry(TableName: string, SortField: string) {
     let TableURL: string;
-    TableURL = this.BaseTableURL + TableName + '?order=' + SortField + '&' + this.Key_Param;
+    TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
 
     this.http
       .get(TableURL)
@@ -578,7 +577,7 @@ export class AccountPage {
   states: any;
   BindState(TableName: string, FilterField: string, SortField: string) {
     let TableURL: string;
-    TableURL = this.BaseTableURL + TableName + '?filter=(COUNTRY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+    TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(COUNTRY_GUID=' + FilterField + ')&' + 'order=' + SortField + '&' + this.Key_Param;
 
     this.http
       .get(TableURL)
@@ -596,7 +595,7 @@ export class AccountPage {
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
-      TableURL = this.BaseTableURL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
+      TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_GUID=' + res.toString() + ')&order=' + SortField + '&' + this.Key_Param;
 
       this.http
         .get(TableURL)
@@ -614,7 +613,7 @@ export class AccountPage {
   qualifications: any;
   BindQualification(TableName: string, SortField: string) {
     let TableURL: string;
-    TableURL = this.BaseTableURL + TableName + '?order=' + SortField + '&' + this.Key_Param;
+    TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
     this.http
       .get(TableURL)
       .map(res => res.json())
@@ -631,10 +630,10 @@ export class AccountPage {
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
       if (localStorage.getItem("g_USER_GUID") == "sva" || localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
-        TableURL_Approver = this.BaseTableURL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')&' + this.Key_Param;
+        TableURL_Approver = constants.DREAMFACTORY_TABLE_URL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')&' + this.Key_Param;
       }
       else {
-        TableURL_Approver = this.BaseTableURL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')AND(USER_GUID!=' + this.view_user_details[0]["USER_GUID"] + ')&' + this.Key_Param;
+        TableURL_Approver = constants.DREAMFACTORY_TABLE_URL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')AND(USER_GUID!=' + this.view_user_details[0]["USER_GUID"] + ')&' + this.Key_Param;
       }
 
       this.http
@@ -1356,7 +1355,7 @@ export class AccountPage {
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     const options = new RequestOptions({ headers: queryHeaders });
     return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + uniqueName, this.Userform.get('avatar').value, options)
+      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + uniqueName, this.Userform.get('avatar').value, options)
         .map((response) => {
           return response;
         }).subscribe((response) => {

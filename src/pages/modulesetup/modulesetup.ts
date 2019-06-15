@@ -16,6 +16,7 @@ import { BaseHttpService } from '../../services/base-http';
 
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the ModulesetupPage page.
@@ -248,7 +249,7 @@ export class ModulesetupPage {
       let options = new RequestOptions({ headers: headers });
       let url: string;
       url = this.baseResource_Url + "main_module?filter=(NAME=" + this.NAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-      this.http.get(url, options)
+      this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -332,7 +333,7 @@ export class ModulesetupPage {
       if (this.NAME_ngModel_Edit.trim() != localStorage.getItem('Prev_module_NAME')) {
         let url: string;
         url = this.baseResource_Url + "main_module?filter=(NAME=" + this.NAME_ngModel_Edit.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-        this.http.get(url)
+        this.http.get(sanitizeURL(url))
           .map(res => res.json())
           .subscribe(
             data => {
@@ -449,7 +450,7 @@ export class ModulesetupPage {
       this.Module_Page_Multiple.push({ ID: this.modulepage_entry.ID, MODULE_GUID: this.modulepage_entry.MODULE_GUID, PAGE_GUID: this.modulepage_entry.PAGE_GUID, CREATION_USER_GUID: this.modulepage_entry.CREATION_USER_GUID, CREATION_TS: this.modulepage_entry.CREATION_TS, UPDATE_USER_GUID: this.modulepage_entry.UPDATE_USER_GUID, UPDATE_TS: this.modulepage_entry.UPDATE_TS });
     }
     //console.log(this.Module_Page_Multiple);
-    this.modulepagesetupservice.save_multiple_recocrd(this.Module_Page_Multiple)
+    this.modulepagesetupservice.save_multiple_record(this.Module_Page_Multiple)
       .subscribe((response) => {
         if (response.status == 200) {
 

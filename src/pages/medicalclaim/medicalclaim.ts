@@ -137,7 +137,7 @@ export class MedicalclaimPage {
     queryHeaders.append('chunkedMode', 'false');
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     const options = new RequestOptions({ headers: queryHeaders });
-    this.http.post('http://api.zen.com.my/api/v2/files/' + this.uploadFileName, this.Medicalform.get('avatar').value, options)
+    this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.uploadFileName, this.Medicalform.get('avatar').value, options)
       .map((response) => {
         return response;
       }).subscribe((response) => {
@@ -191,7 +191,7 @@ export class MedicalclaimPage {
   const options = new RequestOptions({ headers: queryHeaders });
   console.log(this.CloudFilePath);
   return new Promise((resolve) => {
-    this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + this.uploadFileName, this.Medicalform.get('avatar').value, options)
+    this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uploadFileName, this.Medicalform.get('avatar').value, options)
       .map((response) => {
         return response;        
       }).subscribe((response) => {

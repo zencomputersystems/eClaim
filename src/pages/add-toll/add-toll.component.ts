@@ -91,9 +91,6 @@ export class AddTollPage {
       this.days = 1;
     }
   }
-  // getCurrency(amount: number) {
-  //   this.Amount = this.numberPipe.transform(amount, '1.2-2');
-  // }
 
   onAllowanceSelect(allowance: any) {
     this.Amount = allowance.ALLOWANCE_AMOUNT;
@@ -107,17 +104,12 @@ export class AddTollPage {
       .getApiModel('main_payment_type', 'filter=TENANT_GUID=' + this.TenantGUID)
       .subscribe(data => {
         this.paymentTypes = data['resource'];
-        // this.PayType=this.paymentTypes.filter(s=>s.NAME==localStorage.getItem("cs_default_payment_type"))[0].PAYMENT_TYPE_GUID;
         let paymentType: any = this.paymentTypes.filter(
           s => s.NAME == localStorage.getItem('cs_default_payment_type')
         )[0];
         this.PayType = paymentType.PAYMENT_TYPE_GUID;
         this.onPaySelect(paymentType);
-        //    if (paymentType.REQUIRE_ATTACHMENT === 0) {
-        //     this.ImageUploadValidation = true;
-        //   }
-        //   else
-        //     this.ImageUploadValidation = false;
+
       });
   }
 
@@ -135,10 +127,6 @@ export class AddTollPage {
         alert('Please select meal allowance.');
         return;
       }
-      // if (this.Description === undefined) {
-      //   alert('Please enter valid description.')
-      //   return;
-      // }
     } else {
       if (
         this.claimAmount === undefined ||
@@ -280,11 +268,7 @@ export class AddTollPage {
           this.imageURLEdit = this.api.getImageUrl(
             this.claimDetailsData[0].ATTACHMENT_ID
           );
-
-        // this.imageURLEdit = this.claimDetailsData[0].ATTACHMENT_ID
-        // this.ImageUploadValidation=false;
         this.ImageUploadValidation = true;
-        //this.chooseFile = false;
         this.Description = this.claimDetailsData[0].DESCRIPTION;
       });
   }
@@ -356,12 +340,6 @@ export class AddTollPage {
   }
 
   UploadImage() {
-    // if (this.DetailsType === 'Toll') {
-    //   this.CloudFilePath = 'eclaim/toll/'
-    // }
-    // else if (this.DetailsType === 'Parking') {
-    //   this.CloudFilePath = 'eclaim/parking/'
-    // }
     this.CloudFilePath = 'eclaim/';
     // this.loading = true;
     this.uniqueName = new Date().toISOString() + this.uploadFileName;
@@ -379,18 +357,11 @@ export class AddTollPage {
       content: 'Please wait...'
     });
     this.loading.present();
-    return new Promise(resolve => {
-      // this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + this.uploadFileName, this.DetailsForm.get('avatar').value, options)
-      this.http
-        .post(
-          'http://api.zen.com.my/api/v2/files/' +
-            this.CloudFilePath +
-            this.uniqueName,
-          this.DetailsForm.get('avatar').value,
-          options
-        )
-        .map(response => {
-          this.loading.dismissAll();
+    return new Promise((resolve) => {
+      // this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uploadFileName, this.DetailsForm.get('avatar').value, options)
+      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.DetailsForm.get('avatar').value, options)
+        .map((response) => {
+          this.loading.dismissAll()
           return response;
         })
         .subscribe(response => {
@@ -405,13 +376,4 @@ export class AddTollPage {
   }
 
   imageURL: string;
-  // DisplayImage(val: any) {
-  //   this.displayImage = true;
-  //   this.imageURL = val;
-  //   if (val !== null) {
-  //     this.imageURL = this.api.getImageUrl(val);
-  //     this.displayImage = true;
-  //     this.isImage = this.api.isFileImage(val);
-  //   }
-  // }
 }

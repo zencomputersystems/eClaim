@@ -12,6 +12,7 @@ import { BaseHttpService } from '../../services/base-http';
 
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the PagesetupPage page.
@@ -164,7 +165,7 @@ export class PagesetupPage {
       let options = new RequestOptions({ headers: headers });
       let url: string;
       url = this.baseResource_Url + "main_rolepage?filter=NAME=" + this.NAME_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-      this.http.get(url, options)
+      this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -227,7 +228,7 @@ export class PagesetupPage {
       if (this.NAME_ngModel_Edit.trim().toUpperCase() != localStorage.getItem('Prev_set_NAME').toUpperCase()) {
         let url: string;
         url = this.baseResource_Url + "main_rolepage?filter=(NAME=" + this.NAME_ngModel_Edit.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-        this.http.get(url)
+        this.http.get(sanitizeURL(url))
           .map(res => res.json())
           .subscribe(
             data => {

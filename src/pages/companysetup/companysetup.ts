@@ -12,6 +12,7 @@ import { CompanySetup_Service } from '../../services/companysetup_service';
 import { BaseHttpService } from '../../services/base-http';
 
 import { UUID } from 'angular2-uuid';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the CompanysetupPage page.
@@ -162,7 +163,7 @@ export class CompanysetupPage {
       let options = new RequestOptions({ headers: headers });
       let url: string;
       url = this.baseResource_Url + "main_company?filter=(REGISTRATION_NO=" + this.REGISTRATION_NO_ngModel_Add + ")OR(FAX=" + this.FAX_ngModel_Add + ")OR(PHONE=" + this.PHONE_ngModel_Add + ")OR(EMAIL=" + this.EMAIL_ngModel_Add + ")&api_key=" + constants.DREAMFACTORY_API_KEY;
-      this.http.get(url, options)
+      this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
         data => {
@@ -236,7 +237,7 @@ export class CompanysetupPage {
         url = this.baseResource_Url + "main_company?filter=(REGISTRATION_NO=" + this.REGISTRATION_NO_ngModel_Edit.trim() + ")OR(FAX=" + this.FAX_ngModel_Edit.trim() + ")OR(PHONE=" + this.PHONE_ngModel_Edit.trim() + ")OR(EMAIL=" + this.EMAIL_ngModel_Edit.trim() + ")&api_key=" + constants.DREAMFACTORY_API_KEY;
         //url = this.baseResource_Url + "main_company?filter=(NAME=" + this.NAME_ngModel_Edit + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
         console.log(url);
-        this.http.get(url)
+        this.http.get(sanitizeURL(url))
           .map(res => res.json())
           .subscribe(
           data => {

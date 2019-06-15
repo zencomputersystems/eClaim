@@ -42,9 +42,6 @@ export class SocMain_Service {
             .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
             .map(() => {
                     let socs: Array<SocMain_Model> = [];
-                    // result.resource.forEach((branch) => {
-                    // 	branches.push(BranchSetup_Model.fromJson(branche));
-                    // });  
                     return socs;
                 }).catch(this.handleError);
     };

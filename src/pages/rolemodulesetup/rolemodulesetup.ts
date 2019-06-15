@@ -14,6 +14,7 @@ import { LoginPage } from '../login/login';
 
 import { RoleModuleSetup_Model } from '../../models/rolemodulesetup_model';
 import { RoleModuleSetup_Service } from '../../services/rolemodulesetup_service';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the RolemodulesetupPage page.
@@ -345,7 +346,7 @@ export class RolemodulesetupPage {
       let options = new RequestOptions({ headers: headers });
       let url: string;
       url = this.baseResource_Url + "role_module?filter=(ROLE_GUID=" + this.ROLENAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-      this.http.get(url, options)
+      this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -418,7 +419,7 @@ export class RolemodulesetupPage {
       if (this.ROLENAME_ngModel_Edit.trim() != localStorage.getItem('Prev_role_module_guid')) {
         let url: string;
         url = this.baseResource_Url + "role_module?filter=(ROLE_GUID=" + this.ROLENAME_ngModel_Edit.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-        this.http.get(url, options)
+        this.http.get(sanitizeURL(url), options)
           .map(res => res.json())
           .subscribe(
             data => {

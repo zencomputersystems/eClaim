@@ -19,6 +19,7 @@ import { BaseHttpService } from '../../services/base-http';
 
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 
 /**
@@ -109,7 +110,7 @@ export class SocRegistrationPage {
     var self = this;
     let SocEditUrl = this.baseResource_Url + "view_soc_edit?filter=(SOC_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
 
-    this.http.get(SocEditUrl)
+    this.http.get(sanitizeURL(SocEditUrl))
       .map(res => res.json())
       .subscribe(
         data => {
@@ -157,7 +158,7 @@ export class SocRegistrationPage {
 
             //before delete get id of main_project table, according to that id delete the record
             let SocEditUrl = this.baseResource_Url + "view_soc_edit?filter=(SOC_GUID=" + SOC_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-            this.http.get(SocEditUrl)
+            this.http.get(sanitizeURL(SocEditUrl))
               .map(res => res.json())
               .subscribe(
                 data => {
@@ -911,7 +912,7 @@ export class SocRegistrationPage {
 
   GetProjectDetails(PROJECT_GUID: any) {
     let ProjectActivationUrl = this.baseResource_Url + "main_project?filter=(PROJECT_GUID=" + PROJECT_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(ProjectActivationUrl)
+    this.http.get(sanitizeURL(ProjectActivationUrl))
       .map(res => res.json())
       .subscribe(
         data => {

@@ -3,48 +3,19 @@ import { Events, MenuController, Nav, Platform } from 'ionic-angular';
 // import { SplashScreen } from '@ionic-native/splash-screen';
 // import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
-import { AccountPage } from '../pages/account/account';
 import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { SetupPage } from '../pages/setup/setup';
-import { PrintclaimPage } from '../pages/printclaim/printclaim';
-import { GiftclaimPage } from '../pages/giftclaim/giftclaim';
-import { OvertimeclaimPage } from '../pages/overtimeclaim/overtimeclaim';
-import { EntertainmentclaimPage } from '../pages/entertainmentclaim/entertainmentclaim';
-import { TravelclaimPage } from '../pages/travel-claim/travel-claim.component';
-import { MiscellaneousClaimPage } from '../pages/miscellaneous-claim/miscellaneous-claim';
 import { UserData } from '../providers/user-data';
 import { AdminsetupPage } from '../pages/adminsetup/adminsetup';
-import { AllClaimhistoryPage } from '../pages/allclaimhistory/claimhistory';
 
-import { ClaimhistoryPage } from '../pages/claimhistory/claimhistory';
-import { ClaimhistorydetailPage } from '../pages/claimhistorydetail/claimhistorydetail';
-import { ClaimapprovertasklistPage } from '../pages/claimapprovertasklist/claimapprovertasklist';
-import { ClaimtasklistPage } from '../pages/claimtasklist/claimtasklist'
-import { UserclaimslistPage } from '../pages/userclaimslist/userclaimslist';
-import { MonthlyClaimReportPage } from '../pages/monthly-claim-report/monthly-claim-report';
-import { ClaimReportUserPage } from '../pages/claim-report-user/claim-report-user';
-import { ClaimReportPage } from '../pages/claim-report/claim-report';
-import { ClaimReportPrintPage } from '../pages/claim-report-print/claim-report-print';
-import { LeaveReportPage } from '../pages/leave-report/leave-report';
-import { AttendanceReportPage } from '../pages/attendance-report/attendance-report';
-import { FinancePaymentTasklistPage } from '../pages/finance-payment-tasklist/finance-payment-tasklist';
-import { CommonTasklistPage } from '../pages/common-tasklist/common-tasklist';
-import { PaymentHistoryPage } from '../pages/payment-history/payment-history';
-import { CommonHistorylistPage } from '../pages/common-historylist/common-historylist';
-import { ClaimSummaryPage } from '../pages/claim-summary/claim-summary';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { CustomerSetupPage } from '../pages/customer-setup/customer-setup';
-import { ChangePasswordPage } from '../pages/change-password/change-password';
-import { DashboardPage } from '../pages/dashboard/dashboard';
 
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as constants from '../app/config/constants';
-import { AllClaimListPage } from '../pages/all-claim-list/all-claim-list';
-import * as Settings from '../dbSettings/companySettings'
 
 // import { MenuService } from '../providers/menu.service'
 
@@ -297,8 +268,7 @@ export class ConferenceApp {
 
 
         //Get all the roles and menus for that particular user.-------------------------------------------------------   
-        let url: string; this.Menu_Array = []; let Role_Name: string = "";
-        this.Menu_Dashboard_Array = []; this.Menu_Tasks_Array = []; this.Menu_Claims_Array = []; this.Menu_Reports_Array = []; this.Menu_Settings_Array = [];
+        let url: string; this.Menu_Array = [];        this.Menu_Dashboard_Array = []; this.Menu_Tasks_Array = []; this.Menu_Claims_Array = []; this.Menu_Reports_Array = []; this.Menu_Settings_Array = [];
         url = this.baseResource_Url + "view_user_multi_role_menu?filter=USER_GUID=" + localStorage.getItem("g_USER_GUID") + '&api_key=' + constants.DREAMFACTORY_API_KEY;
         this.http
           .get(url)

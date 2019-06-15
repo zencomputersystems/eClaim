@@ -32,6 +32,7 @@ import { UserSetup_Service } from '../../services/usersetup_service';
 import { BaseHttpService } from '../../services/base-http';
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the TenantsetupPage page.
@@ -196,7 +197,7 @@ export class TenantsetupPage {
     this.AddTenantClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
     let url_tenant_edit = this.baseResource_Url + "view_tenant_edit?filter=(TENANT_COMPANY_SITE_GUID=" + TENANT_COMPANY_SITE_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(url_tenant_edit)
+    this.http.get(sanitizeURL(url_tenant_edit))
       .map(res => res.json())
       .subscribe(
         data => {
@@ -236,7 +237,7 @@ export class TenantsetupPage {
     this.ClearUserControls();
     this.AddTTUserClicked = true; this.Add_User_Form = false; this.Edit_User_Form = true;
     let url_tenant_user_edit = this.baseResource_Url + "view_tenant_user_edit?filter=(USER_GUID=" + USER_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(url_tenant_user_edit)
+    this.http.get(sanitizeURL(url_tenant_user_edit))
       .map(res => res.json())
       .subscribe(
         data => {
@@ -938,7 +939,7 @@ export class TenantsetupPage {
       if (this.SITE_NAME_ngModel_Edit.trim() != localStorage.getItem('Prev_ten_Category')) {
         let url: string;
         url = this.baseResource_Url + "tenant_company_site?filter=(SITE_NAME=" + this.SITE_NAME_ngModel_Edit.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-        this.http.get(url)
+        this.http.get(sanitizeURL(url))
           .map(res => res.json())
           .subscribe(
             data => {
@@ -1106,7 +1107,7 @@ export class TenantsetupPage {
   GetUserMain(USER_GUID: any) {    
     let UserActivationUrl = this.baseResourceUrl2_URL + "user_main?filter=(USER_GUID=" + USER_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
 
-    this.http.get(UserActivationUrl)
+    this.http.get(sanitizeURL(UserActivationUrl))
       .map(res => res.json())
       .subscribe(
         data => {

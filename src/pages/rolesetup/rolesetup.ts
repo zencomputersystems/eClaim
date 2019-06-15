@@ -13,6 +13,7 @@ import { BaseHttpService } from '../../services/base-http';
 
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the RolesetupPage page.
@@ -209,7 +210,7 @@ export class RolesetupPage {
       let options = new RequestOptions({ headers: headers });
       let url: string;
       url = this.baseResource_Url + "main_role?filter=(NAME=" + this.NAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-      this.http.get(url, options)
+      this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -288,7 +289,7 @@ export class RolesetupPage {
       if (this.NAME_ngModel_Edit.trim() != localStorage.getItem('Prev_Role_Name')) {
         let url: string;
         url = this.baseResource_Url + "main_role?filter=(NAME=" + this.NAME_ngModel_Edit.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-        this.http.get(url)
+        this.http.get((sanitizeURL)(url))
           .map(res => res.json())
           .subscribe(
             data => {

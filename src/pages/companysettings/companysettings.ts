@@ -156,7 +156,7 @@ export class CompanysettingsPage {
           if (this.FormControls[item]["KEY_NAME"] == "default_currency") { this.Currency_ngModel = this.FormControls[item]["KEY_VALUE"]; }
           // if (this.FormControls[item]["KEY_NAME"] == "email_logo") { this.EmailLogo_ngModel = this.FormControls[item]["KEY_VALUE"]; }
           this.isImage = true;
-          if (this.FormControls[item]["KEY_NAME"] == "email_logo") { this.EmailImage = 'http://api.zen.com.my/api/v2/files/eclaim/' + this.FormControls[item]["KEY_VALUE"] + '?api_key=' + constants.DREAMFACTORY_API_KEY; this.imageGUID = this.FormControls[item]["KEY_VALUE"]; }
+          if (this.FormControls[item]["KEY_NAME"] == "email_logo") { this.EmailImage = constants.DREAMFACTORY_IMAGE_URL + this.FormControls[item]["KEY_VALUE"] + '?api_key=' + constants.DREAMFACTORY_API_KEY; this.imageGUID = this.FormControls[item]["KEY_VALUE"]; }
           if (this.FormControls[item]["KEY_NAME"] == "default_country") {
             var charNo = this.FormControls[item]["KEY_VALUE"].indexOf(",");
             var curKeyNameValue = this.FormControls[item]["KEY_VALUE"].substring(0, charNo);
@@ -495,7 +495,7 @@ export class CompanysettingsPage {
     this.loading.present();
 
     return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + this.uniqueName, this.CompanySettingsform.get('avatar').value, options)
+      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.CompanySettingsform.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
           return response;

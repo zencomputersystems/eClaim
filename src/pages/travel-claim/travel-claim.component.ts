@@ -22,6 +22,7 @@ import { DecimalPipe } from '@angular/common';
 import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 import moment from 'moment';
 import * as Settings from '../../dbSettings/companySettings';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 @IonicPage()
 @Component({
@@ -204,7 +205,7 @@ export class TravelclaimPage {
     let url = 'http://api.zen.com.my/api/v2/google/distancematrix/json?destinations=place_id:' + this.OriginPlaceID + '&origins=place_id:' + this.DestinationPlaceID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     var destination: any;
     return new Promise((resolve, reject) => {
-      this.http.get(url).map(res => res.json()).subscribe(data => {
+      this.http.get(sanitizeURL(url)).map(res => res.json()).subscribe(data => {
         let temp = data["rows"][0]["elements"][0];
         // console.table(data)
         if (temp["distance"] != null) {
@@ -527,7 +528,7 @@ export class TravelclaimPage {
     }
     let url = 'http://api.zen.com.my/api/v2/google/distancematrix/json?destinations=place_id:' + this.DestinationPlaceID + '&origins=place_id:' + this.OriginPlaceID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     var destination: any;
-    this.http.get(url).map(res => res.json()).subscribe(data => {
+    this.http.get(sanitizeURL(url)).map(res => res.json()).subscribe(data => {
       let temp = data["rows"][0]["elements"][0];
       // console.table(data)
       if (temp["distance"] != null) {
@@ -646,7 +647,7 @@ export class TravelclaimPage {
       val = val.replace(/ /g, '');
     }
     var url = 'http://api.zen.com.my/api/v2/google/place/autocomplete/json?json?radius=500&components=country:' + this.countryRange + '&input=' + val + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(url).map(res => res.json()).subscribe(data => {
+    this.http.get(sanitizeURL(url)).map(res => res.json()).subscribe(data => {
       this.currentItems = data["predictions"];
       console.table(this.currentItems);
     });
@@ -929,7 +930,7 @@ export class TravelclaimPage {
     });
     this.loading.present();
     return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/files/' + this.CloudFilePath + this.uniqueName, this.Travelform.get('avatar').value, options)
+      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Travelform.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
           return response;

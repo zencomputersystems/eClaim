@@ -124,6 +124,7 @@ import { ImportExcelDataPage } from '../pages/import-excel-data/import-excel-dat
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { SanitizerProvider } from '../providers/sanitizer/sanitizer';
 // import { Transfer } from "../providers/file-transfer";
 
 @NgModule({
@@ -360,12 +361,6 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ConferenceData, HttpClientModule, ApiManagerProvider,
     UserData, DatePipe, DecimalPipe,
-    //  InAppBrowser,
-    //  SplashScreen, StatusBar, 
-
-    // TransferObject,
-    // Transfer,
-
     Services,
 
     Camera,
@@ -373,9 +368,9 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     File,
     FilePath,
     FileTransfer,
-    //FileUploadOptions,
     FileTransferObject,
-    ApiManagerProvider,Transfer
+    ApiManagerProvider,Transfer,
+    SanitizerProvider
   ]
 })
 export class AppModule { }
