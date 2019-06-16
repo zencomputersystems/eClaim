@@ -24,7 +24,7 @@ import { BaseHttpService } from '../../services/base-http';
 import { UserRole_Model } from '../../models/user_role_model'
 import { UUID } from 'angular2-uuid';
 import { LoginPage } from '../login/login';
-import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
+import { getURL } from '../../providers/sanitizer/sanitizer';
 
 @Component({
   selector: 'page-account',
@@ -107,7 +107,7 @@ export class AccountPage {
   public ROLE_ngModel_Edit: any; ADDITIONAL_ROLE_ngModel_Edit: any;
 
   // constructor(public alertCtrl: AlertController, public nav: NavController, public userData: UserData, fb: FormBuilder) {
-  constructor(private alertCtrl: AlertController, public nav: NavController, public userData: UserData, fb: FormBuilder, public viewCtrl: ViewController, public navParams: NavParams, public http: Http, private userservice: UserSetup_Service, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, public toastCtrl: ToastController, public platform: Platform, private titlecasePipe: TitleCasePipe) {
+  constructor(public nav: NavController, public userData: UserData, fb: FormBuilder, public viewCtrl: ViewController, public navParams: NavParams, public http: Http, private userservice: UserSetup_Service, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, public toastCtrl: ToastController, public platform: Platform, private titlecasePipe: TitleCasePipe) {
     if (localStorage.getItem("g_USER_GUID") != null) {
       //---------Bind Company---------------------
       this.GetCompany("tenant_company", "NAME");
@@ -293,13 +293,9 @@ export class AccountPage {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({ headers: headers });
-    let url_user_edit = this.baseResourceUrl2_URL + "view_user_edit?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let url_user_Professional_Certification = this.baseResourceUrl2_URL + "user_certification?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let url_user_Spouse = this.baseResourceUrl2_URL + "user_spouse?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let url_user_Children = this.baseResourceUrl2_URL + "user_children?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     // debugger;
     //----------------Get the Details from Db and bind Controls---------------------------------
-    this.http.get(sanitizeURL(url_user_edit), options)
+    this.http.get(getURL("table","view_user_edit",[`USER_GUID=${id}`]), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -402,7 +398,7 @@ export class AccountPage {
         });
 
     //------------------------PROFESSIONAL CERTIFICATIONS--------------------------
-    this.http.get(sanitizeURL(url_user_Professional_Certification), options)
+    this.http.get(getURL("table","user_certification",[`USER_GUID=${id}`]), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -413,7 +409,7 @@ export class AccountPage {
 
     //------------------------FAMILY DETAILS---------------------------------------
     //------------------------SPOUSE--------------------------        
-    this.http.get(sanitizeURL(url_user_Spouse), options)
+    this.http.get(getURL("table","user_spouse",[`USER_GUID=${id}`]), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -423,7 +419,7 @@ export class AccountPage {
         });
 
     //------------------------CHILDREN------------------------        
-    this.http.get(sanitizeURL(url_user_Children), options)
+    this.http.get(getURL("table","user_children",[`USER_GUID=${id}`]), options)
       .map(res => res.json())
       .subscribe(
         data => {
@@ -447,10 +443,9 @@ export class AccountPage {
 
     //------------------------Role-------------------------------
     let CheckRole: any = []; let CheckAdditionalRole: any = [];
-    let User_Role_url = this.baseResourceUrl2_URL + "user_role?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
 
     this.http
-      .get(User_Role_url)
+      .get(getURL("table","user_role",[`USER_GUID=${id}`]))
       .map(res => res.json())
       .subscribe(data => {
         this.roles = data.resource;
@@ -470,11 +465,9 @@ export class AccountPage {
   tenants: any;
 
   GetTenant_GUID(Tenant_company_guid: string) {
-    // debugger;
-    let TableURL = constants.DREAMFACTORY_TABLE_URL + "tenant_company" + '?filter=(TENANT_COMPANY_GUID=' + Tenant_company_guid + ')&' + this.Key_Param;
     return new Promise((resolve) => {
       this.http
-        .get(TableURL)
+        .get(getURL("table","tenant_company",[`TENANT_COMPANY_GUID=${Tenant_company_guid}`]))
         .map(res => res.json())
         .subscribe(data => {
           this.tenants = data["resource"];
@@ -1296,26 +1289,6 @@ export class AccountPage {
   }
 
   fileName1: string; ProfileImage: any; imageGUID: any; uploadFileName: string; chooseFile: boolean = false; newImage: boolean = true; ImageUploadValidation: boolean = false;
-  private ProfileImageDisplay(e: any, fileChoose: string): void {
-    let reader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      this.Userform.get(fileChoose).setValue(file);
-      if (fileChoose === 'avatar1')
-        this.fileName1 = file.name;
-
-      reader.onload = (event: any) => {
-        this.ProfileImage = event.target.result;
-        this.Profile_Image_Display = event.target.result
-      }
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    this.imageGUID = this.uploadFileName;
-    this.chooseFile = true;
-    this.newImage = false;
-    this.onFileChange(e);
-    this.ImageUploadValidation = false;
-  }
 
   onFileChange(event: any) {
     const reader = new FileReader();

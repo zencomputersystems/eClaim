@@ -125,6 +125,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { SanitizerProvider } from '../providers/sanitizer/sanitizer';
+import { ToastProvider } from '../providers/toast/toast';
+import { CurrencyProvider } from '../providers/currency/currency';
 // import { Transfer } from "../providers/file-transfer";
 
 @NgModule({
@@ -370,7 +372,9 @@ import { SanitizerProvider } from '../providers/sanitizer/sanitizer';
     FileTransfer,
     FileTransferObject,
     ApiManagerProvider,Transfer,
-    SanitizerProvider
+    SanitizerProvider,
+    ToastProvider,
+    CurrencyProvider
   ]
 })
 export class AppModule { }

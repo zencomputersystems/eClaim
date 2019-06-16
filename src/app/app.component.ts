@@ -16,6 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as constants from '../app/config/constants';
+import { getURL } from '../providers/sanitizer/sanitizer';
 
 // import { MenuService } from '../providers/menu.service'
 
@@ -268,10 +269,15 @@ export class ConferenceApp {
 
 
         //Get all the roles and menus for that particular user.-------------------------------------------------------   
-        let url: string; this.Menu_Array = [];        this.Menu_Dashboard_Array = []; this.Menu_Tasks_Array = []; this.Menu_Claims_Array = []; this.Menu_Reports_Array = []; this.Menu_Settings_Array = [];
-        url = this.baseResource_Url + "view_user_multi_role_menu?filter=USER_GUID=" + localStorage.getItem("g_USER_GUID") + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+        let url: string;
+        this.Menu_Array = [];
+        this.Menu_Dashboard_Array = [];
+        this.Menu_Tasks_Array = [];
+        this.Menu_Claims_Array = [];
+        this.Menu_Reports_Array = [];
+        this.Menu_Settings_Array = [];
         this.http
-          .get(url)
+          .get(getURL("table","view_user_multi_role_menu",[`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]))
           .map(res => res.json())
           .subscribe(data => {
             let res = data["resource"];
@@ -822,7 +828,7 @@ export class ConferenceApp {
     let TableURL = this.baseResource_Url + "view_user_role_menu?filter=USER_GUID=" + user_guid + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     return new Promise((resolve) => {
       this.http
-        .get(TableURL)
+        .get(getURL("table","view_user_role_menu",[`USER_GUID=${user_guid}`]))
         .map(res => res.json())
         .subscribe(data => {
           let roles = data["resource"];

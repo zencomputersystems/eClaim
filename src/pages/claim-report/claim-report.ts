@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core';
 
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import * as constants from '../../app/config/constants';
+import { presentToast } from '../../providers/toast/toast';
 
 
 /**
@@ -49,6 +51,7 @@ export class ClaimReportPage {
   }
 
   BindData() {
+    presentToast("Binding data...");
     this.totalClaimAmount = 0;
     this.http
       .get(this.baseResourceUrl)

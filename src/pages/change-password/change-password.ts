@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading, ToastController, Toast } from 'ionic-angular';
 import { FormControlDirective, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import * as constants from '../../app/config/constants';
 import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
@@ -13,6 +13,7 @@ import { UserSetup_Service } from '../../services/usersetup_service';
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import { LoginPage } from '../login/login';
 import moment from 'moment';
+import { presentToast } from '../../providers/toast/toast';
 
 /**
  * Generated class for the ChangePasswordPage page.
@@ -33,12 +34,12 @@ export class ChangePasswordPage {
   loading: Loading;
   constructor(public api: ApiManagerProvider,private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private userservice: UserSetup_Service, private httpService: BaseHttpService, private loadingCtrl: LoadingController) {
     if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, please login.');
+      presentToast('Sorry, please login first.');
       this.navCtrl.push(LoginPage);
     }
     else {
       if (localStorage.getItem("g_USER_GUID") == "sva") {
-        alert('Sorry, you are not authorized.');
+        presentToast('Sorry, you are not authorized.');
         this.navCtrl.setRoot(this.navCtrl.getActive().component);
       }
       else {
