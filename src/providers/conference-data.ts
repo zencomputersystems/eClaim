@@ -17,7 +17,7 @@ import 'rxjs/add/observable/of';
 export class ConferenceData {
   data: any;
   navCtrl: any;
-  constructor(public http: Http, public user: UserData,  app: App) {  this.navCtrl = app.getActiveNav() }
+  constructor(public http: Http, public user: UserData,  app: App) {  this.navCtrl = app.getActiveNavs()[0]}
 
   load(): any {
     if (this.data) {

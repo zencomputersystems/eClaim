@@ -1035,6 +1035,7 @@ export class TravelclaimPage {
               .subscribe(data => {
                 this.claimRequestData = data;
                 // this.claimRequestData["resource"][0].STATUS = 'Pending';
+                console.log("VehicleID=",this.VehicleId);
 
                 this.claimRequestData["resource"][0].MILEAGE_GUID = this.VehicleId;
                 this.claimRequestData["resource"][0].TRAVEL_DATE = formValues.start_DT;

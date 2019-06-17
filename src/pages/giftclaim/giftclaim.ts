@@ -1,3 +1,4 @@
+import { CustomerListProvider } from './../../providers/customer-list/customer-list';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -81,6 +82,7 @@ export class GiftclaimPage {
   max_claim_amount: any; max_claim: any;
   imageURLEdit: any = null
   GetDataforEdit() {
+    let custList = CustomerListProvider;
     this.apiMng.getApiModel('view_customer', 'filter=TENANT_GUID=' + this.TenantGUID)
       .subscribe(data => {
         this.storeCustomers = this.customers = data["resource"];
@@ -143,21 +145,6 @@ export class GiftclaimPage {
       this.Gift_Amount_ngModel = this.numberPipe.transform(amount, '1.2-2');
     }
   }
-
-  // Lakshman
-  // getCurrency(amount: number) {
-  //   amount = Number(amount);
-  //   let amount_test=this.numberPipe.transform(amount, '1.2-2');
-  //   if (amount <this.min_claim_amount || amount>this.max_claim_amount) {
-  //     this.Gift_Amount_ngModel = null
-  //     this.claimAmount = 0;
-  //   } 
-  //   else {
-  //     this.claimAmount = amount;
-  //     this.Gift_Amount_ngModel = this.numberPipe.transform(amount, '1.2-2');
-  //   }
-  // } 
-  // Lakshman
 
   constructor(public numberPipe: DecimalPipe, private apiMng: ApiManagerProvider, public profileMng: ProfileManagerProvider, public navCtrl: NavController, public viewCtrl: ViewController, public translate: TranslateService, public navParams: NavParams, fb: FormBuilder, public http: Http, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, public toastCtrl: ToastController) {
     // Lakshman
@@ -327,7 +314,7 @@ export class GiftclaimPage {
     // this.apiMng.getApiModel('view_customer', 'filter=TENANT_GUID=' + this.TenantGUID)
 
     // Added by Bijay on 25/09/2018
-    this.apiMng.getApiModel('view_customer', 'filter=(TENANT_GUID=' + this.TenantGUID + ')AND(ACTIVE_FLAG=A)')
+    this.apiMng.getApiModel('view_customer', `filter=(TENANT_GUID=${this.TenantGUID})AND(ACTIVE_FLAG=A)`)
       .subscribe(data => {
         this.storeCustomers = this.customers = data["resource"];
       })

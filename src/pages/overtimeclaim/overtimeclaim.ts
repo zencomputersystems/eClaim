@@ -284,18 +284,18 @@ export class OvertimeclaimPage {
     let from = moment(
       moment
         .utc(this.Start_DT_ngModel)
-        .zone(localStorage.getItem('cs_timestamp'))
+        .utcOffset(-localStorage.getItem('cs_timestamp'))
         .format('YYYY-MM-DDTHH:mm')
     );
     let to = moment(
       moment
         .utc(this.End_DT_ngModel)
-        .zone(localStorage.getItem('cs_timestamp'))
+        .utcOffset(-localStorage.getItem('cs_timestamp'))
         .format('YYYY-MM-DDTHH:mm')
     );
     let day = moment
       .utc(this.Start_DT_ngModel)
-      .zone(localStorage.getItem('cs_timestamp'))
+      .utcOffset(-localStorage.getItem('cs_timestamp'))
       .format('dddd');
     let hours = to.diff(from, 'hours');
     if (hours % 2 != 0) {
