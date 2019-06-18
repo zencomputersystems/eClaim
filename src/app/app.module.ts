@@ -127,8 +127,6 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
 import { SanitizerProvider } from '../providers/sanitizer/sanitizer';
 import { ToastProvider } from '../providers/toast/toast';
 import { CurrencyProvider } from '../providers/currency/currency';
-import { CustomerListProvider } from '../providers/customer-list/customer-list';
-import { ApiModelProvider } from '../providers/api-model/api-model';
 // import { Transfer } from "../providers/file-transfer";
 
 @NgModule({
@@ -377,8 +375,6 @@ import { ApiModelProvider } from '../providers/api-model/api-model';
     SanitizerProvider,
     ToastProvider,
     CurrencyProvider,
-    CustomerListProvider,
-    ApiModelProvider
   ]
 })
 export class AppModule { }

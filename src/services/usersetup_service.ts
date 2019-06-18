@@ -25,29 +25,14 @@ import 'rxjs/add/observable/throw';
 
 export class UserSetup_Service {
 	baseResourceUrl1: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_info';
-	baseResource_Url1: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-
 	baseResourceUrl2: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_main';
-	baseResource_Url2: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-
 	baseResourceUrl3: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_contact';
-	baseResource_Url3: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-
 	baseResourceUrl4: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_company';
-	baseResource_Url4: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-
-	// baseResourceUrl5: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/tenant_company_site';
-	// baseResource_Url5: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-
 	baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_address';
 	baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-
 	baseResourceUrl5: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_qualification';
 	baseResourceUrl6: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_role';
-
 	baseResourceView: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_user_display';
-	baseResourceView_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-
 	baseResourceView6: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_certification';
 	baseResourceView7: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_spouse';
 	baseResourceView8: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_children';

@@ -1,4 +1,3 @@
-import { CustomerListProvider } from './../../providers/customer-list/customer-list';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -82,7 +81,6 @@ export class GiftclaimPage {
   max_claim_amount: any; max_claim: any;
   imageURLEdit: any = null
   GetDataforEdit() {
-    let custList = CustomerListProvider;
     this.apiMng.getApiModel('view_customer', 'filter=TENANT_GUID=' + this.TenantGUID)
       .subscribe(data => {
         this.storeCustomers = this.customers = data["resource"];
