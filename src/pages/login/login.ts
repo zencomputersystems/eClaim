@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { NavController, Loading } from 'ionic-angular';
+import { NavController, Loading, MenuController } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import CryptoJS from 'crypto-js';
@@ -15,6 +15,7 @@ import { UserMain_Model } from '../../models/user_main_model';
 import { UserSetup_Service } from '../../services/usersetup_service';
 import { Storage } from '@ionic/storage';
 import { BaseHttpService } from '../../services/base-http';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 @Component({
   selector: 'page-user',
@@ -25,17 +26,29 @@ export class LoginPage {
   submitted = false;
 
   //baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_bank' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+  baseResource_Url: string = sanitizeURL(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/');
 
-  constructor(public navCtrl: NavController, public userData: UserData, public http: Http, public storage: Storage, fb: FormBuilder, private userservice: UserSetup_Service) {
+  constructor(
+    public navCtrl: NavController,
+    public menu: MenuController,
+    public userData: UserData,
+    public http: Http,
+    public storage: Storage,
+    fb: FormBuilder,
+    private userservice: UserSetup_Service) {
     localStorage.clear(); //debugger;
     this.ForgotPasswordForm = fb.group({
       Email_ID: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}'), Validators.required])],
     });
   }
 
+  ForgotPasswordForm: FormGroup;
+  ForgotPasswordClicked: boolean;
+  email_ngModel: any;
+  usermain_entry: UserMain_Model = new UserMain_Model();
+
+
   onLogin(form: NgForm) {
-    // this.navCtrl.push(DashboardPage);
     this.submitted = true;
     if (form.valid) {
       //-----------Check if the login as super vendor-----------------------
@@ -47,7 +60,10 @@ export class LoginPage {
 
         //this.navCtrl.push(AdminsetupPage);
         //        this.navCtrl.push(SetupGuidePage); //original
-        this.navCtrl.setRoot(DashboardPage);
+        //        this.navCtrl.setRoot(DashboardPage);
+        this.menu.enable(true,"sideMenu");
+        this.navCtrl.push(DashboardPage);
+
       }
       else {
         let url: string;
@@ -69,6 +85,7 @@ export class LoginPage {
               localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
               localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
               localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
+              this.setLocalGlobals(res);
               // debugger;
               if (res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == '') {
                 localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
@@ -157,12 +174,12 @@ export class LoginPage {
   }
 */
 
-  ForgotPasswordForm: FormGroup;
-  ForgotPasswordClicked: boolean;
-  email_ngModel: any;
-  usermain_entry: UserMain_Model = new UserMain_Model();
-
-
+setLocalGlobals(res: Array<any>) {
+res[0].forEach( element=> {
+  console.log(element);
+} )
+}
+  
   ForgotPasswordClick() {
     this.ForgotPasswordClicked = true;
   }
@@ -449,7 +466,7 @@ export class LoginPage {
                           localStorage.setItem("g_KEY_EDIT", "0");
                           localStorage.setItem("g_KEY_DELETE", "0");
                           localStorage.setItem("g_KEY_VIEW", "0");
-      
+
                           for (var item in role_result) {
                             if (role_result[item]["ROLE_NAME"] == "MAIN") {
                               localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
@@ -522,7 +539,7 @@ export class LoginPage {
     localStorage.removeItem("cs_default_language");
     localStorage.removeItem("cs_email_schedule");
     localStorage.removeItem("cs_email_time");
-    
+
     localStorage.removeItem("draft_notification");
     localStorage.removeItem("profile_guid");
     localStorage.removeItem("cs_profile_guid");

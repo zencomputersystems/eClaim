@@ -11,7 +11,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { ConferenceApp } from './app.component';
+import { eClaimApp } from './app.component';
 
 // import { PopoverPage } from '../pages/about-popover/about-popover';
 import { AccountPage } from '../pages/account/account';
@@ -131,10 +131,12 @@ import { CurrencyProvider } from '../providers/currency/currency';
 
 @NgModule({
   declarations: [
-    ConferenceApp,
+    eClaimApp,
     AccountPage,
     LoginPage,
-    AllClaimListPage,    MedicalclaimPage,AllClaimhistoryPage,
+    AllClaimListPage,    
+    MedicalclaimPage,
+    AllClaimhistoryPage,
     PrintclaimPage,
     GiftclaimPage,
     OvertimeclaimPage,
@@ -160,7 +162,8 @@ import { CurrencyProvider } from '../providers/currency/currency';
     TranslatePage,
     MileagesetupPage,
     RolesetupPage,
-    ModulesetupPage, DeviceSetupPage,
+    ModulesetupPage, 
+    DeviceSetupPage,
     PaymenttypesetupPage,
     QualificationsetupPage,
     SubsciptionsetupPage,
@@ -226,7 +229,7 @@ import { CurrencyProvider } from '../providers/currency/currency';
           deps: [HttpClient]
         }
       }),
-    IonicModule.forRoot(ConferenceApp, {}, {
+    IonicModule.forRoot(eClaimApp, {}, {
       links: [
         { component: TabsPage, name: 'TabsPage', segment: 'tabs' },
         // { component: DashboardPage, name: 'Home', segment: 'Home' },
@@ -272,7 +275,7 @@ import { CurrencyProvider } from '../providers/currency/currency';
 
   bootstrap: [IonicApp],
   entryComponents: [
-    ConferenceApp,
+    eClaimApp,
     AccountPage,
     LoginPage,
     AllClaimListPage, SetupguidePage,
@@ -319,39 +322,28 @@ import { CurrencyProvider } from '../providers/currency/currency';
     UserPage,
     SocRegistrationPage,
     TravelclaimPage,
-
-
     ProfileSetupPage,
-
     AddTollPage,
     ClaimhistoryPage,
-
     ClaimhistorydetailPage,
     ClaimapprovertasklistPage,
     ClaimtasklistPage,
     UserclaimslistPage,
-
-
     ClaimReportPage,
     MonthlyClaimReportPage,
     UploadPage,
-
     CustomerSetupPage,
-
     ChangePasswordPage,
     DashboardPage, ImportExcelDataPage,
     ClaimReportUserPage,
     ClaimReportPrintPage,
     LeaveReportPage,
     AttendanceReportPage,
-
     FinancePaymentTasklistPage,
-    CommonTasklistPage,
-   
+    CommonTasklistPage, 
     PaymentHistoryPage,
     CommonHistorylistPage,
     ClaimSummaryPage,
-
     SettingsPage,
     CompanysettingsPage,
     DbmaintenancePage,

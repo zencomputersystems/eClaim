@@ -33,8 +33,8 @@ export interface PageInterface {
 @Component({
   templateUrl: 'app.template.html'
 })
-export class ConferenceApp {
-  blnLogin: boolean = false;
+export class eClaimApp {
+  //  blnLogin: boolean = false;
   //  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
   public Menu: Array<any>[] = [];
 
@@ -50,9 +50,11 @@ export class ConferenceApp {
     { title: 'Sign Up', name: 'SignupPage', component: SignupPage, icon: 'person-add' },
     { title: 'Forgot Password', name: 'LoginPage', component: LoginPage, icon: 'key' }
   ];
-  rootPage = 'LoginPage';
+
+  pageName: any = 'DashboardPage';
   USER_NAME_LABEL: any;
   IMAGE_URL: any;
+  rootPage: any = 'LoginPage';
 
   constructor(
     public events: Events,
@@ -60,37 +62,29 @@ export class ConferenceApp {
     public menu: MenuController,
     public platform: Platform,
     public storage: Storage,
-    public translate: TranslateService, public http: Http
+    public translate: TranslateService,
+    public http: Http
   ) {
-    this.blnLogin = false;
-    /*     platform.ready().then(() => {
-        }); */
     this.TranslateLanguage();
-    // decide which menu items should be hidden by current login status stored in local storage    
-    /*     this.userData.hasLoggedIn().then((hasLoggedIn) => {
-          this.enableMenu(hasLoggedIn === true);
-        }); */
-
-    //this.enableMenu(true);
     this.listenToLoginEvents();
-
-    this.userData.logout();
-    this.enableMenu(false);
-
-    // this.menu.enable(false, 'loggedInMenu');
-    this.menu.enable(false, 'loggedInMenu_User');
+    this.menu.enable(true, "sideMenu");
+    this.enableMenu(this.isLoggedIn());
   }
-  pageName: any;
 
   openPage(page: any) {
     this.pageName = page["CODE_PAGE_NAME"];
     this.nav.setRoot(this.pageName);
-    if (page.logsOut === true) {
+    if (this.pageName === 'LoginPage') {
       // Give the menu time to close before changing to logged out
-      this.blnLogin = !this.userData.logout();
+      //      this.blnLogin = !this.userData.logout();
       this.enableMenu(false);
+      this.clearMenu();
+      this.menu.enable(false, "sideMenu");
+      this.nav.setRoot('LoginPage');
+      console.log("Logged out. Page: ", page);
     }
   }
+
   listenToLoginEvents() {
     this.events.subscribe('user:login', () => {
       this.enableMenu(true);
@@ -115,66 +109,61 @@ export class ConferenceApp {
   }
 
   isLoggedIn() {
-    return (localStorage.getItem("g_USER_GUID") != null) ? true : false;
+    return (localStorage.getItem("g_USER_GUID") !== null) ? true : false;
   }
 
   enableSVAMenu() {
-    this.blnLogin = true; this.USER_NAME_LABEL = localStorage.getItem("g_FULLNAME");
+    //    this.blnLogin = true; 
+    this.USER_NAME_LABEL = localStorage.getItem("g_FULLNAME");
     this.IMAGE_URL = localStorage.getItem("g_IMAGE_URL");
     this.TranslateLanguage();
     // SVA override
     if (localStorage.getItem("g_USER_GUID") == "sva") {
-      this.blnAccount_loggedInMenu_User = true;
-      this.blnSetup_loggedInMenu_User = true;
-      this.loggedInPages = [
-        { title: 'Sign Out', name: 'LoginPage', component: LoginPage, icon: 'log-out', logsOut: true }
-      ];
-
-      this.setupsPages = [
-        { title: 'Setup', name: 'SetupPage', component: SetupPage, icon: 'settings' },
-        { title: 'Admin Setup', name: 'AdminsetupPage', component: AdminsetupPage, icon: 'cog' }
-      ];
-
-      this.menu.enable(loggedIn, 'loggedInMenu');
-      this.menu.enable(!loggedIn, 'loggedOutMenu');
+      //      this.blnAccount_loggedInMenu_User = true;
+      //      this.blnSetup_loggedInMenu_User = true;
+      //      this.loggedInPages = [
+      //        { title: 'Sign Out', name: 'LoginPage', component: LoginPage, icon: 'log-out', logsOut: true }
+      //      ];
+      /* 
+            this.setupsPages = [
+              { title: 'Setup', name: 'SetupPage', component: SetupPage, icon: 'settings' },
+              { title: 'Admin Setup', name: 'AdminsetupPage', component: AdminsetupPage, icon: 'cog' }
+            ];
+       */
+      this.menu.enable(this.isLoggedIn(), 'sideMenu');
+      this.menu.enable(!this.isLoggedIn, 'sideMenu');
     }
   };
 
-  enableMenu(loggedIn: boolean) {
-    loggedIn = this.isLoggedIn();
+  clearMenu() {
+    this.Menu = [];
+  }
 
-    if (localStorage.length > 0) {
-      this.blnLogin = true;
+  enableMenu(loggedIn: boolean) {
+    if (loggedIn) {
       this.USER_NAME_LABEL = localStorage.getItem("g_FULLNAME");
       this.IMAGE_URL = localStorage.getItem("g_IMAGE_URL");
       this.TranslateLanguage();
       this.enableSVAMenu();
-
-      //Get all the roles and menus for that particular user.-------------------------------------------------------   
-      //        let url: string;
       this.http
         .get(getURL("table", "view_user_multi_role_menu", [`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]))
         .map(res => res.json())
         .subscribe(data => {
           let res = data["resource"];
           if (res.length > 0) {
-          this.Menu = this.getMenu(res, this.menuHeaders(res));
+            this.Menu = this.getMenu(res, this.menuHeaders(res));
           }
         });
-
-      this.menu.enable(loggedIn, 'loggedInMenu_User');
-      this.menu.enable(!loggedIn, 'loggedOutMenu');
-      // --------------------------------------------------------------------------------------------------------------------------------- 
+      this.menu.enable(true, "sideMenu");
     }
     else {
-      this.blnLogin = false;
+      this.menu.enable(false, "sideMenu");
     }
-    console.log(this.Menu);
   }
 
   menuHeaders(data: any) {
     let menuHeadersArray: Array<any> = [];
-    data.forEach(element => {
+    data.forEach((element: any) => {
       if (!menuHeadersArray.includes(element["MENU_HEADER"])) {
         menuHeadersArray.push(element["MENU_HEADER"])
       }
@@ -185,7 +174,7 @@ export class ConferenceApp {
   getMenu(data: any, menuHeadersArray: any) {
     let menuArray = Array(menuHeadersArray);
     for (var i = 0; i < menuHeadersArray.length; i++) {
-      menuArray[menuHeadersArray[i]] = data.filter(item => item["MENU_HEADER"] === menuHeadersArray[i]);
+      menuArray[menuHeadersArray[i]] = data.filter((item: any) => item["MENU_HEADER"] === menuHeadersArray[i]);
     }
     return menuArray;
   };
@@ -194,13 +183,10 @@ export class ConferenceApp {
     if ((this.nav.getActive()
       && this.nav.getActive().name === page.name
       && this.pageName == page.name)
-      || (this.nav.getActive()
-        && this.nav.getActive().name === page.name
-        && page.name == "DashboardPage")) {
-      // alert(page.name);
+    ) {
       return 'primary';
     }
-    return null;
+    return null
   }
 
   public translateToMalayClicked: boolean = false;
