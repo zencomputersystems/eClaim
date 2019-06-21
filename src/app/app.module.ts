@@ -34,7 +34,7 @@ import { TenantsetupPage } from '../pages/tenantsetup/tenantsetup';
 import { SetupPage } from '../pages/setup/setup';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
-import { MedicalclaimPage } from '../pages/medicalclaim/medicalclaim';
+// import { MedicalclaimPage } from '../pages/medicalclaim/medicalclaim';
 import { PrintclaimPage } from '../pages/printclaim/printclaim';
 import { GiftclaimPage } from '../pages/giftclaim/giftclaim';
 import { OvertimeclaimPage } from '../pages/overtimeclaim/overtimeclaim';
@@ -104,7 +104,7 @@ import { ClaimSummaryPage } from '../pages/claim-summary/claim-summary';
 import { TravelClaimViewPage } from '../pages/travel-claim-view/travel-claim-view.component';
 import { EntertainmentClaimViewPage } from '../pages/entertainment-claim-view/entertainment-claim-view';
 import { OvertimeClaimViewPage } from '../pages/overtime-claim-view/overtime-claim-view';
-import { MedicalClaimViewPage } from '../pages/medical-claim-view/medical-claim-view';
+// import { MedicalClaimViewPage } from '../pages/medical-claim-view/medical-claim-view';
 import { PrintClaimViewPage } from '../pages/print-claim-view/print-claim-view';
 import { GiftClaimViewPage } from '../pages/gift-claim-view/gift-claim-view';
 import { MiscellaneousClaimViewPage } from '../pages/miscellaneous-claim-view/miscellaneous-claim-view';
@@ -127,6 +127,7 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
 import { SanitizerProvider } from '../providers/sanitizer/sanitizer';
 import { ToastProvider } from '../providers/toast/toast';
 import { CurrencyProvider } from '../providers/currency/currency';
+import { UploaderProvider } from '../providers/uploader/uploader';
 // import { Transfer } from "../providers/file-transfer";
 
 @NgModule({
@@ -135,7 +136,7 @@ import { CurrencyProvider } from '../providers/currency/currency';
     AccountPage,
     LoginPage,
     AllClaimListPage,    
-    MedicalclaimPage,
+    // MedicalclaimPage,
     AllClaimhistoryPage,
     PrintclaimPage,
     GiftclaimPage,
@@ -175,7 +176,7 @@ import { CurrencyProvider } from '../providers/currency/currency';
     ApproverTaskListPage,
     TravelClaimViewPage,
     EntertainmentClaimViewPage,
-    MedicalClaimViewPage,
+    // MedicalClaimViewPage,
     OvertimeClaimViewPage,
     PrintClaimViewPage,
     GiftClaimViewPage,
@@ -283,7 +284,7 @@ import { CurrencyProvider } from '../providers/currency/currency';
     StatesetupPage,
     SetupPage,
     ModulesetupPage, DeviceSetupPage,
-    MedicalclaimPage,
+    // MedicalclaimPage,
     TravelclaimPage,AllClaimhistoryPage,
     PrintclaimPage,
     GiftclaimPage,
@@ -314,7 +315,7 @@ import { CurrencyProvider } from '../providers/currency/currency';
     ApproverTaskListPage,
     TravelClaimViewPage,
     EntertainmentClaimViewPage,
-    MedicalClaimViewPage,
+    // MedicalClaimViewPage,
     OvertimeClaimViewPage,
     PrintClaimViewPage,
     GiftClaimViewPage,
@@ -367,6 +368,7 @@ import { CurrencyProvider } from '../providers/currency/currency';
     SanitizerProvider,
     ToastProvider,
     CurrencyProvider,
+    UploaderProvider,
   ]
 })
 export class AppModule { }

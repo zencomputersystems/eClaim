@@ -4,34 +4,32 @@
   <ion-menu id="sideMenu" [content]="content" *ngIf="isLoggedIn() && (Menu.length > 0)">
     <ion-header>
       <ion-toolbar color="primary200">
-    <div style="height:141px;margin-top:-15pt;color:white;" text-center>
-      <h3 style="padding-top:15pt;">Welcome to eClaim</h3>
+        <div style="height:141px;margin-top:-15pt;color:white;" text-center>
+          <h3 style="padding-top:15pt;">Welcome to eClaim</h3>
 
-      <div style="width: 30%;float: left;margin-left: 5pt;">
-        <div class="profilepicapp">
-          <img src={{IMAGE_URL}} alt="avatar">
+          <div style="width: 30%;float: left;margin-left: 5pt;">
+            <div class="profilepicapp">
+              <img src={{IMAGE_URL}} alt="avatar">
+            </div>
+          </div>
+
+          <div style="color: white;">
+            <h6 text-center text-wrap>{{ USER_NAME_LABEL }}</h6>
+          </div>
+
         </div>
-      </div>
-
-      <div style="color: white;">
-        <h6 text-center text-wrap>{{ USER_NAME_LABEL }}</h6>
-      </div>
-
-    </div>
-    </ion-toolbar>
+      </ion-toolbar>
     </ion-header>
-    <ion-content class="outer-content" *ngFor="let _header of Menu[0]">
+
+    <ion-content class="outer-content">
       <div *ngFor="let _header of Menu[0]">
-        <ion-list-header>{{_header}}</ion-list-header>
-        <button ion-item menuClose *ngFor="let page of Menu[_header]" (click)="openPage(page)"
-          [color]="isActive(page)">
-          <ion-icon item-start [name]="page['icon']"></ion-icon>
-          {{page["NAME"]}}
+        <ion-list-header *ngIf="Menu[_header].length > 0">{{_header}}</ion-list-header>
+        <button ion-item menuClose *ngFor="let page of Menu[_header]" (click)="openPage(page)" [color]="isActive(page)">
+          <ion-icon item-start [name]="page['MENU_ICON']"></ion-icon>{{page["NAME"]}}
         </button>
       </div>
     </ion-content>
   </ion-menu>
-
   <!-- main navigation -->
   <ion-nav [root]="rootPage" #content swipeBackEnabled="false" main></ion-nav>
   <!-- <ion-nav [root]="rootPage"></ion-nav> -->

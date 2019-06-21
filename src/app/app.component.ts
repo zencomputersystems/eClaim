@@ -51,7 +51,7 @@ export class eClaimApp {
     { title: 'Forgot Password', name: 'LoginPage', component: LoginPage, icon: 'key' }
   ];
 
-  pageName: any = 'DashboardPage';
+  pageName: any = 'LoginPage';
   USER_NAME_LABEL: any;
   IMAGE_URL: any;
   rootPage: any = 'LoginPage';
@@ -143,7 +143,6 @@ export class eClaimApp {
     if (loggedIn) {
       this.USER_NAME_LABEL = localStorage.getItem("g_FULLNAME");
       this.IMAGE_URL = localStorage.getItem("g_IMAGE_URL");
-      this.TranslateLanguage();
       this.enableSVAMenu();
       this.http
         .get(getURL("table", "view_user_multi_role_menu", [`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]))
@@ -154,17 +153,13 @@ export class eClaimApp {
             this.Menu = this.getMenu(res, this.menuHeaders(res));
           }
         });
-      this.menu.enable(true, "sideMenu");
-    }
-    else {
-      this.menu.enable(false, "sideMenu");
     }
   }
 
   menuHeaders(data: any) {
-    let menuHeadersArray: Array<any> = [];
+    let menuHeadersArray: string[] = ["Dashboard","Claims","Tasks","Reports","Account"];
     data.forEach((element: any) => {
-      if (!menuHeadersArray.includes(element["MENU_HEADER"])) {
+      if (!menuHeadersArray.find(x => x === element["MENU_HEADER"])) {
         menuHeadersArray.push(element["MENU_HEADER"])
       }
     });

@@ -17,6 +17,7 @@ import { ProfileManagerProvider } from '../../providers/profile-manager.provider
 import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 import moment from 'moment';
 import * as Settings from '../../dbSettings/companySettings';
+import { UploadImage } from '../../providers/uploader/uploader';
 
 @IonicPage()
 @Component({
@@ -386,6 +387,19 @@ export class PrintclaimPage {
 
   imageGUID: any;
   saveIm() {
+    /*     this.loading = this.loadingCtrl.create(
+          { content: 'Please wait...'});
+          this.loading.present(); */
+        let uploadImage = UploadImage(this.http, this.uploadFileName,this.Printform.get('avatar'));
+        console.log("UploadImage returned result: ", uploadImage);
+        if (uploadImage) {
+          //this.submitAction(this.uploadFileName, formValues);
+          this.imageGUID = uploadImage;
+          this.chooseFile = false;
+          this.ImageUploadValidation = true;
+        }
+      }
+/*   saveIm() {
     let uploadImage = this.UploadImage();
     uploadImage.then(() => {
       //this.submitAction(this.uploadFileName, formValues);
@@ -393,9 +407,9 @@ export class PrintclaimPage {
       this.chooseFile = false;
       this.ImageUploadValidation = true;
     })
-  }
+  } */
 
-  UploadImage() {
+/*   UploadImage() {
     this.CloudFilePath = 'eclaim/'
     this.uniqueName = new Date().toISOString() + this.uploadFileName;
     const queryHeaders = new Headers();
@@ -420,7 +434,7 @@ export class PrintclaimPage {
         })
     })
   }
-
+ */
   submitAction(formValues: any) {
 
     let x = this.Printing_Amount_ngModel.split(",").join("");

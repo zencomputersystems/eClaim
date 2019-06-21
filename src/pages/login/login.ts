@@ -175,7 +175,7 @@ export class LoginPage {
 */
 
 setLocalGlobals(res: Array<any>) {
-res[0].forEach( element=> {
+res[0].forEach( (element: any)=> {
   console.log(element);
 } )
 }

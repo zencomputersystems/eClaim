@@ -16,7 +16,7 @@ export class CurrencyProvider {
 
 }
 
-export function toCurrency( amount: any, currencyCode: string) {
+export function toCurrency( amount: any, currencyCode: string="RM") {
   if (Array.isArray(amount)) {
     return amount.map((value) => formatMoney(value, { symbol: currencyCode }));
   }

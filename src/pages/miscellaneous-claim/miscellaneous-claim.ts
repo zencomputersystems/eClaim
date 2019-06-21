@@ -14,6 +14,7 @@ import { ProfileManagerProvider } from '../../providers/profile-manager.provider
 import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 import moment from 'moment';
 import * as Settings from '../../dbSettings/companySettings';
+import { UploadImage } from '../../providers/uploader/uploader';
 
 @IonicPage()
 @Component({
@@ -162,6 +163,7 @@ export class MiscellaneousClaimPage {
                 // this.imageURLEdit = this.claimRequestData[0].ATTACHMENT_ID;
                 if (this.claimRequestData[0].ATTACHMENT_ID !== null)
                   this.imageURLEdit = this.api.getImageUrl(this.claimRequestData[0].ATTACHMENT_ID);
+                  console.log("Image URL Edit: ", this.imageURLEdit);
                 this.ImageUploadValidation = true;
                 //this.getCurrency(this.claimRequestData[0].MILEAGE_AMOUNT)
 
@@ -363,16 +365,20 @@ export class MiscellaneousClaimPage {
 
   imageGUID: any;
   saveIm() {
-    let uploadImage = this.UploadImage();
-    uploadImage.then((resJson) => {
+/*     this.loading = this.loadingCtrl.create(
+      { content: 'Please wait...'});
+      this.loading.present(); */
+    let uploadImage = UploadImage(this.http, this.uploadFileName,this.MiscellaneousForm.get('avatar'));
+    console.log("UploadImage returned result: ", uploadImage);
+    if (uploadImage) {
       //this.submitAction(this.uploadFileName, formValues);
-      this.imageGUID = this.uniqueName;
+      this.imageGUID = uploadImage;
       this.chooseFile = false;
       this.ImageUploadValidation = true;
-    })
+    }
   }
 
-  UploadImage() {
+  /* UploadImage() {
     this.CloudFilePath = 'eclaim/'
     this.uniqueName = new Date().toISOString() + this.uploadFileName;
     const queryHeaders = new Headers();
@@ -395,7 +401,7 @@ export class MiscellaneousClaimPage {
           resolve(response.json());
         })
     })
-  }
+  } */
 
   clearFile() {
     this.MiscellaneousForm.get('avatar').setValue(null);

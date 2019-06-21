@@ -1,3 +1,4 @@
+import { DREAMFACTORY_INSTANCE_URL } from './../../app/config/constants';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ModalController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -22,13 +23,17 @@ import { DecimalPipe } from '@angular/common';
 import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 import moment from 'moment';
 import * as Settings from '../../dbSettings/companySettings';
-import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
+import { sanitizeURL, getURL } from '../../providers/sanitizer/sanitizer';
+import { UploadImage } from '../../providers/uploader/uploader';
+import { Observable } from 'rxjs';
 
 @IonicPage()
 @Component({
   selector: 'page-travelclaim',
-  templateUrl: 'travel-claim.html', providers: [Services, BaseHttpService, FileTransfer, DecimalPipe]
+  templateUrl: 'travel-claim.html',
+  providers: [Services, BaseHttpService, FileTransfer, DecimalPipe]
 })
+
 export class TravelclaimPage {
   isReadyToSave: boolean;
   countries: any;
@@ -197,6 +202,68 @@ export class TravelclaimPage {
 
   }
 
+  GetNewDistance(pointA: string, pointB: string, roundtrip: boolean = false): any {
+    let url = `${getURL("distance")}&destinations=place_id:${pointB}&origins=place_id:${pointA}`;
+    let distance = 0;
+    
+    if (roundtrip) {
+      distance = this.GetNewDistance(pointA, pointB) + this.GetNewDistance(pointB, pointA);
+    } else {
+      let distancePromise = new Promise(resolve => this.http.get(url).map(res => res.json())
+        .subscribe(data => {
+          let rawDistance: number = data["rows"][0]["elements"][0]["distance"]["value"];
+          console.log("Raw Distance: ", rawDistance);
+          let distance = Math.round(rawDistance / 100) / 10;
+          console.log("Rounded distance: ", distance);
+          return distance;
+        })
+      )
+      return distancePromise;
+    }
+/*     console.log("This is the distance I got: ", distance);
+    return distance;
+ */  }
+
+  GetDistance() {
+    if (this.tollParkAmount > 0) {
+      alert('You have added toll/parking/accommodation details to previous path. Please review the details.')
+    }
+    let url = 'http://api.zen.com.my/api/v2/google/distancematrix/json?destinations=place_id:' + this.DestinationPlaceID + '&origins=place_id:' + this.OriginPlaceID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let a = this.GetNewDistance(this.OriginPlaceID, this.DestinationPlaceID);
+    let b = this.GetNewDistance(this.OriginPlaceID, this.DestinationPlaceID, true);
+
+    console.log("Distance calculated by GetNewDistance: ", a)
+    console.log("Distance calculated by GetNewDistance with roundtrip: ", b)
+    var destination: any;
+    this.http.get(sanitizeURL(url))
+      .map(res => res.json())
+      .subscribe(data => {
+        let temp = data["rows"][0]["elements"][0];
+        console.table(data)
+        if (temp["distance"] != null) {
+          let DistKm: string = data["rows"][0]["elements"][0]["distance"]["text"];
+          // console.log(DistKm)
+          DistKm = DistKm.replace(',', '')
+          this.Travel_Distance_ngModel = destination = DistKm.substring(0, DistKm.length - 2)
+          this.Travel_Distance_ngModel = this.numberPipe.transform(this.Travel_Distance_ngModel, '1.2-2');
+
+          // this.Travel_Mode_ngModel = this.vehicleCategory;
+          if (!this.isPublicTransport) {
+            this.travelAmount = this.roundNumber(destination * this.VehicleRate, 2);
+            this.travelAmountNgmodel = this.numberPipe.transform(this.travelAmount, '1.2-2');
+          }
+          else {
+            this.getCurrency('0');
+          }
+          this.travelAmount = this.travelAmount === undefined ? 0 : this.travelAmount;
+          this.tollParkAmount = this.tollParkAmount === undefined ? 0 : this.tollParkAmount;
+          //Added by bijay on 24/09/2018
+          this.totalClaimAmount = this.roundNumber(this.travelAmount + this.tollParkAmount, 2);
+        }
+        else
+          alert('Please select Valid Origin & Destination Places');
+      });
+  }
   Roundtrip_Calculation() {
     // this.api.getApiModel('main_claim_request', 'filter=CLAIM_REQUEST_GUID=' + this.claimRequestGUID).subscribe(data => {
     //   this.claimRequestData = data["resource"];
@@ -252,13 +319,10 @@ export class TravelclaimPage {
 
         let val = this.Roundtrip_Calculation();
         val.then((cal_data: any) => {
-          // console.log(cal_data);
           var return_distance = cal_data[0]["Return_distance"];
           var return_totalAmount = cal_data[0]["Return_totalAmount"];
           var return_travelAmount = cal_data[0]["Return_travelAmount"];
-          // console.log(return_distance);
-          // console.log(return_totalAmount);
-          // console.log(return_travelAmount);
+
           let distance = new String(formValues.distance);
           var distance1 = distance.indexOf(",");
           if (distance1 > 0) {
@@ -520,40 +584,6 @@ export class TravelclaimPage {
   roundNumber(number: any, decimals: any) {
     var newnumber = new Number(number + '').toFixed(parseInt(decimals));
     return parseFloat(newnumber);
-  }
-
-  GetDistance() {
-    if (this.tollParkAmount > 0) {
-      alert('You have added toll/parking/accommodation details to previous path. Please review the details.')
-    }
-    let url = 'http://api.zen.com.my/api/v2/google/distancematrix/json?destinations=place_id:' + this.DestinationPlaceID + '&origins=place_id:' + this.OriginPlaceID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-    var destination: any;
-    this.http.get(sanitizeURL(url)).map(res => res.json()).subscribe(data => {
-      let temp = data["rows"][0]["elements"][0];
-      // console.table(data)
-      if (temp["distance"] != null) {
-        let DistKm: string = data["rows"][0]["elements"][0]["distance"]["text"];
-        // console.log(DistKm)
-        DistKm = DistKm.replace(',', '')
-        this.Travel_Distance_ngModel = destination = DistKm.substring(0, DistKm.length - 2)
-        this.Travel_Distance_ngModel = this.numberPipe.transform(this.Travel_Distance_ngModel, '1.2-2');
-
-        // this.Travel_Mode_ngModel = this.vehicleCategory;
-        if (!this.isPublicTransport) {
-          this.travelAmount = this.roundNumber(destination * this.VehicleRate, 2);
-          this.travelAmountNgmodel = this.numberPipe.transform(this.travelAmount, '1.2-2');
-        }
-        else {
-          this.getCurrency('0');
-        }
-        this.travelAmount = this.travelAmount === undefined ? 0 : this.travelAmount;
-        this.tollParkAmount = this.tollParkAmount === undefined ? 0 : this.tollParkAmount;
-        //Added by bijay on 24/09/2018
-        this.totalClaimAmount = this.roundNumber(this.travelAmount + this.tollParkAmount, 2);
-      }
-      else
-        alert('Please select Valid Origin & Destination Places');
-    });
   }
 
   public CloseTravelClick() {
@@ -879,67 +909,95 @@ export class TravelclaimPage {
   }
 
   disableButton: any;
+  /*   saveIm() {
+      let uploadImage = this.UploadImage();
+      uploadImage.then(() => {
+        //this.imageGUID(this.uploadFileName, formvalues)
+        // console.table(resJson)
+        // let imageResult = this.SaveImageinDB();
+        // imageResult.then((objImage: ImageUpload_model) => { 
+        this.ImageUploadValidation = true;
+        //  this.imageGUID = objImage.Image_Guid
+        this.imageGUID = this.uniqueName;
+        // , formvalues
+        //this.disableButton = true;
+        //this.PublicTransValue = false;
+        // this.PublicTransValue = true;
+        this.chooseFile = false;
+      })
+      // setTimeout(() => {
+      //   this.loading = false;
+      // }, 1000);
+    } */
+
   saveIm() {
-    let uploadImage = this.UploadImage();
-    uploadImage.then(() => {
-      //this.imageGUID(this.uploadFileName, formvalues)
-      // console.table(resJson)
-      // let imageResult = this.SaveImageinDB();
-      // imageResult.then((objImage: ImageUpload_model) => { 
-      this.ImageUploadValidation = true;
-      //  this.imageGUID = objImage.Image_Guid
-      this.imageGUID = this.uniqueName;
-      // , formvalues
-      //this.disableButton = true;
-      //this.PublicTransValue = false;
-      // this.PublicTransValue = true;
+    /*     this.loading = this.loadingCtrl.create(
+          { content: 'Please wait...'});
+          this.loading.present(); */
+    let uploadImage = UploadImage(this.http, this.uploadFileName, this.MiscellaneousForm.get('avatar'));
+    console.log("UploadImage returned result: ", uploadImage);
+    if (uploadImage) {
+      //this.submitAction(this.uploadFileName, formValues);
+      this.imageGUID = uploadImage;
       this.chooseFile = false;
-    })
-    // setTimeout(() => {
-    //   this.loading = false;
-    // }, 1000);
+      this.ImageUploadValidation = true;
+    }
   }
 
   SaveImageinDB() {
-    let objImage: ImageUpload_model = new ImageUpload_model();
-    objImage.Image_Guid = UUID.UUID();
-    objImage.IMAGE_URL = this.CloudFilePath + this.uploadFileName;
-    objImage.CREATION_TS = new Date().toISOString();
-    objImage.Update_Ts = new Date().toISOString();
-    return new Promise((resolve) => {
-      this.api.postData('main_images', objImage.toJson(true)).subscribe(() => {
-        // let res = response.json();
-        // let imageGUID = res["resource"][0].Image_Guid;
-        resolve(objImage.toJson());
-      })
-    })
+    /*     this.loading = this.loadingCtrl.create(
+          { content: 'Please wait...'});
+          this.loading.present(); */
+    let uploadImage = UploadImage(this.http, this.uploadFileName, this.Travelform.get('avatar'));
+    console.log("UploadImage returned result: ", uploadImage);
+    if (uploadImage) {
+      //this.submitAction(this.uploadFileName, formValues);
+      this.imageGUID = uploadImage;
+      this.chooseFile = false;
+      this.ImageUploadValidation = true;
+    }
   }
 
-  UploadImage() {
-    this.CloudFilePath = 'eclaim/'
-    this.uniqueName = new Date().toISOString() + this.uploadFileName;
-    const queryHeaders = new Headers();
-    queryHeaders.append('filename', this.uploadFileName);
-    queryHeaders.append('Content-Type', 'multipart/form-data');
-    queryHeaders.append('fileKey', 'file');
-    queryHeaders.append('chunkedMode', 'false');
-    queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-    const options = new RequestOptions({ headers: queryHeaders });
-    this.loading = this.loadingCtrl.create({
-      content: 'Please wait...',
-    });
-    this.loading.present();
-    return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Travelform.get('avatar').value, options)
-        .map((response) => {
-          this.loading.dismissAll()
-          return response;
-        }).subscribe((response) => {
-          resolve(response.json());
+  /*   SaveImageinDB() {
+      let objImage: ImageUpload_model = new ImageUpload_model();
+      objImage.Image_Guid = UUID.UUID();
+      objImage.IMAGE_URL = this.CloudFilePath + this.uploadFileName;
+      objImage.CREATION_TS = new Date().toISOString();
+      objImage.Update_Ts = new Date().toISOString();
+      return new Promise((resolve) => {
+        this.api.postData('main_images', objImage.toJson(true)).subscribe(() => {
+          // let res = response.json();
+          // let imageGUID = res["resource"][0].Image_Guid;
+          resolve(objImage.toJson());
         })
-    })
-  }
-
+      })
+    }
+  
+    UploadImage() {
+      this.CloudFilePath = 'eclaim/'
+      this.uniqueName = new Date().toISOString() + this.uploadFileName;
+      const queryHeaders = new Headers();
+      queryHeaders.append('filename', this.uploadFileName);
+      queryHeaders.append('Content-Type', 'multipart/form-data');
+      queryHeaders.append('fileKey', 'file');
+      queryHeaders.append('chunkedMode', 'false');
+      queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+      const options = new RequestOptions({ headers: queryHeaders });
+      this.loading = this.loadingCtrl.create({
+        content: 'Please wait...',
+      });
+      this.loading.present();
+      return new Promise((resolve) => {
+        this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Travelform.get('avatar').value, options)
+          .map((response) => {
+            this.loading.dismissAll()
+            return response;
+          }).subscribe((response) => {
+            resolve(response.json());
+          })
+      })
+    }
+   */
 
   validateDate(startDate: any, endDate: any) {
     let today = this.api.CreateTimestamp();
@@ -1035,8 +1093,6 @@ export class TravelclaimPage {
               .subscribe(data => {
                 this.claimRequestData = data;
                 // this.claimRequestData["resource"][0].STATUS = 'Pending';
-                console.log("VehicleID=",this.VehicleId);
-
                 this.claimRequestData["resource"][0].MILEAGE_GUID = this.VehicleId;
                 this.claimRequestData["resource"][0].TRAVEL_DATE = formValues.start_DT;
                 this.claimRequestData["resource"][0].START_TS = formValues.start_DT;
@@ -1093,25 +1149,7 @@ export class TravelclaimPage {
                       this.conference.pushTravelClaim();
                     });
                   })
-
-                // this.api.updateApiModel('main_claim_request', this.claimRequestData, true).subscribe(() => {
-                //   // if (isClaim && modelJSON.STATUS != 'Draft')
-                //   // if (this.claimRequestData["resource"][0].STATUS != 'Draft') {
-
-                //   // Send Email------------------------------------------------
-                //   // this.api.sendEmail(this.claimRequestData["resource"][0].CLAIM_TYPE_GUID, formValues.start_DT, formValues.end_DT, moment(this.claimRequestData["resource"][0].CREATION_TS).format('YYYY-MM-DDTHH:mm'), formValues.start_DT, this.claimRequestGUID);
-                //   //Commented By bijay on 24/09/2018 as per scheduler implemented
-                //   // this.api.sendEmail_New(this.claimRequestData["resource"][0].CLAIM_TYPE_GUID, formValues.start_DT, formValues.end_DT, moment(this.claimRequestData["resource"][0].CREATION_TS).format('YYYY-MM-DDTHH:mm'), formValues.start_DT, this.claimRequestGUID, formValues.origin, formValues.destination, formValues.description, this.Soc_GUID, this.Customer_GUID);
-                //   // ----------------------------------------------------------
-                //   //}
-
-                //   alert('Claim details updated successfully.');
-                //   // this.navCtrl.push(UserclaimslistPage);
-                //   this.conference.pushTravelClaim();
-                // })
               })
-            // this.profileMng.save(formValues, this.travelAmount, this.isCustomer)
-            // this.MainClaimSaved = true;
           }
         })
     }

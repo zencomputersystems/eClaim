@@ -1,4 +1,4 @@
-import { DREAMFACTORY_IMAGE_URL, DREAMFACTORY_TABLE_URL, DREAMFACTORY_API_KEY, DREAMFACTORY_TEMPLATE_URL, DREAMFACTORY_EMAIL_URL } from './../../app/config/constants';
+import { DREAMFACTORY_IMAGE_URL, DREAMFACTORY_TABLE_URL, DREAMFACTORY_API_KEY, DREAMFACTORY_TEMPLATE_URL, DREAMFACTORY_EMAIL_URL, DREAMFACTORY_INSTANCE_URL } from './../../app/config/constants';
 import { Injectable } from '@angular/core';
 
 /*
@@ -25,10 +25,10 @@ export type serviceTypeDef = {
   'file': 'azurefs/eclaim/';
   'template': 'azurefs/Template/';
   'email': 'zenmail';
+  'distance': 'google/distancematrix/json';
 };
 
 export type filterConnectorDef = 'AND' | 'OR'
-
 
 /**
  * Generate usable URL
@@ -42,6 +42,7 @@ export type filterConnectorDef = 'AND' | 'OR'
  */
 export function getURL(serviceType: keyof serviceTypeDef, resourceName?: string, filters: string[] = [], filterConnector: filterConnectorDef = "AND") {
   var urlstring: string;
+
 switch (serviceType) {
   case 'file': { urlstring = `${DREAMFACTORY_IMAGE_URL}/${resourceName}?api_key=${DREAMFACTORY_API_KEY}`; break };
   case 'table': { 
@@ -52,6 +53,7 @@ switch (serviceType) {
   case 'image': { urlstring = `${DREAMFACTORY_IMAGE_URL}/${resourceName}?api_key=${DREAMFACTORY_API_KEY}`; break };
   case 'template': { urlstring = `${DREAMFACTORY_TEMPLATE_URL}/${resourceName}?api_key=${DREAMFACTORY_API_KEY}`; break; }
   case 'email': { urlstring = `${DREAMFACTORY_EMAIL_URL}?api_key=${DREAMFACTORY_API_KEY}`; break; }
+  case 'distance': { urlstring = `${DREAMFACTORY_INSTANCE_URL}/api/v2/google/distancematrix/json?api_key=${DREAMFACTORY_API_KEY}`; break; }
 }
   return sanitizeURL(urlstring);
 }
