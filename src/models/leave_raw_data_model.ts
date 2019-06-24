@@ -1,21 +1,20 @@
-export class Leave_Raw_Data_Model {
-    constructor(
-        public STAFF_ID: string = null,
-        public TITLE: string = null,
-        public START_DATE: string = null,
-        public END_DATE: string = null,
-        public LEAVE_ID: string = null,
-        public HALF_DAY_DATE: string = null,
-        public SESSION: string = null,
+import { Base_Model } from './base_model';
+export class Leave_Raw_Data_Model extends Base_Model {
+    constructor() {
+        super();
+    }
 
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null        
-    ) { }
-    static fromJson(json: any) {
+    public STAFF_ID: string = null;
+    public TITLE: string = null;
+    public START_DATE: string = null;
+    public END_DATE: string = null;
+    public LEAVE_ID: string = null;
+    public HALF_DAY_DATE: string = null;
+    public SESSION: string = null; 
+
+    static fromJson(json: Leave_Raw_Data_Model) {
         if (!json) return;
-        return new Leave_Raw_Data_Model(
+        return (
             json.STAFF_ID,
             json.TITLE,
             json.START_DATE,

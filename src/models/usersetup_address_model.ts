@@ -1,22 +1,22 @@
-export class UserAddress_Model {
-    constructor(
-        public USER_ADDRESS_GUID: string = null,
-        public USER_GUID: string = null,
-        public ADDRESS_TYPE: string = null,
-        public USER_ADDRESS1: string = null,
-        public USER_ADDRESS2: string = null,
-        public USER_ADDRESS3: string = null,
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null,
-        public POST_CODE: string = null,
-        public COUNTRY_GUID: string = null,
-        public STATE_GUID: string = null
-    ) { }
-    static fromJson(json: any) {
+import { Base_Model } from './base_model';
+export class UserAddress_Model extends Base_Model {
+    constructor() {
+        super();
+    }
+
+    public USER_ADDRESS_GUID: string = null;
+    public USER_GUID: string = null;
+    public ADDRESS_TYPE: string = null;
+    public USER_ADDRESS1: string = null;
+    public USER_ADDRESS2: string = null;
+    public USER_ADDRESS3: string = null;
+    public POST_CODE: string = null;
+    public COUNTRY_GUID: string = null;
+    public STATE_GUID: string = null;
+
+    static fromJson(json: UserAddress_Model) {
         if (!json) return;
-        return new UserAddress_Model(
+        return (
             json.USER_ADDRESS_GUID,
             json.USER_GUID,
             json.ADDRESS_TYPE,

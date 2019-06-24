@@ -1,28 +1,27 @@
-export class TenantCompanySiteSetup_Model {
-    constructor(
-        public TENANT_COMPANY_SITE_GUID: string = null,
-        public TENANT_COMPANY_GUID: string = null,
-        public SITE_NAME: string = null,
-        public REGISTRATION_NUM: string = null,
-        public ADDRESS: string = null,
-        public ADDRESS2: string = null,
-        public ADDRESS3: string = null,
-        public CONTACT_NO: string = null,
-        public EMAIL: string = null,
-        public ACTIVATION_FLAG: string = null,
-        public CONTACT_PERSON: string = null,
-        public CONTACT_PERSON_CONTACT_NO: string = null,
-        public CONTACT_PERSON_EMAIL: string = null,
-        public WEBSITE: string = null,
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null,
-        public ISHQ: string = null
-    ) { }
-    static fromJson(json: any) {
+import { Base_Activation_Model } from './base_model';
+export class TenantCompanySiteSetup_Model extends Base_Activation_Model {
+    constructor() {
+        super();
+    }
+
+    public TENANT_COMPANY_SITE_GUID: string = null;
+    public TENANT_COMPANY_GUID: string = null;
+    public SITE_NAME: string = null;
+    public REGISTRATION_NUM: string = null;
+    public ADDRESS: string = null;
+    public ADDRESS2: string = null;
+    public ADDRESS3: string = null;
+    public CONTACT_NO: string = null;
+    public EMAIL: string = null;
+    public CONTACT_PERSON: string = null;
+    public CONTACT_PERSON_CONTACT_NO: string = null;
+    public CONTACT_PERSON_EMAIL: string = null;
+    public WEBSITE: string = null;
+    public ISHQ: string = null;
+
+    static fromJson(json: TenantCompanySiteSetup_Model) {
         if (!json) return;
-        return new TenantCompanySiteSetup_Model(
+        return (
             json.TENANT_COMPANY_SITE_GUID,
             json.TENANT_COMPANY_GUID,
             json.SITE_NAME,

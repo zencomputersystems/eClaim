@@ -1,19 +1,16 @@
-export class DesignationSetup_Model {
-	constructor(
-		public DESIGNATION_GUID: string = null,
-		public NAME: string = null,
-		public DESCRIPTION: string = null,
-		public CREATION_TS: string = null,
-		public CREATION_USER_GUID: string = null,
-		public UPDATE_TS: string = null,
-		public UPDATE_USER_GUID: string = null,
-		public TENANT_GUID: string = null,
-	) { }
+import { Base_NameDescription_Model } from './base_model';
+export class DesignationSetup_Model extends Base_NameDescription_Model {
+	constructor() {
+		super();
+	}
+
+	public DESIGNATION_GUID: string = null
+	public TENANT_GUID: string = null;
 
 
-	static fromJson(json: any) {
+	static fromJson(json: DesignationSetup_Model) {
 		if (!json) return;
-		return new DesignationSetup_Model(
+		return (
 			json.DESIGNATION_GUID,
 			json.NAME,
 			json.DESCRIPTION,

@@ -18,6 +18,7 @@ import { Services } from '../Services';
 import { ClaimRequestDetailModel } from '../../models/claim-request-detail.model';
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import moment from 'moment';
+import { getURL } from '../../providers/sanitizer/sanitizer';
 
 @IonicPage()
 @Component({
@@ -120,7 +121,7 @@ export class AddTollPage {
     } else this.imageOptional = false;
   }
 
-  Save(isMA: boolean) {
+  checkMealValidity(isMA: boolean) {
     if (isMA) {
       this.claimAmount = Number(this.days) * this.claimAmount;
       if (this.MA_SELECT === 'NA' || this.MA_SELECT === undefined) {
@@ -137,6 +138,9 @@ export class AddTollPage {
         return;
       }
     }
+  }
+  Save(isMA: boolean) {
+    this.checkMealValidity(isMA);
     if (this.ClaimDetailGuid === undefined || this.ClaimDetailGuid === null) {
       // alert(imageID)
       let claimReqRef: ClaimRequestDetailModel = new ClaimRequestDetailModel();
@@ -178,9 +182,7 @@ export class AddTollPage {
           this.claimDetailsData['resource'][0].AMOUNT = this.claimAmount;
           this.claimDetailsData['resource'][0].days = this.days;
           this.claimDetailsData['resource'][0].DESCRIPTION = this.Description;
-          this.claimDetailsData[
-            'resource'
-          ][0].UPDATE_TS = this.api.CreateTimestamp();
+          this.claimDetailsData['resource'][0].UPDATE_TS = this.api.CreateTimestamp();
 
           this.claimDetailsData['resource'][0].ATTACHMENT_ID =
             this.imageGUID !== undefined || this.imageGUID !== null
@@ -195,8 +197,8 @@ export class AddTollPage {
             .subscribe(() =>
               alert(
                 'Your ' +
-                  this.ClaimMethodName +
-                  ' details are updated successfully.'
+                this.ClaimMethodName +
+                ' details are updated successfully.'
               )
             );
           this.navCtrl.pop();
@@ -359,7 +361,7 @@ export class AddTollPage {
     this.loading.present();
     return new Promise((resolve) => {
       // this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uploadFileName, this.DetailsForm.get('avatar').value, options)
-      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.DetailsForm.get('avatar').value, options)
+      this.http.post(getURL("image", this.uniqueName), this.DetailsForm.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
           return response;

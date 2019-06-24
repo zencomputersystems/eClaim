@@ -1,21 +1,21 @@
-export class UserQualification_Model {
-    constructor(
-        public USER_QUALIFICATION_GUID: string = null,
-        public QUALIFICATION_GUID: string = null,
-        public USER_GUID: string = null,
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null,
-        public HIGHEST_QUALIFICATION: string = null,
-        public MAJOR: string = null,
-        public UNIVERSITY: string = null,
-        public YEAR: string = null,
-        public ATTACHMENT: string = null
-    ) { }
-    static fromJson(json: any) {
+import { Base_Model } from './base_model';
+export class UserQualification_Model extends Base_Model {
+    constructor() {
+        super();
+    }
+
+    public USER_QUALIFICATION_GUID: string = null;
+    public QUALIFICATION_GUID: string = null;
+    public USER_GUID: string = null;
+    public HIGHEST_QUALIFICATION: string = null;
+    public MAJOR: string = null;
+    public UNIVERSITY: string = null;
+    public YEAR: string = null;
+    public ATTACHMENT: string = null;
+
+    static fromJson(json: UserQualification_Model) {
         if (!json) return;
-        return new UserQualification_Model(
+        return (
             json.USER_QUALIFICATION_GUID,
             json.QUALIFICATION_GUID,
             json.USER_GUID,

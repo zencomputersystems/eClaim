@@ -1,25 +1,24 @@
-export class MainClaimReferanceModel {
+import { Base_Model } from './base_model';
+export class MainClaimReferanceModel extends Base_Model {
 
-    constructor(  
-      public CLAIM_REF_GUID: string = null,
-      public USER_GUID: string = null,
-      public TENANT_GUID: string = null,
-      public REF_NO: string = null,
-      public MONTH: number = null,
-      public YEAR: number = null,
-      public STATUS: string = null,
-      public STATUS_REMARKS: string = null,
-      public CLOSURE_TYPE_GUID: string = null,
-      public CREATION_TS: string = null,
-      public CREATION_USER_GUID: string = null,
-      public UPDATE_TS: string = null,
-      public UPDATE_USER_GUID: string = null,
-    ) { }
+    constructor() {
+      super();
+    }
+    
+    public CLAIM_REF_GUID: string = null;
+    public USER_GUID: string = null;
+    public TENANT_GUID: string = null;
+    public REF_NO: string = null;
+    public MONTH: number = null;
+    public YEAR: number = null;
+    public STATUS: string = null;
+    public STATUS_REMARKS: string = null;
+    public CLOSURE_TYPE_GUID: string = null;
   
   
-    static fromJson(json: any) {
+    static fromJson(json: MainClaimReferanceModel) {
       if (!json) return;
-      return new MainClaimReferanceModel(
+      return (
         json.CLAIM_REF_GUID,
         json.USER_GUID,
         json.TENANT_GUID,

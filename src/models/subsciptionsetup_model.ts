@@ -1,22 +1,21 @@
-export class SubsciptionSetup_Model {
-	constructor(
-        public SUBSCRIPTION_GUID: string = null,
-        public PLAN_NAME: string = null,
-        public DURATION: string = null,
-        public RATE: string = null,
-        public EFFECTIVE_DATE: string = null,
-        public DESCRIPTION: string = null,
-        public ACTIVE_FLAG: string = null,
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public TENANT_GUID: string = null,
-        public UPDATE_USER_GUID: string = null
-    ) { }
-    
-    static fromJson(json: any) {
+import { Base_Model } from './base_model';
+export class SubsciptionSetup_Model extends Base_Model {
+	constructor() {
+    super();
+  }
+
+  public SUBSCRIPTION_GUID: string = null;
+  public PLAN_NAME: string = null;
+  public DURATION: string = null;
+  public RATE: string = null;
+  public EFFECTIVE_DATE: string = null;
+  public DESCRIPTION: string = null;
+  public ACTIVE_FLAG: string = null;
+  public TENANT_GUID: string = null;
+
+    static fromJson(json: SubsciptionSetup_Model) {
 		if (!json) return;
-		return new SubsciptionSetup_Model(
+		return (
 			json.SUBSCRIPTION_GUID,
 		    json.PLAN_NAME,
 			json.DURATION,
