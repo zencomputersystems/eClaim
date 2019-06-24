@@ -14,7 +14,7 @@ import { ProfileManagerProvider } from '../../providers/profile-manager.provider
 import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
 import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
 import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
-import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
+// import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
 import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
 import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
 import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
@@ -360,7 +360,7 @@ export class ClaimapprovertasklistPage {
     switch (claimType) {
       case '2d8d7c80-c9ae-9736-b256-4d592e7b7887': this.pushPage(GiftClaimViewPage); break;
       case '37067b3d-1bf4-33a3-2b60-3ca40baf589a': this.pushPage(OvertimeClaimViewPage); break;
-      case '40dbaf56-98e4-77b9-df95-85ec232ff714': this.pushPage(MedicalClaimViewPage); break;
+//      case '40dbaf56-98e4-77b9-df95-85ec232ff714': this.pushPage(MedicalClaimViewPage); break;
       case '58c59b56-289e-31a2-f708-138e81a9c823': this.pushPage(TravelClaimViewPage); break;
       case 'd9567482-033a-6d92-3246-f33043155746': this.pushPage(PrintClaimViewPage); break;
       case 'f3217ecc-19d7-903a-6c56-78fdbd7bbcf1': this.pushPage(EntertainmentClaimViewPage); break;

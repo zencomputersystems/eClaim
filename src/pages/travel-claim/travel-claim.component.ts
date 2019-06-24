@@ -934,7 +934,7 @@ export class TravelclaimPage {
     /*     this.loading = this.loadingCtrl.create(
           { content: 'Please wait...'});
           this.loading.present(); */
-    let uploadImage = UploadImage(this.http, this.uploadFileName, this.MiscellaneousForm.get('avatar'));
+    let uploadImage = UploadImage(this.http, this.uploadFileName, this.Travelform.get('avatar'));
     console.log("UploadImage returned result: ", uploadImage);
     if (uploadImage) {
       //this.submitAction(this.uploadFileName, formValues);
