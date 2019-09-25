@@ -14,7 +14,7 @@ import { BaseHttpService } from '../../services/base-http';
 import { UUID } from 'angular2-uuid';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { LoadingController, ActionSheetController, Loading, ToastController } from 'ionic-angular';
-import { AddTollPage } from '../add-toll/add-toll.component';
+import { AddTollPage } from './add-toll/add-toll.component';
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
 import { ConferenceData } from '../../providers/conference-data';
@@ -861,7 +861,7 @@ export class TravelclaimPage {
     const reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      if (file.type === 'image/jpeg')
+      if ((file.type === 'image/jpeg') || (file.type === 'image/png'))
         this.isImage = true;
       else
         this.isImage = false;

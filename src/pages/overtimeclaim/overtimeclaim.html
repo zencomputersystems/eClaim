@@ -39,7 +39,7 @@
           <ion-item style="width:19%;display: inline-block;">
             <ion-label floating>{{ "SOC_NUMBER_LABEL" | translate }}</ion-label>
             <ion-input [ngModelOptions]="{standalone: true}" [(ngModel)]="OT_SOC_No_ngModel" [ngModelOptions]="{standalone: true}"
-              type="text" [attr.disabled]="true" ></ion-input>
+              type="text" [disabled]="true" ></ion-input>
           </ion-item>
         </div>
       </div>
@@ -63,7 +63,7 @@
 
     <ion-item>
       <ion-label color="primary500" floating> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ currency }}</ion-label>
-      <ion-input [attr.disabled]="true"  type="text" formControlName="claim_amount" 
+      <ion-input type="text" formControlName="claim_amount" 
       [(ngModel)]="OT_Amount_ngModel"></ion-input>
     </ion-item>
     <!-- <ion-item *ngIf="!OTform.controls.claim_amount.valid  && (OTform.controls.claim_amount.dirty)">
@@ -76,7 +76,7 @@
     </ion-item>
 
     <div class="btn">     
-      <button ion-button color="primary500" (click)='submitAction(OTform.value)' [attr.disabled]= "!OTform.valid">{{ 'SUBMIT'}}</button>     
+      <button ion-button color="primary500" (click)='submitAction(OTform.value)' [disabled]= "!OTform.valid">{{ 'SUBMIT'}}</button>     
    </div>   
    <!-- <ion-item *ngIf="!OTform.controls.claim_amount.valid  && (OTform.controls.claim_amount.dirty)">
     <p style="color: red; text-align:right;margin-right: 34%;">Claim amount should be {{currency}} {{min_claim_amount}} - {{max_claim_amount}}</p>

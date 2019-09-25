@@ -75,7 +75,7 @@
         <!-- <button ion-button outline item-start icon-left (click)="DisplayImage(claim.ATTACHMENT_ID)" *ngIf="claim.ATTACHMENT_ID!==null">
             View Receipt
         </button> -->
-        <a href={{imageURL}} target='_blank'>View Receipt</a> 
+        <a *ngIf="imageURL" href={{imageURL}} target='_blank'>View Receipt</a> 
     </ion-item>
 
 

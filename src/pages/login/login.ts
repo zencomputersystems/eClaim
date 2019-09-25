@@ -8,7 +8,7 @@ import CryptoJS from 'crypto-js';
 import { UserData } from '../../providers/user-data';
 // import { SignupPage } from '../signup/signup';
 import * as constants from '../../app/config/constants';
-import { SetupguidePage } from '../setupguide/setupguide';
+import { SetupguidePage } from '../setup/setupguide/setupguide';
 import { DashboardPage } from '../dashboard/dashboard';
 import { UserMain_Model } from '../../models/user_main_model';
 import { UserSetup_Service } from '../../services/usersetup_service';

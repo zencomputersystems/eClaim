@@ -1,52 +1,44 @@
-import { Component } from '@angular/core';
-
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { BanksetupPage } from '../banksetup/banksetup';
-import { BranchsetupPage } from '../branchsetup/branchsetup';
-import { CashcardsetupPage } from '../cashcardsetup/cashcardsetup';
-import { ClaimtypePage } from '../claimtype/claimtype';
-import { CompanysetupPage } from '../companysetup/companysetup';
-import { DesignationsetupPage } from '../designationsetup/designationsetup';
-import { DepartmentsetupPage } from '../departmentsetup/departmentsetup';
-import { MileagesetupPage } from '../mileagesetup/mileagesetup';
-import { PaymenttypesetupPage } from '../paymenttypesetup/paymenttypesetup';
-import { QualificationsetupPage } from '../qualificationsetup/qualificationsetup';
-import { UserPage } from '../user/user';
-import { SocRegistrationPage } from '../soc-registration/soc-registration';
-import { CountrysetupPage } from '../countrysetup/countrysetup';
-import { StatesetupPage } from '../statesetup/statesetup';
-import { ImportExcelDataPage } from '../import-excel-data/import-excel-data';
-import { DeviceSetupPage } from '../device-setup/device-setup';
-import { RolesetupPage } from '../rolesetup/rolesetup';
-import { RolemodulesetupPage } from '../rolemodulesetup/rolemodulesetup';
-import { CustomerSetupPage } from '../customer-setup/customer-setup';
-import { SetupguidePage } from '../setupguide/setupguide';
-import { LoginPage } from '../login/login';
-import { SettingsPage } from '../settings/settings';
-import { CompanysettingsPage } from '../companysettings/companysettings';
-import { DbmaintenancePage } from '../dbmaintenance/dbmaintenance';
-import { ApprovalProfilePage } from '../approval-profile/approval-profile';
-import { OtRateSetupPage } from '../ot-rate-setup/ot-rate-setup';
-
-import { TenantCompanySetup_Model } from '../../models/tenantcompanysetup_model';
-import { TenantCompanySiteSetup_Model } from '../../models/tenantcompanysitesetup_model';
-import { TenantCompanySetup_Service } from '../../services/tenantcompanysetup_service';
-import { TenantCompanySiteSetup_Service } from '../../services/tenantcompanysitesetup_service';
-import { BaseHttpService } from '../../services/base-http';
-
-
-
-import { UUID } from 'angular2-uuid';
-
-
-
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 import * as constants from '../../app/config/constants';
-import { from } from 'rxjs/observable/from';
 
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+import { ApprovalProfilePage } from '../approval-profile/approval-profile';
+import { BanksetupPage } from '../banksetup/banksetup';
+import { BaseHttpService } from '../../services/base-http';
+import { BranchsetupPage } from '../branchsetup/branchsetup';
+import { CashcardsetupPage } from '../cashcardsetup/cashcardsetup';
+import { ClaimtypePage } from '../claimtype/claimtype';
+import { CompanysettingsPage } from '../companysettings/companysettings';
+import { CompanysetupPage } from './companysetup/companysetup';
+import { Component } from '@angular/core';
+import { CountrysetupPage } from './countrysetup/countrysetup';
+import { CustomerSetupPage } from './customer-setup/customer-setup';
+import { DbmaintenancePage } from '../dbmaintenance/dbmaintenance';
+import { DepartmentsetupPage } from './departmentsetup/departmentsetup';
+import { DesignationsetupPage } from './designationsetup/designationsetup';
+import { DeviceSetupPage } from './device-setup/device-setup';
+import { Http } from '@angular/http';
+import { ImportExcelDataPage } from '../import-excel-data/import-excel-data';
+import { LoginPage } from '../login/login';
+import { MileagesetupPage } from '../mileagesetup/mileagesetup';
+import { OtRateSetupPage } from '../ot-rate-setup/ot-rate-setup';
+import { PaymenttypesetupPage } from '../paymenttypesetup/paymenttypesetup';
+import { QualificationsetupPage } from '../qualificationsetup/qualificationsetup';
+import { RolemodulesetupPage } from '../rolemodulesetup/rolemodulesetup';
+import { RolesetupPage } from '../rolesetup/rolesetup';
+import { SettingsPage } from '../settings/settings';
+import { SetupguidePage } from './setupguide/setupguide';
+import { SocRegistrationPage } from '../soc-registration/soc-registration';
+import { StatesetupPage } from './statesetup/statesetup';
+import { TenantCompanySetup_Model } from '../../models/tenantcompanysetup_model';
+import { TenantCompanySetup_Service } from '../../services/tenantcompanysetup_service';
+import { TenantCompanySiteSetup_Model } from '../../models/tenantcompanysitesetup_model';
+import { TenantCompanySiteSetup_Service } from '../../services/tenantcompanysitesetup_service';
+import { UUID } from 'angular2-uuid';
+import { UserPage } from '../user/user';
 
 /**
  * Generated class for the SetupPage page.

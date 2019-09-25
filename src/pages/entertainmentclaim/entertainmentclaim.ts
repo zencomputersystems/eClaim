@@ -383,12 +383,9 @@ export class EntertainmentclaimPage {
   onFileChange(event: any, ) {
     const reader = new FileReader();
 
-
-
-
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      if (file.type === 'image/jpeg')
+      if ((file.type === 'image/jpeg') || (file.type === 'image/png'))
         this.isImage = true;
       else
         this.isImage = false;
