@@ -1,26 +1,24 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
-import { TitleCasePipe } from '@angular/common';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../../app/config/constants';
-import { SocMain_Model } from '../../models/socmain_model';
-import { SocProject_Model } from '../../models/soc_project_model';
-import { SocCustomer_Model } from '../../models/soc_customer_model';
-import { SocCustomerLocation_Model } from '../../models/soc_customer_location_model';
-import { SocMain_Service } from '../../services/socmain_service';
+import * as constants from '../../../app/config/constants';
 
-import { Tenant_Main_Model } from '../../models/tenant_main_model';
-import { View_SOC_Model } from '../../models/view_soc_model';
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { BaseHttpService } from '../../services/base-http';
-
+import { BaseHttpService } from '../../../services/base-http';
+import { Component } from '@angular/core';
+import { Http } from '@angular/http';
+import { LoginPage } from '../../login/login';
+import { SocCustomerLocation_Model } from '../../../models/soc_customer_location_model';
+import { SocCustomer_Model } from '../../../models/soc_customer_model';
+import { SocMain_Model } from '../../../models/socmain_model';
+import { SocMain_Service } from '../../../services/socmain_service';
+import { SocProject_Model } from '../../../models/soc_project_model';
+import { Tenant_Main_Model } from '../../../models/tenant_main_model';
+import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
-import { LoginPage } from '../login/login';
-import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
-
+import { View_SOC_Model } from '../../../models/view_soc_model';
+import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the SocRegistrationPage page.

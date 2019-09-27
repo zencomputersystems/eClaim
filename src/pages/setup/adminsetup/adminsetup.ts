@@ -8,7 +8,7 @@ import { ClaimtasklistPage } from '../../claimtasklist/claimtasklist';
 import { Component } from '@angular/core';
 import { ModulesetupPage } from '../modulesetup/modulesetup';
 import { PagesetupPage } from '../pagesetup/pagesetup';
-import { PermissionPage } from '../../permission/permission';
+import { PermissionPage } from '../permission/permission';
 import { ProfileSetupPage } from '../profile-setup/profile-setup.component';
 import { SubmodulesetupPage } from '../submodulesetup/submodulesetup';
 import { SubsciptionsetupPage } from '../subsciptionsetup/subsciptionsetup';

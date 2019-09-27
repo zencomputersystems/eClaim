@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
-import { TitleCasePipe } from '@angular/common';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../../app/config/constants';
-import { Settings_Model } from '../../models/settings_model';
-import { Settings_Service } from '../../services/settings_service';
-import { BaseHttpService } from '../../services/base-http';
+import * as constants from '../../../app/config/constants';
 
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Headers, Http, RequestOptions } from '@angular/http';
+
+import { BaseHttpService } from '../../../services/base-http';
+import { Component } from '@angular/core';
+import { LoginPage } from '../../login/login';
+import { Settings_Model } from '../../../models/settings_model';
+import { Settings_Service } from '../../../services/settings_service';
+import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
-import { LoginPage } from '../login/login';
+
 // import { Item } from 'ionic-angular/components/item/item';
 // import { Flags } from '@ionic-native/file';
 

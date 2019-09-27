@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../../app/config/constants';
+
+import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions, URLSearchParams } from '@angular/http';
-import { UUID } from 'angular2-uuid';
-import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
-import 'rxjs/add/operator/map';
-import * as constants from '../../../app/config/constants';
-import { Main_Profile_Model } from '../../../models/main_profile_model';
-import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
+
 import { BaseHttpService } from '../../../services/base-http';
-import { ProfileSetup_Service } from '../../../services/profilesetup_services';
-import { GlobalFunction } from '../../../shared/GlobalFunction';
+import { Component } from '@angular/core';
+// t { GlobalFunction } from '../../../shared/GlobalFunction';
 import { LoginPage } from '../../login/login';
-
-
+import { Main_Profile_Model } from '../../../models/main_profile_model';
+import { ProfileSetup_Service } from '../../../services/profilesetup_services';
+import { UUID } from 'angular2-uuid';
+import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the ProfileSetupPage page.
@@ -24,7 +25,7 @@ import { LoginPage } from '../../login/login';
 @IonicPage()
 @Component({
   selector: 'page-profile-setup',
-  templateUrl: 'profile-setup.html', providers: [ProfileSetup_Service, BaseHttpService, GlobalFunction]
+  templateUrl: 'profile-setup.html', providers: [ProfileSetup_Service, BaseHttpService]
 })
 export class ProfileSetupPage {
   NAME: any;
@@ -54,7 +55,7 @@ export class ProfileSetupPage {
   public XML_ngModel_Edit: any;
   //---------------------------------------------------------------------
 
-  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private profilesetupservice: ProfileSetup_Service, private alertCtrl: AlertController, public GlobalFunction: GlobalFunction) {
+  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private profilesetupservice: ProfileSetup_Service, private alertCtrl: AlertController) {
 
     if (localStorage.getItem("g_USER_GUID") != null) {
       this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/zcs/_table/main_profile?order=PROFILE_NAME&api_key=" + constants.DREAMFACTORY_API_KEY;

@@ -1,20 +1,19 @@
-import { Component, Inject } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { TitleCasePipe } from '@angular/common';
-
-import { FormControlDirective, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../../app/config/constants';
-import { Settings_Model } from '../../models/settings_model';
-import { Settings_Service } from '../../services/settings_service';
-import { BaseHttpService } from '../../services/base-http';
+import * as constants from '../../../app/config/constants';
 
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { BaseHttpService } from '../../../services/base-http';
+import { Component } from '@angular/core';
+// import { GlobalFunction } from '../../../shared/GlobalFunction';
+import { Http } from '@angular/http';
+import { LoginPage } from '../../login/login';
+import { Settings_Model } from '../../../models/settings_model';
+import { Settings_Service } from '../../../services/settings_service';
+import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
-import { GlobalFunction } from '../../shared/GlobalFunction';
-import { LoginPage } from '../login/login';
 
 /**
  * Generated class for the SettingsPage page.
@@ -26,7 +25,7 @@ import { LoginPage } from '../login/login';
 @IonicPage()
 @Component({
   selector: 'page-settings',
-  templateUrl: 'settings.html', providers: [Settings_Service, BaseHttpService, GlobalFunction, TitleCasePipe]
+  templateUrl: 'settings.html', providers: [Settings_Service, BaseHttpService, TitleCasePipe]
 })
 export class SettingsPage {
   AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
@@ -42,7 +41,7 @@ export class SettingsPage {
 
   public page: number = 1;
 
-  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private settingservice: Settings_Service, private alertCtrl: AlertController, public GlobalFunction: GlobalFunction, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
+  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private settingservice: Settings_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
     if (localStorage.getItem("g_USER_GUID") == null) {
       alert('Sorry, you are not logged in. Please login.');
       this.navCtrl.push(LoginPage);

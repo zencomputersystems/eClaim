@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
-import { NgForm, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { NavController, Loading, MenuController } from 'ionic-angular';
-import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
-import CryptoJS from 'crypto-js';
 
-import { UserData } from '../../providers/user-data';
 // import { SignupPage } from '../signup/signup';
 import * as constants from '../../app/config/constants';
-import { SetupguidePage } from '../setup/setupguide/setupguide';
+
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Headers, Http, RequestOptions } from '@angular/http';
+import { Loading, MenuController, NavController } from 'ionic-angular';
+
+import { BaseHttpService } from '../../services/base-http';
+import { Component } from '@angular/core';
+import CryptoJS from 'crypto-js';
 import { DashboardPage } from '../dashboard/dashboard';
+import { Random } from '../../shared/GlobalFunction';
+import { SetupguidePage } from '../setup/setupguide/setupguide';
+import { Storage } from '@ionic/storage';
+import { UserData } from '../../providers/user-data';
 import { UserMain_Model } from '../../models/user_main_model';
 import { UserSetup_Service } from '../../services/usersetup_service';
-import { Storage } from '@ionic/storage';
-import { BaseHttpService } from '../../services/base-http';
 import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 @Component({
@@ -33,6 +36,7 @@ export class LoginPage {
     public userData: UserData,
     public http: Http,
     public storage: Storage,
+//    private Global_Function: GlobalFunction,
     fb: FormBuilder,
     private userservice: UserSetup_Service) {
     localStorage.clear(); //debugger;
@@ -200,8 +204,8 @@ res[0].forEach( (element: any)=> {
         if (res.length > 0) {
 
           //Generate Password Encrypt-----------------
-          let strPassword: string = this.Random().toString();
-          let strPasswordHex: string = CryptoJS.SHA256(strPassword).toString(CryptoJS.enc.Hex);
+          var strPassword = Random();
+          let strPasswordHex = CryptoJS.SHA256(strPassword).toString(CryptoJS.enc.Hex);
 
           //Update to database------------------------          
           this.usermain_entry.TENANT_GUID = res[0]["TENANT_GUID"]
@@ -234,10 +238,11 @@ res[0].forEach( (element: any)=> {
       });
   }
 
-  Random(): string {
+/*   Random(): string {
     let rand = Math.random().toString(10).substring(2, 8)
     return rand;
   }
+ */
 
   emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
   sendEmail(strName: string, strEmail: string, strPassword: string) {

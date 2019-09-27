@@ -11,9 +11,9 @@ import CryptoJS from 'crypto-js';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer } from '@ionic-native/file-transfer';
-import { GlobalFunction } from '../../../shared/GlobalFunction';
 import { ImageUpload_model } from '../../../models/image-upload.model';
 import { LoginPage } from '../../login/login';
+import { Random } from '../../../shared/GlobalFunction';
 import { Services } from '../../Services';
 import { TitleCasePipe } from '@angular/common';
 import { Transfer } from '@ionic-native/transfer';
@@ -225,14 +225,14 @@ export class UserPage {
   public MaritalStatusMarried: boolean = false;
   // private _users: any[];
 
-  Global_Function: GlobalFunction = new GlobalFunction(this.alertCtrl);
+  //Global_Function: GlobalFunction = new GlobalFunction(this.alertCtrl);
 
   public AddUserClick() {
     this.AddUserClicked = true;
     this.ClearControls();
 
     //Generate Password Encrypt-----------------
-    var strPassword = this.Global_Function.Random();
+    var strPassword = Random();
     //this.User_Password_ngModel = Global_Function.Random().toString();
     this.User_Password_ngModel = CryptoJS.SHA256(strPassword).toString(CryptoJS.enc.Hex);
     //console.log(this.User_Password_ngModel);

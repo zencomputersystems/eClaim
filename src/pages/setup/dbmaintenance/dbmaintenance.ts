@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
-import { BaseHttpService } from '../../services/base-http';
 
-import { LoginPage } from '../login/login';
-import { ExcelService } from '../../providers/excel.service';
+import * as constants from '../../../app/config/constants';
 
+import { AlertController, IonicPage, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { Component } from '@angular/core';
+import { ExcelService } from '../../../providers/excel.service';
+import { Http } from '@angular/http';
 
 /**
  * Generated class for the DbmaintenancePage page.

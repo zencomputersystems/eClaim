@@ -1,46 +1,34 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { TitleCasePipe } from '@angular/common';
-
-import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
-import CryptoJS from 'crypto-js';
 
-import { FormControlDirective, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
-import { LoadingController, ActionSheetController, Platform, Loading, ToastController } from 'ionic-angular';
-import { UUID } from 'angular2-uuid';
+import * as constants from '../../../app/config/constants';
+
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
-import * as constants from '../../../app/config/constants';
+import { Component } from '@angular/core';
+import CryptoJS from 'crypto-js';
+import { DepartmentSetup_Model } from '../../../models/departmentsetup_model';
+import { DepartmentSetup_Service } from '../../../services/departmentsetup_service';
+import { DesignationSetup_Model } from '../../../models/designationsetup_model';
+import { DesignationSetup_Service } from '../../../services/designationsetup_service';
+import { Http } from '@angular/http';
+import { Random } from '../../../shared/GlobalFunction';
 import { SetupPage } from '../../setup/setup';
-
-import { TenantMainSetup_Model } from '../../../models/tenantmainsetup_model';
-import { TenantMainSetup_Service } from '../../../services/tenantmainsetup_service';
-
 import { TenantCompanySetup_Model } from '../../../models/tenantcompanysetup_model';
 import { TenantCompanySetup_Service } from '../../../services/tenantcompanysetup_service';
-
 import { TenantCompanySiteSetup_Model } from '../../../models/tenantcompanysitesetup_model';
 import { TenantCompanySiteSetup_Service } from '../../../services/tenantcompanysitesetup_service';
-
-import { UserMain_Model } from '../../../models/user_main_model';
+import { TenantMainSetup_Model } from '../../../models/tenantmainsetup_model';
+import { TenantMainSetup_Service } from '../../../services/tenantmainsetup_service';
+import { TitleCasePipe } from '@angular/common';
+import { UUID } from 'angular2-uuid';
 import { UserInfo_Model } from '../../../models/usersetup_info_model';
+import { UserMain_Model } from '../../../models/user_main_model';
 // import { UserContact_Model } from '../../models/user_contact_model';
 // import { UserCompany_Model } from '../../models/user_company_model';
 // import { UserAddress_Model } from '../../models/usersetup_address_model';
-
 import { UserSetup_Service } from '../../../services/usersetup_service';
-
-import { DepartmentSetup_Model } from '../../../models/departmentsetup_model';
-import { DepartmentSetup_Service } from '../../../services/departmentsetup_service';
-
-import { DesignationSetup_Model } from '../../../models/designationsetup_model';
-import { DesignationSetup_Service } from '../../../services/designationsetup_service';
-
-import { GlobalFunction } from '../../../shared/GlobalFunction';
 
 /**
  * Generated class for the SetupguidePage page.
@@ -52,7 +40,7 @@ import { GlobalFunction } from '../../../shared/GlobalFunction';
 @IonicPage()
 @Component({
   selector: 'page-setupguide',
-  templateUrl: 'setupguide.html', providers: [BaseHttpService, TenantMainSetup_Service, TenantCompanySetup_Service, TenantCompanySiteSetup_Service, UserSetup_Service, DepartmentSetup_Service, DesignationSetup_Service, TitleCasePipe, GlobalFunction]
+  templateUrl: 'setupguide.html', providers: [BaseHttpService, TenantMainSetup_Service, TenantCompanySetup_Service, TenantCompanySiteSetup_Service, UserSetup_Service, DepartmentSetup_Service, DesignationSetup_Service, TitleCasePipe]
 })
 export class SetupguidePage {
   Branchform1: FormGroup;
@@ -119,11 +107,11 @@ export class SetupguidePage {
   isReadonly: boolean = false;
   Mode: string = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb1: FormBuilder, fb2: FormBuilder, fb3: FormBuilder, fb4: FormBuilder, fb5: FormBuilder, private loadingCtrl: LoadingController, public http: Http, private httpService: BaseHttpService, private alertCtrl: AlertController, private TenantMainSetupService: TenantMainSetup_Service, private TenantCompanySetupService: TenantCompanySetup_Service, private tenantcompanysitesetupservice: TenantCompanySiteSetup_Service, private userservice: UserSetup_Service, private departmentsetupservice: DepartmentSetup_Service, private designationsetupservice: DesignationSetup_Service, private titlecasePipe: TitleCasePipe, private Global_Function: GlobalFunction) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, fb1: FormBuilder, fb2: FormBuilder, fb3: FormBuilder, fb4: FormBuilder, fb5: FormBuilder, private loadingCtrl: LoadingController, public http: Http, private httpService: BaseHttpService, private alertCtrl: AlertController, private TenantMainSetupService: TenantMainSetup_Service, private TenantCompanySetupService: TenantCompanySetup_Service, private tenantcompanysitesetupservice: TenantCompanySiteSetup_Service, private userservice: UserSetup_Service, private departmentsetupservice: DepartmentSetup_Service, private designationsetupservice: DesignationSetup_Service, private titlecasePipe: TitleCasePipe) {
     if (localStorage.getItem("g_USER_GUID") == "sva") {
       //Clear all controls-------------------------
 
-      var strPassword = Global_Function.Random();
+      var strPassword = Random();
       //this.Password_ngModel = Global_Function.Random().toString();
       this.Password_ngModel = CryptoJS.SHA256(strPassword).toString(CryptoJS.enc.Hex);
       alert(strPassword);

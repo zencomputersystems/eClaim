@@ -11,7 +11,6 @@ import { BankSetup_Service } from '../../../services/banksetup_service';
 import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { ExcelService } from '../../../providers/excel.service';
-import { GlobalFunction } from '../../../shared/GlobalFunction';
 import { LoginPage } from '../../login/login';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
@@ -25,7 +24,7 @@ import { UUID } from 'angular2-uuid';
 @IonicPage()
 @Component({
   selector: 'page-banksetup',
-  templateUrl: 'banksetup.html', providers: [BankSetup_Service, BaseHttpService, GlobalFunction, TitleCasePipe, ExcelService]
+  templateUrl: 'banksetup.html', providers: [BankSetup_Service, BaseHttpService, TitleCasePipe, ExcelService]
 })
 export class BanksetupPage {
   NAME: any;
@@ -121,7 +120,7 @@ export class BanksetupPage {
   }
 
   loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(private excelService: ExcelService, private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private banksetupservice: BankSetup_Service, private alertCtrl: AlertController, public GlobalFunction: GlobalFunction, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
+  constructor(private excelService: ExcelService, private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private banksetupservice: BankSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
     if (localStorage.getItem("g_USER_GUID") == null) {
       alert('Sorry, you are not logged in. Please login.');
       this.navCtrl.push(LoginPage);

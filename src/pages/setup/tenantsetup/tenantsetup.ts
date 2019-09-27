@@ -1,37 +1,33 @@
-import { Component } from '@angular/core';
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../../app/config/constants';
+
+import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 //import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, URLSearchParams } from '@angular/http';
-import { UUID } from 'angular2-uuid';
+
+import { BaseHttpService } from '../../../services/base-http';
+import { Component } from '@angular/core';
 import CryptoJS from 'crypto-js';
-import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
-import 'rxjs/add/operator/map';
-import * as constants from '../../../app/config/constants';
+// import { GlobalFunction } from '../../../shared/GlobalFunction';
+import { LoginPage } from '../../login/login';
+import { Random } from '../../../shared/GlobalFunction';
 import { TenantCompanySetup_Model } from '../../../models/tenantcompanysetup_model';
+import { TenantCompanySetup_Service } from '../../../services/tenantcompanysetup_service';
 import { TenantCompanySiteSetup_Model } from '../../../models/tenantcompanysitesetup_model';
+import { TenantCompanySiteSetup_Service } from '../../../services/tenantcompanysitesetup_service';
 import { TenantMainSetup_Model } from '../../../models/tenantmainsetup_model';
+import { TenantMainSetup_Service } from '../../../services/tenantmainsetup_service';
+import { UUID } from 'angular2-uuid';
 import { UserAddress_Model } from '../../../models/usersetup_address_model';
-import { UserInfo_Model } from '../../../models/usersetup_info_model';
 import { UserCompany_Model } from '../../../models/user_company_model';
 import { UserContact_Model } from '../../../models/user_contact_model';
+import { UserInfo_Model } from '../../../models/usersetup_info_model';
 import { UserMain_Model } from '../../../models/user_main_model';
 import { UserRole_Model } from '../../../models/user_role_model';
-import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
-import { BaseHttpService } from '../../../services/base-http';
-import { TenantCompanySetup_Service } from '../../../services/tenantcompanysetup_service';
-import { TenantCompanySiteSetup_Service } from '../../../services/tenantcompanysitesetup_service';
-import { TenantMainSetup_Service } from '../../../services/tenantmainsetup_service';
 import { UserSetup_Service } from '../../../services/usersetup_service';
-import { GlobalFunction } from '../../../shared/GlobalFunction';
-import { LoginPage } from '../../login/login';
-
-
-
-
-
-
-
-
+import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the TenantsetupPage page.
@@ -172,7 +168,7 @@ export class TenantsetupPage {
     this.AddTUserClicked = false;
   }
 
-  Global_Function: GlobalFunction = new GlobalFunction(this.alertCtrl);
+  // Global_Function: GlobalFunction = new GlobalFunction(this.alertCtrl);
   public AddTTUserClick() {
     this.ClearUserControls();
     this.AddTTUserClicked = true;
@@ -180,7 +176,7 @@ export class TenantsetupPage {
     //alert(this.tenantusers.EMAIL);
 
     //Generate Password Encrypt-----------------
-    var strPassword = this.Global_Function.Random();
+    var strPassword = Random();
     this.User_Password_ngModel_Add = CryptoJS.SHA256(strPassword).toString(CryptoJS.enc.Hex);
 
     alert(strPassword);

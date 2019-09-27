@@ -1,21 +1,19 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
-import { TitleCasePipe } from '@angular/common';
-
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../../app/config/constants';
-import { ClaimTypeSetup_Model } from '../../models/claimtypesetup_model';
-import { ClaimTypeSetup_Service } from '../../services/claimtypesetup_service';
-import { BaseHttpService } from '../../services/base-http';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import * as constants from '../../../app/config/constants';
 
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { BaseHttpService } from '../../../services/base-http';
+import { ClaimTypeSetup_Model } from '../../../models/claimtypesetup_model';
+import { ClaimTypeSetup_Service } from '../../../services/claimtypesetup_service';
+import { Component } from '@angular/core';
+import { Http } from '@angular/http';
+import { LoginPage } from '../../login/login';
+import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
-import { LoginPage } from '../login/login';
-import moment from 'moment';
-
 
 /**
  * Generated class for the ClaimtypePage page.
