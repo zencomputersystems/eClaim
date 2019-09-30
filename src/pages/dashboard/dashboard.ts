@@ -1,16 +1,19 @@
-import { DashboardCards } from './../../interfaces/dashboard-card';
-import { sanitizeURL, getURL } from './../../providers/sanitizer/sanitizer';
-import { IonicPage, NavController, NavParams, Loading, Config, MenuController } from 'ionic-angular';
-import { Component } from '@angular/core';
-import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
 import 'rxjs/add/operator/map';
+
+import * as Settings from '../../dbSettings/companySettings';
 import * as constants from '../../app/config/constants';
-import { Http } from '@angular/http';
+
+import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { getURL, sanitizeURL } from './../../providers/sanitizer/sanitizer';
+
+import { Chart } from 'chart.js';
+import { Component } from '@angular/core';
+import { DashboardCards } from './../../interfaces/dashboard-card';
 // import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DecimalPipe } from "@angular/common";
-import * as Settings from '../../dbSettings/companySettings';
+import { Http } from '@angular/http';
 import { toCurrency } from '../../providers/currency/currency';
 
 /**
@@ -19,6 +22,8 @@ import { toCurrency } from '../../providers/currency/currency';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+
+
 
 @IonicPage()
 @Component({

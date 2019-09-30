@@ -127,7 +127,7 @@ export class BanksetupPage {
     }
     else {
       this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
+      if (localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
         //Get the role for this page------------------------------        
         if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
         if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
@@ -144,7 +144,7 @@ export class BanksetupPage {
         this.DisplayGrid();
 
         //----------------------------------------------------------
-        if (localStorage.getItem("g_USER_GUID") != "sva") {
+        if (localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
           this.Bankform = fb.group({
             NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
           });
@@ -184,7 +184,7 @@ export class BanksetupPage {
   }
 
   FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
       this.http
         .get(tenantUrl)
@@ -207,7 +207,7 @@ export class BanksetupPage {
     this.loading.present();
 
     let view_url: string = "";
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
+    if (localStorage.getItem("g_IS_SUPER") != "1") {
       view_url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_bank_details' + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     else {
@@ -284,12 +284,7 @@ export class BanksetupPage {
     if (this.Add_Form == true) {
       this.bank_entry.BANK_GUID = UUID.UUID();
       this.bank_entry.CREATION_TS = new Date().toISOString();
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        this.bank_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-      }
-      else {
-        this.bank_entry.CREATION_USER_GUID = 'sva';
-      }
+      this.bank_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
       this.bank_entry.UPDATE_TS = new Date().toISOString();
       this.bank_entry.UPDATE_USER_GUID = "";
     }
@@ -300,17 +295,12 @@ export class BanksetupPage {
     this.bank_entry.CREATION_TS = this.bank_details.CREATION_TS;
     this.bank_entry.CREATION_USER_GUID = this.bank_details.CREATION_USER_GUID;
     this.bank_entry.UPDATE_TS = new Date().toISOString();
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
       this.bank_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-    }
-    else {
-      this.bank_entry.UPDATE_USER_GUID = 'sva';
-    }
   }
 
   SetCommonEntityForAddUpdate() {
     this.bank_entry.NAME = this.titlecasePipe.transform(this.NAME_ngModel_Add.trim());
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
+    if (localStorage.getItem("g_IS_SUPER") != "1") {
       this.bank_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
     }
     else {
@@ -356,11 +346,11 @@ export class BanksetupPage {
 
   CheckDuplicate() {
     let url: string = "";
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
+    if (localStorage.getItem("g_IS_SUPER") != "1") {
       url = this.baseResource_Url + "main_bank?filter=NAME=" + this.NAME_ngModel_Add.trim() + ' AND TENANT_GUID=' + this.Tenant_Add_ngModel + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     else {
-      url = this.baseResource_Url + "main_bank?filter=NAME=" + this.NAME_ngModel_Add.trim() + ' AND TENANT_GUID=' + this.Tenant_Add_ngModel + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      url = this.baseResource_Url + "main_bank?filter=NAME=" + this.NAME_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     let result: any;
     return new Promise((resolve) => {

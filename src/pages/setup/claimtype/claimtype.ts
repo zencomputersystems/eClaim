@@ -126,7 +126,7 @@ export class ClaimtypePage {
     else {
       //Get the role for this page------------------------------
       this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
+      if (localStorage.getItem("g_IS_SUPER") != "1") {
         if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
         if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
         if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
@@ -230,7 +230,7 @@ export class ClaimtypePage {
 
   SetEntityForAdd() {
     this.claimtype_entry.CLAIM_TYPE_GUID = UUID.UUID();
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       this.claimtype_entry.TENANT_GUID = UUID.UUID();
     }
     else {

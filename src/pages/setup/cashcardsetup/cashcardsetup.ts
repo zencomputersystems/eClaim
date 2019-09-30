@@ -133,7 +133,7 @@ export class CashcardsetupPage {
     }
     else {
       this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
+      if (localStorage.getItem("g_IS_SUPER") != "1") {
         //Get the role for this page------------------------------        
         if(localStorage.getItem("g_KEY_ADD") == "0"){ this.button_Add_Disable = true; }
         if(localStorage.getItem("g_KEY_EDIT") == "0"){ this.button_Edit_Disable = true; }
@@ -150,7 +150,7 @@ export class CashcardsetupPage {
         this.DisplayGrid();
 
         //-------------------------------------------------------
-        if (localStorage.getItem("g_USER_GUID") != "sva") {
+        if (localStorage.getItem("g_IS_SUPER") != "1") {
           this.Cashform = fb.group({
             CASHCARD_SNO: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
             ACCOUNT_ID: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
@@ -213,7 +213,7 @@ export class CashcardsetupPage {
   }
 
   FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
       this.http
         .get(tenantUrl)
@@ -233,7 +233,7 @@ export class CashcardsetupPage {
       content: 'Loading...',
     });
     this.loading.present();
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_cashcard_details' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
       this.AdminLogin = true;
     }
@@ -327,12 +327,7 @@ export class CashcardsetupPage {
       //=====================================================================================
       this.cashcard_entry.CASHCARD_GUID = UUID.UUID();
       this.cashcard_entry.CREATION_TS = new Date().toISOString();
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        this.cashcard_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-      }
-      else {
-        this.cashcard_entry.CREATION_USER_GUID = 'sva';
-      }
+      this.cashcard_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
       this.cashcard_entry.UPDATE_TS = new Date().toISOString();
       this.cashcard_entry.UPDATE_USER_GUID = "";
     }
@@ -343,12 +338,7 @@ export class CashcardsetupPage {
     this.cashcard_entry.CREATION_TS = this.cashcard_details.CREATION_TS;
     this.cashcard_entry.CREATION_USER_GUID = this.cashcard_details.CREATION_USER_GUID;
     this.cashcard_entry.UPDATE_TS = new Date().toISOString();
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
       this.cashcard_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-    }
-    else {
-      this.cashcard_entry.UPDATE_USER_GUID = 'sva';
-    }
   }
 
   SetCommonEntityForAddUpdate() {
@@ -358,8 +348,7 @@ export class CashcardsetupPage {
     this.cashcard_entry.MANAGEMENT_URL = this.MANAGEMENT_URL_ngModel_Add;
     this.cashcard_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Add;
     this.cashcard_entry.ACTIVATION_FLAG = 1;
-
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
+    if (localStorage.getItem("g_IS_SUPER") != "1") {
       this.cashcard_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
     }
     else {
@@ -406,7 +395,7 @@ export class CashcardsetupPage {
 
   CheckDuplicate() {
     let url: string = "";
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
+    if (localStorage.getItem("g_IS_SUPER") != "1") {
       url = this.baseResource_Url + "main_cashcard?filter=TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     else {

@@ -98,7 +98,7 @@ export class UserPage {
   banks: any; qualifications: any; tenants: any; countries: any; states: any; userview: any[];
   varTenant_Guid: string;
 
-  baseResourceUrl: string = constants.DREAMFACTORY_TABLE_URL+"user_address?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&'+this.Key_Param;
+  baseResourceUrl: string = sanitizeURL(constants.DREAMFACTORY_TABLE_URL+"user_address?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&'+this.Key_Param);
 
   //public users: UserMain_Model[] = [];
   public multipleid: any;
@@ -275,10 +275,10 @@ export class UserPage {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     let options = new RequestOptions({ headers: headers });
-    let url_user_edit = constants.DREAMFACTORY_TABLE_URL + "view_user_edit?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
-    let url_user_Professional_Certification = constants.DREAMFACTORY_TABLE_URL + "user_certification?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
-    let url_user_Spouse = constants.DREAMFACTORY_TABLE_URL + "user_spouse?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
-    let url_user_Children = constants.DREAMFACTORY_TABLE_URL + "user_children?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
+    let url_user_edit = sanitizeURL(constants.DREAMFACTORY_TABLE_URL + "view_user_edit?filter=(USER_GUID=" + id + ')&'+this.Key_Param);
+    let url_user_Professional_Certification = sanitizeURL(constants.DREAMFACTORY_TABLE_URL + "user_certification?filter=(USER_GUID=" + id + ')&'+this.Key_Param);
+    let url_user_Spouse = sanitizeURL(constants.DREAMFACTORY_TABLE_URL + "user_spouse?filter=(USER_GUID=" + id + ')&'+this.Key_Param);
+    let url_user_Children = sanitizeURL(constants.DREAMFACTORY_TABLE_URL + "user_children?filter=(USER_GUID=" + id + ')&'+this.Key_Param);
 
     //----------------Get the Details from Db and bind Controls---------------------------------
     this.http.get(sanitizeURL(url_user_edit), options)
@@ -309,7 +309,7 @@ export class UserPage {
             this.Profile_Image_Display = "assets/img/profile_no_preview.png";
           }
           else {
-            this.Profile_Image_Display = constants.DREAMFACTORY_IMAGE_URL + this.view_user_details[0]["ATTACHMENT_ID"] + "?"+this.Key_Param;
+            this.Profile_Image_Display = sanitizeURL(constants.DREAMFACTORY_IMAGE_URL + this.view_user_details[0]["ATTACHMENT_ID"] + "?"+this.Key_Param);
           }
 
           //------------------------EMPLOYMENT DETAILS----------------------------------
@@ -417,7 +417,7 @@ export class UserPage {
         });
     //------------------------Role-------------------------------
     let CheckRole: any = []; let CheckAdditionalRole: any = [];
-    let User_Role_url = constants.DREAMFACTORY_TABLE_URL + "user_role?filter=(USER_GUID=" + id + ')&'+this.Key_Param;
+    let User_Role_url = sanitizeURL(constants.DREAMFACTORY_TABLE_URL + "user_role?filter=(USER_GUID=" + id + ')&'+this.Key_Param);
 
     this.http
       .get(sanitizeURL(User_Role_url))
@@ -606,7 +606,7 @@ export class UserPage {
   SaveImageinDB(fileName: string) {
     let objImage: ImageUpload_model = new ImageUpload_model();
     objImage.Image_Guid = UUID.UUID();
-    objImage.IMAGE_URL = this.CloudFilePath + fileName;
+    objImage.IMAGE_URL = sanitizeURL(this.CloudFilePath + fileName);
     objImage.CREATION_TS = new Date().toISOString();
     objImage.Update_Ts = new Date().toISOString();
     return new Promise((resolve) => {
@@ -627,8 +627,8 @@ export class UserPage {
     queryHeaders.append('chunkedMode', 'false');
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     const options = new RequestOptions({ headers: queryHeaders });
-    return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + fileName, this.Userform.get(fileChoose).value, options)
+    return new Promise((resolve, reject) => {
+      this.http.post(sanitizeURL('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + fileName), this.Userform.get(fileChoose).value, options)
         .map((response) => {
           return response;
         }).subscribe((response) => {
@@ -1286,17 +1286,9 @@ export class UserPage {
       this.userservice.save_user_main(this.usermain_entry)
         .subscribe((response) => {
           if (response.status == 200) {
-            //alert('1');
-            // let uploadImage = this.UploadImage('avatar1', this.fileName1);
-            // uploadImage.then((resJson) => {
-            //   //console.table(resJson)
-            //   let imageResult = this.SaveImageinDB(this.fileName1);
-            //   imageResult.then((objImage: ImageUpload_model) => {
-            //     let result = this.Save_User_Info(objImage.Image_Guid);
-            //     //alert("User Main inserted");
-            //   })
-            // })
+            console.log('User_main added');
             this.Save_User_Info();
+            console.log('Returned from Save_User_info');
           }
         });
     });
@@ -1347,6 +1339,7 @@ export class UserPage {
 
   // Save_User_Info(imageGUID: string) {
   Save_User_Info() {
+    let userinfo_entry: UserInfo_Model = new UserInfo_Model();
     this.userinfo_entry.USER_INFO_GUID = UUID.UUID();
     this.userinfo_entry.USER_GUID = this.usermain_entry.USER_GUID;
     this.userinfo_entry.FULLNAME = this.titlecasePipe.transform(this.User_Name_ngModel.trim());
@@ -1406,6 +1399,7 @@ export class UserPage {
         if (response.status == 200) {
           this.Save_User_Address();
           //alert("User Info inserted");
+          console.log('User info inserted');
         }
       });
     // return new Promise((resolve, reject) => {
@@ -1504,6 +1498,7 @@ export class UserPage {
 
       .subscribe((response) => {
         if (response.status == 200) {
+          console.log('User address inserted');
           this.Save_User_Company();
           //alert("User Address inserted");
         }
@@ -1552,6 +1547,7 @@ export class UserPage {
     this.userservice.save_user_company(this.usercompany_entry)
       .subscribe((response) => {
         if (response.status == 200) {
+          console.log('User Company added');
           this.Save_User_Contact();
           //alert("User Company inserted");
         }
@@ -1591,7 +1587,10 @@ export class UserPage {
       .subscribe((response) => {
         if (response.status == 200) {
           //alert('5');
-          let uploadImage = this.UploadImage_Old('avatar2', this.fileName2);
+          console.log('User contact added');
+          console.log('Skipping image upload');
+          // Image upload code START
+ /*          let uploadImage = this.UploadImage_Old('avatar2', this.fileName2);
           uploadImage.then(() => {
             // console.table(resJson)
             let imageResult = this.SaveImageinDB(this.fileName2);
@@ -1600,7 +1599,8 @@ export class UserPage {
 
               //alert("User Contact inserted");
             })
-          })
+          }) */
+          // Image upload code END
           //this.Save_User_Qualification()
         }
       });
@@ -1771,6 +1771,7 @@ export class UserPage {
               // alert('User Inserted Successfully!!');
               // this.navCtrl.setRoot(this.navCtrl.getActive().component);
               //alert("User Certification inserted");
+              console.log('User Certification saved');
             }
           });
 
@@ -1815,6 +1816,7 @@ export class UserPage {
 
                       // alert('User Inserted Successfully!!');
                       // this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                      console.log('User certification added');
                     }
                   });
             }
@@ -1841,6 +1843,7 @@ export class UserPage {
               // alert('User Inserted Successfully!!');
               // this.navCtrl.setRoot(this.navCtrl.getActive().component);
               //alert("User Spouse inserted");
+              console.log('Spouse inserted');
             }
           });
     }
@@ -1872,6 +1875,7 @@ export class UserPage {
 
                       // alert('User Inserted Successfully!!');
                       // this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                      console.log('Spouse saved');
                     }
                   });
             }
@@ -1900,6 +1904,7 @@ export class UserPage {
               // alert('User Inserted Successfully!!');
               // this.navCtrl.setRoot(this.navCtrl.getActive().component);
               //alert("User Child inserted");
+              console.log('Child added');
             }
           });
     }
@@ -1932,6 +1937,7 @@ export class UserPage {
                     if (response.status == 200) {
                       // alert('User Inserted Successfully!!');
                       // this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                      console.log('Child saved');
                     }
                   });
             }
@@ -1956,7 +1962,7 @@ export class UserPage {
           data => {
             let res = data["resource"];
             if (res.length == 0) {
-              console.log("No records Found");
+              console.log("No record found");
               if (this.Exist_Record == false) {
                 this.loading = this.loadingCtrl.create({
                   content: 'Please wait...',
@@ -1973,7 +1979,7 @@ export class UserPage {
               }
             }
             else {
-              alert("The User is already Exist.")
+              alert("The user is already exist.")
             }
           },
           err => {
