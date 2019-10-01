@@ -48,6 +48,8 @@ declare var cordova: any;
 })
 export class UserPage {
   //selectedValue: number;
+  simple: boolean = false;
+
   public page: number = 1;
   fileName1: string;
   fileName2: string;
@@ -226,6 +228,10 @@ export class UserPage {
   // private _users: any[];
 
   //Global_Function: GlobalFunction = new GlobalFunction(this.alertCtrl);
+
+  public SimplifyToggleClick() {
+    this.simple = this.simple ? false : true;
+  }
 
   public AddUserClick() {
     this.AddUserClicked = true;
@@ -617,7 +623,6 @@ export class UserPage {
   }
 
   UploadImage_Old(fileChoose: string, fileName: string) {
-    this.CloudFilePath = 'eclaim/'
 
     this.load = true;
     const queryHeaders = new Headers();
@@ -628,7 +633,7 @@ export class UserPage {
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     const options = new RequestOptions({ headers: queryHeaders });
     return new Promise((resolve, reject) => {
-      this.http.post(sanitizeURL('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + fileName), this.Userform.get(fileChoose).value, options)
+      this.http.post(sanitizeURL(constants.DREAMFACTORY_IMAGE_URL + fileName), this.Userform.get(fileChoose).value, options)
         .map((response) => {
           return response;
         }).subscribe((response) => {
@@ -1662,7 +1667,7 @@ export class UserPage {
       .subscribe(
         (response) => {
           if (response.status == 200) {
-
+/* Take out user qualification upload code
             let uploadImage = this.UploadImage_Old('avatar3', this.fileName3);
             uploadImage.then(() => {
               // console.table(resJson)
@@ -1670,7 +1675,7 @@ export class UserPage {
               imageResult.then((objImage: ImageUpload_model) => {
                 //alert("User Qualification inserted");
               })
-            })
+            }) */
 
             //this.Save_User_Certification();
             this.Save_User_Spouse();
@@ -1689,6 +1694,7 @@ export class UserPage {
         // console.log(res)
         let ClaimRequestMainIdType2 = res["resource"][0].USER_QUALIFICATION_GUID;
         resolve(ClaimRequestMainIdType2);
+        console.log("User qualification inserted.");
       })
     });
   }
@@ -1885,6 +1891,7 @@ export class UserPage {
         });
   }
 
+
   Save_User_Children() {
     for (var item in this.ChildrenDetails) {
       this.UserChildren_Entry.CHILD_GUID = this.ChildrenDetails[item]["CHILD_GUID"];
@@ -1966,16 +1973,20 @@ export class UserPage {
               if (this.Exist_Record == false) {
                 this.loading = this.loadingCtrl.create({
                   content: 'Please wait...',
+                  duration: 6000
                 });
-
+                try {
                 this.loading.present();
-
-                // if (this.User_HighestQualification_ngModel != "") {
-
-                // }
-                this.Save_User_Main();
-
+                console.log("About to run Save_User_Main()");
+                this.Save_User_Main()
+                console.log("Reached past Save_User_Main()");
+                }
+                catch(err) {
+                  console.log(err);
+                }
+                finally {
                 this.loading.dismissAll();
+                }
               }
             }
             else {
@@ -2530,7 +2541,6 @@ export class UserPage {
 
   // CloudFilePath: string;
   UploadImage() {
-    this.CloudFilePath = 'eclaim/'
     // this.loading = true;
     let uniqueName = new Date().toISOString() + this.uploadFileName; localStorage.setItem("Unique_File_Name", uniqueName);
     const queryHeaders = new Headers();
@@ -2541,7 +2551,7 @@ export class UserPage {
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     const options = new RequestOptions({ headers: queryHeaders });
     return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + uniqueName, this.Userform.get('avatar').value, options)
+      this.http.post(constants.DREAMFACTORY_IMAGE_URL + uniqueName, this.Userform.get('avatar').value, options)
         .map((response) => {
           return response;
         }).subscribe((response) => {

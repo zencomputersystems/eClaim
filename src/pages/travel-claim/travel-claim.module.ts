@@ -8,7 +8,7 @@ import { TravelclaimPage } from './travel-claim.component';
     TravelclaimPage,
     TranslatePipe
   ],
-  entryComponents: [ AddTollPage],
+  entryComponents: [ ],
   imports: [
     IonicPageModule.forChild(TravelclaimPage),
     TranslatePipe,

@@ -373,7 +373,7 @@ export class BanksetupPage {
     this.excelService.exportAsExcelFile(this.banks,'Data');
   }
   
-  emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
+  emailUrl: string = constants.DREAMFACTORY_EMAIL_URL;
   EmailTest(evt: any){
     var queryHeaders = new Headers();
     queryHeaders.append('Content-Type', 'application/json');

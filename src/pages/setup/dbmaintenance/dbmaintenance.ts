@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
 import { ExcelService } from '../../../providers/excel.service';
 import { Http } from '@angular/http';
+import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the DbmaintenancePage page.
@@ -62,7 +63,7 @@ export class DbmaintenancePage {
   tables: any; FilterTables: any[] = [];
   LoadTables() {
     let TableUrl: string = "";
-    TableUrl = "http://api.zen.com.my/api/v2/zcs/_table?api_key=" + constants.DREAMFACTORY_API_KEY;
+    TableUrl = constants.DREAMFACTORY_TABLE_URL + "?api_key=" + constants.DREAMFACTORY_API_KEY;
 
     this.http
       .get(TableUrl)
@@ -137,10 +138,10 @@ export class DbmaintenancePage {
     for (var item in this.SelectTable) {
       let TableName: any = this.SelectTable[item]["Table_Name"];
       let TableUrl: string = ""; let TempTableData: any;
-      TableUrl = "http://api.zen.com.my/api/v2/zcs/_table/" + TableName + "?filter=(TENANT_GUID=" + this.TENANTNAME_ngModel + ")&api_key=" + constants.DREAMFACTORY_API_KEY;
+      TableUrl = constants.DREAMFACTORY_TABLE_URL + TableName + "?filter=(TENANT_GUID=" + this.TENANTNAME_ngModel + ")&api_key=" + constants.DREAMFACTORY_API_KEY;
 
       this.http
-        .get(TableUrl)
+        .get(sanitizeURL(TableUrl))
         .map(res => res.json())
         .subscribe(data => {
           TempTableData = data.resource; this.excelService.exportAsExcelFile(TempTableData, TableName);          
