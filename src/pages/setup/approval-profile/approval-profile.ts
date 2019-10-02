@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-import { approval_profile_model } from '../../models/approval_profile_model';
-import { Main_Profile_Model } from '../../models/main_profile_model';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { OptimizeProvider } from '../../providers/optimize.provider';
+import { approval_profile_model } from '../../../models/approval_profile_model';
+import { Main_Profile_Model } from '../../../models/main_profile_model';
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { OptimizeProvider } from '../../../providers/optimize.provider';
 import moment from 'moment';
 
 @IonicPage()

@@ -1,28 +1,30 @@
-import 'rxjs/add/operator/map';
-
-import * as constants from '../../app/config/constants';
-
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Http } from '@angular/http';
+import { UUID } from 'angular2-uuid';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-import { ApprovalProfilePage } from '../approval-profile/approval-profile';
-import { BanksetupPage } from './banksetup/banksetup';
+import 'rxjs/add/operator/map';
+import * as constants from '../../app/config/constants';
+import { TenantCompanySetup_Model } from '../../models/tenantcompanysetup_model';
+import { TenantCompanySiteSetup_Model } from '../../models/tenantcompanysitesetup_model';
 import { BaseHttpService } from '../../services/base-http';
+import { TenantCompanySetup_Service } from '../../services/tenantcompanysetup_service';
+import { TenantCompanySiteSetup_Service } from '../../services/tenantcompanysitesetup_service';
+import { ImportExcelDataPage } from '../import-excel-data/import-excel-data';
+import { LoginPage } from '../login/login';
+import { ApprovalProfilePage } from './approval-profile/approval-profile';
+import { BanksetupPage } from './banksetup/banksetup';
 import { BranchsetupPage } from './branchsetup/branchsetup';
 import { CashcardsetupPage } from './cashcardsetup/cashcardsetup';
 import { ClaimtypePage } from './claimtype/claimtype';
 import { CompanysettingsPage } from './companysettings/companysettings';
 import { CompanysetupPage } from './companysetup/companysetup';
-import { Component } from '@angular/core';
 import { CountrysetupPage } from './countrysetup/countrysetup';
 import { CustomerSetupPage } from './customer-setup/customer-setup';
 import { DbmaintenancePage } from './dbmaintenance/dbmaintenance';
 import { DepartmentsetupPage } from './departmentsetup/departmentsetup';
 import { DesignationsetupPage } from './designationsetup/designationsetup';
 import { DeviceSetupPage } from './device-setup/device-setup';
-import { Http } from '@angular/http';
-import { ImportExcelDataPage } from '../import-excel-data/import-excel-data';
-import { LoginPage } from '../login/login';
 import { MileagesetupPage } from './mileagesetup/mileagesetup';
 import { OtRateSetupPage } from './ot-rate-setup/ot-rate-setup';
 import { PaymenttypesetupPage } from './paymenttypesetup/paymenttypesetup';
@@ -33,12 +35,10 @@ import { SettingsPage } from './settings/settings';
 import { SetupguidePage } from './setupguide/setupguide';
 import { SocRegistrationPage } from './soc-registration/soc-registration';
 import { StatesetupPage } from './statesetup/statesetup';
-import { TenantCompanySetup_Model } from '../../models/tenantcompanysetup_model';
-import { TenantCompanySetup_Service } from '../../services/tenantcompanysetup_service';
-import { TenantCompanySiteSetup_Model } from '../../models/tenantcompanysitesetup_model';
-import { TenantCompanySiteSetup_Service } from '../../services/tenantcompanysitesetup_service';
-import { UUID } from 'angular2-uuid';
 import { UserPage } from './user/user';
+
+
+
 
 /**
  * Generated class for the SetupPage page.
@@ -257,6 +257,7 @@ export class SetupPage {
               if (data.resource[item]["CODE_PAGE_NAME"] == 'ApprovalProfilePage') { this.ApprovalProfileDisplay = true; }
               if (data.resource[item]["CODE_PAGE_NAME"] == 'DbmaintenancePage') { this.DBMaintenanceDisplay = true; }
               if (data.resource[item]["CODE_PAGE_NAME"] == 'CompanysettingsPage') { this.CompanySettingsDisplay = true; }
+              if (data.resource[item]["CODE_PAGE_NAME"] == 'OTRateSetupPage') { this.OtRateDisplay = true; }
             }
           });
         //------------------------------------------------------------------------

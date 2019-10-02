@@ -1,19 +1,19 @@
-import 'rxjs/add/operator/map';
-
-import * as constants from '../../../app/config/constants';
-
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
 //import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
-
-import { BaseHttpService } from '../../../services/base-http';
-import { Component } from '@angular/core';
-import { LoginPage } from '../../login/login';
-import { RoleSetup_Model } from '../../../models/rolesetup_model';
-import { RoleSetup_Service } from '../../../services/rolesetup_service';
 import { UUID } from 'angular2-uuid';
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import 'rxjs/add/operator/map';
+import * as constants from '../../../app/config/constants';
+import { RoleSetup_Model } from '../../../models/rolesetup_model';
 import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
+import { BaseHttpService } from '../../../services/base-http';
+import { RoleSetup_Service } from '../../../services/rolesetup_service';
+import { LoginPage } from '../../login/login';
+
+
+
 
 /**
  * Generated class for the RolesetupPage page.
@@ -21,6 +21,7 @@ import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+
 @IonicPage()
 @Component({
   selector: 'page-rolesetup',
@@ -32,7 +33,7 @@ export class RolesetupPage {
   Roleform: FormGroup;
   public page:number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_role' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+  baseResource_Url: string = constants.DREAMFACTORY_TABLE_URL;
 
   public roles: RoleSetup_Model[] = [];
 
@@ -81,43 +82,14 @@ export class RolesetupPage {
       .get(ROLE_GUID)
       .subscribe((data) => {
         self.role_details = data;
-        this.NAME_ngModel_Edit = self.role_details.NAME; localStorage.setItem('Prev_Role_Name', self.role_details.NAME);
+        this.NAME_ngModel_Edit = self.role_details.NAME; 
+        localStorage.setItem('Prev_Role_Name', self.role_details.NAME);
         this.DESCRIPTION_ngModel_Edit = self.role_details.DESCRIPTION;
-        if (self.role_details.ACTIVATION_FLAG == "1") {
-          this.ACTIVATION_FLAG_ngModel_Edit = true;
-        }
-        else {
-          this.ACTIVATION_FLAG_ngModel_Edit = false;
-        }
-
-        if (self.role_details.KEY_ADD == "1") {
-          this.ADD_ngModel_Edit = true;
-        }
-        else {
-          this.ADD_ngModel_Edit = false;
-        }
-
-        if (self.role_details.KEY_EDIT == "1") {
-          this.EDIT_ngModel_Edit = true;
-        }
-        else {
-          this.EDIT_ngModel_Edit = false;
-        }
-
-        if (self.role_details.KEY_DELETE == "1") {
-          this.DELETE_ngModel_Edit = true;
-        }
-        else {
-          this.DELETE_ngModel_Edit = false;
-        }
-
-        if (self.role_details.KEY_VIEW == "1") {
-          this.VIEW_ngModel_Edit = true;
-        }
-        else {
-          this.VIEW_ngModel_Edit = false;
-        }
-
+        this.ACTIVATION_FLAG_ngModel_Edit = self.role_details.ACTIVATION_FLAG == "1" ? true : false;
+        this.ADD_ngModel_Edit = self.role_details.KEY_ADD == "1" ? true : false;
+        this.EDIT_ngModel_Edit = self.role_details.KEY_EDIT == "1" ? true : false;
+        this.DELETE_ngModel_Edit = self.role_details.KEY_DELETE == "1" ? true : false;
+        this.VIEW_ngModel_Edit = self.role_details.KEY_VIEW == "1" ? true : false;
         this.PRIORITYLEVEL_ngModel_Edit = self.role_details.ROLE_PRIORITY_LEVEL;
       });
   }
@@ -152,13 +124,8 @@ export class RolesetupPage {
   }
 
   public CloseRoleClick() {
-
-    if (this.AddRoleClicked == true) {
-      this.AddRoleClicked = false;
-    }
-    if (this.EditRoleClicked == true) {
-      this.EditRoleClicked = false;
-    }
+    this.AddRoleClicked = this.AddRoleClicked ? false : false;
+    this.EditRoleClicked = this.EditRoleClicked ? false: false;
   }
 
   loading: Loading;
@@ -259,7 +226,7 @@ export class RolesetupPage {
     }
   }
 
-  Update(ROLE_GUID: any) {
+  Update(ROLE_GUID: string) {
     if (this.Roleform.valid) {
       //Load the Controller--------------------------------
       this.loading = this.loadingCtrl.create({
@@ -297,7 +264,7 @@ export class RolesetupPage {
               console.log('Current Name : ' + this.NAME_ngModel_Edit.trim() + ', Previous Name : ' + localStorage.getItem('Prev_Role_Name'));
 
               if (res.length == 0) {
-                console.log("No records Found");
+                console.log("No records found");
                 this.role_entry.NAME = this.NAME_ngModel_Edit.trim();
 
                 //**************Update service if it is new details*************************
@@ -311,8 +278,8 @@ export class RolesetupPage {
                 //**************************************************************************
               }
               else {
-                console.log("Records Found");
-                alert("The Role is already Exist.");
+                console.log("Records found");
+                alert("The Role is already exist.");
                 this.loading.dismissAll();
               }
             },
@@ -355,15 +322,14 @@ export class RolesetupPage {
     if (!params) {
       return this.stores;
     }
-
     return this.stores.filter((item) => {
       for (let key in params) {
         let field = item[key];
         if (typeof field == 'string' && field.toLowerCase().indexOf(params[key].toLowerCase()) >= 0) {
           return item;
-        } else if (field == params[key]) {
-          return item;
-        }
+        } else {
+          return field == params[key] ? item : null;
+        } 
       }
       return null;
     });

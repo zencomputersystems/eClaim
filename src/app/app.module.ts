@@ -12,7 +12,7 @@ import { AdminsetupPage } from '../pages/setup/adminsetup/adminsetup';
 import { AllClaimListPage } from '../pages/all-claim-list/all-claim-list';
 import { AllClaimhistoryPage } from '../pages/allclaimhistory/claimhistory';
 import { ApiManagerProvider } from '../providers/api-manager.provider';
-import { ApprovalProfilePage } from '../pages/approval-profile/approval-profile';
+import { ApprovalProfilePage } from '../pages/setup/approval-profile/approval-profile';
 import { ApproverTaskListPage } from '../pages/approver-task-list/approver-task-list';
 import { AttendanceReportPage } from '../pages/attendance-report/attendance-report';
 import { BanksetupPage } from '../pages/setup/banksetup/banksetup';

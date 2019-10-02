@@ -1,18 +1,18 @@
-import 'rxjs/add/operator/map';
-
-import * as constants from '../../../app/config/constants';
-
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core';
 //import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
-
-import { BaseHttpService } from '../../../services/base-http';
-import { Component } from '@angular/core';
-import { RoleModuleSetup_Model } from '../../../models/rolemodulesetup_model';
-import { RoleModuleSetup_Service } from '../../../services/rolemodulesetup_service';
 import { UUID } from 'angular2-uuid';
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import 'rxjs/add/operator/map';
+import * as constants from '../../../app/config/constants';
+import { RoleModuleSetup_Model } from '../../../models/rolemodulesetup_model';
 import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
+import { BaseHttpService } from '../../../services/base-http';
+import { RoleModuleSetup_Service } from '../../../services/rolemodulesetup_service';
+
+
+
 
 /**
  * Generated class for the RolemodulesetupPage page.
@@ -403,12 +403,6 @@ export class RolemodulesetupPage {
   SETUPSUBMODULE_ngModel_Edit: any;
   Update_RoleModule() {
     if (this.Rolemoduleform.valid) {
-      // //Load the Controller--------------------------------
-      // this.loading = this.loadingCtrl.create({
-      //   content: 'Please wait...',
-      // });
-      // this.loading.present();
-      // //--------------------------------------------------
       //insert record--------------------------------------
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
@@ -425,27 +419,7 @@ export class RolemodulesetupPage {
               if (res.length == 0) {
                 //Delete all the records through role_guid--------------------------
                 this.DeleteRoleModule(localStorage.getItem('Prev_role_module_guid'));
-                // this.Module_Assign_Multiple = [];
 
-                // //Insert------------------------------------------------------------ 
-                // for (var item in this.Module_Assign) {
-                //   this.RoleModule_Entry.ROLE_MODULE_GUID = UUID.UUID();
-                //   this.RoleModule_Entry.ROLE_GUID = this.ROLENAME_ngModel_Edit;
-                //   this.RoleModule_Entry.MODULE_GUID = this.Module_Assign[item]["MODULE_GUID"];
-                //   // this.RoleModule_Entry.CREATION_TS = new Date().toISOString();
-                //   // this.RoleModule_Entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-                //   this.RoleModule_Entry.UPDATE_TS = new Date().toISOString();
-                //   this.RoleModule_Entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-
-                //   this.Module_Assign_Multiple.push({ ROLE_MODULE_GUID: this.RoleModule_Entry.ROLE_MODULE_GUID, ROLE_GUID: this.RoleModule_Entry.ROLE_GUID, MODULE_GUID: this.RoleModule_Entry.MODULE_GUID, CREATION_TS: this.RoleModule_Entry.CREATION_TS, CREATION_USER_GUID: this.RoleModule_Entry.CREATION_USER_GUID, UPDATE_TS: this.RoleModule_Entry.UPDATE_TS, UPDATE_USER_GUID: this.RoleModule_Entry.UPDATE_USER_GUID });
-                // }
-                // this.rolemodulesetupservice.save_multiple_recocrd(this.Module_Assign_Multiple)
-                //   .subscribe((response) => {
-                //     if (response.status == 200) {
-                //       alert('Role Module Updated successfully'); //this.loading.dismissAll();
-                //       this.navCtrl.setRoot(this.navCtrl.getActive().component);
-                //     }
-                //   });
               }
               else {
                 console.log("Records Found");
@@ -461,28 +435,6 @@ export class RolemodulesetupPage {
       else {
         //Delete all the records through role_guid-----------
         this.DeleteRoleModule(localStorage.getItem('Prev_role_module_guid'));
-        // this.Module_Assign_Multiple = [];
-
-        //Insert------------------------------------------------------------
-        // for (var itemA in this.Module_Assign) {
-        //   this.RoleModule_Entry.ROLE_MODULE_GUID = UUID.UUID();
-        //   this.RoleModule_Entry.ROLE_GUID = localStorage.getItem('Prev_role_module_guid');
-        //   this.RoleModule_Entry.MODULE_GUID = this.Module_Assign[itemA]["MODULE_GUID"];
-        //   this.RoleModule_Entry.CREATION_TS = new Date().toISOString();
-        //   this.RoleModule_Entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-        //   this.RoleModule_Entry.UPDATE_TS = new Date().toISOString();
-        //   this.RoleModule_Entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-
-        //   this.Module_Assign_Multiple.push({ ROLE_MODULE_GUID: this.RoleModule_Entry.ROLE_MODULE_GUID, ROLE_GUID: this.RoleModule_Entry.ROLE_GUID, MODULE_GUID: this.RoleModule_Entry.MODULE_GUID, CREATION_TS: this.RoleModule_Entry.CREATION_TS, CREATION_USER_GUID: this.RoleModule_Entry.CREATION_USER_GUID, UPDATE_TS: this.RoleModule_Entry.UPDATE_TS, UPDATE_USER_GUID: this.RoleModule_Entry.UPDATE_USER_GUID });
-        // }
-        // this.rolemodulesetupservice.save_multiple_recocrd(this.Module_Assign_Multiple)
-        //   .subscribe((response) => {
-        //     if (response.status == 200) {
-        //       alert('Role Module Updated successfully');
-        //       //this.loading.dismissAll();
-        //       this.navCtrl.setRoot(this.navCtrl.getActive().component);
-        //     }
-        //   });
       }
     }
   }

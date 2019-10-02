@@ -1,23 +1,21 @@
-import 'rxjs/add/operator/map';
-
-// import { SignupPage } from '../signup/signup';
-import * as constants from '../../app/config/constants';
-
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
-import { Loading, MenuController, NavController } from 'ionic-angular';
-
-import { BaseHttpService } from '../../services/base-http';
-import { Component } from '@angular/core';
-import CryptoJS from 'crypto-js';
-import { DashboardPage } from '../dashboard/dashboard';
-import { Random } from '../../shared/GlobalFunction';
-import { SetupguidePage } from '../setup/setupguide/setupguide';
 import { Storage } from '@ionic/storage';
-import { UserData } from '../../providers/user-data';
+import { Loading, MenuController, NavController } from 'ionic-angular';
+import 'rxjs/add/operator/map';
+// import { SignupPage } from '../signup/signup';
+import * as constants from '../../app/config/constants';
 import { UserMain_Model } from '../../models/user_main_model';
-import { UserSetup_Service } from '../../services/usersetup_service';
 import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
+import { UserData } from '../../providers/user-data';
+import { BaseHttpService } from '../../services/base-http';
+import { UserSetup_Service } from '../../services/usersetup_service';
+import { EncryptPassword, Random } from '../../shared/GlobalFunction';
+import { DashboardPage } from '../dashboard/dashboard';
+
+
+
 
 @Component({
   selector: 'page-user',
@@ -54,49 +52,17 @@ export class LoginPage {
   onLogin(form: NgForm) {
     this.submitted = true;
     if (form.valid) {
-      //-----------Check if the login as super vendor-----------------------
-      if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-        localStorage.setItem("g_USER_GUID", "sva"); localStorage.setItem("g_FULLNAME", "Super Admin"); localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-
-        //navigate to app.component page
-        this.userData.login(this.login.username);
-
-        //this.navCtrl.push(AdminsetupPage);
-        //        this.navCtrl.push(SetupGuidePage); //original
-        //        this.navCtrl.setRoot(DashboardPage);
-        this.menu.enable(true,"sideMenu");
-        this.navCtrl.push(DashboardPage);
-
-      }
-      else {
         let url: string;
-        //CryptoJS.SHA256(this.login.password.trim()).toString(CryptoJS.enc.Hex)
-        //Changed code by Bijay on 25/09/2018
-        url = this.baseResource_Url + "vw_login?filter=(LOGIN_ID=" + this.login.username + ')and(PASSWORD=' + CryptoJS.SHA256(this.login.password.trim()).toString(CryptoJS.enc.Hex) + ')and(ACTIVATION_FLAG=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
-        //url = this.baseResource_Url + "vw_login?filter=(LOGIN_ID=" + this.login.username + ')and(PASSWORD=' + this.login.password + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+        url = this.baseResource_Url + "vw_login?filter=(LOGIN_ID=" + this.login.username + ')and(PASSWORD=' + EncryptPassword(this.login.password) + ')and(ACTIVATION_FLAG=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
         this.http
           .get(url)
           .map(res => res.json())
           .subscribe(data => {
             let res = data["resource"];//console.log(data["resource"]);
             if (res.length > 0) {
-              localStorage.setItem("g_USER_GUID", res[0]["USER_GUID"]);
-              localStorage.setItem("g_TENANT_GUID", res[0]["TENANT_GUID"]);
-              localStorage.setItem("g_EMAIL", res[0]["EMAIL"]);
-              localStorage.setItem("g_FULLNAME", res[0]["FULLNAME"]);
-              localStorage.setItem("g_TENANT_COMPANY_GUID", res[0]["TENANT_COMPANY_GUID"]);
-              localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
-              localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
-              localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
-              this.setLocalGlobals(res);
-              // debugger;
-              if (res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == '') {
-                localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-              }
-              else {
-                localStorage.setItem("g_IMAGE_URL", constants.IMAGE_VIEW_URL + res[0]["IMAGE_URL"]);
-              }
-
+              this.SetLSCommonUserVars(res)
+              this.navCtrl.setRoot(DashboardPage);
+/* 
               //Setup Guide for only Hq Users
               if (res[0]["ISHQ"] == "1" && res[0]["IS_TENANT_ADMIN"] == "1") {
                 //this.navCtrl.push(SetupguidePage);
@@ -106,7 +72,7 @@ export class LoginPage {
                 //this.navCtrl.push(SetupPage);
                 this.navCtrl.setRoot(DashboardPage);
               }
-
+ */
               //Get the role of that particular user----------------------------------------------
               let role_url: string = "";
               role_url = this.baseResource_Url + "view_role_display?filter=(USER_GUID=" + res[0]["USER_GUID"] + ')and(ROLE_PRIORITY_LEVEL=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -115,33 +81,7 @@ export class LoginPage {
                 .map(res => res.json())
                 .subscribe(data => {
                   let role_result = data["resource"];
-                  if (role_result.length > 0) {
-
-                    localStorage.setItem("g_KEY_ADD", "0");
-                    localStorage.setItem("g_KEY_EDIT", "0");
-                    localStorage.setItem("g_KEY_DELETE", "0");
-                    localStorage.setItem("g_KEY_VIEW", "0");
-
-                    for (var item in role_result) {
-                      if (role_result[item]["ROLE_FLAG"] == "MAIN") {
-                        localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                      }
-                      if (role_result[item]["KEY_ADD"] == "1") { localStorage.setItem("g_KEY_ADD", role_result[item]["KEY_ADD"]); }
-                      if (role_result[item]["KEY_EDIT"] == "1") { localStorage.setItem("g_KEY_EDIT", role_result[item]["KEY_EDIT"]); }
-                      if (role_result[item]["KEY_DELETE"] == "1") { localStorage.setItem("g_KEY_DELETE", role_result[item]["KEY_DELETE"]); }
-                      if (role_result[item]["KEY_VIEW"] == "1") { localStorage.setItem("g_KEY_VIEW", role_result[item]["KEY_VIEW"]); }
-                    }
-
-                    // localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                    // localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]);
-                    // localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]);
-                    // localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]);
-                    // localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]);
-                  }
-                  else {
-                    localStorage.setItem("g_KEY_VIEW", "1");
-                    localStorage.removeItem("g_ROLE_NAME");
-                  }
+                  this.SetLSUserRights(role_result);
                 });
 
               //Get company settings details----------------------------------------------------------------------------------
@@ -151,23 +91,14 @@ export class LoginPage {
               this.userData.login(this.login.username);
             }
             else {
-              localStorage.removeItem("g_USER_GUID");
-              localStorage.removeItem("g_TENANT_GUID");
-              localStorage.removeItem("g_EMAIL");
-              localStorage.removeItem("g_FULLNAME");
-              localStorage.removeItem("g_TENANT_COMPANY_GUID");
-              localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
-              localStorage.removeItem("g_ISHQ");
-              localStorage.removeItem("g_IS_TENANT_ADMIN");
+              this.RemoveLSCommonUserVars
               localStorage.removeItem("Ad_Authenticaton");
-              localStorage.removeItem("g_IMAGE_URL");
 
               alert("Please enter valid login details.");
               this.login.username = "";
               this.login.password = "";
             }
           });
-      }
     }
   }
 
@@ -176,12 +107,6 @@ export class LoginPage {
     this.navCtrl.push(SignupPage);
   }
 */
-
-setLocalGlobals(res: Array<any>) {
-res[0].forEach( (element: any)=> {
-  console.log(element);
-} )
-}
   
   ForgotPasswordClick() {
     this.ForgotPasswordClicked = true;
@@ -205,7 +130,7 @@ res[0].forEach( (element: any)=> {
 
           //Generate Password Encrypt-----------------
           var strPassword = Random();
-          let strPasswordHex = CryptoJS.SHA256(strPassword).toString(CryptoJS.enc.Hex);
+          let strPasswordHex = EncryptPassword(strPassword);
 
           //Update to database------------------------          
           this.usermain_entry.TENANT_GUID = res[0]["TENANT_GUID"]
@@ -320,18 +245,11 @@ res[0].forEach( (element: any)=> {
   AuthenticateUserFromAdServer(form: NgForm) {
     if (this.login.username != undefined) {
       localStorage.removeItem("Ad_Authenticaton");
-
       this.stringToSplit = this.login.username;
       this.tempUserSplit1 = this.stringToSplit.split("@")[0]
       this.tempUserSplit2 = this.stringToSplit.split("@")[1];
-
-      if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-        this.GetUserFromAdServer(form, this.tempUserSplit1.trim());
-      }
-      else {
         // user of username@zen.com.my ---> redirect auth to AD
-        if (this.tempUserSplit2 != undefined && this.tempUserSplit2 != undefined) {
-          if (this.tempUserSplit2.trim() == "zen.com.my") {
+          if ( this.tempUserSplit2 && this.tempUserSplit2.trim() == "zen.com.my") {
             let Adurl: string = constants.AD_URL + '/user/' + this.tempUserSplit1.trim() + '/authenticate';
             var headers = new Headers();
             headers.append("Accept", 'application/json');
@@ -351,17 +269,8 @@ res[0].forEach( (element: any)=> {
                   this.GetUserFromAdServer(form, this.tempUserSplit1.trim());
                 }
                 else {
-                  localStorage.removeItem("g_USER_GUID");
-                  localStorage.removeItem("g_TENANT_GUID");
-                  localStorage.removeItem("g_EMAIL");
-                  localStorage.removeItem("g_FULLNAME");
-                  localStorage.removeItem("g_TENANT_COMPANY_GUID");
-                  localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
-                  localStorage.removeItem("g_ISHQ");
-                  localStorage.removeItem("g_IS_TENANT_ADMIN");
+                  this.RemoveLSCommonUserVars;
                   localStorage.removeItem("Ad_Authenticaton");
-                  localStorage.removeItem("g_IMAGE_URL");
-
                   alert("please enter valid login details.");
                   this.login.username = "";
                   this.login.password = "";
@@ -375,25 +284,10 @@ res[0].forEach( (element: any)=> {
           else {
             this.onLogin(form);
           }
-        }
-        // // user of username@xyz.com.my ---> redirect auth to Current DB
-        // else {
-        //   this.onLogin(form);
-        // }
-      }
     }
   }
 
   GetUserFromAdServer(form: NgForm, username: string) {
-    if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-      localStorage.setItem("g_USER_GUID", "sva"); localStorage.setItem("g_FULLNAME", "Super Admin"); localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-
-      //navigate to app.component page
-      this.userData.login(this.login.username);
-      this.navCtrl.setRoot(SetupguidePage);
-      // this.loading.dismissAll();
-    }
-    else {
       let Adurl: string = constants.AD_URL + '/user/' + username;
 
       var queryHeaders = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -410,17 +304,6 @@ res[0].forEach( (element: any)=> {
 
           this.submitted = true;
           if (form.valid) {
-            //-----------Check if the login as super vendor-----------------------
-            if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-              localStorage.setItem("g_USER_GUID", "sva"); localStorage.setItem("g_FULLNAME", "Super Admin"); localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-
-              //navigate to app.component page
-              this.userData.login(this.login.username);
-              this.navCtrl.setRoot(SetupguidePage);
-
-              // this.loading.dismissAll();
-            }
-            else {
               this.userData.login(this.login.username);
               // console.log(data.userPrincipalName);
               let url: string;
@@ -431,22 +314,9 @@ res[0].forEach( (element: any)=> {
                 .subscribe(data => {
                   let res = data["resource"];
                   if (res.length > 0) {
-                    localStorage.setItem("g_USER_GUID", res[0]["USER_GUID"]);
-                    localStorage.setItem("g_TENANT_GUID", res[0]["TENANT_GUID"]);
-                    localStorage.setItem("g_EMAIL", res[0]["EMAIL"]);
-                    localStorage.setItem("g_FULLNAME", res[0]["FULLNAME"]);
-                    localStorage.setItem("g_TENANT_COMPANY_GUID", res[0]["TENANT_COMPANY_GUID"]);
-                    localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
-                    localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
-                    localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
-
-                    if (res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == '') {
-                      localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-                    }
-                    else {
-                      localStorage.setItem("g_IMAGE_URL", constants.IMAGE_VIEW_URL + res[0]["IMAGE_URL"]);
-                    }
-
+                    this.SetLSCommonUserVars(res);
+                    this.navCtrl.setRoot(DashboardPage);
+/* 
                     //Setup Guide for only Hq Users
                     if (res[0]["ISHQ"] == "1" && res[0]["IS_TENANT_ADMIN"] == "1") {
                       this.navCtrl.setRoot(DashboardPage);
@@ -454,6 +324,7 @@ res[0].forEach( (element: any)=> {
                     else {
                       this.navCtrl.setRoot(DashboardPage);
                     }
+                     */
                     // this.loading.dismissAll();
 
                     //Get the role of that particular user---------------------------------------------------------------------------
@@ -464,36 +335,7 @@ res[0].forEach( (element: any)=> {
                       .map(res => res.json())
                       .subscribe(data => {
                         let role_result = data["resource"];
-                        if (role_result.length > 0) {
-
-                          localStorage.setItem("g_KEY_ADD", "0");
-                          localStorage.setItem("g_KEY_EDIT", "0");
-                          localStorage.setItem("g_KEY_DELETE", "0");
-                          localStorage.setItem("g_KEY_VIEW", "0");
-
-                          for (var item in role_result) {
-                            if (role_result[item]["ROLE_NAME"] == "MAIN") {
-                              localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                            }
-                            else {
-                              localStorage.setItem("g_ROLE_NAME", "");
-                            }
-                            if (role_result[0]["KEY_ADD"] == "1") { localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]); }
-                            if (role_result[0]["KEY_EDIT"] == "1") { localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]); }
-                            if (role_result[0]["KEY_DELETE"] == "1") { localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]); }
-                            if (role_result[0]["KEY_VIEW"] == "1") { localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]); }
-                          }
-
-                          // localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                          // localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]);
-                          // localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]);
-                          // localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]);
-                          // localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]);
-                        }
-                        else {
-                          localStorage.setItem("g_KEY_VIEW", "1");
-                          localStorage.removeItem("g_ROLE_NAME");
-                        }
+                        this.SetLSUserRights(role_result);
                       });
 
                     //Get company settings details----------------------------------------------------------------------------------
@@ -505,26 +347,68 @@ res[0].forEach( (element: any)=> {
                     // this.loading.dismissAll();
                   }
                   else {
-                    localStorage.removeItem("g_USER_GUID");
-                    localStorage.removeItem("g_TENANT_GUID");
-                    localStorage.removeItem("g_EMAIL");
-                    localStorage.removeItem("g_FULLNAME");
-                    localStorage.removeItem("g_TENANT_COMPANY_GUID");
-                    localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
-                    localStorage.removeItem("g_ISHQ");
-                    localStorage.removeItem("g_IS_TENANT_ADMIN");
-                    localStorage.removeItem("g_IMAGE_URL");
-
-                    alert("please enter valid login details.");
+                    this.RemoveLSCommonUserVars
+                    alert("Please enter valid login details.");
                     this.login.username = "";
                     this.login.password = "";
                   }
                 });
-            }
           }
         });
       // this.loading.dismissAll();
+  }
+
+  SetLSUserRights(role_result: any) {
+    if (role_result.length > 0) {
+      localStorage.setItem("g_KEY_ADD", "0");
+      localStorage.setItem("g_KEY_EDIT", "0");
+      localStorage.setItem("g_KEY_DELETE", "0");
+      localStorage.setItem("g_KEY_VIEW", "0");
+      for (var item in role_result) {
+        if (role_result[item]["ROLE_NAME"] == "MAIN") {
+          localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
+        }
+        else {
+          localStorage.setItem("g_ROLE_NAME", "");
+        }
+        if (role_result[0]["KEY_ADD"] == "1") { localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]); }
+        if (role_result[0]["KEY_EDIT"] == "1") { localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]); }
+        if (role_result[0]["KEY_DELETE"] == "1") { localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]); }
+        if (role_result[0]["KEY_VIEW"] == "1") { localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]); }
+      }
     }
+    else {
+      localStorage.setItem("g_KEY_VIEW", "1");
+      localStorage.removeItem("g_ROLE_NAME");
+    }
+  }
+  SetLSCommonUserVars(res: any) {
+    localStorage.setItem("g_USER_GUID", res[0]["USER_GUID"]);
+    localStorage.setItem("g_TENANT_GUID", res[0]["TENANT_GUID"]);
+    localStorage.setItem("g_EMAIL", res[0]["EMAIL"]);
+    localStorage.setItem("g_FULLNAME", res[0]["FULLNAME"]);
+    localStorage.setItem("g_TENANT_COMPANY_GUID", res[0]["TENANT_COMPANY_GUID"]);
+    localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
+    localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
+    localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
+    if (res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == '') {
+      localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
+    }
+    else {
+      localStorage.setItem("g_IMAGE_URL", constants.IMAGE_VIEW_URL + res[0]["IMAGE_URL"]);
+    }
+  }
+
+  RemoveLSCommonUserVars() {
+    localStorage.removeItem("g_USER_GUID");
+    localStorage.removeItem("g_TENANT_GUID");
+    localStorage.removeItem("g_EMAIL");
+    localStorage.removeItem("g_FULLNAME");
+    localStorage.removeItem("g_TENANT_COMPANY_GUID");
+    localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
+    localStorage.removeItem("g_ISHQ");
+    localStorage.removeItem("g_IS_TENANT_ADMIN");
+    localStorage.removeItem("g_IMAGE_URL");
   }
 
   KeyNameValue: any[] = []; KeyNameValueList: any;
