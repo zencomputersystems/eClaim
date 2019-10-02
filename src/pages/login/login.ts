@@ -14,9 +14,6 @@ import { UserSetup_Service } from '../../services/usersetup_service';
 import { EncryptPassword, Random } from '../../shared/GlobalFunction';
 import { DashboardPage } from '../dashboard/dashboard';
 
-
-
-
 @Component({
   selector: 'page-user',
   templateUrl: 'login.html', providers: [UserSetup_Service, BaseHttpService]
@@ -48,6 +45,16 @@ export class LoginPage {
   email_ngModel: any;
   usermain_entry: UserMain_Model = new UserMain_Model();
 
+  Authenticate(form: NgForm) {
+    let username = this.login.username.split("@")[0].trim();
+    let domainname = this.login.username.split("@")[1].trim();
+    if (form.valid && username && domainname == "zen.com.my") {
+      this.AuthenticateUserFromAdServer(username,this.login.password);
+
+    } else {
+      this.onLogin(form)
+    }
+  }
 
   onLogin(form: NgForm) {
     this.submitted = true;
@@ -91,7 +98,7 @@ export class LoginPage {
               this.userData.login(this.login.username);
             }
             else {
-              this.RemoveLSCommonUserVars
+              this.RemoveLSCommonUserVars;
               localStorage.removeItem("Ad_Authenticaton");
 
               alert("Please enter valid login details.");
@@ -237,36 +244,28 @@ export class LoginPage {
       });
   }
 
-  stringToSplit: string = "";
-  tempUserSplit1: string = "";
-  tempUserSplit2: string = "";
+  // stringToSplit: string = "";
+  // tempUserSplit1: string = "";
+  // tempUserSplit2: string = "";
   loading: Loading;
 
-  AuthenticateUserFromAdServer(form: NgForm) {
-    if (this.login.username != undefined) {
+  AuthenticateUserFromAdServer(username: string, userpassword: string) {
       localStorage.removeItem("Ad_Authenticaton");
-      this.stringToSplit = this.login.username;
-      this.tempUserSplit1 = this.stringToSplit.split("@")[0]
-      this.tempUserSplit2 = this.stringToSplit.split("@")[1];
-        // user of username@zen.com.my ---> redirect auth to AD
-          if ( this.tempUserSplit2 && this.tempUserSplit2.trim() == "zen.com.my") {
-            let Adurl: string = constants.AD_URL + '/user/' + this.tempUserSplit1.trim() + '/authenticate';
+            let Adurl: string = constants.AD_URL + '/user/' + username + '/authenticate';
             var headers = new Headers();
             headers.append("Accept", 'application/json');
             headers.append('Content-Type', 'application/json');
             let options = new RequestOptions({ headers: headers });
-
             let postParams = {
-              password: this.login.password
+              password: userpassword
             }
-
             this.http.post(Adurl, postParams, options)
               .map(res => res.json())
               .subscribe(data => {
                 if (data.data == true) {
                   // alert('Authenticate');
                   localStorage.setItem("Ad_Authenticaton", "true");
-                  this.GetUserFromAdServer(form, this.tempUserSplit1.trim());
+                  this.GetUserFromAdServer(username);
                 }
                 else {
                   this.RemoveLSCommonUserVars;
@@ -279,15 +278,9 @@ export class LoginPage {
               }, error => {
                 console.log(error);// Error getting the data
               });
-          }
-          // user of username@xyz.com.my ---> redirect auth to Current DB
-          else {
-            this.onLogin(form);
-          }
-    }
   }
 
-  GetUserFromAdServer(form: NgForm, username: string) {
+  GetUserFromAdServer(username: string) {
       let Adurl: string = constants.AD_URL + '/user/' + username;
 
       var queryHeaders = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -303,8 +296,7 @@ export class LoginPage {
         .subscribe(data => {
 
           this.submitted = true;
-          if (form.valid) {
-              this.userData.login(this.login.username);
+              this.userData.login(username);
               // console.log(data.userPrincipalName);
               let url: string;
               url = this.baseResource_Url + "vw_login?filter=(EMAIL=" + data.userPrincipalName + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -316,17 +308,6 @@ export class LoginPage {
                   if (res.length > 0) {
                     this.SetLSCommonUserVars(res);
                     this.navCtrl.setRoot(DashboardPage);
-/* 
-                    //Setup Guide for only Hq Users
-                    if (res[0]["ISHQ"] == "1" && res[0]["IS_TENANT_ADMIN"] == "1") {
-                      this.navCtrl.setRoot(DashboardPage);
-                    }
-                    else {
-                      this.navCtrl.setRoot(DashboardPage);
-                    }
-                     */
-                    // this.loading.dismissAll();
-
                     //Get the role of that particular user---------------------------------------------------------------------------
                     let role_url: string = "";
                     role_url = this.baseResource_Url + "view_role_display?filter=(USER_GUID=" + res[0]["USER_GUID"] + ')and(ROLE_PRIORITY_LEVEL=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -337,7 +318,6 @@ export class LoginPage {
                         let role_result = data["resource"];
                         this.SetLSUserRights(role_result);
                       });
-
                     //Get company settings details----------------------------------------------------------------------------------
                     this.GetCompanySettings(localStorage.getItem("g_TENANT_GUID"));
                     //--------------------------------------------------------------------------------------------------------------
@@ -347,13 +327,12 @@ export class LoginPage {
                     // this.loading.dismissAll();
                   }
                   else {
-                    this.RemoveLSCommonUserVars
+                    this.RemoveLSCommonUserVars;
                     alert("Please enter valid login details.");
                     this.login.username = "";
                     this.login.password = "";
                   }
                 });
-          }
         });
       // this.loading.dismissAll();
   }
