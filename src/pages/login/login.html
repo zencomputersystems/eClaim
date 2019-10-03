@@ -42,7 +42,7 @@
 
 				<div class="btn">
 					<!-- <button color="primary500" ion-button block (click)="onLogin(loginForm)" type="submit">Login</button> -->
-					<button color="primary500" ion-button block (click)="AuthenticateUserFromAdServer(loginForm)" type="submit">{{ "LOGIN" | translate }}</button>
+					<button color="primary500" ion-button block [disabled]="!loginForm.valid" (click)="Authenticate(loginForm)" type="submit">{{ "LOGIN" | translate }}</button>
 				</div>
 				<!-- <div>
 

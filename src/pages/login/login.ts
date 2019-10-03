@@ -46,13 +46,16 @@ export class LoginPage {
   usermain_entry: UserMain_Model = new UserMain_Model();
 
   Authenticate(form: NgForm) {
-    let username = this.login.username.split("@")[0].trim();
-    let domainname = this.login.username.split("@")[1].trim();
+    let username = this.login.username.split("@")[0] || null;
+    let domainname = this.login.username.trim().split("@")[1] || null;
     if (form.valid && username && domainname == "zen.com.my") {
       this.AuthenticateUserFromAdServer(username,this.login.password);
 
-    } else {
+    } else if (form.valid && username && domainname) {
       this.onLogin(form)
+    }
+    else {
+      alert("Sorry. That format is not supported. Please key in the username in valid format.");
     }
   }
 
@@ -252,6 +255,7 @@ export class LoginPage {
   AuthenticateUserFromAdServer(username: string, userpassword: string) {
       localStorage.removeItem("Ad_Authenticaton");
             let Adurl: string = constants.AD_URL + '/user/' + username + '/authenticate';
+            console.log(Adurl);
             var headers = new Headers();
             headers.append("Accept", 'application/json');
             headers.append('Content-Type', 'application/json');
