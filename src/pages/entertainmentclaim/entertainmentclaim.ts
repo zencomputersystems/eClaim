@@ -1,24 +1,22 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http, Headers, RequestOptions } from '@angular/http';
-import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
-//import { MasterClaim_Model } from '../../models/masterclaim_model';
-import { EntertainmentClaim_Service } from '../../services/entertainmentclaim_service';
-import { BaseHttpService } from '../../services/base-http';
 import { DecimalPipe } from '@angular/common';
-// import { FileTransfer } from '@ionic-native/file-transfer';
-import { LoadingController, ActionSheetController, Loading, ToastController } from 'ionic-angular';
-import { MainClaimRequestModel } from '../../models/main-claim-request.model';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Headers, Http, RequestOptions } from '@angular/http';
+import { TranslateService } from '@ngx-translate/core';
+import { ActionSheetController, IonicPage, Loading, LoadingController, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 //import { TravelclaimPage } from '../travel-claim/travel-claim.component';
 import moment from 'moment';
+import 'rxjs/add/operator/map';
+import * as constants from '../../app/config/constants';
 //import { ExcelService } from '../../providers/excel.service';
 import * as Settings from '../../dbSettings/companySettings';
+import { MainClaimRequestModel } from '../../models/main-claim-request.model';
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
+import { BaseHttpService } from '../../services/base-http';
+//import { MasterClaim_Model } from '../../models/masterclaim_model';
+import { EntertainmentClaim_Service } from '../../services/entertainmentclaim_service';
+import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 
 @IonicPage()
 @Component({
@@ -39,7 +37,7 @@ export class EntertainmentclaimPage {
   TenantGUID: any;
   mainClaimReq: MainClaimRequestModel = new MainClaimRequestModel();
   rejectedLevel: any;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
 
   storeProjects: any[];
   public projects: any[];

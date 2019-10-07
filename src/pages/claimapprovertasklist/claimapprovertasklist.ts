@@ -1,27 +1,26 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
 import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
-
-import * as constants from '../../app/config/constants';
-import { BaseHttpService } from '../../services/base-http';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Checkbox } from 'ionic-angular/components/checkbox/checkbox';
+import 'rxjs/add/operator/map';
+import * as constants from '../../app/config/constants';
+import * as Settings from '../../dbSettings/companySettings';
 import { Checkboxlist } from '../../models/checkbox-list.model';
-
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
+import { BaseHttpService } from '../../services/base-http';
+import { ClaimtasklistPage } from '../claimtasklist/claimtasklist';
 import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
+import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
+import { LoginPage } from '../login/login';
+import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
 import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
 // import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
 import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
-import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
-import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
-import { ClaimtasklistPage } from '../claimtasklist/claimtasklist';
-import { LoginPage } from '../login/login';
-import * as Settings from '../../dbSettings/companySettings'
-import { FinancePaymentTasklistPage } from '../finance-payment-tasklist/finance-payment-tasklist';
+import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
+
+
+
 
 
 @IonicPage()
@@ -49,7 +48,7 @@ export class ClaimapprovertasklistPage {
   totalClaimAmount: number = 0;
   public page: number = 1;
   FinanceLogin: boolean = false;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
 
   deptList: any[];
   employeeList: any[];

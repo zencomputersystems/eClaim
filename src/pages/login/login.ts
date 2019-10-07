@@ -395,7 +395,8 @@ export class LoginPage {
   }
 
   KeyNameValue: any[] = []; KeyNameValueList: any;
-  GetCompanySettings(STR_TENANT_GUID: string) {
+
+  RemoveCompanySettings() {
     localStorage.removeItem("cs_date_format");
     localStorage.removeItem("cs_default_currency");
     localStorage.removeItem("cs_email_logo");
@@ -415,6 +416,48 @@ export class LoginPage {
     localStorage.removeItem("profile_guid");
     localStorage.removeItem("cs_profile_guid");
     localStorage.removeItem("zone_wise_current_timestamp");
+  }
+
+  SetCompanyLSVariable(KeyPairs: any) {
+    let CSvars = {
+      "date_format": "cs_date_format",
+      "default_currency": "cs_default_currency",
+      "email_logo": "cs_email_logo",
+      "max_claim_amount": "cs_max_claim_amount",
+      "min_claim_amount": "cs_min_claim_amount",
+      "claim_cutoff_date": "cs_claim_cutoff_date",
+      "month_start": "cs_month_start",
+      "month_end": "cs_month_end",
+      "approval_cutoff_date": "cs_approval_cutoff_date",
+      "default_language": "cs_default_language",
+      "email_schedule": "cs_email_schedule",
+      "email_time": "cs_email_time",
+      
+      "cs_date_format": "date_format",
+      "cs_default_currency": "default_currency",
+      "cs_email_logo": "email_logo",
+      "cs_max_claim_amount": "max_claim_amount",
+      "cs_min_claim_amount": "min_claim_amount",
+      "cs_claim_cutoff_date": "claim_cutoff_date",
+      "cs_month_start": "month_start",
+      "cs_month_end": "month_end",
+      "cs_approval_cutoff_date": "approval_cutoff_date",
+      "cs_default_language": "default_language",
+      "cs_email_schedule": "email_schedule",
+      "cs_email_time": "email_time"
+    }
+    for (let LSVar in CSvars)
+      if (LSVar === KeyPairs.keyname)
+        localStorage.setItem(this.getKeyByValue(CSvars,KeyPairs.keyname),KeyPairs.keyvalue); 
+
+  };
+
+  getKeyByValue(object: any, value: any) { 
+    return Object.keys(object).find(key =>  
+            object[key] === value); 
+}
+  GetCompanySettings(STR_TENANT_GUID: string) {
+    this.RemoveCompanySettings();
     this.KeyNameValue = [];
     let url: string = "";
     url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/permission_keys' + '?filter=(TENANT_GUID=' + STR_TENANT_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -424,11 +467,13 @@ export class LoginPage {
       .subscribe(data => {
         this.KeyNameValueList = data.resource;
         for (var item in this.KeyNameValueList) {
+          this.SetCompanyLSVariable({ keyname: this.KeyNameValueList[item]["KEY_NAME"], keyvalue: this.KeyNameValueList[item]["KEY_VALUE"]});
+/*           
           if (this.KeyNameValueList[item]["KEY_NAME"] == "date_format") { localStorage.setItem("cs_date_format", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_currency") { localStorage.setItem("cs_default_currency", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "email_logo") { localStorage.setItem("cs_email_logo", this.KeyNameValueList[item]["KEY_VALUE"]); }
           // if (this.KeyNameValueList[item]["KEY_NAME"] == "default_country") { localStorage.setItem("cs_default_country", this.KeyNameValueList[item]["KEY_VALUE"]); }
-
+ */
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_country") {
             var StartIndex = this.KeyNameValueList[item]["KEY_VALUE"].indexOf(",");
             var EndIndex = this.KeyNameValueList[item]["KEY_VALUE"].length - (StartIndex + 1);
@@ -436,13 +481,15 @@ export class LoginPage {
 
             localStorage.setItem("cs_default_country", KeyValue);
           }
-
+/* 
           if (this.KeyNameValueList[item]["KEY_NAME"] == "max_claim_amt") { localStorage.setItem("cs_max_claim_amt", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "min_claim_amt") { localStorage.setItem("cs_min_claim_amt", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "claim_cutoff_date") { localStorage.setItem("cs_claim_cutoff_date", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "month_start") { localStorage.setItem("cs_year_start_month", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "month_end") { localStorage.setItem("cs_year_end_month", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "approval_cutoff_date") { localStorage.setItem("cs_approval_cutoff_date", this.KeyNameValueList[item]["KEY_VALUE"]); }
+ */
+
           // if (this.KeyNameValueList[item]["KEY_NAME"] == "default_payment_type") { localStorage.setItem("cs_default_payment_type", this.KeyNameValueList[item]["KEY_VALUE"]); }
 
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_payment_type") {
@@ -452,11 +499,11 @@ export class LoginPage {
 
             localStorage.setItem("cs_default_payment_type", KeyValue_1);
           }
-
+/* 
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_language") { localStorage.setItem("cs_default_language", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "email_schedule") { localStorage.setItem("cs_email_schedule", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "email_time") { localStorage.setItem("cs_email_time", this.KeyNameValueList[item]["KEY_VALUE"]); }
-
+ */
           if (this.KeyNameValueList[item]["KEY_NAME"] == "draft_notification") { localStorage.setItem("draft_notification", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "profile_guid") { localStorage.setItem("cs_profile_guid", this.KeyNameValueList[item]["KEY_VALUE"]); }
 

@@ -1,22 +1,21 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http, Headers, RequestOptions } from '@angular/http';
-import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
-//import { MasterClaim_Model } from '../../models/masterclaim_model';
-import { GiftClaim_Service } from '../../services/giftclaim_service';
-import { BaseHttpService } from '../../services/base-http';
 import { DecimalPipe } from '@angular/common';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Headers, Http, RequestOptions } from '@angular/http';
 import { FileTransfer } from '@ionic-native/file-transfer';
-import { LoadingController, ActionSheetController, Loading, ToastController } from 'ionic-angular';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
+import { TranslateService } from '@ngx-translate/core';
+import { ActionSheetController, IonicPage, Loading, LoadingController, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 //import { TravelclaimPage } from '../travel-claim/travel-claim.component';
 import moment from 'moment';
+import 'rxjs/add/operator/map';
+import * as constants from '../../app/config/constants';
 import * as Settings from '../../dbSettings/companySettings';
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
+import { BaseHttpService } from '../../services/base-http';
+//import { MasterClaim_Model } from '../../models/masterclaim_model';
+import { GiftClaim_Service } from '../../services/giftclaim_service';
+import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 
 @IonicPage()
 @Component({
@@ -35,7 +34,7 @@ export class GiftclaimPage {
   public projects: any[];
   items: string[];
   claimFor: string = 'seg_project';
-  currency = localStorage.getItem("cs_default_currency");
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
   rejectedLevel: any;
 
 

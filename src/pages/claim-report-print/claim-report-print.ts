@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -22,7 +22,7 @@ export class ClaimReportPrintPage {
   @Input() month: any;
   @Input() totalClaimAmount: number;
   @Input() claimsSocSummary: any[];
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
   constructor(public navCtrl: NavController, public navParams: NavParams) {
    // this.getSocSummary();
   }

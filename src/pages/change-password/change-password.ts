@@ -81,7 +81,7 @@ export class ChangePasswordPage {
       // console.log(hash);
 
       //check current password is match with database      
-      if (this.user_details[0]["PASSWORD"] == EncryptPassword(this.Current_Password_ngModel) {
+      if (this.user_details[0]["PASSWORD"] == EncryptPassword(this.Current_Password_ngModel)) {
         if (this.Current_Password_ngModel.trim().toUpperCase() != this.Confirm_Password_ngModel.trim().toUpperCase()) {
           if (this.New_Password_ngModel.trim().toUpperCase() == this.Confirm_Password_ngModel.trim().toUpperCase()) {            
 

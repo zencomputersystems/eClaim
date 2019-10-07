@@ -1,20 +1,20 @@
-import 'chart.piecelabel.js';
-import 'rxjs/add/operator/map';
-
-import * as Settings from '../../dbSettings/companySettings';
-import * as constants from '../../app/config/constants';
-
-import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { getURL, sanitizeURL } from './../../providers/sanitizer/sanitizer';
-
-import { Chart } from 'chart.js';
-import { Component } from '@angular/core';
-import { DashboardCards } from './../../interfaces/dashboard-card';
 // import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DecimalPipe } from "@angular/common";
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
+import { Chart } from 'chart.js';
+import 'chart.piecelabel.js';
+import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
+import 'rxjs/add/operator/map';
+import * as constants from '../../app/config/constants';
+import * as Settings from '../../dbSettings/companySettings';
 import { toCurrency } from '../../providers/currency/currency';
+import { DashboardCards } from './../../interfaces/dashboard-card';
+import { getURL, sanitizeURL } from './../../providers/sanitizer/sanitizer';
+
+
+
 
 /**
  * Generated class for the DashboardPage page.
@@ -53,7 +53,7 @@ export class DashboardPage {
 
   PendingClaimCount_year_Superior: any; PendingClaimAmount_year_Superior: any;
   PendingClaimCount_year_Finance: any; PendingClaimAmount_year_Finance: any;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency") || "RM";
 
   Approved_Claim_Count = 0; Approved_Claim_Amount = '0.00';
   baseResourceUrl_Card: any; Year_Card: any;

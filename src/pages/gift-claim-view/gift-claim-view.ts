@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { Services } from '../Services';
-import { GiftclaimPage } from '../giftclaim/giftclaim';
+import { TranslateService } from '@ngx-translate/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import * as Settings from '../../dbSettings/companySettings';
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import * as Settings from '../../dbSettings/companySettings'; 
+import { GiftclaimPage } from '../giftclaim/giftclaim';
+import { Services } from '../Services';
 
 
 @IonicPage()
@@ -25,7 +24,7 @@ export class GiftClaimViewPage {
   ToggleNgModel: any;
   Approver_GUID: any;
   isApprover: any;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
 
   isRemarksAccepted: boolean = false;
   level: any;
