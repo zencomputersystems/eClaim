@@ -611,8 +611,10 @@ export class UserPage {
 
   SaveImageinDB(fileName: string) {
     let objImage: ImageUpload_model = new ImageUpload_model();
+    let imageUrl = this.CloudFilePath + fileName
+    if (!imageUrl) imageUrl = "https://images.unsplash.com/photo-1505995433366-e12047f3f144";
     objImage.Image_Guid = UUID.UUID();
-    objImage.IMAGE_URL = sanitizeURL(this.CloudFilePath + fileName);
+    objImage.IMAGE_URL = sanitizeURL(imageUrl);
     objImage.CREATION_TS = new Date().toISOString();
     objImage.Update_Ts = new Date().toISOString();
     return new Promise((resolve) => {
@@ -1317,17 +1319,17 @@ export class UserPage {
       }
       this.usermain_entry.EMAIL = this.User_Email_Edit_ngModel.trim();
       // this.usermain_entry.ACTIVATION_FLAG = 1;
-      this.usermain_entry.ACTIVATION_FLAG = this.view_user_details[0]["ACTIVATION_FLAG"];
+      this.usermain_entry.ACTIVATION_FLAG = this.view_user_details[0]["ACTIVATION_FLAG"] || 1;
 
       this.usermain_entry.CREATION_TS = this.view_user_details[0]["CREATION_TS"];
       this.usermain_entry.CREATION_USER_GUID = this.view_user_details[0]["CREATION_USER_GUID"];
 
       this.usermain_entry.UPDATE_TS = new Date().toISOString();
       this.usermain_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-      this.usermain_entry.IS_TENANT_ADMIN = this.view_user_details[0]["IS_TENANT_ADMIN"];
+      this.usermain_entry.IS_TENANT_ADMIN = this.view_user_details[0]["IS_TENANT_ADMIN"] || 0;
       // alert(this.usermain_entry.EMAIL);
       // alert(this.User_Email_ngModel);
-
+console.log(this.view_user_details[0]);
       this.userservice.update_user_main(this.usermain_entry)
         .subscribe((response) => {
           if (response.status == 200) {
@@ -1625,7 +1627,8 @@ export class UserPage {
     this.userservice.update_user_contact(this.usercontact_entry)
       .subscribe((response) => {
         if (response.status == 200) {
-          let uploadImage = this.UploadImage_Old('avatar2', this.fileName2);
+/*  NEED REWORK  - KN
+         let uploadImage = this.UploadImage_Old('avatar2', this.fileName2);
           uploadImage.then(() => {
             // console.table(resJson)
             let imageResult = this.SaveImageinDB(this.fileName2);
@@ -1638,8 +1641,16 @@ export class UserPage {
               //   let result = this.Save_User_Qualification(objImage.Image_Guid);
               // }
             })
-          })
-          //this.Update_User_Qualification()
+          }) */
+//          this.Update_User_Qualification()
+          // Moved from Update_User_Qualification:
+                      // this.Update_User_Certification();
+                      this.Update_User_Spouse();
+                      this.Update_User_Children();
+                      this.Update_Role();
+          
+                      alert('User updated successfully.');
+                      this.navCtrl.setRoot(this.navCtrl.getActive().component);
         }
       });
   }
@@ -2003,7 +2014,7 @@ export class UserPage {
   Update(USER_GUID: any) {
     if (this.Userform) {
       this.loading = this.loadingCtrl.create({
-        content: 'Please wait...',
+        content: 'Updating user data. Please wait...',
       });
       this.loading.present();
       this.Update_User_Main(USER_GUID);
