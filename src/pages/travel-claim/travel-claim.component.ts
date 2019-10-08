@@ -1,31 +1,28 @@
-import { DREAMFACTORY_INSTANCE_URL } from './../../app/config/constants';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, ModalController } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
+
+import * as Settings from '../../dbSettings/companySettings';
 import * as constants from '../../app/config/constants';
-import { ImageUpload_model } from '../../models/image-upload.model';
+
+import { ActionSheetController, IonicPage, Loading, LoadingController, ModalController, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { getURL, sanitizeURL } from '../../providers/sanitizer/sanitizer';
+
+import { AddTollPage } from './add-toll/add-toll.component';
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { BaseHttpService } from '../../services/base-http';
+import { Component } from '@angular/core';
+import { ConferenceData } from '../../providers/conference-data';
+import { DecimalPipe } from '@angular/common';
+import { FileTransfer } from '@ionic-native/file-transfer';
+import { Http } from '@angular/http';
+import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
 //import { TravelClaim_Model } from '../../models/travelclaim_model';
 //import { TravelClaim_Service } from '../../services/travelclaim_service';
 import { Services } from '../Services';
-import { BaseHttpService } from '../../services/base-http';
+import { TranslateService } from '@ngx-translate/core';
 import { UUID } from 'angular2-uuid';
-import { FileTransfer } from '@ionic-native/file-transfer';
-import { LoadingController, ActionSheetController, Loading, ToastController } from 'ionic-angular';
-import { AddTollPage } from './add-toll/add-toll.component';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { ConferenceData } from '../../providers/conference-data';
-
-import { DecimalPipe } from '@angular/common';
-import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
-import moment from 'moment';
-import * as Settings from '../../dbSettings/companySettings';
-import { sanitizeURL, getURL } from '../../providers/sanitizer/sanitizer';
 import { UploadImage } from '../../providers/uploader/uploader';
-import { Observable } from 'rxjs';
+import moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -265,10 +262,6 @@ export class TravelclaimPage {
       });
   }
   Roundtrip_Calculation() {
-    // this.api.getApiModel('main_claim_request', 'filter=CLAIM_REQUEST_GUID=' + this.claimRequestGUID).subscribe(data => {
-    //   this.claimRequestData = data["resource"];
-
-    // });
     let url = 'http://api.zen.com.my/api/v2/google/distancematrix/json?destinations=place_id:' + this.OriginPlaceID + '&origins=place_id:' + this.DestinationPlaceID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     var destination: any;
     return new Promise((resolve, reject) => {

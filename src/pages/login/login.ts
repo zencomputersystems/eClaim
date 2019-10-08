@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Headers, Http, RequestOptions } from '@angular/http';
-import { Storage } from '@ionic/storage';
-import { Loading, MenuController, NavController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
+
 // import { SignupPage } from '../signup/signup';
 import * as constants from '../../app/config/constants';
-import { UserMain_Model } from '../../models/user_main_model';
-import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
-import { UserData } from '../../providers/user-data';
+
+import { EncryptPassword, Random, getKeyByValue } from '../../shared/GlobalFunction';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Headers, Http, RequestOptions } from '@angular/http';
+import { Loading, MenuController, NavController } from 'ionic-angular';
+
 import { BaseHttpService } from '../../services/base-http';
-import { UserSetup_Service } from '../../services/usersetup_service';
-import { EncryptPassword, Random } from '../../shared/GlobalFunction';
+import { Component } from '@angular/core';
 import { DashboardPage } from '../dashboard/dashboard';
+import { Storage } from '@ionic/storage';
+import { UserData } from '../../providers/user-data';
+import { UserMain_Model } from '../../models/user_main_model';
+import { UserSetup_Service } from '../../services/usersetup_service';
+import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 @Component({
   selector: 'page-user',
@@ -242,7 +245,7 @@ export class LoginPage {
     this.http.post(this.emailUrl, body, options)
       .map(res => res.json())
       .subscribe(() => {
-        alert('Password has sent to your eMail Id.');
+        alert('Password has been sent to your email.');
         //          this.navCtrl.push(LoginPage);
       });
   }
@@ -274,7 +277,7 @@ export class LoginPage {
                 else {
                   this.RemoveLSCommonUserVars;
                   localStorage.removeItem("Ad_Authenticaton");
-                  alert("please enter valid login details.");
+                  alert("Authentication Failure: Please enter valid login details.");
                   this.login.username = "";
                   this.login.password = "";
                   // this.loading.dismissAll();
@@ -448,14 +451,10 @@ export class LoginPage {
     }
     for (let LSVar in CSvars)
       if (LSVar === KeyPairs.keyname)
-        localStorage.setItem(this.getKeyByValue(CSvars,KeyPairs.keyname),KeyPairs.keyvalue); 
+        localStorage.setItem(getKeyByValue(CSvars,KeyPairs.keyname),KeyPairs.keyvalue); 
 
   };
 
-  getKeyByValue(object: any, value: any) { 
-    return Object.keys(object).find(key =>  
-            object[key] === value); 
-}
   GetCompanySettings(STR_TENANT_GUID: string) {
     this.RemoveCompanySettings();
     this.KeyNameValue = [];

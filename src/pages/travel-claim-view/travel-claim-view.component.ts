@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { Http } from '@angular/http';
-import { Services } from '../Services';
-import { TravelclaimPage } from '../travel-claim/travel-claim.component';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import * as Settings from '../../dbSettings/companySettings'; 
+import * as Settings from '../../dbSettings/companySettings';
 
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { Component } from '@angular/core';
+import { Http } from '@angular/http';
+import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
+import { Services } from '../Services';
+import { TranslateService } from '@ngx-translate/core';
+import { TravelclaimPage } from '../travel-claim/travel-claim.component';
 
 @IonicPage()
 @Component({
@@ -30,7 +31,7 @@ export class TravelClaimViewPage {
   // approverDesignation: any;
   // totalAmount: number = 0;
   isActionTaken: boolean = false;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
 
   constructor(public profileMngProvider: ProfileManagerProvider, public api: ApiManagerProvider, public api1: Services, public http: Http, public translate: TranslateService, public navCtrl: NavController, public navParams: NavParams) {
     this.isApprover = this.navParams.get("isApprover");
