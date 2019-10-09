@@ -76,6 +76,6 @@ export const ProfileLevels = {
 }
 export const ClaimAmountConstants = {
     MIN_CLAIM_AMOUNT: 0,
-    MAX_CLAIM_AMOUNT: 9999
+    MAX_CLAIM_AMOUNT: 9999.99
 
 }

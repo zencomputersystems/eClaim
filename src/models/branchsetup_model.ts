@@ -7,7 +7,7 @@ export class BranchSetup_Model extends Base_Model {
 	public BRANCH_GUID: string = null;
 	public NAME: string = null;
 
-	static fromJson(json: BranchSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.BRANCH_GUID,

@@ -11,7 +11,7 @@ export class DeviceSetup_Model extends Base_Activation_Model {
 	public TENANT_GUID: string = null;
 
 
-	static fromJson(json: DeviceSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.DEVICE_GUID,

@@ -13,7 +13,7 @@ export class SubsciptionSetup_Model extends Base_Model {
   public ACTIVE_FLAG: string = null;
   public TENANT_GUID: string = null;
 
-    static fromJson(json: SubsciptionSetup_Model) {
+    static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.SUBSCRIPTION_GUID,

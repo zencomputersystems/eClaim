@@ -4,12 +4,12 @@ export class UserContact_Model extends Base_Model {
         super();
     }
     
-    public CONTACT_INFO_GUID: string = null,
-    public USER_GUID: string = null,
-    public TYPE: string = null,  
-    public CONTACT_NO: string = null,
-    public DESCRIPTION: string = null,
-    public REMARKS: string = null
+    public CONTACT_INFO_GUID: string = null;
+    public USER_GUID: string = null;
+    public TYPE: string = null;
+    public CONTACT_NO: string = null;
+    public DESCRIPTION: string = null;
+    public REMARKS: string = null;
 
     static fromJson(json: UserContact_Model) {
 		if (!json) return;

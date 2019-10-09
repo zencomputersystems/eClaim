@@ -1,3 +1,4 @@
+import { urlsanitizer } from '@zencloudservices/urlsanitizer';
 import { DREAMFACTORY_IMAGE_URL, DREAMFACTORY_TABLE_URL, DREAMFACTORY_API_KEY, DREAMFACTORY_TEMPLATE_URL, DREAMFACTORY_EMAIL_URL, DREAMFACTORY_INSTANCE_URL } from './../../app/config/constants';
 import { Injectable } from '@angular/core';
 
@@ -16,7 +17,8 @@ export class SanitizerProvider {
 
 }
 export function sanitizeURL(providedUrl: string) {
-  if (typeof providedUrl === 'string') return providedUrl.trim().replace(/\/\//g, "/").replace(":/", "://") || "-1"
+//  if (typeof providedUrl === 'string') return providedUrl.trim().replace(/\/\//g, "/").replace(":/", "://") || "-1"
+  return urlsanitizer(providedUrl);
 }
 
 export type serviceTypeDef = {

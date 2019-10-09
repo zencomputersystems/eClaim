@@ -12,7 +12,7 @@ export class CashcardSetup_Model extends Base_Activation_Model {
     public MANAGEMENT_URL: string = null;
     public TENANT_GUID: string = null
 
-	static fromJson(json: CashcardSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.CASHCARD_GUID,

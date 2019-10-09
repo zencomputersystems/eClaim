@@ -1,12 +1,14 @@
 import { Base_Activation_Model } from './base_model';
 export class TenantMainSetup_Model extends Base_Activation_Model {
-  constructor() { }
+  constructor() {
+    super();
+  }
   
   public TENANT_GUID: string = null;
   public PARENT_TENANT_GUID: string = null;
   public TENANT_ACCOUNT_NAME: string = null;
 
-    static fromJson(json: TenantMainSetup_Model) {
+    static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.TENANT_GUID,

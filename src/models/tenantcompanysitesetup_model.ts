@@ -19,7 +19,7 @@ export class TenantCompanySiteSetup_Model extends Base_Activation_Model {
     public WEBSITE: string = null;
     public ISHQ: string = null;
 
-    static fromJson(json: TenantCompanySiteSetup_Model) {
+    static fromJson(json: any) {
         if (!json) return;
         return (
             json.TENANT_COMPANY_SITE_GUID,

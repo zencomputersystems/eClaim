@@ -6,7 +6,7 @@ export class approval_profile_model {
   public id: number = null;
   public approver: string = null;
 
-  static fromJson(json: approval_profile_model) {
+  static fromJson(json: any) {
     if (!json) return;
     return (
       json.id,

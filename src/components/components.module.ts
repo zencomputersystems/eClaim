@@ -1,11 +1,8 @@
-import { NgModule } from '@angular/core';
 import { MenuComponent } from './menu/menu';
-import { ImgCropperComponent } from './img-cropper/img-cropper';
+import { NgModule } from '@angular/core';
 @NgModule({
-	declarations: [MenuComponent,
-    ImgCropperComponent],
+	declarations: [MenuComponent],
 	imports: [],
-	exports: [MenuComponent,
-    ImgCropperComponent]
+	exports: [MenuComponent]
 })
 export class ComponentsModule {}

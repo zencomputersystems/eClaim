@@ -1,7 +1,10 @@
 import * as constants from '../app/config/constants';
-import { Observable } from 'rxjs/Observable';
-import { Http, Headers, RequestOptions } from '@angular/http';
+
+import { Headers, Http, RequestOptions } from '@angular/http';
+
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { sanitizeURL } from '../providers/sanitizer/sanitizer';
 
 @Injectable()
 
@@ -18,7 +21,7 @@ export class Services {
     return constants.DREAMFACTORY_TABLE_URL + '/' + table + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   }
   postUrl(table: string) {
-    return constants.DREAMFACTORY_TABLE_URL + '/' + table;
+    return sanitizeURL(constants.DREAMFACTORY_TABLE_URL + '/' + table);
   }
   postData(endpoint: string, body: any): Observable<any> {
     var queryHeaders = new Headers();

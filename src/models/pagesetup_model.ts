@@ -9,7 +9,7 @@ export class PageSetup_Model extends Base_NameDescription_Model {
 	public CODE_PAGE_NAME: string = null;
 
 
-	static fromJson(json: PageSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.PAGE_GUID,

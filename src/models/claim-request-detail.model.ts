@@ -14,7 +14,7 @@ export class ClaimRequestDetailModel extends Base_Model {
   public ATTACHMENT_ID: string = null;
   public GST: string = null;
 
-  static fromJson(json: ClaimRequestDetailModel) {
+  static fromJson(json: any) {
     if (!json) return;
     return (
       json.CLAIM_REQUEST_DETAIL_GUID,

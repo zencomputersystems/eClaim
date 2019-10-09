@@ -20,7 +20,7 @@ export class UserRole_Model extends Base_Activation_Model {
             json.CREATION_USER_GUID,
             json.UPDATE_TS,
             json.UPDATE_USER_GUID,
-            json.ROLE_FLAG,
+            json.ROLE_FLAG
         );
     }
     toJson(stringify?: boolean): any {

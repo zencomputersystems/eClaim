@@ -1,41 +1,43 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
+import { BaseHttpService } from './base-http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { UserAddress_Model } from '../models/usersetup_address_model';
+import { UserCertification_Model } from '../models/user_certification_model';
+import { UserChildren_Model } from '../models/user_children_model';
+import { UserCompany_Model } from '../models/user_company_model';
+import { UserContact_Model } from '../models/user_contact_model';
 //import {EntertainmentClaim_Model} from '../models/entertainment_model';
 import { UserInfo_Model } from '../models/usersetup_info_model';
 import { UserMain_Model } from '../models/user_main_model';
-import { UserContact_Model } from '../models/user_contact_model';
-import { UserCompany_Model } from '../models/user_company_model';
-import { UserRole_Model } from '../models/user_role_model';
-import { UserAddress_Model } from '../models/usersetup_address_model';
 import { UserQualification_Model } from '../models/user_qualification_model';
-import { UserCertification_Model } from '../models/user_certification_model';
+import { UserRole_Model } from '../models/user_role_model';
 import { UserSpouse_Model } from '../models/user_spouse_model';
-import { UserChildren_Model } from '../models/user_children_model';
-import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
-
 
 @Injectable()
 
 export class UserSetup_Service {
-	baseResourceUrl1: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_info';
-	baseResourceUrl2: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_main';
-	baseResourceUrl3: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_contact';
-	baseResourceUrl4: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_company';
-	baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_address';
-	baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-	baseResourceUrl5: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_qualification';
-	baseResourceUrl6: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_role';
-	baseResourceView: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_user_display';
-	baseResourceView6: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_certification';
-	baseResourceView7: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_spouse';
-	baseResourceView8: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_children';
+	UserUrl = {
+	"info": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_info',
+	"main": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_main',
+	"contact": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_contact',
+	"company": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_company',
+	"address": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_address',
+	"baseResource_Url": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/',
+	"qualification": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_qualification',
+	"role": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_role',
+	"view_user_display": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_user_display',
+	"certification": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_certification',
+	"spouse": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_spouse',
+	"children": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_children'
+	};
 
 	queryHeaders: any = new Headers();
 
@@ -58,158 +60,112 @@ export class UserSetup_Service {
 
 	query(params?: URLSearchParams): Observable<UserInfo_Model[]> {
 		return this.httpService.http
-			.get(this.baseResourceUrl, { search: params, headers: this.queryHeaders })
+			.get(this.UserUrl.address, { search: params, headers: this.queryHeaders })
 			.map(() => {
 					let banks: Array<UserInfo_Model> = [];
 					return banks;
 				}).catch(this.handleError);
 	};
 
-	save_user_info(user_info: UserInfo_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceUrl1, user_info.toJson(true), options)
+	SaveUserData(modelData: any, tableURL: string): Observable<any> {
+		let options = new RequestOptions({headers: this.queryHeaders });
+		return this.httpService.http.post(tableURL, modelData.toJson(true), options)
 			.map((response) => {
+				console.log(response + " - NEW - " + tableURL);
+				console.log(modelData);
 				return response;
-			});
+			})
+	}
+
+	PatchUserData(modelData: any, tableURL: string): Observable<any> {
+		let options = new RequestOptions({headers: this.queryHeaders });
+		return this.httpService.http.patch(tableURL, modelData.toJson(true), options)
+			.map((response) => {
+				console.log(response + " - PATCH - " + tableURL);
+				console.log(modelData);
+				return response;
+			})
+	}
+	
+
+	save_user_info(user_info: UserInfo_Model): Observable<any> {
+		return this.SaveUserData(user_info, this.UserUrl.info);
 	}
 
 	save_user_main(user_main: UserMain_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceUrl2, user_main.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_main, this.UserUrl.main); 
 	}
 
 	save_user_contact(user_contact: UserContact_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceUrl3, user_contact.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_contact, this.UserUrl.contact);
 	}
 
 	save_user_company(user_company: UserCompany_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceUrl4, user_company.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_company, this.UserUrl.company);
 	}
 
 	save_user_role(user_role: UserRole_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceUrl6, user_role.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_role, this.UserUrl.role);
 	}
 
 	save_user_address(user_address: UserAddress_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceUrl, user_address.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_address, this.UserUrl.address);
 	}
 
 	save_user_qualification(user_qualification: UserQualification_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceUrl5, user_qualification.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_qualification, this.UserUrl.qualification);
 	}
 
-	save_user_certification(user_cetrtification: UserCertification_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceView6, user_cetrtification.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+	save_user_certification(user_certification: UserCertification_Model): Observable<any> {
+		return this.SaveUserData(user_certification, this.UserUrl.certification);
 	}
 
 	save_user_spouse(user_spouse: UserSpouse_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceView7, user_spouse.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_spouse, this.UserUrl.spouse);
 	}
 
 	save_user_children(user_children: UserChildren_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.post(this.baseResourceView8, user_children.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.SaveUserData(user_children, this.UserUrl.children);
+		
 	}
 
 	//Edit	
 	update_user_main(user_main: UserMain_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.patch(this.baseResourceUrl2, user_main.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.PatchUserData(user_main, this.UserUrl.main);
 	}
 
 	update_user_info(user_info: UserInfo_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.patch(this.baseResourceUrl1, user_info.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.PatchUserData(user_info, this.UserUrl.info);
 	}
 
 	update_user_contact(user_contact: UserContact_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.patch(this.baseResourceUrl3, user_contact.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.PatchUserData(user_contact, this.UserUrl.contact);
 	}
 
 	update_user_company(user_company: UserCompany_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.patch(this.baseResourceUrl4, user_company.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.PatchUserData(user_company, this.UserUrl.company);
 	}
 
 	update_user_address(user_address: UserAddress_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.patch(this.baseResourceUrl, user_address.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.PatchUserData(user_address, this.UserUrl.address);
 	}
 
 	update_user_role(user_role: UserRole_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.patch(this.baseResourceUrl6, user_role.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.PatchUserData(user_role, this.UserUrl.role);
 	}
 
 	update_user_qualification(user_qualification: UserQualification_Model): Observable<any> {
-		let options = new RequestOptions({ headers: this.queryHeaders });
-		return this.httpService.http.patch(this.baseResourceUrl5, user_qualification.toJson(true), options)
-			.map((response) => {
-				return response;
-			});
+		return this.PatchUserData(user_qualification, this.UserUrl.qualification);
 	}
 
 	get(id: string, params?: URLSearchParams): Observable<UserAddress_Model> {
 		console.log('Starting of UserSetup service');
 		return this.httpService.http
-			.get(this.baseResourceUrl + "?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY, { search: params, headers: this.queryHeaders })
+			.get(this.UserUrl.address + "?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY, { search: params, headers: this.queryHeaders })
 			.map((response) => {
 				var result: any = response.json();
 				console.log(result);
-				alert(this.baseResourceUrl);
+				alert(this.UserUrl.address);
 				let viewtype: UserAddress_Model = UserAddress_Model.fromJson(result);
 				console.log(viewtype);
 				alert(JSON.stringify(viewtype));
@@ -222,7 +178,7 @@ export class UserSetup_Service {
 
 	remove(id: string) {
 		return this.httpService.http
-			.delete(this.baseResourceUrl2 + '/' + id, { headers: this.queryHeaders })
+			.delete(this.UserUrl.main + '/' + id, { headers: this.queryHeaders })
 			.map((response) => {
 				var result: any = response.json();
 				return result.USER_GUID;
@@ -230,7 +186,7 @@ export class UserSetup_Service {
 	}
 
 	remove_multiple(id: string, tablename: string) {
-		let url_multiple = this.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")AND(ROLE_FLAG=ADDITIONAL)";
+		let url_multiple = this.UserUrl.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")AND(ROLE_FLAG=ADDITIONAL)";
 		console.log(url_multiple);
 		return this.httpService.http
 			.delete(url_multiple, { headers: this.queryHeaders })
@@ -240,7 +196,7 @@ export class UserSetup_Service {
 	}
 
 	remove_multiple_records(id: string, tablename: string) {
-		let url_multiple = this.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")";
+		let url_multiple = this.UserUrl.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")";
 		return this.httpService.http
 			.delete(url_multiple, { headers: this.queryHeaders })
 			.map((response) => {

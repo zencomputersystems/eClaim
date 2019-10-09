@@ -7,7 +7,7 @@ export class CountrySetup_Model extends Base_Model {
 	public COUNTRY_GUID: string = null;
 	public NAME: string = null;
 
-	static fromJson(json: CountrySetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.COUNTRY_GUID,

@@ -14,7 +14,7 @@ export class UserAddress_Model extends Base_Model {
     public COUNTRY_GUID: string = null;
     public STATE_GUID: string = null;
 
-    static fromJson(json: UserAddress_Model) {
+    static fromJson(json: any) {
         if (!json) return;
         return (
             json.USER_ADDRESS_GUID,
@@ -29,7 +29,7 @@ export class UserAddress_Model extends Base_Model {
             json.UPDATE_USER_GUID,
             json.POST_CODE,
             json.COUNTRY_GUID,
-            json.STATE_GUID,
+            json.STATE_GUID
 
         );
     }

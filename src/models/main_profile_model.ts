@@ -12,7 +12,7 @@ export class Main_Profile_Model extends Base_Model {
 	public PROFILE_JSON: string = null;
 
 
-	static fromJson(json: Main_Profile_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.MAIN_PROFILE_GUID,

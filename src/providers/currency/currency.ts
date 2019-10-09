@@ -20,6 +20,6 @@ export function toCurrency( amount: any, currencyCode: string="RM") {
   if (Array.isArray(amount)) {
     return amount.map((value) => formatMoney(value, { symbol: currencyCode }));
   }
-  console.log("Returning: ",formatMoney(amount, { symbol: currencyCode }));
+//  console.log("Returning: ",formatMoney(amount, { symbol: currencyCode }));
   return formatMoney(amount,{ symbol: (currencyCode) ? currencyCode : "" });
 }

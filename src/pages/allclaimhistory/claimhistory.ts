@@ -1,18 +1,16 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
 import { Http } from '@angular/http';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 //import { HttpClient } from '@angular/common/http';
-
 import 'rxjs/add/operator/map';
-
 import * as constants from '../../app/config/constants';
+import { ExcelService } from '../../providers/excel.service';
 import { BaseHttpService } from '../../services/base-http';
 //import { ClaimHistory_Model } from '../../models/ClaimHistory_Model';
 import { AllClaimListPage } from '../all-claim-list/all-claim-list';
 
-import { ExcelService } from '../../providers/excel.service';
-import * as Settings from '../../dbSettings/companySettings'
+
+
 
 
 // import { Observable } from 'rxjs/Observable';
@@ -46,7 +44,7 @@ export class AllClaimhistoryPage {
   yearsList: any[] = [];
   currentYear: number = new Date().getFullYear();
   loginUserRole:string;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
 
   // baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_claimhistory?filter=(TENANT_COMPANY_SITE_GUID=' + localStorage.getItem("g_TENANT_COMPANY_SITE_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResourceUrl: string;

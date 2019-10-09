@@ -8,7 +8,7 @@ export class DesignationSetup_Model extends Base_NameDescription_Model {
 	public TENANT_GUID: string = null;
 
 
-	static fromJson(json: DesignationSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.DESIGNATION_GUID,

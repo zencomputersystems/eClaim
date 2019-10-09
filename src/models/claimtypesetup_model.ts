@@ -7,7 +7,7 @@ export class ClaimTypeSetup_Model extends Base_NameDescription_Model {
 	public CLAIM_TYPE_GUID: string = null;
 	public TENANT_GUID: string = null;
 	
-	static fromJson(json: ClaimTypeSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.CLAIM_TYPE_GUID,

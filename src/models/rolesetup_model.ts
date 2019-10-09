@@ -13,7 +13,7 @@ export class RoleSetup_Model extends Base_NameDescription_Model {
 	public KEY_VIEW: string = null;
 	public ROLE_PRIORITY_LEVEL: string = null;
 
-	static fromJson(json: RoleSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.ROLE_GUID,

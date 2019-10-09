@@ -657,7 +657,9 @@ export class ApiManagerProvider {
 
 
   getImageUrl(imageName: string) {
-    return constants.DREAMFACTORY_IMAGE_URL + imageName + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+    return constants.IMAGE_VIEW_URL+encodeURIComponent((imageName)).replace(/\%20/gi,'%2520'); //+constants.SAS_QUERY_STRING;
+    
+//    return constants.DREAMFACTORY_IMAGE_URL + imageName + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   }
 
   getModelUrl(table: string, args?: string) {

@@ -1,20 +1,16 @@
+import 'rxjs/add/operator/map';
+
 import { Component, ViewChild } from '@angular/core';
 import { Events, MenuController, Nav, Platform } from 'ionic-angular';
+
+import { Http } from '@angular/http';
+import { LoginPage } from '../pages/login/login';
+import { SignupPage } from '../pages/signup/signup';
 // import { SplashScreen } from '@ionic-native/splash-screen';
 // import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
-import { LoginPage } from '../pages/login/login';
-import { SignupPage } from '../pages/signup/signup';
-import { SetupPage } from '../pages/setup/setup';
-import { UserData } from '../providers/user-data';
-import { AdminsetupPage } from '../pages/adminsetup/adminsetup';
-
-
 import { TranslateService } from '@ngx-translate/core';
-
-
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { UserData } from '../providers/user-data';
 import { getURL } from '../providers/sanitizer/sanitizer';
 
 // import { MenuService } from '../providers/menu.service'
@@ -118,7 +114,7 @@ export class eClaimApp {
     this.IMAGE_URL = localStorage.getItem("g_IMAGE_URL");
     this.TranslateLanguage();
     // SVA override
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       //      this.blnAccount_loggedInMenu_User = true;
       //      this.blnSetup_loggedInMenu_User = true;
       //      this.loggedInPages = [

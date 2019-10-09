@@ -19,7 +19,7 @@ export class TravelClaim_Model extends Base_Model {
     public GST: string = null;
 
 
-	static fromJson(json: TravelClaim_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.CLAIM_REQUEST_DETAIL_GUID,

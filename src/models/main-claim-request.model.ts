@@ -38,7 +38,7 @@ export class MainClaimRequestModel extends Base_Model {
   public to_place_id: string = null;
   public AUDIT_TRAIL: string = null;
 
-  static fromJson(json: MainClaimRequestModel) {
+  static fromJson(json: any) {
     if (!json) return;
     return (
       json.CLAIM_REQUEST_GUID,

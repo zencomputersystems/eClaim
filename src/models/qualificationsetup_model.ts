@@ -9,7 +9,7 @@ export class QualificationSetup_Model extends Base_Model {
 	public TYPE_DESC: string = null;
 	public TENANT_GUID: string = null;
 
-	static fromJson(json: QualificationSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.QUALIFICATION_TYPE_GUID,

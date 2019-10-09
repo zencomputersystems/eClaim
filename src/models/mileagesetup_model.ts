@@ -10,7 +10,7 @@ export class MileageSetup_Model extends Base_Activation_Model {
 	public RATE_DATE: string = null;
 	public TENANT_GUID: string = null;
 
-	static fromJson(json: MileageSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.MILEAGE_GUID,

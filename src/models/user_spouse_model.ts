@@ -4,10 +4,10 @@ export class UserSpouse_Model extends Base_Model {
         super();
     }
 
-    public SPOUSE_GUID: string = null,
-    public NAME: string = null,
-    public ICNO: string = null,
-    public USER_GUID: string = null
+    public SPOUSE_GUID: string = null;
+    public NAME: string = null;
+    public ICNO: string = null;
+    public USER_GUID: string = null;
 
 
     static fromJson(json: UserSpouse_Model) {

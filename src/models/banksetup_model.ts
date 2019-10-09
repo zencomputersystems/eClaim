@@ -8,7 +8,7 @@ export class BankSetup_Model extends Base_NameDescription_Model {
 	public BANK_GUID: string = null;
 	public TENANT_GUID: string = null;
 
-	static fromJson(json: BankSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.BANK_GUID,

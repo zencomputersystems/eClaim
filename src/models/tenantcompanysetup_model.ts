@@ -9,7 +9,7 @@ export class TenantCompanySetup_Model extends Base_Activation_Model {
       public NAME: string = null;
       public REGISTRATION_NO: string = null;
 
-      static fromJson(json: TenantCompanySetup_Model) {
+      static fromJson(json: any) {
             if (!json) return;
             return (
                   json.TENANT_COMPANY_GUID,

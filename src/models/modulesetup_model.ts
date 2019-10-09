@@ -10,7 +10,7 @@ export class ModuleSetup_Model extends Base_NameDescription_Model {
 	public MENU_ICON: string = null;
 	public MENU_SL_NO: string = null;
 	
-	static fromJson(json: ModuleSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.MODULE_GUID,

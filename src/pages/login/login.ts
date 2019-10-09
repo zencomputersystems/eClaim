@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
-import { NgForm, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { NavController, Loading, MenuController } from 'ionic-angular';
-import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
-import CryptoJS from 'crypto-js';
-import moment from 'moment';
 
-import { UserData } from '../../providers/user-data';
 // import { SignupPage } from '../signup/signup';
 import * as constants from '../../app/config/constants';
-import { SetupguidePage } from '../setupguide/setupguide';
+
+import { EncryptPassword, Random, getKeyByValue } from '../../shared/GlobalFunction';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Headers, Http, RequestOptions } from '@angular/http';
+import { Loading, MenuController, NavController } from 'ionic-angular';
+
+import { BaseHttpService } from '../../services/base-http';
+import { Component } from '@angular/core';
 import { DashboardPage } from '../dashboard/dashboard';
+import { Storage } from '@ionic/storage';
+import { UserData } from '../../providers/user-data';
 import { UserMain_Model } from '../../models/user_main_model';
 import { UserSetup_Service } from '../../services/usersetup_service';
-import { Storage } from '@ionic/storage';
-import { BaseHttpService } from '../../services/base-http';
 import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 @Component({
@@ -34,6 +34,7 @@ export class LoginPage {
     public userData: UserData,
     public http: Http,
     public storage: Storage,
+//    private Global_Function: GlobalFunction,
     fb: FormBuilder,
     private userservice: UserSetup_Service) {
     localStorage.clear(); //debugger;
@@ -47,53 +48,34 @@ export class LoginPage {
   email_ngModel: any;
   usermain_entry: UserMain_Model = new UserMain_Model();
 
+  Authenticate(form: NgForm) {
+    let username = this.login.username.split("@")[0] || null;
+    let domainname = this.login.username.trim().split("@")[1] || null;
+    if (form.valid && username && domainname == "zen.com.my") {
+      this.AuthenticateUserFromAdServer(username,this.login.password);
+
+    } else if (form.valid && username && domainname) {
+      this.onLogin(form)
+    }
+    else {
+      alert("Sorry. That format is not supported. Please key in the username in valid format.");
+    }
+  }
 
   onLogin(form: NgForm) {
     this.submitted = true;
     if (form.valid) {
-      //-----------Check if the login as super vendor-----------------------
-      if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-        localStorage.setItem("g_USER_GUID", "sva"); localStorage.setItem("g_FULLNAME", "Super Admin"); localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-
-        //navigate to app.component page
-        this.userData.login(this.login.username);
-
-        //this.navCtrl.push(AdminsetupPage);
-        //        this.navCtrl.push(SetupGuidePage); //original
-        //        this.navCtrl.setRoot(DashboardPage);
-        this.menu.enable(true,"sideMenu");
-        this.navCtrl.push(DashboardPage);
-
-      }
-      else {
         let url: string;
-        //CryptoJS.SHA256(this.login.password.trim()).toString(CryptoJS.enc.Hex)
-        //Changed code by Bijay on 25/09/2018
-        url = this.baseResource_Url + "vw_login?filter=(LOGIN_ID=" + this.login.username + ')and(PASSWORD=' + CryptoJS.SHA256(this.login.password.trim()).toString(CryptoJS.enc.Hex) + ')and(ACTIVATION_FLAG=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
-        //url = this.baseResource_Url + "vw_login?filter=(LOGIN_ID=" + this.login.username + ')and(PASSWORD=' + this.login.password + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+        url = this.baseResource_Url + "vw_login?filter=(LOGIN_ID=" + this.login.username + ')and(PASSWORD=' + EncryptPassword(this.login.password) + ')and(ACTIVATION_FLAG=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
         this.http
           .get(url)
           .map(res => res.json())
           .subscribe(data => {
             let res = data["resource"];//console.log(data["resource"]);
             if (res.length > 0) {
-              localStorage.setItem("g_USER_GUID", res[0]["USER_GUID"]);
-              localStorage.setItem("g_TENANT_GUID", res[0]["TENANT_GUID"]);
-              localStorage.setItem("g_EMAIL", res[0]["EMAIL"]);
-              localStorage.setItem("g_FULLNAME", res[0]["FULLNAME"]);
-              localStorage.setItem("g_TENANT_COMPANY_GUID", res[0]["TENANT_COMPANY_GUID"]);
-              localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
-              localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
-              localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
-              this.setLocalGlobals(res);
-              // debugger;
-              if (res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == '') {
-                localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-              }
-              else {
-                localStorage.setItem("g_IMAGE_URL", constants.DREAMFACTORY_IMAGE_URL + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
-              }
-
+              this.SetLSCommonUserVars(res)
+              this.navCtrl.setRoot(DashboardPage);
+/* 
               //Setup Guide for only Hq Users
               if (res[0]["ISHQ"] == "1" && res[0]["IS_TENANT_ADMIN"] == "1") {
                 //this.navCtrl.push(SetupguidePage);
@@ -103,7 +85,7 @@ export class LoginPage {
                 //this.navCtrl.push(SetupPage);
                 this.navCtrl.setRoot(DashboardPage);
               }
-
+ */
               //Get the role of that particular user----------------------------------------------
               let role_url: string = "";
               role_url = this.baseResource_Url + "view_role_display?filter=(USER_GUID=" + res[0]["USER_GUID"] + ')and(ROLE_PRIORITY_LEVEL=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -112,33 +94,7 @@ export class LoginPage {
                 .map(res => res.json())
                 .subscribe(data => {
                   let role_result = data["resource"];
-                  if (role_result.length > 0) {
-
-                    localStorage.setItem("g_KEY_ADD", "0");
-                    localStorage.setItem("g_KEY_EDIT", "0");
-                    localStorage.setItem("g_KEY_DELETE", "0");
-                    localStorage.setItem("g_KEY_VIEW", "0");
-
-                    for (var item in role_result) {
-                      if (role_result[item]["ROLE_FLAG"] == "MAIN") {
-                        localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                      }
-                      if (role_result[item]["KEY_ADD"] == "1") { localStorage.setItem("g_KEY_ADD", role_result[item]["KEY_ADD"]); }
-                      if (role_result[item]["KEY_EDIT"] == "1") { localStorage.setItem("g_KEY_EDIT", role_result[item]["KEY_EDIT"]); }
-                      if (role_result[item]["KEY_DELETE"] == "1") { localStorage.setItem("g_KEY_DELETE", role_result[item]["KEY_DELETE"]); }
-                      if (role_result[item]["KEY_VIEW"] == "1") { localStorage.setItem("g_KEY_VIEW", role_result[item]["KEY_VIEW"]); }
-                    }
-
-                    // localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                    // localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]);
-                    // localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]);
-                    // localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]);
-                    // localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]);
-                  }
-                  else {
-                    localStorage.setItem("g_KEY_VIEW", "1");
-                    localStorage.removeItem("g_ROLE_NAME");
-                  }
+                  this.SetLSUserRights(role_result);
                 });
 
               //Get company settings details----------------------------------------------------------------------------------
@@ -148,23 +104,14 @@ export class LoginPage {
               this.userData.login(this.login.username);
             }
             else {
-              localStorage.removeItem("g_USER_GUID");
-              localStorage.removeItem("g_TENANT_GUID");
-              localStorage.removeItem("g_EMAIL");
-              localStorage.removeItem("g_FULLNAME");
-              localStorage.removeItem("g_TENANT_COMPANY_GUID");
-              localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
-              localStorage.removeItem("g_ISHQ");
-              localStorage.removeItem("g_IS_TENANT_ADMIN");
+              this.RemoveLSCommonUserVars;
               localStorage.removeItem("Ad_Authenticaton");
-              localStorage.removeItem("g_IMAGE_URL");
 
               alert("Please enter valid login details.");
               this.login.username = "";
               this.login.password = "";
             }
           });
-      }
     }
   }
 
@@ -173,12 +120,6 @@ export class LoginPage {
     this.navCtrl.push(SignupPage);
   }
 */
-
-setLocalGlobals(res: Array<any>) {
-res[0].forEach( (element: any)=> {
-  console.log(element);
-} )
-}
   
   ForgotPasswordClick() {
     this.ForgotPasswordClicked = true;
@@ -201,8 +142,8 @@ res[0].forEach( (element: any)=> {
         if (res.length > 0) {
 
           //Generate Password Encrypt-----------------
-          let strPassword: string = this.Random().toString();
-          let strPasswordHex: string = CryptoJS.SHA256(strPassword).toString(CryptoJS.enc.Hex);
+          var strPassword = Random();
+          let strPasswordHex = EncryptPassword(strPassword);
 
           //Update to database------------------------          
           this.usermain_entry.TENANT_GUID = res[0]["TENANT_GUID"]
@@ -235,10 +176,11 @@ res[0].forEach( (element: any)=> {
       });
   }
 
-  Random(): string {
+/*   Random(): string {
     let rand = Math.random().toString(10).substring(2, 8)
     return rand;
   }
+ */
 
   emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
   sendEmail(strName: string, strEmail: string, strPassword: string) {
@@ -303,62 +245,39 @@ res[0].forEach( (element: any)=> {
     this.http.post(this.emailUrl, body, options)
       .map(res => res.json())
       .subscribe(() => {
-        alert('Password has sent to your eMail Id.');
+        alert('Password has been sent to your email.');
         //          this.navCtrl.push(LoginPage);
       });
   }
 
-  stringToSplit: string = "";
-  tempUserSplit1: string = "";
-  tempUserSplit2: string = "";
+  // stringToSplit: string = "";
+  // tempUserSplit1: string = "";
+  // tempUserSplit2: string = "";
   loading: Loading;
 
-  AuthenticateUserFromAdServer(form: NgForm) {
-    if (this.login.username != undefined) {
+  AuthenticateUserFromAdServer(username: string, userpassword: string) {
       localStorage.removeItem("Ad_Authenticaton");
-
-      this.stringToSplit = this.login.username;
-      this.tempUserSplit1 = this.stringToSplit.split("@")[0]
-      this.tempUserSplit2 = this.stringToSplit.split("@")[1];
-
-      if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-        this.GetUserFromAdServer(form, this.tempUserSplit1.trim());
-      }
-      else {
-        // user of username@zen.com.my ---> redirect auth to AD
-        if (this.tempUserSplit2 != undefined && this.tempUserSplit2 != undefined) {
-          if (this.tempUserSplit2.trim() == "zen.com.my") {
-            let Adurl: string = constants.AD_URL + '/user/' + this.tempUserSplit1.trim() + '/authenticate';
+            let Adurl: string = constants.AD_URL + '/user/' + username + '/authenticate';
+            console.log(Adurl);
             var headers = new Headers();
             headers.append("Accept", 'application/json');
             headers.append('Content-Type', 'application/json');
             let options = new RequestOptions({ headers: headers });
-
             let postParams = {
-              password: this.login.password
+              password: userpassword
             }
-
             this.http.post(Adurl, postParams, options)
               .map(res => res.json())
               .subscribe(data => {
                 if (data.data == true) {
                   // alert('Authenticate');
                   localStorage.setItem("Ad_Authenticaton", "true");
-                  this.GetUserFromAdServer(form, this.tempUserSplit1.trim());
+                  this.GetUserFromAdServer(username);
                 }
                 else {
-                  localStorage.removeItem("g_USER_GUID");
-                  localStorage.removeItem("g_TENANT_GUID");
-                  localStorage.removeItem("g_EMAIL");
-                  localStorage.removeItem("g_FULLNAME");
-                  localStorage.removeItem("g_TENANT_COMPANY_GUID");
-                  localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
-                  localStorage.removeItem("g_ISHQ");
-                  localStorage.removeItem("g_IS_TENANT_ADMIN");
+                  this.RemoveLSCommonUserVars;
                   localStorage.removeItem("Ad_Authenticaton");
-                  localStorage.removeItem("g_IMAGE_URL");
-
-                  alert("please enter valid login details.");
+                  alert("Authentication Failure: Please enter valid login details.");
                   this.login.username = "";
                   this.login.password = "";
                   // this.loading.dismissAll();
@@ -366,30 +285,9 @@ res[0].forEach( (element: any)=> {
               }, error => {
                 console.log(error);// Error getting the data
               });
-          }
-          // user of username@xyz.com.my ---> redirect auth to Current DB
-          else {
-            this.onLogin(form);
-          }
-        }
-        // // user of username@xyz.com.my ---> redirect auth to Current DB
-        // else {
-        //   this.onLogin(form);
-        // }
-      }
-    }
   }
 
-  GetUserFromAdServer(form: NgForm, username: string) {
-    if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-      localStorage.setItem("g_USER_GUID", "sva"); localStorage.setItem("g_FULLNAME", "Super Admin"); localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-
-      //navigate to app.component page
-      this.userData.login(this.login.username);
-      this.navCtrl.setRoot(SetupguidePage);
-      // this.loading.dismissAll();
-    }
-    else {
+  GetUserFromAdServer(username: string) {
       let Adurl: string = constants.AD_URL + '/user/' + username;
 
       var queryHeaders = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -405,19 +303,7 @@ res[0].forEach( (element: any)=> {
         .subscribe(data => {
 
           this.submitted = true;
-          if (form.valid) {
-            //-----------Check if the login as super vendor-----------------------
-            if (this.login.username.trim() == "sva" && this.login.password.trim() == "sva") {
-              localStorage.setItem("g_USER_GUID", "sva"); localStorage.setItem("g_FULLNAME", "Super Admin"); localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-
-              //navigate to app.component page
-              this.userData.login(this.login.username);
-              this.navCtrl.setRoot(SetupguidePage);
-
-              // this.loading.dismissAll();
-            }
-            else {
-              this.userData.login(this.login.username);
+              this.userData.login(username);
               // console.log(data.userPrincipalName);
               let url: string;
               url = this.baseResource_Url + "vw_login?filter=(EMAIL=" + data.userPrincipalName + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -427,31 +313,8 @@ res[0].forEach( (element: any)=> {
                 .subscribe(data => {
                   let res = data["resource"];
                   if (res.length > 0) {
-                    localStorage.setItem("g_USER_GUID", res[0]["USER_GUID"]);
-                    localStorage.setItem("g_TENANT_GUID", res[0]["TENANT_GUID"]);
-                    localStorage.setItem("g_EMAIL", res[0]["EMAIL"]);
-                    localStorage.setItem("g_FULLNAME", res[0]["FULLNAME"]);
-                    localStorage.setItem("g_TENANT_COMPANY_GUID", res[0]["TENANT_COMPANY_GUID"]);
-                    localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
-                    localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
-                    localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
-
-                    if (res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == '') {
-                      localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
-                    }
-                    else {
-                      localStorage.setItem("g_IMAGE_URL", constants.DREAMFACTORY_IMAGE_URL + res[0]["IMAGE_URL"] + "?api_key=" + constants.DREAMFACTORY_API_KEY);
-                    }
-
-                    //Setup Guide for only Hq Users
-                    if (res[0]["ISHQ"] == "1" && res[0]["IS_TENANT_ADMIN"] == "1") {
-                      this.navCtrl.setRoot(DashboardPage);
-                    }
-                    else {
-                      this.navCtrl.setRoot(DashboardPage);
-                    }
-                    // this.loading.dismissAll();
-
+                    this.SetLSCommonUserVars(res);
+                    this.navCtrl.setRoot(DashboardPage);
                     //Get the role of that particular user---------------------------------------------------------------------------
                     let role_url: string = "";
                     role_url = this.baseResource_Url + "view_role_display?filter=(USER_GUID=" + res[0]["USER_GUID"] + ')and(ROLE_PRIORITY_LEVEL=1)&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -460,38 +323,8 @@ res[0].forEach( (element: any)=> {
                       .map(res => res.json())
                       .subscribe(data => {
                         let role_result = data["resource"];
-                        if (role_result.length > 0) {
-
-                          localStorage.setItem("g_KEY_ADD", "0");
-                          localStorage.setItem("g_KEY_EDIT", "0");
-                          localStorage.setItem("g_KEY_DELETE", "0");
-                          localStorage.setItem("g_KEY_VIEW", "0");
-
-                          for (var item in role_result) {
-                            if (role_result[item]["ROLE_NAME"] == "MAIN") {
-                              localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                            }
-                            else {
-                              localStorage.setItem("g_ROLE_NAME", "");
-                            }
-                            if (role_result[0]["KEY_ADD"] == "1") { localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]); }
-                            if (role_result[0]["KEY_EDIT"] == "1") { localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]); }
-                            if (role_result[0]["KEY_DELETE"] == "1") { localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]); }
-                            if (role_result[0]["KEY_VIEW"] == "1") { localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]); }
-                          }
-
-                          // localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
-                          // localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]);
-                          // localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]);
-                          // localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]);
-                          // localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]);
-                        }
-                        else {
-                          localStorage.setItem("g_KEY_VIEW", "1");
-                          localStorage.removeItem("g_ROLE_NAME");
-                        }
+                        this.SetLSUserRights(role_result);
                       });
-
                     //Get company settings details----------------------------------------------------------------------------------
                     this.GetCompanySettings(localStorage.getItem("g_TENANT_GUID"));
                     //--------------------------------------------------------------------------------------------------------------
@@ -501,30 +334,72 @@ res[0].forEach( (element: any)=> {
                     // this.loading.dismissAll();
                   }
                   else {
-                    localStorage.removeItem("g_USER_GUID");
-                    localStorage.removeItem("g_TENANT_GUID");
-                    localStorage.removeItem("g_EMAIL");
-                    localStorage.removeItem("g_FULLNAME");
-                    localStorage.removeItem("g_TENANT_COMPANY_GUID");
-                    localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
-                    localStorage.removeItem("g_ISHQ");
-                    localStorage.removeItem("g_IS_TENANT_ADMIN");
-                    localStorage.removeItem("g_IMAGE_URL");
-
-                    alert("please enter valid login details.");
+                    this.RemoveLSCommonUserVars;
+                    alert("Please enter valid login details.");
                     this.login.username = "";
                     this.login.password = "";
                   }
                 });
-            }
-          }
         });
       // this.loading.dismissAll();
+  }
+
+  SetLSUserRights(role_result: any) {
+    if (role_result.length > 0) {
+      localStorage.setItem("g_KEY_ADD", "0");
+      localStorage.setItem("g_KEY_EDIT", "0");
+      localStorage.setItem("g_KEY_DELETE", "0");
+      localStorage.setItem("g_KEY_VIEW", "0");
+      for (var item in role_result) {
+        if (role_result[item]["ROLE_NAME"] == "MAIN") {
+          localStorage.setItem("g_ROLE_NAME", role_result[0]["ROLE_NAME"]);
+        }
+        else {
+          localStorage.setItem("g_ROLE_NAME", "");
+        }
+        if (role_result[0]["KEY_ADD"] == "1") { localStorage.setItem("g_KEY_ADD", role_result[0]["KEY_ADD"]); }
+        if (role_result[0]["KEY_EDIT"] == "1") { localStorage.setItem("g_KEY_EDIT", role_result[0]["KEY_EDIT"]); }
+        if (role_result[0]["KEY_DELETE"] == "1") { localStorage.setItem("g_KEY_DELETE", role_result[0]["KEY_DELETE"]); }
+        if (role_result[0]["KEY_VIEW"] == "1") { localStorage.setItem("g_KEY_VIEW", role_result[0]["KEY_VIEW"]); }
+      }
+    }
+    else {
+      localStorage.setItem("g_KEY_VIEW", "1");
+      localStorage.removeItem("g_ROLE_NAME");
+    }
+  }
+  SetLSCommonUserVars(res: any) {
+    localStorage.setItem("g_USER_GUID", res[0]["USER_GUID"]);
+    localStorage.setItem("g_TENANT_GUID", res[0]["TENANT_GUID"]);
+    localStorage.setItem("g_EMAIL", res[0]["EMAIL"]);
+    localStorage.setItem("g_FULLNAME", res[0]["FULLNAME"]);
+    localStorage.setItem("g_TENANT_COMPANY_GUID", res[0]["TENANT_COMPANY_GUID"]);
+    localStorage.setItem("g_TENANT_COMPANY_SITE_GUID", res[0]["TENANT_COMPANY_SITE_GUID"]);
+    localStorage.setItem("g_ISHQ", res[0]["ISHQ"]);
+    localStorage.setItem("g_IS_TENANT_ADMIN", res[0]["IS_TENANT_ADMIN"]);
+    if (res[0]["IMAGE_URL"] == null || res[0]["IMAGE_URL"] == '') {
+      localStorage.setItem("g_IMAGE_URL", "assets/img/profile_no_preview.png");
+    }
+    else {
+      localStorage.setItem("g_IMAGE_URL", constants.IMAGE_VIEW_URL + res[0]["IMAGE_URL"]);
     }
   }
 
+  RemoveLSCommonUserVars() {
+    localStorage.removeItem("g_USER_GUID");
+    localStorage.removeItem("g_TENANT_GUID");
+    localStorage.removeItem("g_EMAIL");
+    localStorage.removeItem("g_FULLNAME");
+    localStorage.removeItem("g_TENANT_COMPANY_GUID");
+    localStorage.removeItem("g_TENANT_COMPANY_SITE_GUID");
+    localStorage.removeItem("g_ISHQ");
+    localStorage.removeItem("g_IS_TENANT_ADMIN");
+    localStorage.removeItem("g_IMAGE_URL");
+  }
+
   KeyNameValue: any[] = []; KeyNameValueList: any;
-  GetCompanySettings(STR_TENANT_GUID: string) {
+
+  RemoveCompanySettings() {
     localStorage.removeItem("cs_date_format");
     localStorage.removeItem("cs_default_currency");
     localStorage.removeItem("cs_email_logo");
@@ -544,6 +419,44 @@ res[0].forEach( (element: any)=> {
     localStorage.removeItem("profile_guid");
     localStorage.removeItem("cs_profile_guid");
     localStorage.removeItem("zone_wise_current_timestamp");
+  }
+
+  SetCompanyLSVariable(KeyPairs: any) {
+    let CSvars = {
+      "date_format": "cs_date_format",
+      "default_currency": "cs_default_currency",
+      "email_logo": "cs_email_logo",
+      "max_claim_amount": "cs_max_claim_amount",
+      "min_claim_amount": "cs_min_claim_amount",
+      "claim_cutoff_date": "cs_claim_cutoff_date",
+      "month_start": "cs_month_start",
+      "month_end": "cs_month_end",
+      "approval_cutoff_date": "cs_approval_cutoff_date",
+      "default_language": "cs_default_language",
+      "email_schedule": "cs_email_schedule",
+      "email_time": "cs_email_time",
+      
+      "cs_date_format": "date_format",
+      "cs_default_currency": "default_currency",
+      "cs_email_logo": "email_logo",
+      "cs_max_claim_amount": "max_claim_amount",
+      "cs_min_claim_amount": "min_claim_amount",
+      "cs_claim_cutoff_date": "claim_cutoff_date",
+      "cs_month_start": "month_start",
+      "cs_month_end": "month_end",
+      "cs_approval_cutoff_date": "approval_cutoff_date",
+      "cs_default_language": "default_language",
+      "cs_email_schedule": "email_schedule",
+      "cs_email_time": "email_time"
+    }
+    for (let LSVar in CSvars)
+      if (LSVar === KeyPairs.keyname)
+        localStorage.setItem(getKeyByValue(CSvars,KeyPairs.keyname),KeyPairs.keyvalue); 
+
+  };
+
+  GetCompanySettings(STR_TENANT_GUID: string) {
+    this.RemoveCompanySettings();
     this.KeyNameValue = [];
     let url: string = "";
     url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/permission_keys' + '?filter=(TENANT_GUID=' + STR_TENANT_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -553,11 +466,13 @@ res[0].forEach( (element: any)=> {
       .subscribe(data => {
         this.KeyNameValueList = data.resource;
         for (var item in this.KeyNameValueList) {
+          this.SetCompanyLSVariable({ keyname: this.KeyNameValueList[item]["KEY_NAME"], keyvalue: this.KeyNameValueList[item]["KEY_VALUE"]});
+/*           
           if (this.KeyNameValueList[item]["KEY_NAME"] == "date_format") { localStorage.setItem("cs_date_format", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_currency") { localStorage.setItem("cs_default_currency", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "email_logo") { localStorage.setItem("cs_email_logo", this.KeyNameValueList[item]["KEY_VALUE"]); }
           // if (this.KeyNameValueList[item]["KEY_NAME"] == "default_country") { localStorage.setItem("cs_default_country", this.KeyNameValueList[item]["KEY_VALUE"]); }
-
+ */
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_country") {
             var StartIndex = this.KeyNameValueList[item]["KEY_VALUE"].indexOf(",");
             var EndIndex = this.KeyNameValueList[item]["KEY_VALUE"].length - (StartIndex + 1);
@@ -565,13 +480,15 @@ res[0].forEach( (element: any)=> {
 
             localStorage.setItem("cs_default_country", KeyValue);
           }
-
+/* 
           if (this.KeyNameValueList[item]["KEY_NAME"] == "max_claim_amt") { localStorage.setItem("cs_max_claim_amt", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "min_claim_amt") { localStorage.setItem("cs_min_claim_amt", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "claim_cutoff_date") { localStorage.setItem("cs_claim_cutoff_date", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "month_start") { localStorage.setItem("cs_year_start_month", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "month_end") { localStorage.setItem("cs_year_end_month", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "approval_cutoff_date") { localStorage.setItem("cs_approval_cutoff_date", this.KeyNameValueList[item]["KEY_VALUE"]); }
+ */
+
           // if (this.KeyNameValueList[item]["KEY_NAME"] == "default_payment_type") { localStorage.setItem("cs_default_payment_type", this.KeyNameValueList[item]["KEY_VALUE"]); }
 
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_payment_type") {
@@ -581,11 +498,11 @@ res[0].forEach( (element: any)=> {
 
             localStorage.setItem("cs_default_payment_type", KeyValue_1);
           }
-
+/* 
           if (this.KeyNameValueList[item]["KEY_NAME"] == "default_language") { localStorage.setItem("cs_default_language", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "email_schedule") { localStorage.setItem("cs_email_schedule", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "email_time") { localStorage.setItem("cs_email_time", this.KeyNameValueList[item]["KEY_VALUE"]); }
-
+ */
           if (this.KeyNameValueList[item]["KEY_NAME"] == "draft_notification") { localStorage.setItem("draft_notification", this.KeyNameValueList[item]["KEY_VALUE"]); }
           if (this.KeyNameValueList[item]["KEY_NAME"] == "profile_guid") { localStorage.setItem("cs_profile_guid", this.KeyNameValueList[item]["KEY_VALUE"]); }
 

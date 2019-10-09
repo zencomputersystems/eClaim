@@ -11,7 +11,7 @@ export class RoleModuleSetup_Model extends Base_Model {
     public MODULE_FLAG: string = null;
 
 
-    static fromJson(json: RoleModuleSetup_Model) {
+    static fromJson(json: any) {
         if (!json) return;
         return (
             json.ROLE_MODULE_GUID,

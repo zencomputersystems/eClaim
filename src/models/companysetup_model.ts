@@ -13,7 +13,7 @@ export class CompanySetup_Model extends Base_Model {
         public PHONE: string = null;
         public EMAIL: string = null;
     
-    static fromJson(json: CompanySetup_Model) {
+    static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.COMPANY_GUID,

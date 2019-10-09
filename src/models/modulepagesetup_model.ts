@@ -9,7 +9,7 @@ export class ModulePageSetup_Model extends Base_Model {
 	public PAGE_GUID: string = null;
 
 
-	static fromJson(json: ModulePageSetup_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
 		return (
 			json.ID,
