@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../app/config/constants';
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
 import { IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
-import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
-import { UserMain_Model } from '../../models/user_main_model';
+
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { presentToast } from '../../providers/toast/toast';
 import { BaseHttpService } from '../../services/base-http';
-import { UserSetup_Service } from '../../services/usersetup_service';
+import { Component } from '@angular/core';
 import { EncryptPassword } from '../../shared/GlobalFunction';
 import { LoginPage } from '../login/login';
-
+import { UserMain_Model } from '../../models/user_main_model';
+import { UserSetup_Service } from '../../services/usersetup_service';
+import { presentToast } from '../../providers/toast/toast';
 
 /**
  * Generated class for the ChangePasswordPage page.
@@ -36,16 +38,10 @@ export class ChangePasswordPage {
       this.navCtrl.push(LoginPage);
     }
     else {
-      if (localStorage.getItem("g_USER_GUID") == "sva") {
-        presentToast('Sorry, you are not authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
-      else {
         //Get the details of user according to user_guid.
         //------------------------------------------------
         this.GetUser_Main_Details(localStorage.getItem("g_USER_GUID"));
         //------------------------------------------------
-      }
     }
     this.ChangePasswordForm = fb.group({
       Current_Password: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],      

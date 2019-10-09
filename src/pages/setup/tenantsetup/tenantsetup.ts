@@ -293,7 +293,7 @@ export class TenantsetupPage {
   }
 
   constructor(public navCtrl: NavController, public navParams: NavParams, fb_tenant: FormBuilder, fb_user: FormBuilder, public http: Http, private TenantMainSetupService: TenantMainSetup_Service, private TenantCompanySetupService: TenantCompanySetup_Service, private tenantcompanysitesetupservice: TenantCompanySiteSetup_Service, private userservice: UserSetup_Service, private alertCtrl: AlertController) {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       //--------------Clear all required storage------------------------
       localStorage.removeItem("PREV_TENANT_GUID");
       localStorage.removeItem("PREV_TENANT_COMPANY_GUID");

@@ -46,7 +46,7 @@ export class CompanysettingsPage {
     }
     else {
       this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
+      if (localStorage.getItem("g_IS_SUPER") != "1") {
         //Get the role for this page------------------------------        
         if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
         if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
@@ -100,7 +100,7 @@ export class CompanysettingsPage {
   Bind_PaymentType() {
     let url: string = "";
     url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_payment_type' + '?filter=(TENANT_GUID=' + localStorage.getItem('g_TENANT_GUID') + ')&order=NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_payment_type' + '?order=NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     this.http
@@ -115,7 +115,7 @@ export class CompanysettingsPage {
   BindProfiles() {
     let url: string = "";
     url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_profile' + '?filter=(TENANT_GUID=' + localStorage.getItem('g_TENANT_GUID') + ')&order=PROFILE_NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_profile' + '?order=PROFILE_NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     this.http
@@ -140,7 +140,7 @@ export class CompanysettingsPage {
     this.Add_Form = true;
     this.KeyNameValue = [];
     let url: string = "";
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/permission_keys' + '?filter=(CREATION_USER_GUID=' + localStorage.getItem('g_USER_GUID') + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     else {
@@ -203,7 +203,7 @@ export class CompanysettingsPage {
       });
 
     //For Tenant Admin version should display from sva creation_guid
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
+    if (localStorage.getItem("g_IS_SUPER") != "1") {
       url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/permission_keys' + '?filter=(CREATION_USER_GUID=sva)&api_key=' + constants.DREAMFACTORY_API_KEY;
       this.http
         .get(url)
@@ -524,7 +524,7 @@ export class CompanysettingsPage {
   }
 
   VisibleControls() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       this.isVisibleToSVA = true;
     }
     else {

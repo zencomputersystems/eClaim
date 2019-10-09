@@ -24,7 +24,6 @@ import { UserSpouse_Model } from '../models/user_spouse_model';
 @Injectable()
 
 export class UserSetup_Service {
-	baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 	UserUrl = {
 	"info": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_info',
 	"main": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_main',
@@ -61,7 +60,7 @@ export class UserSetup_Service {
 
 	query(params?: URLSearchParams): Observable<UserInfo_Model[]> {
 		return this.httpService.http
-			.get(this.baseResourceUrl, { search: params, headers: this.queryHeaders })
+			.get(this.UserUrl.address, { search: params, headers: this.queryHeaders })
 			.map(() => {
 					let banks: Array<UserInfo_Model> = [];
 					return banks;
@@ -162,11 +161,11 @@ export class UserSetup_Service {
 	get(id: string, params?: URLSearchParams): Observable<UserAddress_Model> {
 		console.log('Starting of UserSetup service');
 		return this.httpService.http
-			.get(this.baseResourceUrl + "?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY, { search: params, headers: this.queryHeaders })
+			.get(this.UserUrl.address + "?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY, { search: params, headers: this.queryHeaders })
 			.map((response) => {
 				var result: any = response.json();
 				console.log(result);
-				alert(this.baseResourceUrl);
+				alert(this.UserUrl.address);
 				let viewtype: UserAddress_Model = UserAddress_Model.fromJson(result);
 				console.log(viewtype);
 				alert(JSON.stringify(viewtype));
@@ -179,7 +178,7 @@ export class UserSetup_Service {
 
 	remove(id: string) {
 		return this.httpService.http
-			.delete(this.baseResourceUrl2 + '/' + id, { headers: this.queryHeaders })
+			.delete(this.UserUrl.main + '/' + id, { headers: this.queryHeaders })
 			.map((response) => {
 				var result: any = response.json();
 				return result.USER_GUID;
@@ -187,7 +186,7 @@ export class UserSetup_Service {
 	}
 
 	remove_multiple(id: string, tablename: string) {
-		let url_multiple = this.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")AND(ROLE_FLAG=ADDITIONAL)";
+		let url_multiple = this.UserUrl.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")AND(ROLE_FLAG=ADDITIONAL)";
 		console.log(url_multiple);
 		return this.httpService.http
 			.delete(url_multiple, { headers: this.queryHeaders })
@@ -197,7 +196,7 @@ export class UserSetup_Service {
 	}
 
 	remove_multiple_records(id: string, tablename: string) {
-		let url_multiple = this.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")";
+		let url_multiple = this.UserUrl.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")";
 		return this.httpService.http
 			.delete(url_multiple, { headers: this.queryHeaders })
 			.map((response) => {

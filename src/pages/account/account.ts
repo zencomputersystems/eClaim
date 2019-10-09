@@ -1,29 +1,28 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ViewController } from 'ionic-angular';
-import { UserData } from '../../providers/user-data';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import * as constants from '../../app/config/constants';
 
+import { ActionSheetController, Loading, LoadingController, NavController, NavParams, Platform, ToastController, ViewController } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Headers, Http, RequestOptions } from '@angular/http';
+
+import { BaseHttpService } from '../../services/base-http';
+import { Component } from '@angular/core';
+import { FileTransfer } from '@ionic-native/file-transfer';
+import { LoginPage } from '../login/login';
 import { TitleCasePipe } from '@angular/common';
 import { Transfer } from '@ionic-native/transfer';
-import { LoadingController, ActionSheetController, Platform, Loading, ToastController } from 'ionic-angular';
-import { FileTransfer } from '@ionic-native/file-transfer';
-import { Http, Headers, RequestOptions } from '@angular/http';
-import * as constants from '../../app/config/constants';
+import { UUID } from 'angular2-uuid';
+import { UserAddress_Model } from '../../models/usersetup_address_model';
+import { UserCertification_Model } from '../../models/user_certification_model';
+import { UserChildren_Model } from '../../models/user_children_model';
+import { UserCompany_Model } from '../../models/user_company_model';
+import { UserContact_Model } from '../../models/user_contact_model';
+import { UserData } from '../../providers/user-data';
 import { UserInfo_Model } from '../../models/usersetup_info_model';
 import { UserMain_Model } from '../../models/user_main_model';
-import { UserContact_Model } from '../../models/user_contact_model';
-import { UserCompany_Model } from '../../models/user_company_model';
-import { UserAddress_Model } from '../../models/usersetup_address_model';
 import { UserQualification_Model } from '../../models/user_qualification_model';
-import { UserCertification_Model } from '../../models/user_certification_model';
-import { UserSpouse_Model } from '../../models/user_spouse_model';
-import { UserChildren_Model } from '../../models/user_children_model';
+import { UserRole_Model } from '../../models/user_role_model';
 import { UserSetup_Service } from '../../services/usersetup_service';
-import { BaseHttpService } from '../../services/base-http';
-
-import { UserRole_Model } from '../../models/user_role_model'
-import { UUID } from 'angular2-uuid';
-import { LoginPage } from '../login/login';
+import { UserSpouse_Model } from '../../models/user_spouse_model';
 import { getURL } from '../../providers/sanitizer/sanitizer';
 
 @Component({
@@ -502,7 +501,7 @@ this.userinfo_entry.DOB = this.view_user_details[0]["DOB"]
   companies: any;
   GetCompany(TableName: string, SortField: string) {
     let TableURL: string;
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
+    if (localStorage.getItem("g_IS_SUPER") == "1") {
       TableURL = constants.DREAMFACTORY_TABLE_URL + TableName + '?order=' + SortField + '&' + this.Key_Param;
     }
     else {
@@ -623,7 +622,7 @@ this.userinfo_entry.DOB = this.view_user_details[0]["DOB"]
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
     val.then((res) => {
-      if (localStorage.getItem("g_USER_GUID") == "sva" || localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
+      if (localStorage.getItem("g_IS_SUPER") == "1" || localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
         TableURL_Approver = constants.DREAMFACTORY_TABLE_URL + ViewName + '?filter=(TENANT_GUID=' + res.toString() + ')&' + this.Key_Param;
       }
       else {

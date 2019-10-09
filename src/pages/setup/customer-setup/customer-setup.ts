@@ -183,7 +183,7 @@ export class CustomerSetupPage {
     }
     else {
       this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
+      if (localStorage.getItem("g_IS_SUPER") != "1") {
         //Get the role for this page------------------------------        
         if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
         if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
