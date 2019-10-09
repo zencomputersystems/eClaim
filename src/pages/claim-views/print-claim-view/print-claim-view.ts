@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import * as Settings from '../../../dbSettings/companySettings';
+
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { Services } from '../Services';
-import { PrintclaimPage } from '../printclaim/printclaim';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import * as Settings from '../../dbSettings/companySettings'; 
-
-
+import { PrintclaimPage } from '../../claim-forms/printclaim/printclaim';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
+import { Services } from '../../Services';
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({

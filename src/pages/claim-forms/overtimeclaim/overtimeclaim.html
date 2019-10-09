@@ -49,7 +49,7 @@
     <ion-item  class="fuha">
       <ion-label color="primary500" floating>{{ "START_DT_LABEL" | translate }}</ion-label>
       <ion-datetime  displayFormat="DD/MM/YYYY HH:mm" 
-      (ionChange)="getOT()"
+      (ionChange)="getOT(); dirty = Dirty()"
        [(ngModel)]="Start_DT_ngModel" formControlName="start_DT"  ></ion-datetime>
     </ion-item>
     <!-- max={{validDate}} -->
@@ -57,13 +57,13 @@
     <ion-item  class="fuha">
       <ion-label color="primary500" floating>{{ "END_DT_LABEL" | translate }}</ion-label>
       <ion-datetime  displayFormat="DD/MM/YYYY HH:mm" 
-      (ionChange)="getOT()"
+      (ionChange)="getOT(); dirty = Dirty()"
         [(ngModel)]="End_DT_ngModel" formControlName="end_DT"  ></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label color="primary500" floating> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ currency }}</ion-label>
-      <ion-input type="text" formControlName="claim_amount" 
+      <ion-input type="text" formControlName="claim_amount" [disabled]="true"
       [(ngModel)]="OT_Amount_ngModel"></ion-input>
     </ion-item>
     <!-- <ion-item *ngIf="!OTform.controls.claim_amount.valid  && (OTform.controls.claim_amount.dirty)">
@@ -76,8 +76,16 @@
     </ion-item>
 
     <div class="btn">     
-      <button ion-button color="primary500" (click)='submitAction(OTform.value)' [disabled]= "!OTform.valid">{{ 'SUBMIT'}}</button>     
-   </div>   
+      <button ion-button color="primary500" (click)='submitAction(OTform.value)' [disabled]= "(!OTform.valid || !dirty || !(!getOT() || getOT() < 8))">{{ 'SUBMIT'}}</button>     
+   </div> 
+
+   <ion-item *ngIf="getOT() >= 8">
+    <p style="color: red; text-align:right;margin-right: 34%;">You have worked for 8 hours or more. Please apply for replacement leave instead.</p>
+  </ion-item>
+   <ion-item *ngIf="!OTform.controls.claim_amount.valid  && (OTform.controls.claim_amount.dirty) && dirty">
+    <p style="color: red; text-align:right;margin-right: 34%;">Claim amount should be {{currency}} {{min_claim_amount}} - {{max_claim_amount}}</p>
+  </ion-item>
+
    <!-- <ion-item *ngIf="!OTform.controls.claim_amount.valid  && (OTform.controls.claim_amount.dirty)">
     <p style="color: red; text-align:right;margin-right: 34%;">Claim amount should be {{currency}} {{min_claim_amount}} - {{max_claim_amount}}</p>
 </ion-item> -->

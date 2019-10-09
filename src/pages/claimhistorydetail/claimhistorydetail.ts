@@ -1,22 +1,20 @@
-import { Component } from '@angular/core';
-import { Http } from '@angular/http';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
+
 import * as Settings from '../../dbSettings/companySettings';
-import { ExcelService } from '../../providers/excel.service';
+import * as constants from '../../app/config/constants';
+
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import { BaseHttpService } from '../../services/base-http';
-import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
-import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
-import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
-import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
-import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
-import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
-
-
-
-
-
+import { Component } from '@angular/core';
+import { EntertainmentClaimViewPage } from '../claim-views/entertainment-claim-view/entertainment-claim-view';
+import { ExcelService } from '../../providers/excel.service';
+import { GiftClaimViewPage } from '../claim-views/gift-claim-view/gift-claim-view';
+import { Http } from '@angular/http';
+import { MiscellaneousClaimViewPage } from '../claim-views/miscellaneous-claim-view/miscellaneous-claim-view';
+import { OvertimeClaimViewPage } from '../claim-views/overtime-claim-view/overtime-claim-view';
+import { PrintClaimViewPage } from '../claim-views/print-claim-view/print-claim-view';
+import { TravelClaimViewPage } from '../claim-views/travel-claim-view/travel-claim-view.component';
 
 /**
  * Generated class for the ClaimhistorydetailPage page.

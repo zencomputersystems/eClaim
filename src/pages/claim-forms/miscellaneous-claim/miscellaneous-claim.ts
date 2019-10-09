@@ -1,20 +1,18 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UUID } from 'angular2-uuid';
-import { DecimalPipe } from '@angular/common';
 import 'rxjs/add/operator/map';
-//import { TravelclaimPage } from '../travel-claim/travel-claim.component';
-import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
-import * as constants from '../../app/config/constants';
-import { Services } from '../Services';
-import { ImageUpload_model } from '../../models/image-upload.model';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
+
+import * as Settings from '../../../dbSettings/companySettings';
+
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { DecimalPipe } from '@angular/common';
+import { Http } from '@angular/http';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
+import { UploadImage } from '../../../providers/uploader/uploader';
+import { UserclaimslistPage } from '../../userclaimslist/userclaimslist';
 import moment from 'moment';
-import * as Settings from '../../dbSettings/companySettings';
-import { UploadImage } from '../../providers/uploader/uploader';
 
 @IonicPage()
 @Component({
@@ -65,7 +63,7 @@ export class MiscellaneousClaimPage {
   claimRequestGUID: any;
   claimRequestData: any;
 
-  constructor(public numberPipe: DecimalPipe, public profileMng: ProfileManagerProvider, fb: FormBuilder, private loadingCtrl: LoadingController, private service: Services, public navCtrl: NavController, public http: Http, public navParams: NavParams, public api: ApiManagerProvider) {
+  constructor(public numberPipe: DecimalPipe, public profileMng: ProfileManagerProvider, fb: FormBuilder, public navCtrl: NavController, public http: Http, public navParams: NavParams, public api: ApiManagerProvider) {
     // Lakshman
     this.min_claim_amount = localStorage.getItem('cs_min_claim_amt');
     this.min_claim = this.numberPipe.transform(this.min_claim_amount, '1.2-2');
@@ -79,7 +77,6 @@ export class MiscellaneousClaimPage {
     if (this.max_claim_amount == null) {
       this.max_claim_amount = Settings.ClaimAmountConstants.MAX_CLAIM_AMOUNT
     }
-    let currency = localStorage.getItem("cs_default_currency");
     // Lakshman
     this.profileMng.CheckSessionOut();
     this.userGUID = localStorage.getItem('g_USER_GUID');
@@ -341,27 +338,6 @@ export class MiscellaneousClaimPage {
   fileName1: string;
   ProfileImage: any;
   newImage: boolean = true;
-  private ProfileImageDisplay(e: any, fileChoose: string): void {
-    let reader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-
-      const file = e.target.files[0];
-      this.MiscellaneousForm.get(fileChoose).setValue(file);
-      if (fileChoose === 'avatar1')
-        this.fileName1 = file.name;
-
-      reader.onload = (event: any) => {
-        this.ProfileImage = event.target.result;
-      }
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    this.imageGUID = this.uploadFileName;
-    this.chooseFile = true;
-    this.ImageUploadValidation = false;
-    this.newImage = false;
-    this.onFileChange(e);
-    this.saveIm();
-  }
 
   imageGUID: any;
   saveIm() {
@@ -472,7 +448,7 @@ export class MiscellaneousClaimPage {
               this.api.getApiModel('main_claim_ref', 'filter=(USER_GUID=' + this.userGUID + ')AND(MONTH=' + month + ')AND(YEAR=' + year + ')')
                 .subscribe(claimRefdata => {
                   this.claimRequestData["resource"][0].CLAIM_REF_GUID = claimRefdata["resource"][0].CLAIM_REF_GUID;
-                  this.api.updateApiModel('main_claim_request', this.claimRequestData, true).subscribe(res => {
+                  this.api.updateApiModel('main_claim_request', this.claimRequestData, true).subscribe(() => {
                     alert('Claim details updated successfully.')
                     this.navCtrl.push(UserclaimslistPage);
                   });

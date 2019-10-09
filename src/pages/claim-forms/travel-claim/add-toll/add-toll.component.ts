@@ -1,24 +1,17 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ViewController,
-  Loading,
-  LoadingController
-} from 'ionic-angular';
-import * as constants from '../../../app/config/constants';
-import { TranslateService } from '@ngx-translate/core';
+import * as constants from '../../../../app/config/constants';
 
-import { Http, Headers, RequestOptions } from '@angular/http';
-import { UUID } from 'angular2-uuid';
-import { DecimalPipe, CurrencyPipe } from '@angular/common';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Services } from '../../Services';
-import { ClaimRequestDetailModel } from '../../../models/claim-request-detail.model';
-import { ApiManagerProvider } from '../../../providers/api-manager.provider';
-import moment from 'moment';
-import { getURL } from '../../../providers/sanitizer/sanitizer';
+import { Headers, Http, RequestOptions } from '@angular/http';
+import { IonicPage, Loading, LoadingController, NavController, NavParams, ViewController } from 'ionic-angular';
+
+import { ApiManagerProvider } from '../../../../providers/api-manager.provider';
+import { ClaimRequestDetailModel } from '../../../../models/claim-request-detail.model';
+import { DecimalPipe } from '@angular/common';
+import { Services } from '../../../Services';
+import { TranslateService } from '@ngx-translate/core';
+import { UUID } from 'angular2-uuid';
+import { getURL } from '../../../../providers/sanitizer/sanitizer';
 
 @IonicPage()
 @Component({
@@ -161,7 +154,7 @@ export class AddTollPage {
 
       this.api
         .postData('claim_request_detail', claimReqRef.toJson(true))
-        .subscribe(response => {
+        .subscribe(() => {
           alert(
             'Your ' + this.ClaimMethodName + ' details submitted successfully.'
           );
@@ -307,25 +300,6 @@ export class AddTollPage {
   fileName1: string;
   ProfileImage: any;
   newImage: boolean = true;
-  private ProfileImageDisplay(e: any, fileChoose: string): void {
-    let reader = new FileReader();
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      this.DetailsForm.get(fileChoose).setValue(file);
-      if (fileChoose === 'avatar1') this.fileName1 = file.name;
-
-      reader.onload = (event: any) => {
-        this.ProfileImage = event.target.result;
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-    this.imageGUID = this.uploadFileName;
-    this.chooseFile = true;
-    this.newImage = false;
-    this.onFileChange(e);
-    this.ImageUploadValidation = true;
-    this.saveIm();
-  }
   uniqueName: any;
   imageGUID: any;
 

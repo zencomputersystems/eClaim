@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import * as Settings from '../../../dbSettings/companySettings';
+
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { MiscellaneousClaimPage } from '../miscellaneous-claim/miscellaneous-claim';
-import * as Settings from '../../dbSettings/companySettings'; 
 
-
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { Component } from '@angular/core';
+import { MiscellaneousClaimPage } from '../../claim-forms/miscellaneous-claim/miscellaneous-claim';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
 
 @IonicPage()
 @Component({

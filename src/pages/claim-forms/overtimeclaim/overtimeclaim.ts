@@ -1,26 +1,22 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  ViewController
-} from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-//import { TravelclaimPage } from '../travel-claim/travel-claim.component';
-import { OvertimeClaim_Service } from '../../services/overtimeclaim_service';
-import { BaseHttpService } from '../../services/base-http';
+
+import * as Settings from '../../../dbSettings/companySettings';
+
+import { ActionSheetController, IonicPage, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { BaseHttpService } from '../../../services/base-http';
 import { DecimalPipe } from '@angular/common';
 import { FileTransfer } from '@ionic-native/file-transfer';
-
-import { ActionSheetController, ToastController } from 'ionic-angular';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
+import { Http } from '@angular/http';
+import { OvertimeClaim_Service } from '../../../services/overtimeclaim_service';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
+import { TranslateService } from '@ngx-translate/core';
+import { UserclaimslistPage } from '../../userclaimslist/userclaimslist';
 import moment from 'moment';
-import * as Settings from '../../dbSettings/companySettings';
+
 @IonicPage()
 @Component({
   selector: 'page-overtimeclaim',
@@ -99,6 +95,10 @@ export class OvertimeclaimPage {
   rate_blocks: any[];
 
   imageURLEdit: any = null;
+
+  dirty = false;
+
+  Dirty() { return true; }
   GetDataforEdit() {
     this.apiMng
       .getApiModel('view_customer', 'filter=TENANT_GUID=' + this.TenantGUID)
@@ -281,6 +281,7 @@ export class OvertimeclaimPage {
   }
 
   getOT() {
+    if (this.dirty) {
     let from = moment(
       moment
         .utc(this.Start_DT_ngModel)
@@ -301,12 +302,6 @@ export class OvertimeclaimPage {
     if (hours % 2 != 0) {
       hours -= 1;
     }
-
-    if (hours > 8) {
-      alert('Your OT is more than 8 hours, please apply replacement leave.');
-      return;
-    }
-
     this.rate_blocks.forEach(element => {
       if (Number(element.hours) === hours) {
         if (day === 'Saturday' || day === 'Sunday') {
@@ -316,9 +311,10 @@ export class OvertimeclaimPage {
         }
       }
     });
-    console.log(this.OT_Amount_ngModel);
     this.claimAmount = this.OT_Amount_ngModel;
-  }
+    return hours;
+  } else return false;
+  } // GetOT()
 
   LoadCustomers() {
     // this.apiMng.getApiModel('view_customer', 'filter=TENANT_GUID=' + this.TenantGUID)

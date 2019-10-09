@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { Http } from '@angular/http';
-import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import * as Settings from '../../dbSettings/companySettings';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { GiftclaimPage } from '../giftclaim/giftclaim';
-import { Services } from '../Services';
+import * as Settings from '../../../dbSettings/companySettings';
 
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { Component } from '@angular/core';
+import { GiftclaimPage } from '../../claim-forms/giftclaim/giftclaim';
+import { Http } from '@angular/http';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
+import { Services } from '../../Services';
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({

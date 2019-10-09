@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { TranslateService } from '@ngx-translate/core';
-import { Http } from '@angular/http';
-import { Services } from '../Services';
-import {OvertimeclaimPage} from '../overtimeclaim/overtimeclaim';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import * as Settings from '../../dbSettings/companySettings'; 
+import * as Settings from '../../../dbSettings/companySettings';
 
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { Component } from '@angular/core';
+import { OvertimeclaimPage } from '../../claim-forms/overtimeclaim/overtimeclaim';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -31,7 +30,7 @@ export class OvertimeClaimViewPage {
   approverDesignation: any;
   isActionTaken: boolean = false;
 
-  constructor(public profileMngProvider: ProfileManagerProvider, public api: ApiManagerProvider, public api1: Services, public http: Http, public translate: TranslateService, public navCtrl: NavController, public navParams: NavParams) {    
+  constructor(public profileMngProvider: ProfileManagerProvider, public api: ApiManagerProvider, public translate: TranslateService, public navCtrl: NavController, public navParams: NavParams) {    
     this.isApprover = this.navParams.get("isApprover");
     this.claimRequestGUID = this.navParams.get("cr_GUID");
     this.Approver_GUID = this.navParams.get("approver_GUID");

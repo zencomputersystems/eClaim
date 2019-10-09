@@ -1,14 +1,12 @@
-import * as Settings from '../../dbSettings/companySettings';
+import * as Settings from '../../../dbSettings/companySettings';
 
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { Services } from '../Services';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
 import { TranslateService } from '@ngx-translate/core';
-import { TravelclaimPage } from '../travel-claim/travel-claim.component';
+import { TravelclaimPage } from '../../claim-forms/travel-claim/travel-claim.component';
 
 @IonicPage()
 @Component({
@@ -33,7 +31,7 @@ export class TravelClaimViewPage {
   isActionTaken: boolean = false;
   currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
 
-  constructor(public profileMngProvider: ProfileManagerProvider, public api: ApiManagerProvider, public api1: Services, public http: Http, public translate: TranslateService, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public profileMngProvider: ProfileManagerProvider, public api: ApiManagerProvider, public translate: TranslateService, public navCtrl: NavController, public navParams: NavParams) {
     this.isApprover = this.navParams.get("isApprover");
     this.claimRequestGUID = this.navParams.get("cr_GUID");
     this.Approver_GUID = this.navParams.get("approver_GUID");
@@ -72,6 +70,7 @@ export class TravelClaimViewPage {
   imageURL: any;
   isImage: boolean = false;
   TravelType: any;
+  
   LoadMainClaim() {
     let claimResult = this.LoadClaimDetails();
     claimResult.then((tollorParkAmount: number) => {

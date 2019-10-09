@@ -1,13 +1,15 @@
-import { NgModule } from '@angular/core';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+
 import { IonicPageModule } from 'ionic-angular';
+import { NgModule } from '@angular/core';
 import { OvertimeclaimPage } from './overtimeclaim';
 
 @NgModule({
   declarations: [
-    OvertimeclaimPage,
+    OvertimeclaimPage, TranslatePipe, TranslateModule
   ],
   imports: [
-    IonicPageModule.forChild(OvertimeclaimPage),
+    IonicPageModule.forChild(OvertimeclaimPage), TranslatePipe
   ],
   exports: [
     OvertimeclaimPage

@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
-import { Http } from '@angular/http';
-import { TranslateService } from '@ngx-translate/core';
+import * as Settings from '../../../dbSettings/companySettings';
+
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import * as Settings from '../../dbSettings/companySettings';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { EntertainmentclaimPage } from '../entertainmentclaim/entertainmentclaim';
-import { Services } from '../Services';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { Component } from '@angular/core';
+import { EntertainmentclaimPage } from '../../claim-forms/entertainmentclaim/entertainmentclaim';
+import { Http } from '@angular/http';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
+import { Services } from '../../Services';
+import { TranslateService } from '@ngx-translate/core';
 //import { ExcelService } from '../../providers/excel.service';
 
 @IonicPage()

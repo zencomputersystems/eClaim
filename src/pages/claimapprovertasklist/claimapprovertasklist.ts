@@ -1,27 +1,26 @@
-import { Component } from '@angular/core';
-import { Http } from '@angular/http';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Checkbox } from 'ionic-angular/components/checkbox/checkbox';
 import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
+
 import * as Settings from '../../dbSettings/companySettings';
-import { Checkboxlist } from '../../models/checkbox-list.model';
+import * as constants from '../../app/config/constants';
+
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
 import { BaseHttpService } from '../../services/base-http';
+import { Checkbox } from 'ionic-angular/components/checkbox/checkbox';
+import { Checkboxlist } from '../../models/checkbox-list.model';
 import { ClaimtasklistPage } from '../claimtasklist/claimtasklist';
-import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
-import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
+import { Component } from '@angular/core';
+import { EntertainmentClaimViewPage } from '../claim-views/entertainment-claim-view/entertainment-claim-view';
+import { GiftClaimViewPage } from '../claim-views/gift-claim-view/gift-claim-view';
+import { Http } from '@angular/http';
 import { LoginPage } from '../login/login';
-import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
-import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
+import { MiscellaneousClaimViewPage } from '../claim-views/miscellaneous-claim-view/miscellaneous-claim-view';
+import { OvertimeClaimViewPage } from '../claim-views/overtime-claim-view/overtime-claim-view';
 // import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
-import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
-import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
-
-
-
-
+import { PrintClaimViewPage } from '../claim-views/print-claim-view/print-claim-view';
+import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
+import { TravelClaimViewPage } from '../claim-views/travel-claim-view/travel-claim-view.component';
 
 @IonicPage()
 @Component({

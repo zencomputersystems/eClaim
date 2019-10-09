@@ -1,27 +1,27 @@
 import 'rxjs/add/operator/map';
 
-import * as Settings from '../../dbSettings/companySettings';
-import * as constants from '../../app/config/constants';
+import * as Settings from '../../../dbSettings/companySettings';
+import * as constants from '../../../app/config/constants';
 
 import { ActionSheetController, IonicPage, Loading, LoadingController, ModalController, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { getURL, sanitizeURL } from '../../providers/sanitizer/sanitizer';
+import { getURL, sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 import { AddTollPage } from './add-toll/add-toll.component';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { BaseHttpService } from '../../services/base-http';
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
-import { ConferenceData } from '../../providers/conference-data';
+import { ConferenceData } from '../../../providers/conference-data';
 import { DecimalPipe } from '@angular/common';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { Http } from '@angular/http';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
 //import { TravelClaim_Model } from '../../models/travelclaim_model';
 //import { TravelClaim_Service } from '../../services/travelclaim_service';
-import { Services } from '../Services';
+import { Services } from '../../Services';
 import { TranslateService } from '@ngx-translate/core';
 import { UUID } from 'angular2-uuid';
-import { UploadImage } from '../../providers/uploader/uploader';
+import { UploadImage } from '../../../providers/uploader/uploader';
 import moment from 'moment';
 
 @IonicPage()

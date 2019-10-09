@@ -1,22 +1,25 @@
-import { DecimalPipe } from '@angular/common';
+import 'rxjs/add/operator/map';
+
+//import { ExcelService } from '../../providers/excel.service';
+import * as Settings from '../../../dbSettings/companySettings';
+import * as constants from '../../../app/config/constants';
+
+import { ActionSheetController, IonicPage, Loading, LoadingController, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
+
+import { ApiManagerProvider } from '../../../providers/api-manager.provider';
+import { BaseHttpService } from '../../../services/base-http';
+import { DecimalPipe } from '@angular/common';
+//import { MasterClaim_Model } from '../../models/masterclaim_model';
+import { EntertainmentClaim_Service } from '../../../services/entertainmentclaim_service';
+import { MainClaimRequestModel } from '../../../models/main-claim-request.model';
+import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
 import { TranslateService } from '@ngx-translate/core';
-import { ActionSheetController, IonicPage, Loading, LoadingController, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
+import { UserclaimslistPage } from '../../userclaimslist/userclaimslist';
 //import { TravelclaimPage } from '../travel-claim/travel-claim.component';
 import moment from 'moment';
-import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
-//import { ExcelService } from '../../providers/excel.service';
-import * as Settings from '../../dbSettings/companySettings';
-import { MainClaimRequestModel } from '../../models/main-claim-request.model';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { BaseHttpService } from '../../services/base-http';
-//import { MasterClaim_Model } from '../../models/masterclaim_model';
-import { EntertainmentClaim_Service } from '../../services/entertainmentclaim_service';
-import { UserclaimslistPage } from '../userclaimslist/userclaimslist';
 
 @IonicPage()
 @Component({

@@ -1,30 +1,27 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import * as Settings from '../../dbSettings/companySettings';
 import * as constants from '../../app/config/constants';
-import { BaseHttpService } from '../../services/base-http';
 
-import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
-import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
-import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
-import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
-import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
-import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
-
-import { EntertainmentclaimPage } from '../entertainmentclaim/entertainmentclaim';
-import { TravelclaimPage } from '../travel-claim/travel-claim.component';
-import { PrintclaimPage } from '../printclaim/printclaim';
-import { GiftclaimPage } from '../giftclaim/giftclaim';
-import { OvertimeclaimPage } from '../overtimeclaim/overtimeclaim';
-import { MiscellaneousClaimPage } from '../miscellaneous-claim/miscellaneous-claim';
+import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { ApiManagerProvider } from '../../providers/api-manager.provider';
-
+import { BaseHttpService } from '../../services/base-http';
+import { Component } from '@angular/core';
+import { EntertainmentClaimViewPage } from '../claim-views/entertainment-claim-view/entertainment-claim-view';
+import { EntertainmentclaimPage } from '../claim-forms/entertainmentclaim/entertainmentclaim';
 import { ExcelService } from '../../providers/excel.service';
-import * as Settings from '../../dbSettings/companySettings'
+import { GiftClaimViewPage } from '../claim-views/gift-claim-view/gift-claim-view';
+import { GiftclaimPage } from '../claim-forms/giftclaim/giftclaim';
+import { Http } from '@angular/http';
+import { MiscellaneousClaimPage } from '../claim-forms/miscellaneous-claim/miscellaneous-claim';
+import { MiscellaneousClaimViewPage } from '../claim-views/miscellaneous-claim-view/miscellaneous-claim-view';
+import { OvertimeClaimViewPage } from '../claim-views/overtime-claim-view/overtime-claim-view';
+import { OvertimeclaimPage } from '../claim-forms/overtimeclaim/overtimeclaim';
+import { PrintClaimViewPage } from '../claim-views/print-claim-view/print-claim-view';
+import { PrintclaimPage } from '../claim-forms/printclaim/printclaim';
+import { TravelClaimViewPage } from '../claim-views/travel-claim-view/travel-claim-view.component';
+import { TravelclaimPage } from '../claim-forms/travel-claim/travel-claim.component';
 
 /**
  * Generated class for the UserclaimslistPage page.
