@@ -84,7 +84,7 @@ export class SetupPage {
   TenantCompanyDisplay: boolean = false;
   BankDisplay: boolean = false;
   CashcardDisplay: boolean = false; */
-  Setup = {
+  Setup: { [ index: string] : boolean } = {
     "SetupGuide"     : false,
     "TenantCompany"  : false,
     "Bank"           : false,
@@ -107,10 +107,10 @@ export class SetupPage {
     "RoleSetup"      : false,
     "RoleModule"     : false,
     "ApprovalProfile": false,
-    "OtRate"         : false
+    "OtRate"         : false,
   }
  
-  SetupPageMap = {
+  SetupPageMap: { [index: string] : string } = {
     "SetupGuide"          : 'SetupguidePage',
     "TenantCompany"       : 'BranchsetupPage',
     "Bank"                : 'BanksetupPage',
@@ -137,14 +137,14 @@ export class SetupPage {
   }
 
   public DisableSetupAccess() {
-    let Key = "";
+    let Key: any;
     for (Key of Object.keys(this.Setup)) {
       this.Setup[Key] = false;
     }
   }
 
   public EnableSetupAccess() {
-    let Key = "";
+    let Key: any;
     for (Key of Object.keys(this.Setup)) {
       this.Setup[Key] = true;
     }
