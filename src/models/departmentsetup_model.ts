@@ -1,16 +1,20 @@
-import { Base_NameDescription_Model } from './base_model';
-export class DepartmentSetup_Model extends Base_NameDescription_Model {
-	constructor() {
-		super();
-	}
-
-	public DEPARTMENT_GUID: string = null;
-	public TENANT_GUID: string = null;
+export class DepartmentSetup_Model {
+	constructor(
+		public DEPARTMENT_GUID: string = null,
+		public NAME: string = null,
+		//public COMPANY: string = null,
+		public DESCRIPTION: string = null,
+		public CREATION_TS: string = null,
+		public CREATION_USER_GUID: string = null,
+		public UPDATE_TS: string = null,
+		public UPDATE_USER_GUID: string = null,
+		public TENANT_GUID: string = null
+	) { }
 
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new DepartmentSetup_Model(
 			json.DEPARTMENT_GUID,
 			json.NAME,
 			//json.COMPANY,

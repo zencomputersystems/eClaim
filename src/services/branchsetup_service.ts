@@ -18,12 +18,8 @@ import { NavController } from 'ionic-angular';
 export class BranchSetup_Service {
     baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_branch';
     baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-    queryHeaders: any = new Headers();
-    constructor(private httpService: BaseHttpService) { 
-        this.queryHeaders.append('Content-Type', 'application/json');
-        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        this.queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-    };
+
+    constructor(private httpService: BaseHttpService) { };
 
     private handleError(error: any) {
         let errMsg = (error.message) ? error.message :
@@ -34,8 +30,12 @@ export class BranchSetup_Service {
     }
 
     query(params?: URLSearchParams): Observable<BranchSetup_Model[]> {
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
         return this.httpService.http
-            .get(this.baseResourceUrl, { search: params, headers: this.queryHeaders })
+            .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
             .map((response) => {
                 let branches: Array<BranchSetup_Model> = [];
 
@@ -48,7 +48,11 @@ export class BranchSetup_Service {
     };
 
     save(branch_main: BranchSetup_Model): Observable<any> {
-        let options = new RequestOptions({ headers: this.queryHeaders });
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        let options = new RequestOptions({ headers: queryHeaders });
         return this.httpService.http.post(this.baseResourceUrl, branch_main.toJson(true), options)
             .map((response) => {
                 return response;
@@ -56,7 +60,11 @@ export class BranchSetup_Service {
     }
 
     update(branch_main: BranchSetup_Model): Observable<any> {
-        let options = new RequestOptions({ headers: this.queryHeaders });
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        let options = new RequestOptions({ headers: queryHeaders });
         return this.httpService.http.patch(this.baseResourceUrl, branch_main.toJson(true), options)
             .map((response) => {
                 return response;
@@ -64,17 +72,29 @@ export class BranchSetup_Service {
     }
 
     get_branch(params?: URLSearchParams): Observable<BranchSetup_Model[]> {
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
         return this.httpService.http
-            .get(this.baseResourceUrl, { search: params, headers: this.queryHeaders })
+            .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
             .map((response) => {
                 let branches: Array<BranchSetup_Model> = [];
+
+                // result.resource.forEach((branch) => {
+                //  	branches.push(BranchSetup_Model.fromJson(branch));
+                //  });
                 return branches;
             }).catch(this.handleError);
     };
 
     remove(id: string) {
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
         return this.httpService.http
-            .delete(this.baseResourceUrl + '/' + id, { headers: this.queryHeaders })
+            .delete(this.baseResourceUrl + '/' + id, { headers: queryHeaders })
             .map((response) => {
                 var result: any = response.json();
                 return result.branch_GUID;
@@ -82,8 +102,13 @@ export class BranchSetup_Service {
     }
 
     get(id: string, params?: URLSearchParams): Observable<BranchSetup_Model> {
+        var queryHeaders = new Headers();
+        queryHeaders.append('Content-Type', 'application/json');
+        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+
         return this.httpService.http
-            .get(this.baseResourceUrl + '/' + id, { search: params, headers: this.queryHeaders })
+            .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
                 var result: any = response.json();
                 let branch: BranchSetup_Model = BranchSetup_Model.fromJson(result);

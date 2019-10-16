@@ -1,16 +1,18 @@
-import { Base_Model } from './base_model';
-export class StateSetup_Model extends Base_Model {
-	constructor() {
-		super();
-	}
+export class StateSetup_Model {
+	constructor(
+		public STATE_GUID: string = null,		
+        public NAME: string = null,		
+        public COUNTRY_GUID: string = null,	
+		public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null
+	) { }
 
-	public STATE_GUID: string = null;
-	public NAME: string = null;
-	public COUNTRY_GUID: string = null;
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new StateSetup_Model(
 			json.STATE_GUID,
             json.NAME,	
             json.COUNTRY_GUID,	   

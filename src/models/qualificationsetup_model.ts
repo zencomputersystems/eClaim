@@ -1,17 +1,19 @@
-import { Base_Model } from './base_model';
-export class QualificationSetup_Model extends Base_Model {
-	constructor() {
-		super();
-	}
+export class QualificationSetup_Model {
+	constructor(
+        public QUALIFICATION_TYPE_GUID: string = null,
+        public TYPE_NAME: string = null,
+        public TYPE_DESC: string = null,
+        public TENANT_GUID: string = null,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null
+	) { }
 
-	public QUALIFICATION_TYPE_GUID: string = null;
-	public TYPE_NAME: string = null;
-	public TYPE_DESC: string = null;
-	public TENANT_GUID: string = null;
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new QualificationSetup_Model(
 			json.QUALIFICATION_TYPE_GUID,
 		    json.TYPE_NAME,
 			json.TYPE_DESC,

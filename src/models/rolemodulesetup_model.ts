@@ -1,19 +1,20 @@
-import { Base_Model } from './base_model';
-export class RoleModuleSetup_Model extends Base_Model {
-    constructor() {
-        super();
-    }
-
-    public ROLE_MODULE_GUID: string = null;
-    public ROLE_GUID: string = null;
-    public MODULE_GUID: string = null;
-    public MODULE_SLNO: string = null;
-    public MODULE_FLAG: string = null;
+export class RoleModuleSetup_Model {
+    constructor(
+        public ROLE_MODULE_GUID: string = null,
+        public ROLE_GUID: string = null,
+        public MODULE_GUID: string = null,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null,
+        public MODULE_SLNO: string = null,
+        public MODULE_FLAG: string = null,
+    ) { }
 
 
     static fromJson(json: any) {
         if (!json) return;
-        return (
+        return new RoleModuleSetup_Model(
             json.ROLE_MODULE_GUID,
             json.ROLE_GUID,
             json.CREATION_TS,

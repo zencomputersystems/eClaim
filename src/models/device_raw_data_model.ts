@@ -1,17 +1,18 @@
-import { Base_Model } from './base_model';
-export class Device_Raw_Data_Model extends Base_Model {
-    constructor() {
-        super();
-    }
+export class Device_Raw_Data_Model {
+    constructor(
+        public RAW_DATA_GUID: string = null,
+        public DEVICE_GUID: string = null,
+        public REF_NO: string = null,
+        public DATA_ENTRY_TS: string = null,
 
-    public RAW_DATA_GUID: string = null;
-    public DEVICE_GUID: string = null;
-    public REF_NO: string = null;
-    public DATA_ENTRY_TS: string = null;
-
-    static fromJson(json: Device_Raw_Data_Model) {
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null,
+    ) { }
+    static fromJson(json: any) {
         if (!json) return;
-        return (
+        return new Device_Raw_Data_Model(
             json.RAW_DATA_GUID,
             json.DEVICE_GUID,
             json.REF_NO,

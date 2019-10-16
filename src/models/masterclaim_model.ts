@@ -1,33 +1,34 @@
-import { Base_Model } from './base_model';
-export class ClaimReqMain_Model extends Base_Model {
-    constructor() {
-      super();
-    }
+export class ClaimReqMain_Model {
+    constructor(
+      public CLAIM_REQUEST_GUID: string = null,
+      public SOC_GUID: string = null,
+      public TENANT_GUID: string = null,
+      public CLAIM_REF_GUID: string = null,
+      public CLAIM_TYPE_GUID: string = null, 
+      public MILEAGE_GUID: string = null,
+       public START_TS: string = null,
+      public END_TS: string = null,
+      public FROM: string = null,
+      public DESTINATION: string = null,
+      public DISTANCE_KM: number = null,
+      public MILEAGE_AMOUNT: number = null,
+      public CLAIM_AMOUNT: number = null,
+      public CALENDAR_REF: string = null,
+      public TRAVEL_DATE: string = null,
+      public STATUS: string = null,
+      public STATUS_REMARKS: string = null,
+      public STAGE: string = null,
+      public STAGE_REMARKS: string = null,
+      public CREATION_TS: string = null,
+      public CREATION_USER_GUID: string = null,
+      public UPDATE_TS: string = null,
+      public UPDATE_USER_GUID: string = null,
+    ) { }
   
-    public CLAIM_REQUEST_GUID: string = null;
-    public SOC_GUID: string = null;
-    public TENANT_GUID: string = null;
-    public CLAIM_REF_GUID: string = null;
-    public CLAIM_TYPE_GUID: string = null;
-    public MILEAGE_GUID: string = null;
-    public START_TS: string = null;
-    public END_TS: string = null;
-    public FROM: string = null;
-    public DESTINATION: string = null;
-    public DISTANCE_KM: number = null;
-    public MILEAGE_AMOUNT: number = null;
-    public CLAIM_AMOUNT: number = null;
-    public CALENDAR_REF: string = null;
-    public TRAVEL_DATE: string = null;
-    public STATUS: string = null;
-    public STATUS_REMARKS: string = null;
-    public STAGE: string = null;
-    public STAGE_REMARKS: string = null;
   
-  
-    static fromJson(json: ClaimReqMain_Model) {
+    static fromJson(json: any) {
       if (!json) return;
-      return (
+      return new ClaimReqMain_Model(
         json.CLAIM_REQUEST_GUID,
         json.SOC_GUID,
         json.TENANT_GUID,

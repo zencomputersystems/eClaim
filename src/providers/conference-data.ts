@@ -1,18 +1,23 @@
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/map';
-
-import { App } from 'ionic-angular';
-import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { TravelclaimPage } from '../pages/claim-forms/travel-claim/travel-claim.component';
+
+import { Http } from '@angular/http';
+
 import { UserData } from './user-data';
+import { TravelclaimPage } from '../pages/travel-claim/travel-claim.component';
+import { App } from 'ionic-angular';
+
+
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
+
 
 @Injectable()
 export class ConferenceData {
   data: any;
   navCtrl: any;
-  constructor(public http: Http, public user: UserData,  app: App) {  this.navCtrl = app.getActiveNavs()[0]}
+  constructor(public http: Http, public user: UserData,  app: App) {  this.navCtrl = app.getActiveNav() }
 
   load(): any {
     if (this.data) {

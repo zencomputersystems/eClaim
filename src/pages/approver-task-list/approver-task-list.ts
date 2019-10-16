@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../app/config/constants';
 // import { BaseHttpService } from '../../services/base-http';
 import { Checkbox } from 'ionic-angular/components/checkbox/checkbox';
-import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
-
 
 @IonicPage()
 @Component({
@@ -19,7 +19,7 @@ export class ApproverTaskListPage {
   claimrefguid: any;
   claimRequestGUID: string;
   level: string;
-  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
+  currency = localStorage.getItem("cs_default_currency");
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http) {

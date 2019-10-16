@@ -1,19 +1,18 @@
-import 'rxjs/add/operator/map';
-
-import * as constants from '../../app/config/constants';
-
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Headers, Http, RequestOptions } from '@angular/http';
-import { IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
-
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { BaseHttpService } from '../../services/base-http';
 import { Component } from '@angular/core';
-import { EncryptPassword } from '../../shared/GlobalFunction';
-import { LoginPage } from '../login/login';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { FormControlDirective, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import * as constants from '../../app/config/constants';
+import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import { BaseHttpService } from '../../services/base-http';
+import { TranslateService } from '@ngx-translate/core';
+import 'rxjs/add/operator/map';
+import CryptoJS from 'crypto-js';
+
 import { UserMain_Model } from '../../models/user_main_model';
 import { UserSetup_Service } from '../../services/usersetup_service';
-import { presentToast } from '../../providers/toast/toast';
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { LoginPage } from '../login/login';
+import moment from 'moment';
 
 /**
  * Generated class for the ChangePasswordPage page.
@@ -34,14 +33,20 @@ export class ChangePasswordPage {
   loading: Loading;
   constructor(public api: ApiManagerProvider,private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private userservice: UserSetup_Service, private httpService: BaseHttpService, private loadingCtrl: LoadingController) {
     if (localStorage.getItem("g_USER_GUID") == null) {
-      presentToast('Sorry, please login first.');
+      alert('Sorry, please login.');
       this.navCtrl.push(LoginPage);
     }
     else {
+      if (localStorage.getItem("g_USER_GUID") == "sva") {
+        alert('Sorry, you are not authorized.');
+        this.navCtrl.setRoot(this.navCtrl.getActive().component);
+      }
+      else {
         //Get the details of user according to user_guid.
         //------------------------------------------------
         this.GetUser_Main_Details(localStorage.getItem("g_USER_GUID"));
         //------------------------------------------------
+      }
     }
     this.ChangePasswordForm = fb.group({
       Current_Password: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],      
@@ -77,7 +82,7 @@ export class ChangePasswordPage {
       // console.log(hash);
 
       //check current password is match with database      
-      if (this.user_details[0]["PASSWORD"] == EncryptPassword(this.Current_Password_ngModel)) {
+      if (this.user_details[0]["PASSWORD"] == CryptoJS.SHA256(this.Current_Password_ngModel.trim()).toString(CryptoJS.enc.Hex)) {
         if (this.Current_Password_ngModel.trim().toUpperCase() != this.Confirm_Password_ngModel.trim().toUpperCase()) {
           if (this.New_Password_ngModel.trim().toUpperCase() == this.Confirm_Password_ngModel.trim().toUpperCase()) {            
 
@@ -90,7 +95,7 @@ export class ChangePasswordPage {
             this.usermain_entry.USER_GUID = localStorage.getItem("g_USER_GUID");
             this.usermain_entry.STAFF_ID = this.user_details[0]["STAFF_ID"];
             this.usermain_entry.LOGIN_ID = this.user_details[0]["LOGIN_ID"];
-            this.usermain_entry.PASSWORD = EncryptPassword(this.Confirm_Password_ngModel);
+            this.usermain_entry.PASSWORD = CryptoJS.SHA256(this.Confirm_Password_ngModel.trim()).toString(CryptoJS.enc.Hex);
             this.usermain_entry.EMAIL = this.user_details[0]["EMAIL"];
             this.usermain_entry.ACTIVATION_FLAG = this.user_details[0]["ACTIVATION_FLAG"];
 

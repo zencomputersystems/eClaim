@@ -1,20 +1,21 @@
-import { Base_Model } from './base_model';
-export class User_Attendance_Main_Model extends Base_Model {
-    constructor() {
-        super();
-    }
+export class User_Attendance_Main_Model {
+    constructor(
+        public USER_ATTENDANCE_GUID: string = null,
+        public USER_GUID: string = null,
+        public ATTENDANCE_DATE: string = null,
+        public IN_TS: string = null,
+        public OUT_TS: string = null,
+        public WORKING_HOURS: string = null,
+        public OVERTIME_FLAG: string = null,
 
-    public USER_ATTENDANCE_GUID: string = null;
-    public USER_GUID: string = null;
-    public ATTENDANCE_DATE: string = null;
-    public IN_TS: string = null;
-    public OUT_TS: string = null;
-    public WORKING_HOURS: string = null;
-    public OVERTIME_FLAG: string = null;
-
-    static fromJson(json: User_Attendance_Main_Model) {
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null,
+    ) { }
+    static fromJson(json: any) {
         if (!json) return;
-        return (
+        return new User_Attendance_Main_Model(
             json.USER_ATTENDANCE_GUID,
             json.USER_GUID,
             json.ATTENDANCE_DATE,

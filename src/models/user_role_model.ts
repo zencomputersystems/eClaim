@@ -1,17 +1,19 @@
-import { Base_Activation_Model } from './base_model';
-export class UserRole_Model extends Base_Activation_Model {
-    constructor() {
-        super();
-    }
+export class UserRole_Model {
+    constructor(
+        public USER_ROLE_GUID: string = null,
+        public USER_GUID: string = null,
+        public ROLE_GUID: string = null,
+        public ACTIVATION_FLAG: string = null,
 
-    public USER_ROLE_GUID: string = null;
-    public USER_GUID: string = null;
-    public ROLE_GUID: string = null;
-    public ROLE_FLAG: string = null;
-
-    static fromJson(json: UserRole_Model) {
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null,
+        public ROLE_FLAG: string = null
+    ) { }
+    static fromJson(json: any) {
         if (!json) return;
-        return (
+        return new UserRole_Model(
             json.USER_ROLE_GUID,
             json.USER_GUID,
             json.ROLE_GUID,
@@ -20,7 +22,7 @@ export class UserRole_Model extends Base_Activation_Model {
             json.CREATION_USER_GUID,
             json.UPDATE_TS,
             json.UPDATE_USER_GUID,
-            json.ROLE_FLAG
+            json.ROLE_FLAG,
         );
     }
     toJson(stringify?: boolean): any {

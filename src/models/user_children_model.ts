@@ -1,20 +1,21 @@
-import { Base_Model } from './base_model';
-export class UserChildren_Model extends Base_Model {
-    constructor() {
-        super();
-    }
+export class UserChildren_Model {
+    constructor(
+        public CHILD_GUID: string = null,
+        public NAME: string = null,
+        public ICNO: string = null,
+        public GENDER: string = null,
+        public SPOUSE: string = null,
+        public USER_GUID: string = null,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null
+    ) { }
 
-    public CHILD_GUID: string = null;
-    public NAME: string = null;
-    public ICNO: string = null;
-    public GENDER: string = null;
-    public SPOUSE: string = null;
-    public USER_GUID: string = null;
 
-
-    static fromJson(json: UserChildren_Model) {
+    static fromJson(json: any) {
         if (!json) return;
-        return (
+        return new UserChildren_Model(
             json.CHILD_GUID,
             json.NAME,
             json.ICNO,

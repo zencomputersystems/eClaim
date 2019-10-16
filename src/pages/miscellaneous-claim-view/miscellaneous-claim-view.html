@@ -1,0 +1,114 @@
+<ion-header>
+
+    <ion-navbar color="primary200">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>{{ "MISCELLANEOUS_CLAIM_HEADING" | translate }}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding *ngFor="let claim of claimRequestData">
+    <ion-item>
+        <ion-label>
+            <b>Miscellaneous Claim View</b>
+        </ion-label>
+
+    </ion-item>
+    <ion-item>
+        <ion-label> {{ "CLAIM_APPLIED_DATE_LABEL" | translate }} : </ion-label>
+        <ion-label> {{ claim.CREATION_TS |date }} </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label> {{ "CLAIM_DATE_LABEL" | translate }} : </ion-label>
+        <ion-label> {{ claim.TRAVEL_DATE | date }} </ion-label>
+    </ion-item>
+    <ion-item *ngIf="claim.CUSTOMER_NAME">
+        <ion-label> {{ "CUSTOMER_NAME_LABEL" | translate }} : </ion-label>
+        <ion-label text-wrap> {{ claim.CUSTOMER_NAME }} </ion-label>
+    </ion-item>
+    <ion-item *ngIf="claim.SOC">
+        <ion-label> {{ "PROJECT_NAME_LABEL" | translate }} : </ion-label>
+        <ion-label text-wrap> {{ claim.PROJECT_NAME }} </ion-label>
+
+    </ion-item>
+    <ion-item *ngIf="claim.SOC">
+        <ion-label> {{ "SOC_NUMBER_LABEL" | translate }} : </ion-label>
+        <ion-label> {{ claim.SOC }} </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label> {{ "CLAIM_AMOUNT_LABEL" | translate }} </ion-label>
+        <ion-label> {{currency}} {{totalClaimAmount | number:'1.2-2'}} </ion-label>
+    </ion-item>
+
+    <ion-item>
+        <ion-label> {{ "STATUS_LABEL" | translate }} : </ion-label>
+        <ion-label> {{ claim.STATUS }}</ion-label>
+    </ion-item>
+
+    <!-- <ion-item *ngIf="claim.PROFILE_LEVEL!=1">
+        <ion-label> {{ "STAGE_LABEL" | translate }} : </ion-label>
+        <ion-label> {{ claim.STAGE }} </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="claim.PROFILE_LEVEL===1">
+        <ion-label> {{ "STAGE_LABEL" | translate }}: </ion-label>
+        <ion-label>Superior</ion-label>
+    </ion-item> -->
+
+    <ion-item>
+        <ion-label> {{ "APPROVER_NAME" | translate }} </ion-label>
+        <ion-label> {{ claim.APPROVER_NAME }} </ion-label>
+    </ion-item>
+
+    <ion-item>
+        <ion-label> {{ "DESCRIPTION_LABEL" | translate }} : </ion-label>
+        <ion-label text-wrap> {{ claim.DESCRIPTION }} </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="claim.REMARKS!==null && claim.PROFILE_LEVEL==0">
+        <ion-label> {{ "REMARK_LABEL" | translate }} : </ion-label>
+        <ion-label text-wrap> {{ claim.REMARKS }} </ion-label>
+    </ion-item>
+
+    <ion-item>
+        <!-- <button ion-button outline item-start icon-left (click)="DisplayImage(claim.ATTACHMENT_ID)" *ngIf="claim.ATTACHMENT_ID!==null">
+            View Receipt
+        </button> -->
+        <a href={{imageURL}} target='_blank'>View Receipt</a> 
+    </ion-item>
+
+
+
+    <div class="blackcontainer" *ngIf="displayImage">
+    </div>
+    <div class="popup1" padding *ngIf="displayImage">
+        <ion-card>
+            <ion-card-header class="icTitle headerColor-white ">
+                <div class="icHeaderText">Receipt</div>
+                <button class="btnR" (click)="CloseDisplayImage()">
+                    <ion-icon name="md-close"></ion-icon>
+                </button>
+            </ion-card-header>
+            <img style="width: 25%" height="50%" src={{imageURL}} *ngIf="imageURL!==null && isImage">
+            <a href={{imageURL}} *ngIf="!isImage" target=_ blank>VIEW</a>
+        </ion-card>
+    </div>
+
+    <ion-item *ngIf="isApprover">
+        <ion-label> {{ "REMARKS_LABEL" | translate }} : </ion-label>
+        <ion-input type="text" [(ngModel)]="Remarks_NgModel" placeholder=" {{ 'REMARKS_PLACE_HOLDER' | translate }} "></ion-input>
+
+    </ion-item>
+
+    <div class="btn" *ngIf="isApprover">
+        <button ion-button outline item-start (click)="isAccepted('accepted')" [disabled]="isActionTaken">
+            {{ "ACCEPT_BUTTON" | translate }} </button>
+        <button ion-button outline item-start (click)="isAccepted('rejected')" [disabled]="isActionTaken">
+            {{ "REJECT_BUTTON" | translate }} </button>
+    </div>
+
+    <div *ngIf="!isApprover">
+        <button ion-button outline item-start icon-left (click)="EditClaim()">
+            {{ "EDIT_LABEL" | translate }} </button>
+    </div>

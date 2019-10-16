@@ -1,21 +1,21 @@
-import { Base_Model } from './base_model';
-export class UserMain_Model extends Base_Model {
-    constructor() {
-        super();
-    }
-
-    public USER_GUID: string = null;
-    public TENANT_GUID: string = null;
-    public STAFF_ID: string = null;
-    public LOGIN_ID: string = null;
-    public PASSWORD: string = null;
-    public EMAIL: string = null;
-    public ACTIVATION_FLAG: number = 1;
-    public IS_TENANT_ADMIN: string = null;
-
-    static fromJson(json: UserMain_Model) {
+export class UserMain_Model {
+    constructor(
+        public USER_GUID: string = null,
+        public TENANT_GUID: string = null,
+        public STAFF_ID: string = null,
+        public LOGIN_ID: string = null,
+        public PASSWORD: string = null,
+        public EMAIL: string = null,
+        public ACTIVATION_FLAG: number = 1,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null,
+        public IS_TENANT_ADMIN: string = null
+    ) { }
+    static fromJson(json: any) {
         if (!json) return;
-        return (
+        return new UserMain_Model(
             json.USER_GUID,
             json.TENANT_GUID,
             json.STAFF_ID,

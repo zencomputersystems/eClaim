@@ -1,20 +1,22 @@
-import 'rxjs/add/operator/map';
-
-import * as Settings from '../../dbSettings/companySettings';
-import * as constants from '../../app/config/constants';
-
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { BaseHttpService } from '../../services/base-http';
-import { Component } from '@angular/core';
-import { EntertainmentClaimViewPage } from '../claim-views/entertainment-claim-view/entertainment-claim-view';
-import { ExcelService } from '../../providers/excel.service';
-import { GiftClaimViewPage } from '../claim-views/gift-claim-view/gift-claim-view';
 import { Http } from '@angular/http';
-import { MiscellaneousClaimViewPage } from '../claim-views/miscellaneous-claim-view/miscellaneous-claim-view';
-import { OvertimeClaimViewPage } from '../claim-views/overtime-claim-view/overtime-claim-view';
-import { PrintClaimViewPage } from '../claim-views/print-claim-view/print-claim-view';
-import { TravelClaimViewPage } from '../claim-views/travel-claim-view/travel-claim-view.component';
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../app/config/constants';
+import { BaseHttpService } from '../../services/base-http';
+import { ExcelService } from '../../providers/excel.service';
+
+
+import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
+import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
+import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
+import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
+import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
+import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
+import * as Settings from '../../dbSettings/companySettings'
+
 
 /**
  * Generated class for the ClaimhistorydetailPage page.
@@ -42,7 +44,7 @@ export class ClaimhistorydetailPage {
   loginUserRole: string;
   public page: number = 1;
   btnSearch: boolean = false;
-  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
+  currency = localStorage.getItem("cs_default_currency")
 
 
   //role: any;

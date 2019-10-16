@@ -1,15 +1,26 @@
-import CryptoJS from "crypto-js";
+import { Component } from '@angular/core';
+import { AlertController } from 'ionic-angular';
 
-export function  Random(): string {
+@Component({
+
+})
+
+export class GlobalFunction {
+  constructor(public alertCtrl: AlertController) {
+
+  }
+
+  showAlert_New(subTitle: string) {
+    let alert = this.alertCtrl.create({
+      title: 'e-Claim',
+      subTitle: subTitle,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  Random(): string {
     let rand = Math.random().toString(10).substring(2, 8)
     return rand;
   }
-
-export function EncryptPassword(password: string): string {
-  return CryptoJS.SHA256(password.trim()).toString(CryptoJS.enc.Hex)
 }
-
-export function getKeyByValue(object: any, value: any) { 
-  return Object.keys(object).find(key =>  
-          object[key] === value)
-  }

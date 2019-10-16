@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar color="primary500">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>       
+
+
+    <ion-title>{{ 'MEDICAL_CLAIM_HEADING' | translate }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+
+  <form [formGroup]="Medicalform">
+
+    <ion-item>
+      <ion-label color="primary500" stacked>{{ "MEDICAL_DATE_LABEL" | translate }}</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" formControlName="travel_date" [(ngModel)]="Medical_Date_ngModel" max={{validDate}} placeholder="{{ 'DATE_PLACE_HOLDER' | translate }}"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary500" stacked> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ "CURRENCY_NAME_LABEL" | translate }}</ion-label>
+      <ion-input type="number" formControlName="claim_amount" [(ngModel)]="Medical_Amount_ngModel" placeholder=" {{ 'CLAIM_AMOUNT_PLACE_HOLDER' | translate }} "></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary500" stacked> {{ "DESCRIPTION_LABEL" | translate }} </ion-label>
+      <ion-input type="text" formControlName="description" [(ngModel)]="Medical_Description_ngModel" placeholder=" {{ 'DESCRIPTION_PLACE_HOLDER' | translate }} "></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
+      <button ion-button type="button" (click)="clearFile()">clear file</button>
+    </ion-item>
+
+    <div class="btn">
+      <button ion-button (click)='saveIm(Medicalform.value)' [disabled]="Medicalform.invalid || loading">{{ 'SUBMIT' }}</button>
+    </div>
+
+
+  </form>
+</ion-content>

@@ -45,7 +45,7 @@ export class ModulePageSetup_Service {
             });
     }
 
-    save_multiple_record(module_main: any): Observable<any> {
+    save_multiple_recocrd(module_main: any): Observable<any> {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);

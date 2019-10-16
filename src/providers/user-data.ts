@@ -44,12 +44,10 @@ export class UserData {
     this.events.publish('user:signup');
   };
 
-  logout() {
+  logout(): void {
     this.storage.remove(this.HAS_LOGGED_IN);
     this.storage.remove('username');
-    this.storage.remove('g_USER_GUID');
     this.events.publish('user:logout');
-    return true;
   };
 
   setUsername(username: string): void {

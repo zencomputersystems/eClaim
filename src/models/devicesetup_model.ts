@@ -1,19 +1,21 @@
-import { Base_Activation_Model } from './base_model';
-export class DeviceSetup_Model extends Base_Activation_Model {
-	constructor() {
-		super();
-	}
-
-
-	public DEVICE_GUID: string = null;
-	public DEVICE_NAME: string = null;
-	public ROLE: string = null;
-	public TENANT_GUID: string = null;
+export class DeviceSetup_Model {
+	constructor(
+		public DEVICE_GUID: string = null,
+		public DEVICE_NAME: string = null,
+        public ROLE: string = null,
+        public TENANT_GUID: string = null,
+        public ACTIVATION_FLAG: string = null,
+        public CREATION_TS: string = null,
+		public CREATION_USER_GUID: string = null,
+		public UPDATE_TS: string = null,
+		public UPDATE_USER_GUID: string = null,
+		
+	) { }
 
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new DeviceSetup_Model(
 			json.DEVICE_GUID,
 			json.DEVICE_NAME,
             json.ROLE,

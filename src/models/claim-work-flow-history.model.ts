@@ -1,22 +1,23 @@
-import { Base_Model } from './base_model';
-export class ClaimWorkFlowHistoryModel extends Base_Model {
-  constructor() {
-    super();
-  }
-  public USER_GUID: string = null;
-  public CLAIM_REQUEST_GUID: string = null;
-  public CLAIM_WFH_GUID: string = null;
-  public REMARKS: string = null;
-  public STATUS: string = null;
-  public UPDATE_USER_GUID: string = null;
-  public ASSIGNED_TO: string = null;
-  public PROFILE_LEVEL: number = null;
+export class ClaimWorkFlowHistoryModel {
+  constructor(
+    public CLAIM_REQUEST_GUID: string = null,
+    public CLAIM_WFH_GUID: string = null,
+    public REMARKS: string = null,
+    public STATUS: string = null,
+    public USER_GUID: string = null, 
+    public CREATION_TS: string = null,
+    public UPDATE_TS: string = null, 
+    public CREATION_USER_GUID: string = null,
+    public UPDATE_USER_GUID: string = null,
+    public ASSIGNED_TO: string = null,
+    public PROFILE_LEVEL: number = null
+ 
+  ) { }
 
 
-
-  static fromJson(json: ClaimWorkFlowHistoryModel) {
+  static fromJson(json: any) {
     if (!json) return;
-    return (
+    return new ClaimWorkFlowHistoryModel(
       json.CLAIM_REQUEST_GUID,
       json.CLAIM_WFH_GUID,
       json.REMARKS,

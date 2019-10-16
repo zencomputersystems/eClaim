@@ -1,20 +1,21 @@
-import { Base_Model } from './base_model';
-export class Main_Profile_Model extends Base_Model {
-	constructor() {
-		super();
-	}
-
-	public MAIN_PROFILE_GUID: string = null;
-	public PROFILE_NAME: string = null;
-	public PROFILE_XML: string = null;
-	public TENANT_GUID: string = null;
-	public TENANT_SITE_GUID: string = null;
-	public PROFILE_JSON: string = null;
+export class Main_Profile_Model {
+	constructor(
+		public MAIN_PROFILE_GUID: string = null,
+		public PROFILE_NAME: string = null,
+		public PROFILE_XML: string = null,
+		public TENANT_GUID: string = null,
+		public TENANT_SITE_GUID: string = null,
+		public CREATION_TS: string = null,
+		public CREATION_USER_GUID: string = null,
+		public UPDATE_TS: string = null,
+		public UPDATE_USER_GUID: string = null,
+		public PROFILE_JSON: string = null
+	) { }
 
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new Main_Profile_Model(
 			json.MAIN_PROFILE_GUID,
 			json.PROFILE_NAME,
 			json.PROFILE_XML,

@@ -1,16 +1,19 @@
-import { Base_NameDescription_Model } from './base_model';
-export class PaymentTypeSetup_Model extends Base_NameDescription_Model {
-	constructor() {
-		super();
-	}
-
-	public PAYMENT_TYPE_GUID: string = null;
-	public TENANT_GUID: string = null;
+export class PaymentTypeSetup_Model {
+	constructor(
+        public PAYMENT_TYPE_GUID: string = null,
+        public TENANT_GUID: string = null,
+        public NAME: string = null,
+        public DESCRIPTION: string = null,
+        public CREATION_USER_GUID: string = null,
+        public CREATION_TS: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null
+	) { }
 
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new PaymentTypeSetup_Model(
 			json.PAYMENT_TYPE_GUID,
 		    json.TENANT_GUID,
 			json.NAME,

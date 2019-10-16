@@ -1,26 +1,28 @@
-import 'rxjs/add/operator/map';
-
-import * as Settings from '../../dbSettings/companySettings';
-import * as constants from '../../app/config/constants';
-
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../app/config/constants';
 import { BaseHttpService } from '../../services/base-http';
 import { Checkbox } from 'ionic-angular/components/checkbox/checkbox';
 import { Checkboxlist } from '../../models/checkbox-list.model';
-import { ClaimtasklistPage } from '../claimtasklist/claimtasklist';
-import { Component } from '@angular/core';
-import { EntertainmentClaimViewPage } from '../claim-views/entertainment-claim-view/entertainment-claim-view';
-import { GiftClaimViewPage } from '../claim-views/gift-claim-view/gift-claim-view';
-import { Http } from '@angular/http';
-import { LoginPage } from '../login/login';
-import { MiscellaneousClaimViewPage } from '../claim-views/miscellaneous-claim-view/miscellaneous-claim-view';
-import { OvertimeClaimViewPage } from '../claim-views/overtime-claim-view/overtime-claim-view';
-// import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
-import { PrintClaimViewPage } from '../claim-views/print-claim-view/print-claim-view';
+
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { TravelClaimViewPage } from '../claim-views/travel-claim-view/travel-claim-view.component';
+import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
+import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
+import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
+import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
+import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
+import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
+import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
+import { ClaimtasklistPage } from '../claimtasklist/claimtasklist';
+import { LoginPage } from '../login/login';
+import * as Settings from '../../dbSettings/companySettings'
+import { FinancePaymentTasklistPage } from '../finance-payment-tasklist/finance-payment-tasklist';
+
 
 @IonicPage()
 @Component({
@@ -47,7 +49,7 @@ export class ClaimapprovertasklistPage {
   totalClaimAmount: number = 0;
   public page: number = 1;
   FinanceLogin: boolean = false;
-  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
+  currency = localStorage.getItem("cs_default_currency")
 
   deptList: any[];
   employeeList: any[];
@@ -358,7 +360,7 @@ export class ClaimapprovertasklistPage {
     switch (claimType) {
       case '2d8d7c80-c9ae-9736-b256-4d592e7b7887': this.pushPage(GiftClaimViewPage); break;
       case '37067b3d-1bf4-33a3-2b60-3ca40baf589a': this.pushPage(OvertimeClaimViewPage); break;
-//      case '40dbaf56-98e4-77b9-df95-85ec232ff714': this.pushPage(MedicalClaimViewPage); break;
+      case '40dbaf56-98e4-77b9-df95-85ec232ff714': this.pushPage(MedicalClaimViewPage); break;
       case '58c59b56-289e-31a2-f708-138e81a9c823': this.pushPage(TravelClaimViewPage); break;
       case 'd9567482-033a-6d92-3246-f33043155746': this.pushPage(PrintClaimViewPage); break;
       case 'f3217ecc-19d7-903a-6c56-78fdbd7bbcf1': this.pushPage(EntertainmentClaimViewPage); break;

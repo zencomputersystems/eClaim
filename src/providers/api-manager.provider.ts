@@ -6,27 +6,20 @@ import * as constants from '../app/config/constants';
 import { MainClaimRequestModel } from '../models/main-claim-request.model';
 import { DatePipe, DecimalPipe } from '@angular/common'
 import moment from 'moment';
-import { sanitizeURL, getURL } from './sanitizer/sanitizer';
-//import { postHeaders } from '../models/extended_headers_model';
+
 @Injectable()
+
 export class ApiManagerProvider {
-  emailUrl: string = getURL("email");
+  emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
   claimDetailsData: any[];
   result: any[];
   userClaimCutoffDate: number;
   approverCutoffDate: number;
-  queryHeaders: any = new Headers();
 
-  constructor(public numberPipe: DecimalPipe, public http: Http, public toastCtrl: ToastController, public datepipe: DatePipe) { 
-    this.queryHeaders.append('Content-Type', 'application/json');
-		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		this.queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-
-
-  }
+  constructor(public numberPipe: DecimalPipe, public http: Http, public toastCtrl: ToastController, public datepipe: DatePipe) { }
 
   CreateTimestamp() {
-    return moment.utc(new Date()).utcOffset(-localStorage.getItem("cs_timestamp")).format('YYYY-MM-DDTHH:mm');
+    return moment.utc(new Date()).zone(localStorage.getItem("cs_timestamp")).format('YYYY-MM-DDTHH:mm');
   }
 
   LoadMainClaim(claimReqGUID: any) {
@@ -44,15 +37,20 @@ export class ApiManagerProvider {
   }
 
   getApiModel(endPoint: string, args?: string) {
-    let url = this.getModelUrl(endPoint, args);;
-    return this.http
-      .get(sanitizeURL(url)) //, { headers: queryHeaders })
-      .map(res => res.json())
+    let url = this.getModelUrl(endPoint, args);
+    var queryHeaders = new Headers();
+    queryHeaders.append('Content-Type', 'application/json');
+    queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+    return this.http.get(url, { headers: queryHeaders }).map(res => res.json())
   }
 
   sendEmail(ClaimType_GUID: string, startDate: string, endDate: string, CreatedDate: string, TravelDate: string, CLAIM_REQUEST_GUID: string) {
+    // console.log(moment(startDate).format('YYYY-MM-DDTHH:mm'));
+    // console.log(this.datepipe.transform(startDate, 'dd/MM/yyyy HH:mm'));
+
+    let url = constants.DREAMFACTORY_TABLE_URL + '/view_email_details?filter=USER_GUID=' + localStorage.getItem("g_USER_GUID") + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(getURL("table", "view_email_details", [`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]))
+      .get(url)
       .map(res => res.json())
       .subscribe(data => {
         let email_details = data["resource"];
@@ -67,25 +65,28 @@ export class ApiManagerProvider {
 
           //Get the Total Claim Amount and Status----------------------
           let ClaimAmt: string = "0.00"; let Status: string = "";
+          let url_Amt_Status = constants.DREAMFACTORY_TABLE_URL + '/main_claim_request?filter=(CLAIM_REQUEST_GUID=' + CLAIM_REQUEST_GUID + ')AND(CLAIM_TYPE_GUID = ' + ClaimType_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
           this.http
-            .get(getURL("table","main_claim_request",[`CLAIM_REQUEST_GUID=${CLAIM_REQUEST_GUID}`,`CLAIM_TYPE_GUID=${ClaimType_GUID}`]))
+            .get(url_Amt_Status)
             .map(res => res.json())
             .subscribe(data => {
               let Amt_Status_details = data["resource"];
               if (Amt_Status_details.length > 0) {
                 ClaimAmt = this.numberPipe.transform(Amt_Status_details[0]["CLAIM_AMOUNT"], '1.2-2');
                 Status = Amt_Status_details[0]["STATUS"];
-/* 
-                var queryHeaders = postHeaders;
+
+                var queryHeaders = new Headers();
+                queryHeaders.append('Content-Type', 'application/json');
                 queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-                console.log(queryHeaders);
- */                let options = new RequestOptions({ headers: this.queryHeaders });
+                queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+                let options = new RequestOptions({ headers: queryHeaders });
                 let claimType: string = "";
                 let strSubjectApplier: string = ""; let strSubjectApprover: string; let strBody_html: string;
 
                 //For Cliam Type-------------------------------------------------
+                let url_claim_type = constants.DREAMFACTORY_TABLE_URL + "/main_claim_type?filter=(CLAIM_TYPE_GUID=" + ClaimType_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
                 this.http
-                  .get(getURL("table","main_claim_type",[`CLAIM_TYPE_GUID=${ClaimType_GUID}`]))
+                  .get(url_claim_type)
                   .map(res => res.json())
                   .subscribe(data => {
                     let claimType_details = data["resource"];
@@ -169,8 +170,9 @@ export class ApiManagerProvider {
   }
 
   sendEmail_New(ClaimType_GUID: string, startDate: string, endDate: string, CreatedDate: string, ClaimDate: string, CLAIM_REQUEST_GUID: string, OriginPlace: string, Destination: string, Description: string, Soc_GUID: any, Customer_GUID: any) {
+    let url = constants.DREAMFACTORY_TABLE_URL + '/view_email_details?filter=USER_GUID=' + localStorage.getItem("g_USER_GUID") + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(getURL("table", "view_email_details", [`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]))
+      .get(url)
       .map(res => res.json())
       .subscribe(data => {
         let email_details = data["resource"];
@@ -187,9 +189,14 @@ export class ApiManagerProvider {
           let Project_OR_Customer_Name: string = "";
           let Soc_No: string = "";
           let Proj_Cust_url: string = "";
-            Proj_Cust_url = (Soc_GUID) 
-              ? getURL("table","view_soc_project",[`SOC_GUID=${Soc_GUID}`])
-              : getURL("table","main_customer",[`CUSTOMER_GUID=${Customer_GUID}`]);
+
+          if (Soc_GUID != null) {
+            Proj_Cust_url = constants.DREAMFACTORY_TABLE_URL + '/view_soc_project?filter=SOC_GUID=' + Soc_GUID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+          }
+          if (Customer_GUID != null) {
+            Proj_Cust_url = constants.DREAMFACTORY_TABLE_URL + '/main_customer?filter=CUSTOMER_GUID=' + Customer_GUID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+          }
+
           this.http
             .get(Proj_Cust_url)
             .map(res => res.json())
@@ -206,8 +213,9 @@ export class ApiManagerProvider {
 
                 //Get the Total Claim Amount and Status----------------------
                 let ClaimAmt: string = "0.00"; let Status: string = "";
+                let url_Amt_Status = constants.DREAMFACTORY_TABLE_URL + '/main_claim_request?filter=(CLAIM_REQUEST_GUID=' + CLAIM_REQUEST_GUID + ')AND(CLAIM_TYPE_GUID = ' + ClaimType_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
                 this.http
-                  .get(getURL("table", "main_claim_request", [`CLAIM_REQUEST_GUID=${CLAIM_REQUEST_GUID}`, `CLAIM_TYPE_GUID=${ClaimType_GUID}`]))
+                  .get(url_Amt_Status)
                   .map(res => res.json())
                   .subscribe(data => {
                     let Amt_Status_details = data["resource"];
@@ -215,17 +223,18 @@ export class ApiManagerProvider {
                       ClaimAmt = this.numberPipe.transform(Amt_Status_details[0]["CLAIM_AMOUNT"], '1.2-2');
                       Status = Amt_Status_details[0]["STATUS"];
 
-/*                       var queryHeaders = postHeaders;
+                      var queryHeaders = new Headers();
+                      queryHeaders.append('Content-Type', 'application/json');
                       queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-                      console.log(queryHeaders);
- */
-                      let options = new RequestOptions({ headers: this.queryHeaders });
+                      queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+                      let options = new RequestOptions({ headers: queryHeaders });
                       let claimType: string = "";
                       let strSubjectApplier: string = ""; let strSubjectApprover: string; let strBody_html: string;
 
-                      //For Claim Type-------------------------------------------------
+                      //For Cliam Type-------------------------------------------------
+                      let url_claim_type = constants.DREAMFACTORY_TABLE_URL + "/main_claim_type?filter=(CLAIM_TYPE_GUID=" + ClaimType_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
                       this.http
-                        .get(getURL("table", "main_claim_type", [`CLAIM_TYPE_GUID=${ClaimType_GUID}`]))
+                        .get(url_claim_type)
                         .map(res => res.json())
                         .subscribe(data => {
                           let claimType_details = data["resource"];
@@ -282,8 +291,9 @@ export class ApiManagerProvider {
   }
 
   EmailNextApprover(CLAIM_REQUEST_GUID: string, ASSIGNED_TO: string, claimStatus: string, Level: any) {
+    let url = constants.DREAMFACTORY_TABLE_URL + '/view_email_approver?filter=CLAIM_REQUEST_GUID=' + CLAIM_REQUEST_GUID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(getURL("table", "view_email_approver", [`CLAIM_REQUEST_GUID=${CLAIM_REQUEST_GUID}`]))
+      .get(url)
       .map(res => res.json())
       .subscribe(data => {
         let email_details = data["resource"];
@@ -305,8 +315,9 @@ export class ApiManagerProvider {
           let Role_Name = email_details[0]["ROLE_NAME"];
 
           //Here get the approver name and emailid----------------------------------
+          let url_approver: string = constants.DREAMFACTORY_TABLE_URL + '/view_user_email?filter=USER_GUID=' + ASSIGNED_TO + '&api_key=' + constants.DREAMFACTORY_API_KEY;;
           this.http
-            .get(getURL("table", "view_user_email", [`USER_GUID=${ASSIGNED_TO}`]))
+            .get(url_approver)
             .map(res => res.json())
             .subscribe(data => {
               let approver_details = data["resource"];
@@ -324,12 +335,12 @@ export class ApiManagerProvider {
 
                 // console.log(moment(startDate).format('YYYY-MM-DDTHH:mm'));
                 // console.log(this.datepipe.transform(startDate, 'dd/MM/yyyy HH:mm'));
-/* 
-                var queryHeaders = postHeaders;
+
+                var queryHeaders = new Headers();
+                queryHeaders.append('Content-Type', 'application/json');
                 queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-                console.log(queryHeaders);
- */
-                let options = new RequestOptions({ headers: this.queryHeaders });
+                queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+                let options = new RequestOptions({ headers: queryHeaders });
                 let claimType: string = ""; claimType = email_details[0]["CLAIM_TYPE"];
                 let strSubjectApplier: string = ""; let strSubjectApprover: string; let strBody_html: string;
 
@@ -430,9 +441,9 @@ export class ApiManagerProvider {
   }
 
   EmailNextApprover_New(CLAIM_REQUEST_GUID: string, Remarks: string, ApproverStatus: string) {
-//    let url = constants.DREAMFACTORY_TABLE_URL + '/view_email_details_new?filter=CLAIM_REQUEST_GUID=' + CLAIM_REQUEST_GUID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let url = constants.DREAMFACTORY_TABLE_URL + '/view_email_details_new?filter=CLAIM_REQUEST_GUID=' + CLAIM_REQUEST_GUID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(getURL("table","view_email_details_new",[`CLAIM_REQUEST_GUID=${CLAIM_REQUEST_GUID}`]))
+      .get(url)
       .map(res => res.json())
       .subscribe(data => {
         let email_details = data["resource"];
@@ -464,12 +475,12 @@ export class ApiManagerProvider {
 
           claimType = email_details[0]["CLAIM_TYPE"];
           Description = email_details[0]["DESCRIPTION"];
-/* 
-          var queryHeaders = postHeaders;
+
+          var queryHeaders = new Headers();
+          queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-          console.log(queryHeaders);
- */
-          let options = new RequestOptions({ headers: this.queryHeaders });
+          queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+          let options = new RequestOptions({ headers: queryHeaders });
           let strSubjectApplier: string = ""; let strBody_html: string;
 
           if (ApproverStatus == "Rejected") {
@@ -536,8 +547,7 @@ export class ApiManagerProvider {
   }
 
   EmailReject(CLAIM_REQUEST_GUID: string, Remarks: string, ApproverStatus: string, RejectedByStatus: string, Level: string) {
-    let url = getURL("table","view_email_details_new",[`CLAIM_REQUEST_GUID=${CLAIM_REQUEST_GUID}`]);
-
+    let url = constants.DREAMFACTORY_TABLE_URL + '/view_email_details_new?filter=CLAIM_REQUEST_GUID=' + CLAIM_REQUEST_GUID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
       .get(url)
       .map(res => res.json())
@@ -550,10 +560,10 @@ export class ApiManagerProvider {
           let AppliedDate: string = "";
 
           name = email_details[0]["APPLIER_NAME"]; email = email_details[0]["APPLIER_EMAIL"];
-          let ename = email_details[0]["APPLIER_NAME"];
-
-          let superior_email: string = email_details[0]["SUPERIOR_EMAIL"];
-
+          let ename = email_details[0]["APPLIER_NAME"]; 
+          
+          let superior_email: string = email_details[0]["SUPERIOR_EMAIL"];    
+          
           if (email_details[0]["SOC_NO"] != null) {
             Project_OR_Customer_Name = email_details[0]["PROJECT_NAME"] + ' / ' + email_details[0]["SOC_NO"];
           }
@@ -598,7 +608,7 @@ export class ApiManagerProvider {
               strBody_html = '<HTML><HEAD><META name=GENERATOR content="MSHTML 10.00.9200.17606"></HEAD><BODY><DIV style="FONT-FAMILY: Century Gothic"><DIV style="MIN-WIDTH: 500px"><BR><DIV style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src=' + ImgageSrc + '></DIV><DIV style="MARGIN: 0 30px;"><DIV style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><B>' + strSubjectApplier + '</B></DIV></DIV><DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding:11px 30px">&nbsp;<hr><div style="FONT-SIZE: 16px; TEXT-ALIGN: left; "><B>Claim Details :</B></div><BR/><TABLE style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;"><TBODY><TR><TD style="TEXT-ALIGN: left">Employee</TD><TD>:</TD><TD colSpan=2> ' + ename + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Applied Date</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + moment(AppliedDate).format('DD/MM/YYYY') + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Date </TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + moment(startDate).format('DD/MM/YYYY') + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Type</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2>' + claimType + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Project / Customer / SOC</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + Project_OR_Customer_Name + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Origin</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + OriginPlace + ' </TD></TR><TR><TD style="TEXT-ALIGN: left">Destination</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + Destination + ' </TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Amount</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + localStorage.getItem("cs_default_currency") + ' ' + ClaimAmt + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Description</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2>' + Description + ' </TD></TR><tr><td style="TEXT-ALIGN: left">Remarks</td><td>: </td><td style="TEXT-ALIGN: left" colspan="2">' + Remarks + ' </td></tr><TR><TD style="TEXT-ALIGN: left"></TD><TD></TD><TD style="TEXT-ALIGN: left" colSpan=2><a href="http://autobuild.zeontech.com.my/eclaim/#/UserclaimslistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display:inline-block;">Open eClaim</a></TD></TR></TBODY></TABLE><HR><DIV style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</DIV></DIV></DIV></DIV></BODY></HTML>'
             }
           }
-
+          
           body1 = {
             "template": "",
             "template_id": 0,
@@ -607,7 +617,7 @@ export class ApiManagerProvider {
                 "name": strSubjectApplier,
                 "email": email
               }
-            ],
+            ],            
             "subject": strSubjectApplier,
             "body_text": "",
             "body_html": strBody_html,
@@ -616,9 +626,9 @@ export class ApiManagerProvider {
             "reply_to_name": "",
             "reply_to_email": ""
           };
-
+          
           //Added by bijay on 18/10/2018--------------
-          if (Level == '3' || Level == '-1') {
+          if(Level == '3' || Level == '-1'){
             body1 = {
               "template": "",
               "template_id": 0,
@@ -627,13 +637,13 @@ export class ApiManagerProvider {
                   "name": strSubjectApplier,
                   "email": email,
                 }
-              ],
+              ],         
               "cc": [
                 {
                   "name": strSubjectApplier,
                   "email": superior_email,
                 }
-              ],
+              ],            
               "subject": strSubjectApplier,
               "body_text": "",
               "body_html": strBody_html,
@@ -657,26 +667,29 @@ export class ApiManagerProvider {
 
 
   getImageUrl(imageName: string) {
-    return constants.IMAGE_VIEW_URL+encodeURIComponent((imageName)).replace(/\%20/gi,'%2520'); //+constants.SAS_QUERY_STRING;
-    
-//    return constants.DREAMFACTORY_IMAGE_URL + imageName + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+    return constants.DREAMFACTORY_IMAGE_URL + imageName + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+  }
+
+  getUrl(table: string, args?: string) {
+    if (args != null) {
+      return constants.DREAMFACTORY_TABLE_URL + '/' + table + '?' + args + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+    }
+    return constants.DREAMFACTORY_TABLE_URL + '/' + table + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   }
 
   getModelUrl(table: string, args?: string) {
     if (args != null) {
-      return getURL("table",table)+`&${args}`
- //     return constants.DREAMFACTORY_TABLE_URL + '/' + table + '?' + args;
+      return constants.DREAMFACTORY_TABLE_URL + '/' + table + '?' + args;
     }
-      return getURL("table",table);
-//    return constants.DREAMFACTORY_TABLE_URL + '/' + table;
+    return constants.DREAMFACTORY_TABLE_URL + '/' + table;
   }
 
   postUrl(table: string) {
-    return sanitizeURL(constants.DREAMFACTORY_TABLE_URL + '/' + table);
+    return constants.DREAMFACTORY_TABLE_URL + '/' + table;
   }
 
   deleteUrl(table: string, id: string) {
-    return sanitizeURL(constants.DREAMFACTORY_TABLE_URL + '/' + table + '/' + id);
+    return constants.DREAMFACTORY_TABLE_URL + '/' + table + '/' + id;
   }
 
   postData(endpoint: string, body: any): Observable<any> {
@@ -695,25 +708,35 @@ export class ApiManagerProvider {
     queryHeaders.append('Content-Type', 'application/json');
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     let options = new RequestOptions({ headers: queryHeaders });
-    return this.http.patch(getURL("table",'main_claim_request'), claim_main.toJson(true), options)
+    return this.http.patch(this.getUrl('main_claim_request'), claim_main.toJson(true), options)
       .map((response) => {
         return response;
       });
   }
 
+  // updateApiModel(endPoint: string, modelJSON: any) {
+  //   var queryHeaders = new Headers();
+  //   queryHeaders.append('Content-Type', 'application/json');
+  //   queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+  //   let options = new RequestOptions({ headers: queryHeaders });
+  //   return this.http.patch(this.postUrl(endPoint), modelJSON, options)
+  //     .map((response) => {
+  //       return response;
+  //     });
+  // }
+
   updateApiModel(endPoint: string, modelJSONData: any, isClaim: boolean) {
-//    let modelJSON = modelJSONData["resource"][0];
-var queryHeaders = new Headers();
-queryHeaders.append('Content-Type', 'application/json');
-queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-console.log(queryHeaders);
+    let modelJSON = modelJSONData["resource"][0];
+    var queryHeaders = new Headers();
+    queryHeaders.append('Content-Type', 'application/json');
+    queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     let options = new RequestOptions({ headers: queryHeaders });
     return this.http.patch(this.postUrl(endPoint), modelJSONData, options)
-    /*       .map((response) => {
-            // if (isClaim && modelJSON.STATUS != 'Draft')
-            // this.sendEmail(modelJSON.CLAIM_TYPE_GUID, modelJSON.START_TS, modelJSON.END_TS, modelJSON.CREATION_TS, modelJSON.TRAVEL_DATE, modelJSON.CLAIM_REQUEST_GUID);
-            return response; 
-          }); */
+      .map((response) => {
+        // if (isClaim && modelJSON.STATUS != 'Draft')
+          // this.sendEmail(modelJSON.CLAIM_TYPE_GUID, modelJSON.START_TS, modelJSON.END_TS, modelJSON.CREATION_TS, modelJSON.TRAVEL_DATE, modelJSON.CLAIM_REQUEST_GUID);
+          return response;
+      });
   }
 
   deleteApiModel(endPoint: string, args: string) {
@@ -723,15 +746,18 @@ console.log(queryHeaders);
     let options = new RequestOptions({ headers: queryHeaders });
     console.log(this.deleteUrl(endPoint, args));
     return this.http.delete(this.deleteUrl(endPoint, args), options)
-    /*       .map((response) => {
-            return response;
-          }); */
+      .map((response) => {
+        return response;
+      });
   }
 
 
   getClaimRequestByClaimReqGUID(claimReqGUID: string): Observable<MainClaimRequestModel[]> {
+    var queryHeaders = new Headers();
+    queryHeaders.append('Content-Type', 'application/json');
+    queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     return this.http
-      .get(getURL("table", 'main_claim_request', [`CLAIM_REQUEST_GUID=${claimReqGUID}`]))
+      .get(this.getUrl('main_claim_request', 'filter=	CLAIM_REQUEST_GUID=' + claimReqGUID))
       .map((response) => {
         var result: any = response.json();
         let claimData: Array<MainClaimRequestModel> = [];
@@ -744,24 +770,24 @@ console.log(queryHeaders);
       });
   }
 
-  /*   getApiData(endPoint: string, args?: string) {
-      return new Promise((resolve) => {
-        this.http
-          .get(getUrl(endPoint, args))
-          .map(res => res.json())
-          .subscribe(data => {
-            //this.claimRequestData = data["resource"];
-            resolve(data['resource']);
-          })
-      })
-    } */
+  getApiData(endPoint: string, args?: string) {
+    return new Promise((resolve) => {
+      this.http
+        .get(this.getUrl(endPoint, args))
+        .map(res => res.json())
+        .subscribe(data => {
+          //this.claimRequestData = data["resource"];
+          resolve(data['resource']);
+        })
+    })
+  }
 
-  /* GetGoogleDistance(url: any) {
+  GetGoogleDistance(url: any) {
     let DistKm: string;
     // var origin = this.Travel_From_ngModel;
     // var destination;
     // var url = 'http://api.zen.com.my/api/v2/google/distancematrix/json?destinations=place_id:' + this.DestinationPlaceID + '&origins=place_id:' + this.OriginPlaceID + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(sanitizeURL(url)).map(res => res.json()).subscribe(data => {
+    this.http.get(url).map(res => res.json()).subscribe(data => {
       let temp = data["rows"][0]["elements"][0];
       // console.table(data)
       if (temp["distance"] != null) {
@@ -780,7 +806,7 @@ console.log(queryHeaders);
       // alert('Please select Valid Origin & Destination Places');
     });
     return DistKm;
-  } */
+  }
 
   SearchLocation(key: any) {
     let val = key.target.value;
@@ -792,7 +818,7 @@ console.log(queryHeaders);
       return;
     }
     var url = 'http://api.zen.com.my/api/v2/google/place/autocomplete/json?json?radius=50000&input=' + val + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.http.get(sanitizeURL(url)).map(res => res.json()).subscribe(data => {
+    this.http.get(url).map(res => res.json()).subscribe(data => {
       items = data["predictions"];
       return items;
     });
@@ -812,6 +838,41 @@ console.log(queryHeaders);
       }
     }
   }
+
+  // isClaimExpired(formValues: any) {
+  //   let myDate = new Date(formValues.travel_date);
+  //   let travelMonth:number = myDate.getMonth();
+  //   let currentMonth:number = new Date().getMonth();
+  //   let travelDate:number = myDate.getDate();
+
+  //  let longBack = (travelMonth + 1) < currentMonth;
+  //  let previous = (((travelMonth ) === currentMonth) && travelDate > 7);
+  //        if ( longBack || previous)  {
+  //     alert('Claim has expired.')
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  // isClaimExpired(formValues: any) {
+  //   let myDate = new Date(formValues.travel_date);
+
+  //   let travelMonth: number = myDate.getMonth();
+  //   let currentMonth: number = new Date().getMonth();
+  //   let currentDate: number = new Date().getDate();
+  //   let longBack = (travelMonth + 1) < currentMonth;
+  //   let previous = travelMonth === (currentMonth - 1) && currentDate > 7
+  //   let current = (travelMonth === currentMonth);
+  //   if (current)
+  //     return false;
+  //   if (longBack || previous) {
+
+  //     alert('Claim has expired.')
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
 
   isClaimExpired(travelDate: any, isApprover: boolean) {
     this.userClaimCutoffDate = parseInt(localStorage.getItem("cs_claim_cutoff_date"));

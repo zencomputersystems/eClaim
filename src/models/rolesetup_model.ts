@@ -1,21 +1,26 @@
-import { Base_NameDescription_Model } from './base_model';
-export class RoleSetup_Model extends Base_NameDescription_Model {
-	constructor() {
-		super();
-	}
+export class RoleSetup_Model {
+	constructor(
+		public ROLE_GUID: string = null,
+		public NAME: string = null,
+		public DESCRIPTION: string = null,
+		public TENANT_GUID: string = null,
+		public ACTIVATION_FLAG: string = null,
+		public CREATION_TS: string = null,
+		public CREATION_USER_GUID: string = null,
+		public UPDATE_TS: string = null,
+		public UPDATE_USER_GUID: string = null,
 
-	public ROLE_GUID: string = null;
-	public TENANT_GUID: string = null;
-	public ACTIVATION_FLAG: string = null;
-	public KEY_ADD: string = null;
-	public KEY_EDIT: string = null;
-	public KEY_DELETE: string = null;
-	public KEY_VIEW: string = null;
-	public ROLE_PRIORITY_LEVEL: string = null;
+		public KEY_ADD: string = null,
+		public KEY_EDIT: string = null,
+		public KEY_DELETE: string = null,
+		public KEY_VIEW: string = null,
+		public ROLE_PRIORITY_LEVEL: string = null
+	) { }
+
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new RoleSetup_Model(
 			json.ROLE_GUID,
 			json.NAME,
 			json.DESCRIPTION,

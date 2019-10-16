@@ -29,6 +29,28 @@
               padding-top: 6pt;">{{item}}</h2></ion-col>
           </ion-row>
     </ion-card>
+  <!-- <ion-list>
+    <ion-item>
+      <table class="Tabler ">
+        <tr class="linedsg TColor">
+          <th class="lgl1 tblBrLeft" style="width:40px">No.</th>
+          <th class="lgl1">Month</th>
+
+          <th class="lgl1 tblBrRight" style="width:90px">Action</th>
+      
+
+        </tr>
+
+        <tr class="col7" *ngFor="let item of monthsList; let i=index">
+          <td class="lgl1">{{i+1}}</td>
+          <td class="lgl1">{{item}}</td>
+          <td class="lgl1" text-wrap>
+            <button ion-button item-end (click)="BindData('printSectionId',item)">Print</button>
+          </td>
+        </tr>
+      </table>
+    </ion-item>
+  </ion-list> -->
 </ion-content>
 
 <div id="printSectionId" hidden>

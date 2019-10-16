@@ -27,6 +27,19 @@ export class Settings_Service {
         return Observable.throw(errMsg);
     }
 
+    // query(params?: URLSearchParams): Observable<Settings_Model[]> {
+    //     var queryHeaders = new Headers();
+    //     queryHeaders.append('Content-Type', 'application/json');
+    //     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+    //     return this.httpService.http
+    //         .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
+    //         .map((response) => {
+    //             let banks: Array<Settings_Model> = [];
+    //             return banks;
+
+    //         }).catch(this.handleError);
+    // };
+
     save(Settings_main: Settings_Model, Table_Name: string): Observable<any> {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
@@ -81,7 +94,7 @@ export class Settings_Service {
 
         let options = new RequestOptions({ headers: queryHeaders });
         let url: string;
-        url = constants.DREAMFACTORY_TABLE_URL + "permission_keys?filter=(KEY_NAME=" + KEY_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+        url = "http://api.zen.com.my/api/v2/zcs/_table/permission_keys?filter=(KEY_NAME=" + KEY_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
 
         return this.httpService.http
             .get(url, options)

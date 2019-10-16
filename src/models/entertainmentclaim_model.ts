@@ -1,27 +1,28 @@
-import { Base_Model } from './base_model';
-export class EntertainmentClaim_Model extends Base_Model {
-	constructor() {
-        super();
-    }
+export class EntertainmentClaim_Model {
+	constructor(
+        public CLAIM_REQUEST_DETAIL_GUID: string = null,
+        public CLAIM_REQUEST_GUID: string = null,
+        public CLAIM_TYPE_GUID: string = null,
+        public CLAIM_AMOUNT: string = null,
+        public FROM: string = null,
+        public DESTINATION: string = null,
+        public DISTANCE_KM: string = null,
+        public DESCRIPTION: string = null,
+        public PAYMENT_TYPE_GUID: string = null,
+        public START_TS: string = null,
+        public END_TS: string = null,
+        public ATTACHMENT_ID: string = null,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null,
+        public GST: string = null
+	) { }
 
-    public CLAIM_REQUEST_DETAIL_GUID: string = null;
-    public CLAIM_REQUEST_GUID: string = null;
-    public CLAIM_TYPE_GUID: string = null;
-    public CLAIM_AMOUNT: string = null;
-    public FROM: string = null;
-    public DESTINATION: string = null;
-    public DISTANCE_KM: string = null;
-    public DESCRIPTION: string = null;
-    public PAYMENT_TYPE_GUID: string = null;
-    public START_TS: string = null;
-    public END_TS: string = null;
-    public ATTACHMENT_ID: string = null;
-    public GST: string = null;
 
-
-	static fromJson(json: EntertainmentClaim_Model) {
+	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new EntertainmentClaim_Model(
 			json.CLAIM_REQUEST_DETAIL_GUID,
 		    json.CLAIM_REQUEST_GUID,
 			json.CLAIM_TYPE_GUID,

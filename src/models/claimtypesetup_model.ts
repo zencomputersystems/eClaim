@@ -1,15 +1,19 @@
-import { Base_NameDescription_Model } from './base_model';
-export class ClaimTypeSetup_Model extends Base_NameDescription_Model {
-	constructor() {
-		super();
-	}
+export class ClaimTypeSetup_Model {
+	constructor(
+        public CLAIM_TYPE_GUID: string = null,
+        public TENANT_GUID: string = null,
+        public NAME: string = null,
+        public DESCRIPTION: string = null,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null
+	) { }
 
-	public CLAIM_TYPE_GUID: string = null;
-	public TENANT_GUID: string = null;
-	
+
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new ClaimTypeSetup_Model(
 			json.CLAIM_TYPE_GUID,
 		    json.TENANT_GUID,
 			json.NAME,

@@ -1,19 +1,19 @@
-import { Base_Model } from './base_model';
-export class UserContact_Model extends Base_Model {
-    constructor() {
-        super();
-    }
-    
-    public CONTACT_INFO_GUID: string = null;
-    public USER_GUID: string = null;
-    public TYPE: string = null;
-    public CONTACT_NO: string = null;
-    public DESCRIPTION: string = null;
-    public REMARKS: string = null;
-
-    static fromJson(json: UserContact_Model) {
+export class UserContact_Model {
+	constructor(
+        public CONTACT_INFO_GUID: string = null,
+        public USER_GUID: string = null,
+        public TYPE: string = null,  
+        public CONTACT_NO: string = null,
+        public DESCRIPTION: string = null,
+        public REMARKS: string = null,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null
+    ) { }
+    static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new UserContact_Model(
 			json.CONTACT_INFO_GUID,
 		    json.USER_GUID,
 			json.TYPE,

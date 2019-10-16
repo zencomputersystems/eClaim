@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { getURL } from '../../providers/sanitizer/sanitizer';
+import * as constants from '../../app/config/constants';
 /**
  * Generated class for the ClaimReportUserPage page.
  *
@@ -43,15 +43,14 @@ export class ClaimReportUserPage {
   }
 
 
-
+ 
   BindData(printSectionId: any, item: string) {
     if (this.loginUserGuid !== undefined) {
-      this.month = item.split(' ')[0].substring(0, 3);
+      this.month = item.split(' ')[0].substring(0,3);
       //alert(this.month);
       this.year = item.split(' ')[1];
-      console.log(getURL("table", "vw_claim_report",[`USER_GUID=${this.loginUserGuid}`, `MONTH=${this.month}`, `YEAR=${this.year}`],"AND"));
       this.http
-        .get(getURL("table", "vw_claim_report",[`USER_GUID=${this.loginUserGuid}`, `MONTH=${this.month}`, `YEAR=${this.year}`],"AND"))
+        .get(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_claim_report?filter=(USER_GUID=' + this.loginUserGuid + ')AND(MONTH=' + this.month + ')AND(YEAR=' + this.year + ')&api_key=' + constants.DREAMFACTORY_API_KEY)
         .map(res => res.json())
         .subscribe(data => {
           this.claimsListPrint = data["resource"];
@@ -126,9 +125,29 @@ export class ClaimReportUserPage {
     })
     alert1.present();
   }
+
+
+  // CheckIsDataAvailable(item: string) {
+  //   if (this.loginUserGuid !== undefined) {
+  //     let month = item.split('-')[0];
+  //     let year = item.split('-')[1];
+  //     this.http
+  //       .get(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_claim_report?filter=(USER_GUID=' + this.loginUserGuid + ')AND(MONTH=' + month + ')AND(YEAR=' + year + ')&api_key=' + constants.DREAMFACTORY_API_KEY)
+  //       .map(res => res.json())
+  //       .subscribe(data => {
+  //         this.claimsList = data["resource"];
+  //       });
+  //     if (this.claimsList !== undefined)
+  //       return true
+  //     else
+  //       return false;
+  //   }
+  // }
+
+
   BindEmpDetails() {
     this.http
-      .get(getURL("table","view_user_display",[`USER_GUID=${this.loginUserGuid}`]))
+      .get(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_user_display?filter=(USER_GUID=' + this.loginUserGuid + ')&api_key=' + constants.DREAMFACTORY_API_KEY)
       .map(res => res.json())
       .subscribe(data => {
         this.empData = data["resource"];
@@ -137,7 +156,7 @@ export class ClaimReportUserPage {
 
   BindSummaryData() {
     this.http
-      .get(getURL("table","vw_claim_report_summary",[`USER_GUID=${this.loginUserGuid}`,`MONTH=${this.month}`,`YEAR=${this.year}`],"AND"))
+      .get(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_claim_report_summary?filter=(USER_GUID=' + this.loginUserGuid + ')AND(MONTH=' + this.month + ')AND(YEAR=' + this.year + ')&api_key=' + constants.DREAMFACTORY_API_KEY)
       .map(res => res.json())
       .subscribe(data => {
         this.claimsListSummary = data["resource"];
@@ -146,11 +165,11 @@ export class ClaimReportUserPage {
 
   GetSocSummaryData() {
     this.http
-      .get(getURL("table","vw_claim_report_soc_summary",[`USER_GUID=${this.loginUserGuid}`,`MONTH=${this.month}`,`YEAR=${this.year}`],"AND"))
-      .map(res => res.json())
-      .subscribe(data => {
-        this.claimsSocSummary = data["resource"];
-      });
+    .get(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_claim_report_soc_summary?filter=(USER_GUID=' + this.loginUserGuid + ')AND(MONTH=' + this.month + ')AND(YEAR=' + this.year + ')&api_key=' + constants.DREAMFACTORY_API_KEY)
+    .map(res => res.json())
+    .subscribe(data => {
+      this.claimsSocSummary = data["resource"];
+    });
   }
 
   printToCart(printSectionId: any) {
@@ -173,7 +192,7 @@ export class ClaimReportUserPage {
     let currentYear = new Date().getFullYear();
     if (this.loginUserGuid !== undefined) {
       this.http
-        .get(getURL("table","vw_get_months",[`USER_GUID=${this.loginUserGuid}`]))
+        .get(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_get_months?filter=(USER_GUID=' + this.loginUserGuid + ')&api_key=' + constants.DREAMFACTORY_API_KEY)
         .map(res => res.json())
         .subscribe(data => {
           this.monthsData = data["resource"];
@@ -187,5 +206,32 @@ export class ClaimReportUserPage {
 
         });
     }
+
+
+    // let currentMonth = new Date().getMonth() + 1;
+    // let currentYear = new Date().getFullYear();
+    // let item = ''; let val = 12;
+
+    // for (let i = 0; i <= 11; i++) {
+    //   if ((currentMonth - i) > 0) {
+    //     item = this.getMonthName(currentMonth - i) + '-' + currentYear;
+    //   }
+    //   else {
+    //     item = this.getMonthName(val) + '-' + (currentYear - 1);
+    //     val--;
+    //   }
+    //   if (this.CheckIsDataAvailable(item))
+    //     this.monthsList.push(item);
+    // }
   }
+
+  // getMonthName(currentMonth: number) {
+  //   let monthName = currentMonth === 1 ? 'Jan' : currentMonth === 2 ? 'Feb' : currentMonth === 3 ? 'Mar' : currentMonth === 4 ? 'Apr' :
+  //     currentMonth === 5 ? 'May' : currentMonth === 6 ? 'Jun' : currentMonth === 7 ? 'Jul' : currentMonth === 8 ? 'Aug' :
+  //       currentMonth === 9 ? 'Sep' : currentMonth === 10 ? 'Oct' : currentMonth === 11 ? 'Nov' : currentMonth === 12 ? 'Dec' : '';
+  //   return monthName;
+  // }
+
+
+
 }

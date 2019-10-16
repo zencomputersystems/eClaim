@@ -23,7 +23,6 @@ import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import moment from 'moment';
 import { Observable } from 'rxjs/Rx';
 import { saveAs as importedSaveAs } from "file-saver";
-import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the ImportExcelDataPage page.
@@ -2147,7 +2146,7 @@ export class ImportExcelDataPage {
     const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/user_template.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
-    return this.http.get(sanitizeURL(url), options)
+    return this.http.get(url, options)
       .map(res => res.blob())
   }
 
@@ -2167,7 +2166,7 @@ export class ImportExcelDataPage {
     const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/SOC.xlsx?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
-    return this.http.get(sanitizeURL(url), options)
+    return this.http.get(url, options)
       .map(res => res.blob())
   }
 
@@ -2187,7 +2186,7 @@ export class ImportExcelDataPage {
     const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/Customer.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
-    return this.http.get(sanitizeURL(url), options)
+    return this.http.get(url, options)
       .map(res => res.blob())
   }
 

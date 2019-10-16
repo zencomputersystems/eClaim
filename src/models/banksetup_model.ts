@@ -1,16 +1,19 @@
-import { Base_NameDescription_Model } from './base_model';
-export class BankSetup_Model extends Base_NameDescription_Model {
+export class BankSetup_Model {
 	constructor(
+		public BANK_GUID: string = null,
+		public NAME: string = null,
+		public DESCRIPTION: string = null,
+		public TENANT_GUID: string = null,
+		public CREATION_TS: string = null,
+		public CREATION_USER_GUID: string = null,
+		public UPDATE_TS: string = null,
+		public UPDATE_USER_GUID: string = null
+	) { }
 
-	) {
-		super();
-	}
-	public BANK_GUID: string = null;
-	public TENANT_GUID: string = null;
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return (
+		return new BankSetup_Model(
 			json.BANK_GUID,
 		    json.NAME,
 			json.DESCRIPTION,

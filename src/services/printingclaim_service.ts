@@ -19,15 +19,10 @@ export class PrintingClaim_Service
     
 	baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/claim_request_detail';
 	baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-	queryHeaders: any = new Headers();
 
 	
 	
-	constructor(private httpService: BaseHttpService) {
-		this.queryHeaders.append('Content-Type', 'application/json');
-    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    	this.queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);    	
-	};
+	constructor(private httpService: BaseHttpService) {};
 	
     private handleError (error: any) {
 	   let errMsg = (error.message) ? error.message :
@@ -39,8 +34,13 @@ export class PrintingClaim_Service
     
     query (params?:URLSearchParams): Observable<PrintingClaim_Model[]> 
     {       
+        //let bank :any;
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');
+    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);    	
 		return this.httpService.http
-			.get(this.baseResourceUrl, { search: params, headers: this.queryHeaders})
+			.get(this.baseResourceUrl, { search: params, headers: queryHeaders})
 			.map(() => {
 					let banks: Array<PrintingClaim_Model> = [];
 					// result.resource.forEach((bank) => {
@@ -49,10 +49,28 @@ export class PrintingClaim_Service
 					return banks;
 				}).catch(this.handleError);
     };
+    
+    
+	// save_main_claim_request (master_main: MasterClaim_Model): Observable<any> 
+	// {
+	// 	var queryHeaders = new Headers();
+    // 	queryHeaders.append('Content-Type', 'application/json');
+    // 	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    // 	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+	// 	let options = new RequestOptions({ headers: queryHeaders });
+	// 	return this.httpService.http.post(this.baseResourceUrl1, master_main.toJson(true),options)
+	// 		.map((response) => {
+	// 			return response;
+	// 		});
+    // }
 
     save_claim_request_detail (printing_main: PrintingClaim_Model): Observable<any> 
 	{
-		let options = new RequestOptions({ headers: this.queryHeaders });
+		var queryHeaders = new Headers();
+    	queryHeaders.append('Content-Type', 'application/json');
+    	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
+    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		let options = new RequestOptions({ headers: queryHeaders });
 		return this.httpService.http.post(this.baseResourceUrl, printing_main.toJson(true),options)
 			.map((response) => {
 				return response;

@@ -1,47 +1,51 @@
-import { Base_Model } from './base_model';
-export class UserInfo_Model extends Base_Model {
-    constructor() {
-        super();
-    }
+export class UserInfo_Model {
+    constructor(
+        public USER_INFO_GUID: string = null,
+        public USER_GUID: string = null,
+        public FULLNAME: string = null,
+        public NICKNAME: string = null,
+        public SALUTATION: string = null,
+        public MANAGER_USER_GUID: string = null,
+        public PERSONAL_ID_TYPE: string = null,
+        public PERSONAL_ID: string = null,
+        public DOB: string = null,
+        public GENDER: string = null,
+        public JOIN_DATE: string = null,
+        public MARITAL_STATUS: string = null,
+        public BRANCH: string = null,
+        public EMPLOYEE_TYPE: string = null,
+        public APPROVER1: string = null,
+        public APPROVER2: string = null,
+        public EMPLOYEE_STATUS: string = null,
+        public DEPT_GUID: string = null,
+        public DESIGNATION_GUID: string = null,
+        public RESIGNATION_DATE: string = null,
+        public TENANT_COMPANY_GUID: string = null,
+        public CONFIRMATION_DATE: string = null,
+        public TENANT_COMPANY_SITE_GUID: string = null,
+        public CREATION_TS: string = null,
+        public CREATION_USER_GUID: string = null,
+        public UPDATE_TS: string = null,
+        public UPDATE_USER_GUID: string = null,
 
-    public USER_INFO_GUID: string = null;
-    public USER_GUID: string = null;
-    public FULLNAME: string = null;
-    public NICKNAME: string = null;
-    public SALUTATION: string = null;
-    public MANAGER_USER_GUID: string = null;
-    public PERSONAL_ID_TYPE: string = null;
-    public PERSONAL_ID: string = null;
-    public DOB: string = null;
-    public GENDER: string = null;
-    public JOIN_DATE: string = null;
-    public MARITAL_STATUS: string = null;
-    public BRANCH: string = null;
-    public EMPLOYEE_TYPE: string = null;
-    public APPROVER1: string = null;
-    public APPROVER2: string = null;
-    public EMPLOYEE_STATUS: string = null;
-    public DEPT_GUID: string = null;
-    public DESIGNATION_GUID: string = null;
-    public RESIGNATION_DATE: string = null;
-    public TENANT_COMPANY_GUID: string = null;
-    public CONFIRMATION_DATE: string = null;
-    public TENANT_COMPANY_SITE_GUID: string = null;
-    public EMG_CONTACT_NAME_1: string = null;
-    public EMG_RELATIONSHIP_1: string = null;
-    public EMG_CONTACT_NUMBER_1: string = null;
-    public EMG_CONTACT_NAME_2: string = null;
-    public EMG_RELATIONSHIP_2: string = null;
-    public EMG_CONTACT_NUMBER_2: string = null;
-    public PR_EPF_NUMBER: string = null;
-    public PR_INCOMETAX_NUMBER: string = null;
-    public BANK_GUID: string = null;
-    public PR_ACCOUNT_NUMBER: string = null;
-    public ATTACHMENT_ID: string = null;
-
-    static fromJson(json: UserInfo_Model) {
+        // public POST_CODE: string = null,
+        // public COUNTRY_GUID: string = null,
+        // public STATE_GUID: string = null,
+        public EMG_CONTACT_NAME_1: string = null,
+        public EMG_RELATIONSHIP_1: string = null,
+        public EMG_CONTACT_NUMBER_1: string = null,
+        public EMG_CONTACT_NAME_2: string = null,
+        public EMG_RELATIONSHIP_2: string = null,
+        public EMG_CONTACT_NUMBER_2: string = null,
+        public PR_EPF_NUMBER: string = null,
+        public PR_INCOMETAX_NUMBER: string = null,
+        public BANK_GUID: string = null,
+        public PR_ACCOUNT_NUMBER: string = null,
+        public ATTACHMENT_ID: string = null,
+    ) { }
+    static fromJson(json: any) {
         if (!json) return;
-        return (
+        return new UserInfo_Model(
             json.USER_INFO_GUID,
             json.USER_GUID,
             json.FULLNAME,
