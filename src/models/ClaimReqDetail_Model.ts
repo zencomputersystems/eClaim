@@ -1,24 +1,22 @@
-export class ClaimReqDetail_Model {
-  constructor(
-    public CLAIM_REQUEST_DETAIL_GUID: string = null,
-    public CLAIM_REQUEST_GUID: string = null,
-    public CLAIM_METHOD_GUID: string = null,
-    public AMOUNT: string = null,
+import { Base_Model } from './base_model';
+export class ClaimReqDetail_Model extends Base_Model {
+  constructor() {
+    super();
+  }
 
-    public DESCRIPTION: string = null,
-    public PAYMENT_TYPE_GUID: string = null,
 
-    public ATTACHMENT_ID: string = null,
-    public CREATION_TS: string = null,
-    public CREATION_USER_GUID: string = null,
-    public UPDATE_TS: string = null,
-    public UPDATE_USER_GUID: string = null,
-    public GST: string = null
-  ) { }
+  public CLAIM_REQUEST_DETAIL_GUID: string = null;
+  public CLAIM_REQUEST_GUID: string = null;
+  public CLAIM_METHOD_GUID: string = null;
+  public AMOUNT: string = null;
+  public DESCRIPTION: string = null;
+  public PAYMENT_TYPE_GUID: string = null;
+  public ATTACHMENT_ID: string = null;
+  public GST: string = null;
 
-  static fromJson(json: any) {
+  static fromJson(json: ClaimReqDetail_Model) {
     if (!json) return;
-    return new ClaimReqDetail_Model(
+    return (
       json.CLAIM_REQUEST_DETAIL_GUID,
       json.CLAIM_REQUEST_GUID,
       json.CLAIM_METHOD_GUID,

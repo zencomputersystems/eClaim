@@ -1,22 +1,18 @@
-export class ModuleSetup_Model {
-	constructor(
-		public MODULE_GUID: string = null,
-		public NAME: string = null,
-		public DESCRIPTION: string = null,
-		public PAGE_GUID: string = null,
-		public CREATION_TS: string = null,
-		public CREATION_USER_GUID: string = null,
-		public UPDATE_TS: string = null,
-		public UPDATE_USER_GUID: string = null,
-		public MENU_HEADER: string = null,
-		public MENU_ICON: string = null,
-		public MENU_SL_NO: string = null
-	) { }
+import { Base_NameDescription_Model } from './base_model';
+export class ModuleSetup_Model extends Base_NameDescription_Model {
+	constructor() {
+		super();
+	}
 
-
+	public MODULE_GUID: string = null;
+	public PAGE_GUID: string = null;
+	public MENU_HEADER: string = null;
+	public MENU_ICON: string = null;
+	public MENU_SL_NO: string = null;
+	
 	static fromJson(json: any) {
 		if (!json) return;
-		return new ModuleSetup_Model(
+		return (
 			json.MODULE_GUID,
 			json.NAME,
 			json.DESCRIPTION,

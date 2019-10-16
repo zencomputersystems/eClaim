@@ -1,49 +1,46 @@
-export class MainClaimRequestModel {
-  constructor(
-    public CLAIM_REQUEST_GUID: string = null,
-    public SOC_GUID: string = null,
-    public CUSTOMER_GUID: number = null,
-    public TENANT_GUID: string = null,
-    public CLAIM_REF_GUID: string = null,
-    public CLAIM_TYPE_GUID: string = null,
-    public MILEAGE_GUID: string = null,
-    public ALLOWANCE_GUID: string = null,
-    public START_TS: string = null,
-    public END_TS: string = null,
-    public FROM: string = null,
-    public DESTINATION: string = null,
-    public DISTANCE_KM: number = null,
-    public DESCRIPTION: string = null,
-    public MILEAGE_AMOUNT: number = null,
-    public CLAIM_AMOUNT: number = null,
-    public ROUND_TRIP: number = null,
-    public CALENDAR_REF: string = null,
-    public TRAVEL_DATE: string = null,
-    public STATUS: string = null,
-    public STATUS_REMARKS: string = null,
-    public STAGE: string = null,
-    public STAGE_REMARKS: string = null,
-    public ASSIGNED_TO: string = null,
-    public PROFILE_JSON: string = null,
-    public PROFILE_LEVEL: number = null,
-    public PREVIOUS_LEVEL: number = null,
-    public CREATION_TS: string = null,
-    public CREATION_USER_GUID: string = null,
-    public UPDATE_TS: string = null,
-    public UPDATE_USER_GUID: string = null,
-    public ATTACHMENT_ID: string = null,
-    public TRAVEL_TYPE: string = null,
-    public claim_method_guid: string = null,
-    public from_place_id: string = null,
-    public to_place_id: string = null,
-    public AUDIT_TRAIL: string = null
+import { Base_Model } from './base_model';
+export class MainClaimRequestModel extends Base_Model {
+  constructor() {
+    super();
+  }
 
-  ) { }
-
+  public CLAIM_REQUEST_GUID: string = null;
+  public SOC_GUID: string = null;
+  public CUSTOMER_GUID: number = null;
+  public TENANT_GUID: string = null;
+  public CLAIM_REF_GUID: string = null;
+  public CLAIM_TYPE_GUID: string = null;
+  public MILEAGE_GUID: string = null;
+  public ALLOWANCE_GUID: string = null;
+  public START_TS: string = null;
+  public END_TS: string = null;
+  public FROM: string = null;
+  public DESTINATION: string = null;
+  public DISTANCE_KM: number = null;
+  public DESCRIPTION: string = null;
+  public MILEAGE_AMOUNT: number = null;
+  public CLAIM_AMOUNT: number = null;
+  public ROUND_TRIP: number = null;
+  public CALENDAR_REF: string = null;
+  public TRAVEL_DATE: string = null;
+  public STATUS: string = null;
+  public STATUS_REMARKS: string = null;
+  public STAGE: string = null;
+  public STAGE_REMARKS: string = null;
+  public ASSIGNED_TO: string = null;
+  public PROFILE_JSON: string = null;
+  public PROFILE_LEVEL: number = null;
+  public PREVIOUS_LEVEL: number = null;
+  public ATTACHMENT_ID: string = null;
+  public TRAVEL_TYPE: string = null;
+  public claim_method_guid: string = null;
+  public from_place_id: string = null;
+  public to_place_id: string = null;
+  public AUDIT_TRAIL: string = null;
 
   static fromJson(json: any) {
     if (!json) return;
-    return new MainClaimRequestModel(
+    return (
       json.CLAIM_REQUEST_GUID,
       json.SOC_GUID,
       json.CUSTOMER_GUID, json.TENANT_GUID,

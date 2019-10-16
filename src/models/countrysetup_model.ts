@@ -1,17 +1,15 @@
-export class CountrySetup_Model {
-	constructor(
-		public COUNTRY_GUID: string = null,
-		public NAME: string = null,
-		public CREATION_TS: string = null,
-		public CREATION_USER_GUID: string = null,
-		public UPDATE_TS: string = null,
-		public UPDATE_USER_GUID: string = null
-	) { }
+import { Base_Model } from './base_model';
+export class CountrySetup_Model extends Base_Model {
+	constructor() {
+		super();
+	}
 
+	public COUNTRY_GUID: string = null;
+	public NAME: string = null;
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return new CountrySetup_Model(
+		return (
 			json.COUNTRY_GUID,
 			json.NAME,
 			json.CREATION_TS,

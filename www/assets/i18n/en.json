@@ -429,5 +429,7 @@
  "ROUND_TRIP_LABEL": "Round Trip",
  "ROUND_TRIP_NOTE": "Check if you make a round trip, you go on a journey and return to where you started from.",
 
- "SAVE_AS_DRAFT": "Save As Draft"
+ "SAVE_AS_DRAFT": "Save As Draft",
+ "NO_OF_DAYS":"Days"
+
 } 

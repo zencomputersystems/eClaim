@@ -1,14 +1,20 @@
-import { IonicPage, NavController, NavParams, Loading, Config } from 'ionic-angular';
-import { Component } from '@angular/core';
-import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
 import 'rxjs/add/operator/map';
+
+import * as Settings from '../../dbSettings/companySettings';
 import * as constants from '../../app/config/constants';
-import { Http } from '@angular/http';
+
+import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { getURL, sanitizeURL } from './../../providers/sanitizer/sanitizer';
+
+import { Chart } from 'chart.js';
+import { Component } from '@angular/core';
+import { DashboardCards } from './../../interfaces/dashboard-card';
 // import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DecimalPipe } from "@angular/common";
-import * as Settings from '../../dbSettings/companySettings';
+import { Http } from '@angular/http';
+import { toCurrency } from '../../providers/currency/currency';
 
 /**
  * Generated class for the DashboardPage page.
@@ -17,6 +23,8 @@ import * as Settings from '../../dbSettings/companySettings';
  * Ionic pages and navigation.
  */
 
+
+
 @IonicPage()
 @Component({
   selector: 'page-dashboard',
@@ -24,6 +32,8 @@ import * as Settings from '../../dbSettings/companySettings';
 })
 export class DashboardPage {
 
+  dashboardCards: DashboardCards[];
+  
   baseResourceUrl: string;
   baseResourceUrl_New: string;
   claimrequestdetails: any; paid_details: any;
@@ -43,7 +53,7 @@ export class DashboardPage {
 
   PendingClaimCount_year_Superior: any; PendingClaimAmount_year_Superior: any;
   PendingClaimCount_year_Finance: any; PendingClaimAmount_year_Finance: any;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency") || "RM";
 
   Approved_Claim_Count = 0; Approved_Claim_Amount = '0.00';
   baseResourceUrl_Card: any; Year_Card: any;
@@ -81,15 +91,19 @@ export class DashboardPage {
 
   paid_month_model: any;
 
-  Domain:any;
+  Domain: any;
 
-  constructor(public numberPipe: DecimalPipe, public fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, public config: Config) {
+  constructor(
+    public fb: FormBuilder,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: Http,
+    public config: Config) {
     this.DashboardForm = fb.group({
       'Month': [null, Validators.compose([Validators.required])],
       'Year': [null, Validators.compose([Validators.required])]
     })
-
-    this.baseResourceUrl_New = constants.DREAMFACTORY_TABLE_URL + '/vw_dashboardchart?filter=(USER_GUID =' + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+    this.baseResourceUrl_New = getURL("table", "vw_dashboardchart", [`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]);
     var current_date = new Date();
     this.month_value = current_date.getMonth();
     this.year_value = current_date.getFullYear();
@@ -100,19 +114,14 @@ export class DashboardPage {
     // let Year_ngModel = this.monthNames(this.Month_Change_ngModel) + " " + this.year_value;   
     let Year_ngModel = this.Month_Change_ngModel + " " + this.year_value;
     this.Year_Change_ngModel = Year_ngModel;
-   
+
     this.paid_month_model = this.monthNameToNum(this.Month_Change_ngModel);
-    // For web
-    // this.Year_Change_ngModel = this.year_value;
-    // this.MONTH = this.monthNames(this.Month_Change_ngModel);
     this.MONTH = this.Month_Change_ngModel;
     this.YEAR = this.year_value;
-    
-    // this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_claimrequestlist?filter=(STATUS=Pending)AND(PROFILE_LEVEL=2)AND(YEAR=' + this.currentYear + ')AND(EMAIL=' + localStorage.getItem("g_EMAIL").toString().split('@')[1] + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.Domain=localStorage.getItem("g_EMAIL").toString();
-    if(this.Domain!=null && this.Domain!=undefined)
-    {      
-      this.Domain= this.Domain.split('@')[1] 
+
+    this.Domain = localStorage.getItem("g_EMAIL").toString();
+    if (this.Domain != null && this.Domain != undefined) {
+      this.Domain = this.Domain.split('@')[1]
       // alert(this.Domain)
     }
     // this.GetRoleName();
@@ -127,27 +136,42 @@ export class DashboardPage {
     this.GetData_FaRole();
     // this.GetData_FeRole_Year();
     let val = this.GetRoleName();
-    val.then((res: any) => {     
-      res.forEach((e: any) => {       
-        if (e["ROLE_NAME"] === Settings.UserRoleConstants.TEAM_LEAD || e["ROLE_NAME"] === Settings.UserRoleConstants.DIVISION_HEAD || e["ROLE_NAME"] === Settings.UserRoleConstants.HOD
-          || e["ROLE_NAME"] === Settings.UserRoleConstants.HR || e["ROLE_NAME"] === Settings.UserRoleConstants.DESK_ADMIN) {
-          this.IsApprover = true;
-        }
-        // Finance Executive
-        if (e["ROLE_NAME"] === Settings.UserRoleConstants.FINANCE_EXECUTIVE) {
-          this.IsFinanceExecutive = true;            
-        }
-
-        if (e["ROLE_NAME"] === Settings.UserRoleConstants.FINANCE_MANAGER || e["ROLE_NAME"] === Settings.UserRoleConstants.FINANCE_ADMIN) {
-          this.IsFinanceManager = true;
-          this.IsApprover = true;
-        }
+    val.then((res: any) => {
+      res.forEach((e: any) => {
+        this.setRole(e);
       });
 
     })
-  
+
   }
-  
+
+   approvers: string[] = [
+    Settings.UserRoleConstants.TEAM_LEAD,
+    Settings.UserRoleConstants.DIVISION_HEAD,
+    Settings.UserRoleConstants.HOD,
+    Settings.UserRoleConstants.HR,
+    Settings.UserRoleConstants.DESK_ADMIN,
+    Settings.UserRoleConstants.FINANCE_MANAGER,
+    Settings.UserRoleConstants.FINANCE_ADMIN
+  ];
+  financeExecs: string[] = [
+    Settings.UserRoleConstants.FINANCE_EXECUTIVE
+  ];
+  financeManagers: string[] = [
+    Settings.UserRoleConstants.FINANCE_MANAGER,
+    Settings.UserRoleConstants.FINANCE_ADMIN
+  ];
+
+  setRole(roleName: any) {
+    this.IsApprover = this.isRole(roleName["ROLE_NAME"], this.approvers);
+    this.IsFinanceExecutive = this.isRole(roleName["ROLE_NAME"], this.financeExecs);
+    this.IsFinanceManager = this.isRole(roleName["ROLE_NAME"], this.financeManagers);
+  }
+
+  isRole(roleName: string, roleArray: string[]) {
+    return (roleArray.find( key => key == roleName )) ? true: false;
+  }
+
   // Unique and Sort years
   sortUnique(arr: any) {
     arr.sort();
@@ -184,42 +208,36 @@ export class DashboardPage {
       return result;
     }
   }
- 
+
   GetRoleName() {
     //Get the role of that particular user----------------------------------------------
     let role_url: string = "";
-    let result: any;
-    // role_url = constants.DREAMFACTORY_TABLE_URL + "/view_role_display?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')AND(ROLE_FLAG=MAIN)&api_key=' + constants.DREAMFACTORY_API_KEY;
-    role_url = constants.DREAMFACTORY_TABLE_URL + "/view_role_display?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // console.log(role_url)
-    return new Promise((resolve, reject) => {
-      this.http.get(role_url)
+    role_url = constants.DREAMFACTORY_TABLE_URL + "view_role_display?filter=(USER_GUID=" + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+    return new Promise((resolve) => {
+      this.http.get(sanitizeURL(role_url))
         .map(res => res.json())
         .subscribe((response: any) => {
           let role_result = response["resource"];
           // console.log(role_result);
           // this.role_name = role_result[0]["ROLE_NAME"];
-          if (role_result != null) {          
+          if (role_result != null) {
           }
-          else {            
+          else {
             role_result = null;
-          }  
+          }
           resolve(role_result);
         })
     });
-  }  
+  }
 
-  ngOnInit() {   
+  ngOnInit() {
     // register plugin    
     Chart.plugins.register({
       beforeDraw: function (chart: any) {
-        if (chart.config.options.plugin_one_attribute === 'chart1') {        
-          // Plugin code here...    
           var data = chart.data.datasets[0].data;
           var sum = data.reduce(function (a: any, b: any) {
             var x = a + b;
             var y = parseFloat(x.toFixed(2));
-            // y=this.numberPipe.transform(y, '1.2-2');
             return y;
           }, 0);
           var width = chart.chart.width,
@@ -234,8 +252,6 @@ export class DashboardPage {
           if (sum != 0) {
             // var text = sum,
             var text = sum.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-              // var text =this.numberPipe.transform(sum,'1.2-2'),
-              // var text = this.numberPipe.transform(sum, '1.2-2'),          
               textX = Math.round((width - ctx.measureText(text).width) / 2),
               textY = height / 2;
             // this.chart1 = true;
@@ -247,44 +263,6 @@ export class DashboardPage {
           }
           ctx.fillText(text, textX, textY);
           ctx.save();
-        }
-
-        if (chart.config.options.plugin_one_attribute === 'chart2') {          
-          var data = chart.data.datasets[0].data;
-          var sum = data.reduce(function (a: any, b: any) {
-            var x = a + b;
-            var y = parseFloat(x.toFixed(2));
-            // y=this.numberPipe.transform(y, '1.2-2');
-            return y;
-          }, 0);
-          var width = chart.chart.width,
-            height = chart.chart.height,
-            ctx = chart.chart.ctx;
-          ctx.restore();
-          var fontSize = (height / 18).toFixed(2);
-          ctx.font = fontSize + "px Verdana";
-          ctx.textBaseline = "middle";
-          ctx.fillStyle = "blue";
-          ctx.fontStyle = "bold";
-
-
-          if (sum != 0) {
-            // var text = sum,
-            var text = sum.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-              // var text =this.numberPipe.transform(sum,'1.2-2'),
-              // var text = this.numberPipe.transform(sum, '1.2-2'),          
-              textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2;
-            // this.chart2 = true;
-          }
-          else {
-            // this.chart2 = false;
-            text = 'Data Not Available', textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2;
-          }
-          ctx.fillText(text, textX, textY);
-          ctx.save();
-        }
       }
     });
 
@@ -327,29 +305,6 @@ export class DashboardPage {
       fontSize: 20,
       fontColor: 'green'
     },
-    //   pieceLabel: {
-    //     mode: 'value',
-    //     overlap: true,
-    //     fontColor: ['white', 'blue', 'yellow','black'],
-    //    // fontStyle: 'bold'
-    //   //  indexLabelPlacement: "outside", 
-    //   // mode: 'value'
-    // //   mode: 'label',
-    // //   overlap: true,
-    // //   fontColor: ['Red', 'blue', 'yellow','black'],
-    // //  fontStyle: 'bold',
-    // // //  indexLabelPlacement: "outside", 
-    // //   // arc: true,
-    // //   position: 'outside'
-    //   },
-    // elements: {
-    //   center: {
-    //     text: 'Desktop',
-    //     color: '#36A2EB', //Default black
-    //     fontStyle: 'Helvetica', //Default Arial
-    //     sidePadding: 15 //Default 20 (as a percentage)
-    //   }
-    // },
     tooltips: {
       enabled: true,
       callbacks: {
@@ -390,21 +345,6 @@ export class DashboardPage {
       fontSize: 20,
       fontColor: 'green'
     },
-    // pieceLabel: {
-    //   // mode: 'value',
-    //   //fontColor:'blue',
-    //   render: function (args:any) {
-    //     const label = args.label,
-    //       value = args.value;
-    //     //console.log(label + ': ' + value)
-    //     return value.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //   },
-    //   overlap: true,
-    //  //s fontStyle: 'bold',
-    //   fontColor: ['white', 'blue', 'yellow','black'],
-    //   // indexLabelPlacement: "outside", 
-    // },
-    // this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/vw_claimrequestlist?filter=(STATUS=Pending)AND(PROFILE_LEVEL=2)AND(YEAR=' + this.currentYear + ')AND(EMAIL=' + localStorage.getItem("g_EMAIL").toString().split('@')[1] + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     tooltips: {
       enabled: true,
       callbacks: {
@@ -441,15 +381,12 @@ export class DashboardPage {
     // Returns Previous Month 
     // return month ? month : 0;
   }
-  
+
 
   GetData_filter() {
-    // this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + '/view_dashboard_filter?filter=(ASSIGNED_TO =' + localStorage.getItem("g_USER_GUID") + ')or(USER_GUID=' + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + '/vw_dashboard_dw?filter=(query_value=' + localStorage.getItem("g_USER_GUID") + ')or(query_value=' + localStorage.getItem("g_USER_GUID") + ')or(query_value>1)&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + '/vw_dashboard_dw?&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // console.log("filter "+this.baseResource_RoleUrl);
+    this.baseResource_RoleUrl = getURL("table","vw_dashboard_dw");
     this.http
-      .get(this.baseResource_RoleUrl)
+      .get(sanitizeURL(this.baseResource_RoleUrl))
       .map(res => res.json())
       .subscribe(data => {
         this.years_data = data["resource"];
@@ -461,8 +398,7 @@ export class DashboardPage {
           this.Approved_Claim_Count; this.Approved_Claim_Amount;
         }
         else {
-          let tempdata: any; let id: any;
-          tempdata = {
+          let tempdata: any; tempdata = {
             MONTH_NUM: this.monthNameToNum_true(this.MONTH), MONTH: this.MONTH, YEAR: this.year_value, ApprovedClaimAmount: null, ApprovedReqCount: '0',
             CLAIM_REF_GUID: null, PendingClaimAmount: null, PendingReqCount: '0', RejectedClaimAmount: null, RejectedReqCount: null, USER_GUID: null
           };
@@ -488,26 +424,22 @@ export class DashboardPage {
               t.MONTH === thing.MONTH && t.YEAR === thing.YEAR
             ))
           )
-          this.yeardata = this.years_data;         
+          this.yeardata = this.years_data;
         }
       });
   }
 
   GetRoleDashboard() {
-    // this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + '/view_role_dashboard?filter=(ASSIGNED_TO =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + '/new_view_role_dashboard?filter=(ASSIGNED_TO =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // console.log("Role " + this.baseResource_RoleUrl);
+    this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + 'new_view_role_dashboard?filter=(ASSIGNED_TO =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(this.baseResource_RoleUrl)
+      .get(sanitizeURL(this.baseResource_RoleUrl))
       .map(res => res.json())
       .subscribe(data => {
         this.roleBasedData = data["resource"][0];
-      
+
         // console.log( this.roleBasedData.length);
         if (data["resource"][0] != null && data["resource"][0] != undefined) {
-          this.ApproverLevel_PendAmount = this.numberPipe.transform(this.roleBasedData.PendingAmount_Appr_Fe_Fm_FirstLevel, '1.2-2');
-          // this.ApproverLevel_PendAmount = this.ApproverLevel_PendAmount.toString()
-          // this.ApproverLevel_PendAmount = this.numberPipe.transform(this.ApproverLevel_PendAmount, '1.2-2');
+          this.ApproverLevel_PendAmount = toCurrency(this.roleBasedData.PendingAmount_Appr_Fe_Fm_FirstLevel, this.currency);
           if (this.ApproverLevel_PendAmount == null) {
             this.ApproverLevel_PendAmount = "0.00";
           }
@@ -515,60 +447,31 @@ export class DashboardPage {
           if (this.ApproverLevel_PendCount == null) {
             this.ApproverLevel_PendCount = 0;
           }
-          // this.FinanceExecLevel_PendAmt = this.roleBasedData.PendingAmount_Fe_FinalLevel;
-          // this.FinanceExecLevel_PendCount = this.roleBasedData.PendingCount_Fe_FinalLevel;
-
-          // this.FinanceMgrLevel_PendAmt = this.numberPipe.transform(this.roleBasedData.PendingAmount_Fm_MgrLevel, '1.2-2');
-          // if( this.FinanceMgrLevel_PendAmt ==null)
-          // {
-          //   this.FinanceMgrLevel_PendAmt ="0.00";
-          // }
-          // this.FinanceMgrLevel_PendCount = this.roleBasedData.PendingCount_Fm_MgrLevel;
-          // if( this.FinanceMgrLevel_PendCount ==null)
-          // {
-          //   this.FinanceMgrLevel_PendCount =0;
-          // }
         }
         else {
           this.ApproverLevel_PendAmount = "0.00";
           this.ApproverLevel_PendCount = 0;
-
-          // this.FinanceExecLevel_PendAmt = "0.00";
-          // this.FinanceExecLevel_PendCount = 0;
-
-          // this.FinanceMgrLevel_PendAmt = "0.00";
-          // this.FinanceMgrLevel_PendCount = 0;
-
         }
       });
 
   }
   GetRoleDashboard_Year() {
-    this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + '/view_role_dashboard_year?filter=(ASSIGNED_TO =' + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+    this.baseResource_RoleUrl = constants.DREAMFACTORY_TABLE_URL + 'view_role_dashboard_year?filter=(ASSIGNED_TO =' + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     // console.log("Role_year " + this.baseResource_RoleUrl);
     this.http
-      .get(this.baseResource_RoleUrl)
+      .get(sanitizeURL(this.baseResource_RoleUrl))
       .map(res => res.json())
       .subscribe(data => {
-        this.roleBasedData = data["resource"][0];       
-        // console.log( this.roleBasedData.length);
+        this.roleBasedData = data["resource"][0];
         if (data["resource"][0] != null && data["resource"][0] != undefined) {
-          this.ApproverLevel_PendAmount_Year = this.numberPipe.transform(this.roleBasedData.PendingAmount_Appr_Fe_Fm_FirstLevel_Year, '1.2-2');
+          this.ApproverLevel_PendAmount_Year = toCurrency(this.roleBasedData.PendingAmount_Appr_Fe_Fm_FirstLevel_Year, this.currency);
           this.ApproverLevel_PendCount_Year = this.roleBasedData.PendingCount_Appr_Fe_Fm_FirstLevel_Year;
-
-          // this.FinanceExecLevel_PendAmt_Year = this.roleBasedData.PendingAmount_Fe_FinalLevel_Year;
-          // this.FinanceExecLevel_PendCount_Year = this.roleBasedData.PendingCount_Fe_FinalLevel_Year;
-
-          this.FinanceMgrLevel_PendAmt_Year = this.numberPipe.transform(this.roleBasedData.PendingAmount_Fm_MgrLevel_Year, '1.2-2');
+          this.FinanceMgrLevel_PendAmt_Year = toCurrency(this.roleBasedData.PendingAmount_Fm_MgrLevel_Year, this.currency);
           this.FinanceMgrLevel_PendCount_Year = this.roleBasedData.PendingCount_Fm_MgrLevel_Year;
         }
         else {
           this.ApproverLevel_PendAmount_Year = "0.00";
           this.ApproverLevel_PendCount_Year = 0;
-
-          // this.FinanceExecLevel_PendAmt_Year = "0.00";
-          // this.FinanceExecLevel_PendCount_Year = 0;
-
           this.FinanceMgrLevel_PendAmt_Year = "0.00";
           this.FinanceMgrLevel_PendCount_Year = 0;
         }
@@ -577,18 +480,14 @@ export class DashboardPage {
   }
 
   GetData_FeRole() {
-    // let baseResource_Fe_RoleUrl= constants.DREAMFACTORY_TABLE_URL + '/view_dashboard_fe?filter=(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let baseResource_Fe_RoleUrl= constants.DREAMFACTORY_TABLE_URL + '/new_view_dashboard_fe?filter=(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')and(EMAIL='+this.Domain+')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // console.log("FE_Role " + baseResource_Fe_RoleUrl);
+    let baseResource_Fe_RoleUrl = constants.DREAMFACTORY_TABLE_URL + 'new_view_dashboard_fe?filter=(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')and(EMAIL=' + this.Domain + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(baseResource_Fe_RoleUrl)
+      .get(sanitizeURL(baseResource_Fe_RoleUrl))
       .map(res => res.json())
       .subscribe(data => {
         let FeRoleData = data["resource"][0];
         if (data["resource"][0] != null && data["resource"][0] != undefined) {
-
-          // this.numberPipe.transform(this.Rejected_Claim_Amount, '1.2-2');  
-          this.FinanceExecLevel_PendAmt = this.numberPipe.transform(FeRoleData.PendingAmount_Fe_FinalLevel, '1.2-2');
+          this.FinanceExecLevel_PendAmt = toCurrency(FeRoleData.PendingAmount_Fe_FinalLevel, this.currency);
           if (this.FinanceExecLevel_PendAmt == null) {
             this.FinanceExecLevel_PendAmt = "0.00";
           }
@@ -604,22 +503,17 @@ export class DashboardPage {
           this.FinanceExecLevel_PendCount = 0;
         }
       });
-  } 
+  }
 
   GetData_FaRole() {
-    // this.Month_Change_ngModel= this.month.substring(0, 3);
-    // let baseResource_FA_RoleUrl= constants.DREAMFACTORY_TABLE_URL + '/view_dashboard_fa?filter=(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    let baseResource_FA_RoleUrl= constants.DREAMFACTORY_TABLE_URL + '/new_view_dashboard_fa?filter=(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')and(EMAIL='+this.Domain+')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // console.log("FA_Role " + baseResource_FA_RoleUrl);
+    let baseResource_FA_RoleUrl = constants.DREAMFACTORY_TABLE_URL + 'new_view_dashboard_fa?filter=(MONTH=' + this.Month_Change_ngModel.substring(0, 3) + ')and(YEAR=' + this.year_value + ')and(EMAIL=' + this.Domain + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(baseResource_FA_RoleUrl)
+      .get(sanitizeURL(baseResource_FA_RoleUrl))
       .map(res => res.json())
       .subscribe(data => {
         let FaRoleData = data["resource"][0];
         if (data["resource"][0] != null && data["resource"][0] != undefined) {
-
-          // this.numberPipe.transform(this.Rejected_Claim_Amount, '1.2-2');  
-          this.FinanceMgrLevel_PendAmt = this.numberPipe.transform(FaRoleData.PendingAmount_Fm_MgrLevel, '1.2-2');
+          this.FinanceMgrLevel_PendAmt = toCurrency(FaRoleData.PendingAmount_Fm_MgrLevel, this.currency);
           if (this.FinanceMgrLevel_PendAmt == null) {
             this.FinanceMgrLevel_PendAmt = "0.00";
           }
@@ -635,7 +529,7 @@ export class DashboardPage {
         }
       });
   }
-  
+
 
   Year_Changed(value: any) {
     let stringToSplit = value;
@@ -654,13 +548,12 @@ export class DashboardPage {
   }
   GetDashboardInfo() {
     if (this.month_value != undefined) {
-            // this.baseResourceUrl = constants.DREAMFACTORY_TABLE_URL + '/vw_dashboardchart?filter=(USER_GUID =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH=' + this.Month_Change_ngModel + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-            this.baseResourceUrl = constants.DREAMFACTORY_TABLE_URL + '/new_vw_dashboardchart?filter=(USER_GUID =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH=' + this.Month_Change_ngModel + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      this.baseResourceUrl = constants.DREAMFACTORY_TABLE_URL + 'new_vw_dashboardchart?filter=(USER_GUID =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH=' + this.Month_Change_ngModel + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
       console.log('hi ' + this.baseResourceUrl)
     }
 
     this.http
-      .get(this.baseResourceUrl)
+      .get(sanitizeURL(this.baseResourceUrl))
       .map(res => res.json())
       .subscribe(data => {
 
@@ -668,154 +561,105 @@ export class DashboardPage {
         // console.log(this.claimrequestdetails);
         let val = this.GetPaidData();
         val.then((paid_data: any) => {
-          // console.log(paid_data);
           var paid = paid_data["PaidReqCount"];
           paid = parseInt(paid);
-          this.PaidReqCount=paid;
+          this.PaidReqCount = paid;
           this.PaidClaimAmount = paid_data["PaidClaimAmount"];
-          if (this.PaidClaimAmount !== null && this.PaidClaimAmount !== undefined) {
-            this.PaidClaimAmount = parseFloat(this.PaidClaimAmount).toFixed(2);
-            // rejectedAmount = this.numberPipe.transform(rejectedAmount, '1.2-2');
-          }
-          else { this.PaidClaimAmount = '0.00' }
-          this.PaidClaimAmount = paid_data["PaidClaimAmount"];
-          if (this.PaidClaimAmount != null) {
-            // this.PaidClaimAmount = this.PaidClaimAmount.toFixed(2).toString();
-            this.PaidClaimAmount = this.numberPipe.transform(this.PaidClaimAmount, '1.2-2');
-            // this.chart1 = true;
-            //   this.chart2 = true;
-          }
-          else this.PaidClaimAmount = '0.00';
-
-          if (data["resource"][0] != null) {           
-            var approve = parseInt(this.claimrequestdetails.ApprovedReqCount);
-            // alert(approve)
-            // var pending = parseInt(this.claimrequestdetails.PendingReqCount);
+          this.PaidClaimAmount = toCurrency(this.PaidClaimAmount, this.currency);
+          if (data["resource"][0]) {
+            console.log(data["resource"][0]);
+            var approve = parseInt(this.claimrequestdetails.ApprovedReqCount) || 0;
             var pending_Finance = parseInt(this.claimrequestdetails.PendingReqCount_Finance);
             var pending_Superior = parseInt(this.claimrequestdetails.PendingReqCount_Superior);
             var rejected = parseInt(this.claimrequestdetails.RejectedReqCount);
-            // var paid = parseInt(this.claimrequestdetails.PaidReqCount);
-            var paid = paid_data["PaidReqCount"];
+            paid = paid_data["PaidReqCount"];
             paid = parseInt(paid);
-            //  console.log(paid);
 
             this.doughnutChartData = [approve, pending_Finance, pending_Superior, rejected, paid];
 
             if (this.claimrequestdetails.ApprovedClaimAmount !== null && this.claimrequestdetails.ApprovedClaimAmount !== undefined) {
               var approveAmount = parseFloat(this.claimrequestdetails.ApprovedClaimAmount).toFixed(2);
-              // approveAmount = this.numberPipe.transform(approveAmount, '1.2-2');
             }
             else { approveAmount = '0.00' }
 
-            // if (this.claimrequestdetails.PendingClaimAmount !== null && this.claimrequestdetails.PendingClaimAmount !== undefined) {
-            //   var pendingAmount = parseFloat(this.claimrequestdetails.PendingClaimAmount).toFixed(2);
-            //   // pendingAmount=this.format(pendingAmount);
-            //   // this.numberPipe.transform(amount, '1.2-2');
-            //   // pendingAmount = this.numberPipe.transform(pendingAmount, '1.2-2');
-            //   //  alert(pendingAmount)
-            // }
-            // else { pendingAmount = '0.00' }
-
             // Superior
-            if (this.claimrequestdetails.PendingClaimAmount_Superior !== null && this.claimrequestdetails.PendingClaimAmount_Superior !== undefined) {
-              // console.log(  this.claimrequestdetails.PendingClaimAmount_Superior)
+            if (this.claimrequestdetails.PendingClaimAmount_Superior) {
               var pendingAmount_Superior = parseFloat(this.claimrequestdetails.PendingClaimAmount_Superior).toFixed(2);
 
             }
             else { pendingAmount_Superior = '0.00' }
             // Finance
-            if (this.claimrequestdetails.PendingClaimAmount_Finance !== null && this.claimrequestdetails.PendingClaimAmount_Finance !== undefined) {
+            if (this.claimrequestdetails.PendingClaimAmount_Finance) {
               var pendingAmount_Finance = parseFloat(this.claimrequestdetails.PendingClaimAmount_Finance).toFixed(2);
 
             }
             else { pendingAmount_Finance = '0.00' }
 
-            if (this.claimrequestdetails.RejectedClaimAmount !== null && this.claimrequestdetails.RejectedClaimAmount !== undefined) {
+            if (this.claimrequestdetails.RejectedClaimAmount) {
               var rejectedAmount = parseFloat(this.claimrequestdetails.RejectedClaimAmount).toFixed(2);
-              // rejectedAmount = this.numberPipe.transform(rejectedAmount, '1.2-2');
             }
             else { rejectedAmount = '0.00' }
-
-            // if (this.claimrequestdetails.PaidClaimAmount !== null && this.claimrequestdetails.PaidClaimAmount !== undefined) {
-            //   var PaidClaimAmount = parseFloat(this.claimrequestdetails.PaidClaimAmount).toFixed(2);
-            //   // rejectedAmount = this.numberPipe.transform(rejectedAmount, '1.2-2');
-            // }
-            // else { PaidClaimAmount = '0.00' }
-
             this.PaidClaimAmount = paid_data["PaidClaimAmount"];
-            if (this.PaidClaimAmount !== null && this.PaidClaimAmount !== undefined) {
+            if (this.PaidClaimAmount) {
               this.PaidClaimAmount = parseFloat(this.PaidClaimAmount).toFixed(2);
-              // rejectedAmount = this.numberPipe.transform(rejectedAmount, '1.2-2');
             }
             else { this.PaidClaimAmount = '0.00' }
-
-            //var approveAmount=(this.claimrequestdetails.ApprovedClaimAmount);parseFloat
-            // var pendingAmount = parseFloat(this.claimrequestdetails.PendingClaimAmount).toFixed(2);
-            // var rejectedAmount = parseFloat(this.claimrequestdetails.RejectedClaimAmount).toFixed(2);
-
             this.claimAmountData = [parseFloat(approveAmount), parseFloat(pendingAmount_Finance), parseFloat(pendingAmount_Superior), parseFloat(rejectedAmount), parseFloat(this.PaidClaimAmount)];
-
-            // console.log(this.claimAmountData)
+            console.log(data["resource"][0]);
 
             // For Display Data In Ion-cards
             this.Rejected_Claim_Count = this.claimrequestdetails.RejectedReqCount;
             this.Pending_Claim_Count = this.claimrequestdetails.PendingReqCount;
-            this.Approved_Claim_Count = this.claimrequestdetails.ApprovedReqCount;
+            this.Approved_Claim_Count = this.claimrequestdetails.ApprovedReqCount || 0;
             // this.PaidReqCount = this.claimrequestdetails.PaidReqCount;
             this.PaidReqCount = paid_data["PaidReqCount"];
             this.Pending_Claim_Count_Superior = this.claimrequestdetails.PendingReqCount_Superior;
             this.Pending_Claim_Count_Finance = this.claimrequestdetails.PendingReqCount_Finance;
 
-            if (this.claimrequestdetails.RejectedClaimAmount != null) {
+            if (this.claimrequestdetails.RejectedClaimAmount) {
               this.Rejected_Claim_Amount = this.claimrequestdetails.RejectedClaimAmount.toFixed(2).toString();
-              this.Rejected_Claim_Amount = this.numberPipe.transform(this.Rejected_Claim_Amount, '1.2-2');
+              this.Rejected_Claim_Amount = toCurrency(this.Rejected_Claim_Amount, this.currency);
             }
             else this.Rejected_Claim_Amount = '0.00';
 
-            if (this.claimrequestdetails.PendingClaimAmount != null) {
+            if (this.claimrequestdetails.PendingClaimAmount) {
               this.Pending_Claim_Amount = this.claimrequestdetails.PendingClaimAmount.toFixed(2).toString();
-              this.Pending_Claim_Amount = this.numberPipe.transform(this.Pending_Claim_Amount, '1.2-2');
+              this.Pending_Claim_Amount = toCurrency(this.Pending_Claim_Amount, this.currency);
             }
             else this.Pending_Claim_Amount = '0.00';
             // Superior
-            if (this.claimrequestdetails.PendingClaimAmount_Superior != null) {
+            if (this.claimrequestdetails.PendingClaimAmount_Superior) {
               this.Pending_Claim_Amount_Superior = this.claimrequestdetails.PendingClaimAmount_Superior.toFixed(2).toString();
-              this.Pending_Claim_Amount_Superior = this.numberPipe.transform(this.Pending_Claim_Amount_Superior, '1.2-2');
+              this.Pending_Claim_Amount_Superior = toCurrency(this.Pending_Claim_Amount_Superior, this.currency);
             }
             else this.Pending_Claim_Amount_Superior = '0.00';
             // Finance
-            if (this.claimrequestdetails.PendingClaimAmount_Finance != null) {
+            if (this.claimrequestdetails.PendingClaimAmount_Finance) {
               this.Pending_Claim_Amount_Finance = this.claimrequestdetails.PendingClaimAmount_Finance.toFixed(2).toString();
-              this.Pending_Claim_Amount_Finance = this.numberPipe.transform(this.Pending_Claim_Amount_Finance, '1.2-2');
+              this.Pending_Claim_Amount_Finance = toCurrency(this.Pending_Claim_Amount_Finance, this.currency);
             }
             else this.Pending_Claim_Amount_Finance = '0.00';
 
-            if (this.claimrequestdetails.ApprovedClaimAmount != null) {
+            if (this.claimrequestdetails.ApprovedClaimAmount) {
               this.Approved_Claim_Amount = this.claimrequestdetails.ApprovedClaimAmount.toFixed(2).toString();
-              this.Approved_Claim_Amount = this.numberPipe.transform(this.Approved_Claim_Amount, '1.2-2');
+              this.Approved_Claim_Amount = toCurrency(this.Approved_Claim_Amount, this.currency);
             }
             else this.Approved_Claim_Amount = '0.00';
-
-            // if (this.claimrequestdetails.PaidClaimAmount != null) {
-            //   this.PaidClaimAmount = this.claimrequestdetails.PaidClaimAmount.toFixed(2).toString();
-            //   this.PaidClaimAmount = this.numberPipe.transform(this.PaidClaimAmount, '1.2-2');
-            // }
-            // else this.PaidClaimAmount = '0.00';
             this.PaidClaimAmount = paid_data["PaidClaimAmount"];
             if (this.PaidClaimAmount != null) {
               // this.PaidClaimAmount = this.PaidClaimAmount.toFixed(2).toString();
-              this.PaidClaimAmount = this.numberPipe.transform(this.PaidClaimAmount, '1.2-2');
+              this.PaidClaimAmount = toCurrency(this.PaidClaimAmount, this.currency);
             }
             else this.PaidClaimAmount = '0.00';
 
             if (approve == 0 && pending_Finance == 0 && pending_Superior == 0 && rejected == 0 && paid == 0) {
-              
+
               this.chart1 = false;
               this.chart2 = false;
-            } else {             
+            } else {
               this.chart1 = true;
               this.chart2 = true;
-              }
+            }
           }
 
           else {
@@ -836,10 +680,6 @@ export class DashboardPage {
 
 
             this.claimAmountData = [parseFloat(approveAmount), parseFloat(pendingAmount_Finance), parseFloat(pendingAmount_Superior), parseFloat(rejectedAmount), parseFloat(this.PaidClaimAmount)];
-
-            // this.doughnutChartLabels = data.label;
-            // this.claimAmountLabels = data.label;
-
 
             // For Display Data In Ion-cards
             this.Rejected_Claim_Count = 0;
@@ -863,9 +703,8 @@ export class DashboardPage {
   }
 
   GetInfoForCards() {
-    this.baseResourceUrl_Card = constants.DREAMFACTORY_TABLE_URL + '/vw_dashboard_card?filter=(USER_GUID =' + localStorage.getItem("g_USER_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http
-      .get(this.baseResourceUrl_Card)
+      .get(getURL("table", "vw_dashboard_card", [`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]))
       .map(res => res.json())
       .subscribe(data => {
         this.Year_Card = data["resource"];
@@ -910,37 +749,37 @@ export class DashboardPage {
 
           this.RejectedClaimAmount_year = this.Year_Card[0]["RejectedClaimAmount_year"];
           if (this.RejectedClaimAmount_year != null && this.RejectedClaimAmount_year != undefined)
-            this.RejectedClaimAmount_year = this.numberPipe.transform(this.RejectedClaimAmount_year, '1.2-2');
+            this.RejectedClaimAmount_year = toCurrency(this.RejectedClaimAmount_year, this.currency);
           else
             this.RejectedClaimAmount_year = '0.00';
 
           this.PendingClaimAmount_year = this.Year_Card[0]["PendingClaimAmount_year"];
           if (this.PendingClaimAmount_year != null && this.PendingClaimAmount_year != undefined)
-            this.PendingClaimAmount_year = this.numberPipe.transform(this.PendingClaimAmount_year, '1.2-2');
+            this.PendingClaimAmount_year = toCurrency(this.PendingClaimAmount_year, this.currency);
           else
             this.PendingClaimAmount_year = '0.00';
           // Superior
           this.PendingClaimAmount_year_Superior = this.Year_Card[0]["PendingClaimAmount_year_superior"];
           if (this.PendingClaimAmount_year_Superior != null && this.PendingClaimAmount_year_Superior != undefined)
-            this.PendingClaimAmount_year_Superior = this.numberPipe.transform(this.PendingClaimAmount_year_Superior, '1.2-2');
+            this.PendingClaimAmount_year_Superior = toCurrency(this.PendingClaimAmount_year_Superior, this.currency);
           else
             this.PendingClaimAmount_year_Superior = '0.00';
           // Finance
           this.PendingClaimAmount_year_Finance = this.Year_Card[0]["PendingClaimAmount_year_finance"];
           if (this.PendingClaimAmount_year_Finance != null && this.PendingClaimAmount_year_Finance != undefined)
-            this.PendingClaimAmount_year_Finance = this.numberPipe.transform(this.PendingClaimAmount_year_Finance, '1.2-2');
+            this.PendingClaimAmount_year_Finance = toCurrency(this.PendingClaimAmount_year_Finance, this.currency);
           else
             this.PendingClaimAmount_year_Finance = '0.00';
 
           this.ApprovedClaimAmount_year = this.Year_Card[0]["ApprovedClaimAmount_year"];
           if (this.ApprovedClaimAmount_year != null && this.ApprovedClaimAmount_year != undefined)
-            this.ApprovedClaimAmount_year = this.numberPipe.transform(this.ApprovedClaimAmount_year, '1.2-2');
+            this.ApprovedClaimAmount_year = toCurrency(this.ApprovedClaimAmount_year, this.currency);
           else
             this.ApprovedClaimAmount_year = '0.00';
 
           this.PaidClaimAmount_year = this.Year_Card[0]["PaidClaimAmount_year"];
           if (this.PaidClaimAmount_year != null && this.PaidClaimAmount_year != undefined)
-            this.PaidClaimAmount_year = this.numberPipe.transform(this.PaidClaimAmount_year, '1.2-2');
+            this.PaidClaimAmount_year = toCurrency(this.PaidClaimAmount_year, this.currency);
           else
             this.PaidClaimAmount_year = '0.00';
         }
@@ -965,7 +804,7 @@ export class DashboardPage {
   }
   GetData_Years() {
     this.http
-      .get(this.baseResourceUrl_New)
+      .get(sanitizeURL(this.baseResourceUrl_New))
       .map(res => res.json())
       .subscribe(data => {
         this.years_data = data["resource"];
@@ -986,57 +825,46 @@ export class DashboardPage {
       });
 
   }
-  GetPaidData() {   
-    // let Paid_Url = constants.DREAMFACTORY_TABLE_URL + '/vw_dashboardchart?filter=(USER_GUID =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH_NUM=' + this.paid_month_model + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    // alert(this.paid_month_model)
-    let Paid_Url = constants.DREAMFACTORY_TABLE_URL + '/new_vw_dashboardchart?filter=(USER_GUID =' + localStorage.getItem("g_USER_GUID") + ')and(MONTH_NUM=' + this.paid_month_model + ')and(YEAR=' + this.year_value + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    console.log("Paid "+Paid_Url);
-    return new Promise((resolve, reject) => {
+  GetPaidData() {
+    let Paid_Url = getURL("table", "new_vw_dashboardchart", [`USER_GUID=${localStorage.getItem("g_USER_GUID")}`]);
+    return new Promise((resolve) => {
       this.http
-        .get(Paid_Url)
+        .get(sanitizeURL(Paid_Url))
         .map(res => res.json())
         .subscribe(data => {
           this.paid_details = data["resource"][0];
           // console.log(this.paid_details);
-          if (data["resource"][0] == null) {           
+          if (data["resource"][0] == null) {
             this.paid_details = { paid: 0, PaidReqCount: 0 };
-          }         
+          }
           resolve(this.paid_details);
         });
 
     });
   }
   Rejected_Click() {
-    // this.navCtrl.setRoot('UserclaimslistPage', { Rejected: Settings.StatusConstants.REJECTED });
-    this.navCtrl.push('UserclaimslistPage', { Rejected_data: [{ Rejected: Settings.StatusConstants.REJECTED,month:this.Month_Change_ngModel}] });
+    this.navCtrl.push('UserclaimslistPage', { Rejected_data: [{ Rejected: Settings.StatusConstants.REJECTED, month: this.Month_Change_ngModel }] });
   }
   Pending_Click() {
-    // this.navCtrl.setRoot('UserclaimslistPage', { PENDINGSUPERIOR: Settings.StatusConstants.PENDINGSUPERIOR });
-    this.navCtrl.push('UserclaimslistPage', {Pending_data:[{ PENDINGSUPERIOR: Settings.StatusConstants.PENDINGSUPERIOR,month:this.Month_Change_ngModel}] });
+    this.navCtrl.push('UserclaimslistPage', { Pending_data: [{ PENDINGSUPERIOR: Settings.StatusConstants.PENDINGSUPERIOR, month: this.Month_Change_ngModel }] });
   }
   Validated_Click() {
-    // this.navCtrl.setRoot('UserclaimslistPage', { Approved: Settings.StatusConstants.PENDINGPAYMENT });
-    this.navCtrl.push('UserclaimslistPage', { Approved_data:[{PENDINGPAYMENT: Settings.StatusConstants.PENDINGPAYMENT,month:this.Month_Change_ngModel}]});
+    this.navCtrl.push('UserclaimslistPage', { Approved_data: [{ PENDINGPAYMENT: Settings.StatusConstants.PENDINGPAYMENT, month: this.Month_Change_ngModel }] });
   }
   Approved_Click() {
-    // this.navCtrl.setRoot('UserclaimslistPage', { PENDINGFINANCEVALIDATION: Settings.StatusConstants.PENDINGFINANCEVALIDATION });
-    this.navCtrl.push('UserclaimslistPage', { Validation_data:[{PENDINGFINANCEVALIDATION: Settings.StatusConstants.PENDINGFINANCEVALIDATION,month:this.Month_Change_ngModel}] });
+    this.navCtrl.push('UserclaimslistPage', { Validation_data: [{ PENDINGFINANCEVALIDATION: Settings.StatusConstants.PENDINGFINANCEVALIDATION, month: this.Month_Change_ngModel }] });
   }
   Paid_Click() {
-    // this.navCtrl.setRoot('UserclaimslistPage', { Paid: Settings.StatusConstants.PAID });
-    this.navCtrl.push('UserclaimslistPage', { Paid_data:[{Paid: Settings.StatusConstants.PAID,month:this.Month_Change_ngModel}]});
+    this.navCtrl.push('UserclaimslistPage', { Paid_data: [{ Paid: Settings.StatusConstants.PAID, month: this.Month_Change_ngModel }] });
   }
   Approver_Click() {
-    // this.navCtrl.setRoot('ClaimapprovertasklistPage');
-    this.navCtrl.push('ClaimapprovertasklistPage', {month:this.Month_Change_ngModel});
+    this.navCtrl.push('ClaimapprovertasklistPage', { month: this.Month_Change_ngModel });
   }
   Finance_Executive_Click() {
-    // this.navCtrl.setRoot('ClaimtasklistPage');
-    this.navCtrl.push('ClaimtasklistPage', {month:this.Month_Change_ngModel});
+    this.navCtrl.push('ClaimtasklistPage', { month: this.Month_Change_ngModel });
   }
   Finance_Manager_Click() {
-    // this.navCtrl.setRoot('FinancePaymentTasklistPage');
-    this.navCtrl.push('FinancePaymentTasklistPage', {month:this.Month_Change_ngModel});
+    this.navCtrl.push('FinancePaymentTasklistPage', { month: this.Month_Change_ngModel });
 
   }
 

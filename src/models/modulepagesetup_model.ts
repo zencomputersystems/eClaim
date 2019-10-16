@@ -1,18 +1,17 @@
-export class ModulePageSetup_Model {
-	constructor(
-		public ID: string = null,
-		public MODULE_GUID: string = null,
-		public PAGE_GUID: string = null,
-		public CREATION_TS: string = null,
-		public CREATION_USER_GUID: string = null,
-		public UPDATE_TS: string = null,
-		public UPDATE_USER_GUID: string = null
-	) { }
+import { Base_Model } from './base_model';
+export class ModulePageSetup_Model extends Base_Model {
+	constructor() {
+		super();
+	}
+
+	public ID: string = null;
+	public MODULE_GUID: string = null;
+	public PAGE_GUID: string = null;
 
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return new ModulePageSetup_Model(
+		return (
 			json.ID,
 			json.MODULE_GUID,
 			json.PAGE_GUID,

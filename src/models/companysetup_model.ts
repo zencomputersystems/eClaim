@@ -1,21 +1,21 @@
-export class CompanySetup_Model {
-	constructor(
-		public COMPANY_GUID: string = null,
-		public NAME: string = null,		
-	 	public REGISTRATION_NO: string = null,
-        public ADDRESS: string = null,
-        public FAX: string = null,
-        public PHONE: string = null,
-        public EMAIL: string = null,
-		public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null
-    ) { }
+import { Base_Model } from './base_model';
+export class CompanySetup_Model extends Base_Model {
+	constructor() {
+        super();
+    }
+    
+
+		public COMPANY_GUID: string = null;
+		public NAME: string = null;
+	 	public REGISTRATION_NO: string = null;
+        public ADDRESS: string = null;
+        public FAX: string = null;
+        public PHONE: string = null;
+        public EMAIL: string = null;
     
     static fromJson(json: any) {
 		if (!json) return;
-		return new CompanySetup_Model(
+		return (
 			json.COMPANY_GUID,
 		    json.NAME,
 			json.REGISTRATION_NO,

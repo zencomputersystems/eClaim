@@ -82,7 +82,9 @@
 
         <ion-item class="fuha">
           <ion-label stacked>{{ 'DATE_OF_BIRTH' | translate }}</ion-label>
-          <ion-datetime displayFormat="DD/MM/YYYY" formControlName="DOB" [(ngModel)]="User_DOB_Edit_ngModel"
+<!--           <ion-datetime displayFormat="DD/MM/YYYY" formControlName="DOB" [(ngModel)]="User_DOB_Edit_ngModel"
+          placeholder="{{'Please choose your date of birth'}}" [disabled]="isDisabled"></ion-datetime>
+ -->          <ion-datetime displayFormat="DD/MM/YYYY" formControlName="DOB" [(ngModel)]="userinfo_entry.DOB"
             placeholder="{{'Please choose your date of birth'}}" [disabled]="isDisabled"></ion-datetime>
         </ion-item>
 

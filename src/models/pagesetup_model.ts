@@ -1,20 +1,17 @@
-export class PageSetup_Model {
-	constructor(
-		public PAGE_GUID: string = null,
-		public NAME: string = null,
-		public DESCRIPTION: string = null,
-		public URL: string = null,
-		public CREATION_TS: string = null,
-		public CREATION_USER_GUID: string = null,
-		public UPDATE_TS: string = null,
-		public UPDATE_USER_GUID: string = null,
-		public CODE_PAGE_NAME: string = null
-	) { }
+import { Base_NameDescription_Model } from './base_model';
+export class PageSetup_Model extends Base_NameDescription_Model {
+	constructor() {
+		super();
+	}
+
+	public PAGE_GUID: string = null;
+	public URL: string = null;
+	public CODE_PAGE_NAME: string = null;
 
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return new PageSetup_Model(
+		return (
 			json.PAGE_GUID,
 			json.NAME,
 			json.DESCRIPTION,

@@ -1,19 +1,18 @@
-export class UserSpouse_Model {
-    constructor(
-        public SPOUSE_GUID: string = null,
-        public NAME: string = null,
-        public ICNO: string = null,
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null,
-        public USER_GUID: string = null
-    ) { }
+import { Base_Model } from './base_model';
+export class UserSpouse_Model extends Base_Model {
+    constructor() {
+        super();
+    }
+
+    public SPOUSE_GUID: string = null;
+    public NAME: string = null;
+    public ICNO: string = null;
+    public USER_GUID: string = null;
 
 
-    static fromJson(json: any) {
+    static fromJson(json: UserSpouse_Model) {
         if (!json) return;
-        return new UserSpouse_Model(
+        return (
             json.SPOUSE_GUID,
             json.NAME,
             json.ICNO,

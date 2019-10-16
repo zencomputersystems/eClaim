@@ -1,28 +1,26 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import * as Settings from '../../dbSettings/companySettings';
 import * as constants from '../../app/config/constants';
+
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
 import { BaseHttpService } from '../../services/base-http';
 import { Checkbox } from 'ionic-angular/components/checkbox/checkbox';
 import { Checkboxlist } from '../../models/checkbox-list.model';
-
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
-import { TravelClaimViewPage } from '../travel-claim-view/travel-claim-view.component';
-import { EntertainmentClaimViewPage } from '../entertainment-claim-view/entertainment-claim-view';
-import { OvertimeClaimViewPage } from '../overtime-claim-view/overtime-claim-view';
-import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
-import { PrintClaimViewPage } from '../print-claim-view/print-claim-view';
-import { GiftClaimViewPage } from '../gift-claim-view/gift-claim-view';
-import { MiscellaneousClaimViewPage } from '../miscellaneous-claim-view/miscellaneous-claim-view';
 import { ClaimtasklistPage } from '../claimtasklist/claimtasklist';
+import { Component } from '@angular/core';
+import { EntertainmentClaimViewPage } from '../claim-views/entertainment-claim-view/entertainment-claim-view';
+import { GiftClaimViewPage } from '../claim-views/gift-claim-view/gift-claim-view';
+import { Http } from '@angular/http';
 import { LoginPage } from '../login/login';
-import * as Settings from '../../dbSettings/companySettings'
-import { FinancePaymentTasklistPage } from '../finance-payment-tasklist/finance-payment-tasklist';
-
+import { MiscellaneousClaimViewPage } from '../claim-views/miscellaneous-claim-view/miscellaneous-claim-view';
+import { OvertimeClaimViewPage } from '../claim-views/overtime-claim-view/overtime-claim-view';
+// import { MedicalClaimViewPage } from '../medical-claim-view/medical-claim-view';
+import { PrintClaimViewPage } from '../claim-views/print-claim-view/print-claim-view';
+import { ProfileManagerProvider } from '../../providers/profile-manager.provider';
+import { TravelClaimViewPage } from '../claim-views/travel-claim-view/travel-claim-view.component';
 
 @IonicPage()
 @Component({
@@ -49,7 +47,7 @@ export class ClaimapprovertasklistPage {
   totalClaimAmount: number = 0;
   public page: number = 1;
   FinanceLogin: boolean = false;
-  currency = localStorage.getItem("cs_default_currency")
+  currency = localStorage.getItem("cs_default_currency") || localStorage.getItem("default_currency");
 
   deptList: any[];
   employeeList: any[];
@@ -128,34 +126,17 @@ export class ClaimapprovertasklistPage {
         this.claimrequestdetails = [];
        
         this.claimrequestdetails = data["resource"];
-        // console.log( this.claimrequestdetails)
+         console.log( this.claimrequestdetails)
         this.totalClaimAmount = 0;
         let key: any;
         this.claimrequestdetails.forEach(element => {
           element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
-
-          // if (this.FinanceLogin) {
-          // For Status changing
           if (element.PROFILE_LEVEL == Settings.ProfileLevels.ONE && element.STATUS == Settings.StatusConstants.PENDING)
             element.STATUS = Settings.StatusConstants.PENDINGSUPERIOR
           else if (element.PROFILE_LEVEL == Settings.ProfileLevels.TWO && element.STATUS == Settings.StatusConstants.PENDING)
             element.STATUS = Settings.StatusConstants.PENDINGFINANCEVALIDATION
           else if (element.PROFILE_LEVEL == Settings.ProfileLevels.THREE && element.STATUS == Settings.StatusConstants.APPROVED)
             element.STATUS = Settings.StatusConstants.PENDINGPAYMENT
-          // }
-          // if (element.STATUS === 'Rejected') {
-          //   element.STAGE_GUID = null;
-          // }
-          // else {
-          //   key = element.PROFILE_LEVEL;
-          // }
-
-          // switch (key) {
-          //   case 1: element.STAGE_GUID = 'Superior'; break;
-          //   case 2: element.STAGE_GUID = 'Finance Executive'; break;
-          //   case 3:
-          //   case -1: element.STAGE_GUID = 'Finance & Admin'; break;
-          // }
         });
         this.claimrequestdetails1 = this.claimrequestdetails;
         if (this.claimrequestdetails.length != 0) {
@@ -240,10 +221,6 @@ export class ClaimapprovertasklistPage {
   // }
 
   getCheckboxValue(event: Checkbox, claimRequestGuid: any, level: number, status: string) {
-    // alert(event.id);
-    // alert(event.checked);
-    // alert(claimRequestGuid);
-    // debugger;
     let checkboxData: Checkboxlist = new Checkboxlist(event.checked, claimRequestGuid, level, status);
     if (event.checked) {
       this.checkboxDataList.push(checkboxData);
@@ -255,9 +232,6 @@ export class ClaimapprovertasklistPage {
         this.checkboxDataList.splice(index, 1);
       }
     }
-    // console.log(this.checkboxDataList);
-    // alert(this.checkboxDataList.length);
-    // alert(this.checkboxDataList.find(item => item.Chkid == event.id).Chkid + ","+this.checkboxDataList.find(item => item.Chkid == event.id).Checked+ ","+this.checkboxDataList.find(item => item.Chkid == event.id).claimRequestGuid);
   }
 
   approveAll() {
@@ -323,7 +297,7 @@ export class ClaimapprovertasklistPage {
                   claimRefObj["resource"][0].STATUS = 'Paid';
                 //debugger;
                 this.api.updateApiModel('main_claim_ref', claimRefObj, false).subscribe(() => {
-                  alert('Claim has been Approved.');
+                  alert('Claim has been Approved. (1)');
                   this.BindData("All", "All");
                   this.checkboxDataList = [];
                   this.navCtrl.setRoot(ClaimtasklistPage);
@@ -332,7 +306,7 @@ export class ClaimapprovertasklistPage {
           })
       }
       if (this.claimrefguid === null || this.claimrefguid === undefined) {
-        alert('Claim has been Approved.')
+        alert('Claim has been Approved. (2)')
         this.claimrequestdetails = [];
         this.checkboxDataList = [];
         this.BindData("All", "All");
@@ -360,7 +334,7 @@ export class ClaimapprovertasklistPage {
     switch (claimType) {
       case '2d8d7c80-c9ae-9736-b256-4d592e7b7887': this.pushPage(GiftClaimViewPage); break;
       case '37067b3d-1bf4-33a3-2b60-3ca40baf589a': this.pushPage(OvertimeClaimViewPage); break;
-      case '40dbaf56-98e4-77b9-df95-85ec232ff714': this.pushPage(MedicalClaimViewPage); break;
+//      case '40dbaf56-98e4-77b9-df95-85ec232ff714': this.pushPage(MedicalClaimViewPage); break;
       case '58c59b56-289e-31a2-f708-138e81a9c823': this.pushPage(TravelClaimViewPage); break;
       case 'd9567482-033a-6d92-3246-f33043155746': this.pushPage(PrintClaimViewPage); break;
       case 'f3217ecc-19d7-903a-6c56-78fdbd7bbcf1': this.pushPage(EntertainmentClaimViewPage); break;

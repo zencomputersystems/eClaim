@@ -1,13 +1,14 @@
 export class approval_profile_model {
   constructor(
-    public id: number = null,
-    public approver: string = null
+
   ) { }
 
+  public id: number = null;
+  public approver: string = null;
 
   static fromJson(json: any) {
     if (!json) return;
-    return new approval_profile_model(
+    return (
       json.id,
       json.approver
     );

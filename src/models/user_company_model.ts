@@ -1,18 +1,17 @@
-export class UserCompany_Model {
-	constructor(
-        public USER_COMPANY_GUID: string = null,  
-        public USER_GUID: string = null,
-        public TENANT_COMPANY_SITE_GUID: string = null,
-        
-        public COMPANY_CONTACT_NO: string = null,
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null
-    ) { }
-    static fromJson(json: any) {
+import { Base_Model } from './base_model';
+export class UserCompany_Model extends Base_Model {
+	constructor() {
+    super();
+  }
+
+  public USER_COMPANY_GUID: string = null;
+  public USER_GUID: string = null;
+  public TENANT_COMPANY_SITE_GUID: string = null;
+  public COMPANY_CONTACT_NO: string = null;
+
+    static fromJson(json: UserCompany_Model) {
 		if (!json) return;
-		return new UserCompany_Model(
+		return (
 			json.USER_COMPANY_GUID,
 		    json.USER_GUID,
             json.TENANT_COMPANY_SITE_GUID,

@@ -1,142 +1,141 @@
-﻿import { BrowserModule } from '@angular/platform-browser';
+﻿import { DatePipe, DecimalPipe } from '@angular/common';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
+// import { PopoverPage } from '../pages/about-popover/about-popover';
+import { AccountPage } from '../pages/account/account';
+import { AddTollPage } from '../pages/claim-forms/travel-claim/add-toll/add-toll.component';
+import { AdminsetupPage } from '../pages/setup/adminsetup/adminsetup';
+import { AllClaimListPage } from '../pages/all-claim-list/all-claim-list';
+import { AllClaimhistoryPage } from '../pages/allclaimhistory/claimhistory';
+import { ApiManagerProvider } from '../providers/api-manager.provider';
+import { ApprovalProfilePage } from '../pages/setup/approval-profile/approval-profile';
+import { ApproverTaskListPage } from '../pages/approver-task-list/approver-task-list';
+import { AttendanceReportPage } from '../pages/attendance-report/attendance-report';
+import { BanksetupPage } from '../pages/setup/banksetup/banksetup';
+import { BranchsetupPage } from '../pages/setup/branchsetup/branchsetup';
+import { BrowserModule } from '@angular/platform-browser';
+import { Camera } from '@ionic-native/camera';
+import { CashcardsetupPage } from '../pages/setup/cashcardsetup/cashcardsetup';
+import { ChangePasswordPage } from '../pages/change-password/change-password';
+// import { Chart } from 'chart.js';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { ClaimReportPage } from '../pages/claim-report/claim-report';
+import { ClaimReportPrintPage } from '../pages/claim-report-print/claim-report-print';
+import { ClaimReportUserPage } from '../pages/claim-report-user/claim-report-user';
+import { ClaimSummaryPage } from '../pages/claim-summary/claim-summary';
+import { ClaimapprovertasklistPage } from '../pages/claimapprovertasklist/claimapprovertasklist';
+//import { TravelClaim_Service } from '../services/travelclaim_service';
+import { ClaimhistoryPage } from '../pages/claimhistory/claimhistory';
+import { ClaimhistorydetailPage } from '../pages/claimhistorydetail/claimhistorydetail';
+import { ClaimtasklistPage } from '../pages/claimtasklist/claimtasklist';
+import { ClaimtypePage } from '../pages/setup/claimtype/claimtype';
+import { CommonHistorylistPage } from '../pages/common-historylist/common-historylist';
+import { CommonTasklistPage } from '../pages/common-tasklist/common-tasklist';
+import { CompanysettingsPage } from '../pages/setup/companysettings/companysettings';
+import { CompanysetupPage } from '../pages/setup/companysetup/companysetup';
+import { CountrysetupPage } from '../pages/setup/countrysetup/countrysetup';
+import { CurrencyProvider } from '../providers/currency/currency';
+import { CustomerSetupPage } from '../pages/setup/customer-setup/customer-setup';
+import { DashboardPage } from '../pages/dashboard/dashboard';
+import { DbmaintenancePage } from '../pages/setup/dbmaintenance/dbmaintenance';
+import { DepartmentsetupPage } from '../pages/setup/departmentsetup/departmentsetup';
+import { DesignationsetupPage } from '../pages/setup/designationsetup/designationsetup';
+import { DeviceSetupPage } from '../pages/setup/device-setup/device-setup';
+import { EntertainmentClaimViewPage } from '../pages/claim-views/entertainment-claim-view/entertainment-claim-view';
+import { EntertainmentclaimPage } from '../pages/claim-forms/entertainmentclaim/entertainmentclaim';
+import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
+import { FinancePaymentTasklistPage } from '../pages/finance-payment-tasklist/finance-payment-tasklist';
+import { GiftClaimViewPage } from '../pages/claim-views/gift-claim-view/gift-claim-view';
+import { GiftclaimPage } from '../pages/claim-forms/giftclaim/giftclaim';
 import { HttpModule } from '@angular/http';
-import { NgModule, ErrorHandler } from '@angular/core';
-
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-
+import { ImportExcelDataPage } from '../pages/import-excel-data/import-excel-data';
 // import { InAppBrowser } from '@ionic-native/in-app-browser';
 // import { SplashScreen } from '@ionic-native/splash-screen';
 // import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-import { ConferenceApp } from './app.component';
-
-// import { PopoverPage } from '../pages/about-popover/about-popover';
-import { AccountPage } from '../pages/account/account';
+import { LeaveReportPage } from '../pages/leave-report/leave-report';
 import { LoginPage } from '../pages/login/login';
-import { BanksetupPage } from '../pages/banksetup/banksetup';
-import { BranchsetupPage } from '../pages/branchsetup/branchsetup';
-import { CashcardsetupPage } from '../pages/cashcardsetup/cashcardsetup';
-import { ClaimtypePage } from '../pages/claimtype/claimtype';
-import { CompanysetupPage } from '../pages/companysetup/companysetup';
-import { DesignationsetupPage } from '../pages/designationsetup/designationsetup';
-import { DepartmentsetupPage } from '../pages/departmentsetup/departmentsetup';
-import { MileagesetupPage } from '../pages/mileagesetup/mileagesetup';
-import { RolesetupPage } from '../pages/rolesetup/rolesetup';
-import { PaymenttypesetupPage } from '../pages/paymenttypesetup/paymenttypesetup';
-import { QualificationsetupPage } from '../pages/qualificationsetup/qualificationsetup';
-import { SubsciptionsetupPage } from '../pages/subsciptionsetup/subsciptionsetup';
-import { SignupPage } from '../pages/signup/signup';
-import { TabsPage } from '../pages/tabs/tabs';
-import { TenantsetupPage } from '../pages/tenantsetup/tenantsetup';
+import { MileagesetupPage } from '../pages/setup/mileagesetup/mileagesetup';
+import { MiscellaneousClaimPage } from '../pages/claim-forms/miscellaneous-claim/miscellaneous-claim';
+import { MiscellaneousClaimViewPage } from '../pages/claim-views/miscellaneous-claim-view/miscellaneous-claim-view';
+import { ModulesetupPage } from '../pages/setup/modulesetup/modulesetup';
+import { MonthlyClaimReportPage } from '../pages/monthly-claim-report/monthly-claim-report';
+// import { Ng2PaginationModule } from 'ng2-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { OtRateSetupPage } from '../pages/setup/ot-rate-setup/ot-rate-setup';
+import { OvertimeClaimViewPage } from '../pages/claim-views/overtime-claim-view/overtime-claim-view';
+import { OvertimeclaimPage } from '../pages/claim-forms/overtimeclaim/overtimeclaim';
+import { PagesetupPage } from '../pages/setup/pagesetup/pagesetup';
+import { PaymentHistoryPage } from '../pages/payment-history/payment-history';
+import { PaymenttypesetupPage } from '../pages/setup/paymenttypesetup/paymenttypesetup';
+import { PermissionPage } from '../pages/setup/permission/permission';
+import { PrintClaimViewPage } from '../pages/claim-views/print-claim-view/print-claim-view';
+import { PrintclaimPage } from '../pages/claim-forms/printclaim/printclaim';
+import { ProfileManagerProvider } from '../providers/profile-manager.provider';
+import { ProfileSetupPage } from '../pages/setup/profile-setup/profile-setup.component';
+import { QualificationsetupPage } from '../pages/setup/qualificationsetup/qualificationsetup';
+import { RolemodulesetupPage } from '../pages/setup/rolemodulesetup/rolemodulesetup';
+import { RolesetupPage } from '../pages/setup/rolesetup/rolesetup';
+import { SanitizerProvider } from '../providers/sanitizer/sanitizer';
+import { Services } from '../pages/Services';
+import { SettingsPage } from '../pages/setup/settings/settings';
 import { SetupPage } from '../pages/setup/setup';
-import { ConferenceData } from '../providers/conference-data';
-import { UserData } from '../providers/user-data';
-import { MedicalclaimPage } from '../pages/medicalclaim/medicalclaim';
-import { PrintclaimPage } from '../pages/printclaim/printclaim';
-import { GiftclaimPage } from '../pages/giftclaim/giftclaim';
-import { OvertimeclaimPage } from '../pages/overtimeclaim/overtimeclaim';
-import { ApproverTaskListPage } from '../pages/approver-task-list/approver-task-list';
-import { AllClaimListPage } from '../pages/all-claim-list/all-claim-list';
-import { AllClaimhistoryPage } from '../pages/allclaimhistory/claimhistory';
-
-import { CountrysetupPage } from '../pages/countrysetup/countrysetup';
-import { StatesetupPage } from '../pages/statesetup/statesetup';
-import { SetupguidePage } from '../pages/setupguide/setupguide';
-import { EntertainmentclaimPage } from '../pages/entertainmentclaim/entertainmentclaim';
-import { TravelclaimPage } from '../pages/travel-claim/travel-claim.component';
-import { MiscellaneousClaimPage } from '../pages/miscellaneous-claim/miscellaneous-claim';
-import { UserPage } from '../pages/user/user';
-import { SocRegistrationPage } from '../pages/soc-registration/soc-registration';
-import { AdminsetupPage } from '../pages/adminsetup/adminsetup';
-import { PermissionPage } from '../pages/permission/permission';
-import { RolemodulesetupPage } from '../pages/rolemodulesetup/rolemodulesetup';
-import { PagesetupPage } from '../pages/pagesetup/pagesetup';
-import { SubmodulesetupPage } from '../pages/submodulesetup/submodulesetup';
-import { ModulesetupPage } from '../pages/modulesetup/modulesetup';
-import { DeviceSetupPage } from '../pages/device-setup/device-setup';
-
-import { OtRateSetupPage } from '../pages/ot-rate-setup/ot-rate-setup';
-
-import { UploadPage } from '../pages/upload/upload';
+import { SetupguidePage } from '../pages/setup/setupguide/setupguide';
+import { SignupPage } from '../pages/signup/signup';
+import { SocRegistrationPage } from '../pages/setup/soc-registration/soc-registration';
+import { StatesetupPage } from '../pages/setup/statesetup/statesetup';
+import { SubmodulesetupPage } from '../pages/setup/submodulesetup/submodulesetup';
+import { SubsciptionsetupPage } from '../pages/setup/subsciptionsetup/subsciptionsetup';
+import { TabsPage } from '../pages/tabs/tabs';
+import { TenantsetupPage } from '../pages/setup/tenantsetup/tenantsetup';
+import { ToastProvider } from '../providers/toast/toast';
+import { Transfer } from '@ionic-native/transfer';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslatePage } from '../pages/translate/translate';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { File } from '@ionic-native/file';
-import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
-import { FileUploadOptions } from '@ionic-native/file-transfer';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TravelClaimViewPage } from '../pages/claim-views/travel-claim-view/travel-claim-view.component';
+import { TravelclaimPage } from '../pages/claim-forms/travel-claim/travel-claim.component';
+import { UploadPage } from '../pages/upload/upload';
+import { UploaderProvider } from '../providers/uploader/uploader';
+import { UserData } from '../providers/user-data';
+import { UserPage } from '../pages/setup/user/user';
+import { UserclaimslistPage } from '../pages/userclaimslist/userclaimslist';
+import { eClaimApp } from './app.component';
 
-// import { Chart } from 'chart.js';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 // import {AddTollPage} from '../pages/add-toll/add-toll';
+// import { Transfer } from "../providers/file-transfer";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-import { ProfileSetupPage } from '../pages/profile-setup/profile-setup.component';
-
-import { AddTollPage } from '../pages/add-toll/add-toll.component';
-import { Services } from '../pages/Services';
-//import { TravelClaim_Service } from '../services/travelclaim_service';
-import { ClaimhistoryPage } from '../pages/claimhistory/claimhistory';
-
-import { ClaimhistorydetailPage } from '../pages/claimhistorydetail/claimhistorydetail';
-import { ClaimapprovertasklistPage } from '../pages/claimapprovertasklist/claimapprovertasklist'
-import { ClaimtasklistPage } from '../pages/claimtasklist/claimtasklist'
-import { UserclaimslistPage } from '../pages/userclaimslist/userclaimslist'
-import { ClaimReportPage } from '../pages/claim-report/claim-report';
-import { MonthlyClaimReportPage } from '../pages/monthly-claim-report/monthly-claim-report';
-import { ClaimReportUserPage } from '../pages/claim-report-user/claim-report-user';
-import { ClaimReportPrintPage } from '../pages/claim-report-print/claim-report-print';
-import { LeaveReportPage } from '../pages/leave-report/leave-report';
-import { AttendanceReportPage } from '../pages/attendance-report/attendance-report';
-import { FinancePaymentTasklistPage } from '../pages/finance-payment-tasklist/finance-payment-tasklist';
-import { CommonTasklistPage } from '../pages/common-tasklist/common-tasklist';
-import { PaymentHistoryPage } from '../pages/payment-history/payment-history';
-import { CommonHistorylistPage } from '../pages/common-historylist/common-historylist';
-import { ClaimSummaryPage } from '../pages/claim-summary/claim-summary';
-
-
-import { TravelClaimViewPage } from '../pages/travel-claim-view/travel-claim-view.component';
-import { EntertainmentClaimViewPage } from '../pages/entertainment-claim-view/entertainment-claim-view';
-import { OvertimeClaimViewPage } from '../pages/overtime-claim-view/overtime-claim-view';
-import { MedicalClaimViewPage } from '../pages/medical-claim-view/medical-claim-view';
-import { PrintClaimViewPage } from '../pages/print-claim-view/print-claim-view';
-import { GiftClaimViewPage } from '../pages/gift-claim-view/gift-claim-view';
-import { MiscellaneousClaimViewPage } from '../pages/miscellaneous-claim-view/miscellaneous-claim-view';
-import { ApiManagerProvider } from '../providers/api-manager.provider';
-import { ProfileManagerProvider } from '../providers/profile-manager.provider';
-import { CustomerSetupPage } from '../pages/customer-setup/customer-setup';
-import { ChangePasswordPage } from '../pages/change-password/change-password';
-import { DashboardPage } from '../pages/dashboard/dashboard';
-import { SettingsPage } from '../pages/settings/settings';
-import { CompanysettingsPage } from '../pages/companysettings/companysettings';
-import { DbmaintenancePage } from '../pages/dbmaintenance/dbmaintenance';
-import { ApprovalProfilePage } from '../pages/approval-profile/approval-profile';
-
-import { DatePipe, DecimalPipe } from '@angular/common'
-import { ImportExcelDataPage } from '../pages/import-excel-data/import-excel-data';
-// import { Ng2PaginationModule } from 'ng2-pagination';
-import { NgxPaginationModule } from 'ngx-pagination';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
-import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-// import { Transfer } from "../providers/file-transfer";
 
 @NgModule({
   declarations: [
-    ConferenceApp,
-    AccountPage,
+/* 1st level loading */
+    eClaimApp,
     LoginPage,
-    AllClaimListPage,    MedicalclaimPage,AllClaimhistoryPage,
+    SignupPage,
+/* 2nd level loading, only dashboard */
+DashboardPage, 
+
+/* 3nd level loading, after dashboard */
+    TravelclaimPage,
+    // MedicalclaimPage,
+    AllClaimhistoryPage,
     PrintclaimPage,
     GiftclaimPage,
     OvertimeclaimPage,
     EntertainmentclaimPage,
     MiscellaneousClaimPage,
+    AllClaimListPage,
+
+    /* Should be loaded only when using setup */
+       
     PermissionPage,
     RolemodulesetupPage,
     PagesetupPage,
@@ -144,7 +143,7 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     TravelclaimPage,
     StatesetupPage,
     SetupguidePage,
-    SignupPage,
+
     SubmodulesetupPage,
     SetupPage,
     BanksetupPage,
@@ -157,27 +156,40 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     TranslatePage,
     MileagesetupPage,
     RolesetupPage,
-    ModulesetupPage, DeviceSetupPage,
+    ModulesetupPage, 
+    DeviceSetupPage,
     PaymenttypesetupPage,
     QualificationsetupPage,
     SubsciptionsetupPage,
     TenantsetupPage,
+    AdminsetupPage,
+    ProfileSetupPage,
+    CustomerSetupPage,
+    SocRegistrationPage,
+
+    SettingsPage,
+    CompanysettingsPage,
+    DbmaintenancePage,
+    OtRateSetupPage,
+    ApprovalProfilePage,
+    ImportExcelDataPage,
+ /* */
+
+     /* Should be loaded only when doing travel claims */
+    AddTollPage,
+    TravelClaimViewPage,
+
+    AccountPage,
     TabsPage,
     UserPage,
-    SocRegistrationPage,
-    AdminsetupPage,
     ApproverTaskListPage,
-    TravelClaimViewPage,
     EntertainmentClaimViewPage,
-    MedicalClaimViewPage,
+    // MedicalClaimViewPage,
     OvertimeClaimViewPage,
     PrintClaimViewPage,
     GiftClaimViewPage,
     MiscellaneousClaimViewPage,
-    TravelclaimPage,
     UploadPage,
-    ProfileSetupPage,
-    AddTollPage,
 
     ClaimhistoryPage,
     ClaimhistorydetailPage,
@@ -186,30 +198,19 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     UserclaimslistPage,
     ClaimReportPage,
     MonthlyClaimReportPage,
-    CustomerSetupPage,
     ChangePasswordPage,
-    DashboardPage, ImportExcelDataPage,
     ClaimReportUserPage,
     ClaimReportPrintPage,
     LeaveReportPage,
     AttendanceReportPage,
-    SettingsPage,
+
 
     FinancePaymentTasklistPage,
     CommonTasklistPage,
     PaymentHistoryPage,
     CommonHistorylistPage,
 
-    CompanysettingsPage,
-    DbmaintenancePage,
-
-    ApprovalProfilePage,
-
-    ClaimSummaryPage,
-    OtRateSetupPage
-
-
-
+    ClaimSummaryPage
   ],
 
   imports: [
@@ -223,7 +224,7 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
           deps: [HttpClient]
         }
       }),
-    IonicModule.forRoot(ConferenceApp, {}, {
+    IonicModule.forRoot(eClaimApp, {}, {
       links: [
         { component: TabsPage, name: 'TabsPage', segment: 'tabs' },
         // { component: DashboardPage, name: 'Home', segment: 'Home' },
@@ -243,8 +244,8 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
         { component: OvertimeclaimPage, name: 'OvertimeclaimPage', segment: 'OvertimeclaimPage' },
         { component: PrintclaimPage, name: 'PrintclaimPage', segment: 'PrintclaimPage' },
         { component: MiscellaneousClaimPage, name: 'MiscellaneousClaimPage', segment: 'MiscellaneousClaimPage' },
-        { component: CustomerSetupPage, name: 'CustomerSetupPage', segment: 'CustomerSetupPage' },        
-        { component: AllClaimhistoryPage, name: 'AllClaimhistoryPage', segment: 'AllClaimhistoryPage' },        
+        { component: CustomerSetupPage, name: 'CustomerSetupPage', segment: 'CustomerSetupPage' },
+        { component: AllClaimhistoryPage, name: 'AllClaimhistoryPage', segment: 'AllClaimhistoryPage' },
 
         { component: ClaimtasklistPage, name: 'ClaimtasklistPage', segment: 'ClaimtasklistPage' },
         { component: ClaimapprovertasklistPage, name: 'ClaimapprovertasklistPage', segment: 'ClaimapprovertasklistPage' },
@@ -269,21 +270,36 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
 
   bootstrap: [IonicApp],
   entryComponents: [
-    ConferenceApp,
-    AccountPage,
+    /* 1st level loading */
+    eClaimApp,
     LoginPage,
-    AllClaimListPage, SetupguidePage,
     SignupPage,
-    StatesetupPage,
-    SetupPage,
-    ModulesetupPage, DeviceSetupPage,
-    MedicalclaimPage,
-    TravelclaimPage,AllClaimhistoryPage,
+    /* 2nd level loading, only dashboard */
+    DashboardPage,
+
+    /* 3rd level loading, after dashboard */
+
+
+
+    // MedicalclaimPage,
+    TravelclaimPage, 
+    AllClaimhistoryPage,
     PrintclaimPage,
     GiftclaimPage,
     OvertimeclaimPage,
     EntertainmentclaimPage,
     MiscellaneousClaimPage,
+    AllClaimListPage, 
+
+
+    /* Should be loaded only when using setup */
+  
+
+    SetupguidePage,
+    StatesetupPage,
+    SetupPage,
+    ModulesetupPage, 
+    DeviceSetupPage,
     BanksetupPage,
     BranchsetupPage,
     CompanysetupPage,
@@ -304,11 +320,27 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     SubsciptionsetupPage,
     TenantsetupPage,
     RolemodulesetupPage,
+    CustomerSetupPage,
+    OtRateSetupPage,
+
+    SettingsPage,
+    CompanysettingsPage,
+    DbmaintenancePage,
+    ApprovalProfilePage,
+    ImportExcelDataPage,
+
+
+    /* */
+
+    /* Should be loaded only when doing travel claims */
+    TravelClaimViewPage,
+    AddTollPage,
+
     TabsPage,
     ApproverTaskListPage,
-    TravelClaimViewPage,
+    
     EntertainmentClaimViewPage,
-    MedicalClaimViewPage,
+    // MedicalClaimViewPage,
     OvertimeClaimViewPage,
     PrintClaimViewPage,
     GiftClaimViewPage,
@@ -316,56 +348,35 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     UserPage,
     SocRegistrationPage,
     TravelclaimPage,
-
-
     ProfileSetupPage,
-
-    AddTollPage,
+ 
     ClaimhistoryPage,
-
     ClaimhistorydetailPage,
     ClaimapprovertasklistPage,
     ClaimtasklistPage,
     UserclaimslistPage,
-
-
     ClaimReportPage,
     MonthlyClaimReportPage,
     UploadPage,
 
-    CustomerSetupPage,
-
     ChangePasswordPage,
-    DashboardPage, ImportExcelDataPage,
     ClaimReportUserPage,
     ClaimReportPrintPage,
     LeaveReportPage,
     AttendanceReportPage,
-
     FinancePaymentTasklistPage,
     CommonTasklistPage,
-   
     PaymentHistoryPage,
     CommonHistorylistPage,
     ClaimSummaryPage,
 
-    SettingsPage,
-    CompanysettingsPage,
-    DbmaintenancePage,
-    ApprovalProfilePage,
-    OtRateSetupPage
+    AccountPage
 
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    ConferenceData, HttpClientModule, ApiManagerProvider,
+    HttpClientModule, ApiManagerProvider,
     UserData, DatePipe, DecimalPipe,
-    //  InAppBrowser,
-    //  SplashScreen, StatusBar, 
-
-    // TransferObject,
-    // Transfer,
-
     Services,
 
     Camera,
@@ -373,9 +384,12 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
     File,
     FilePath,
     FileTransfer,
-    //FileUploadOptions,
     FileTransferObject,
-    ApiManagerProvider,Transfer
+    ApiManagerProvider, Transfer,
+    SanitizerProvider,
+    ToastProvider,
+    CurrencyProvider,
+    UploaderProvider,
   ]
 })
 export class AppModule { }

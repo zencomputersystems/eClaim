@@ -25,7 +25,7 @@
   </div>
 </div>
 <ion-content padding style="background: #eeeeee;">
-  <ion-card class="round1" (click)="goToSetupGuide()" *ngIf="SetupGuideDisplay">
+  <ion-card class="round1" (click)="goToSetupGuide()" *ngIf="Setup.SetupGuide">
     <ion-card-header class="icon">
       <ion-icon name="ios-cog" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -34,7 +34,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToBranchsetup()" *ngIf="TenantCompanyDisplay">
+  <ion-card class="round1" (click)="goToBranchsetup()" *ngIf="Setup.TenantCompany">
     <ion-card-header class="icon">
       <ion-icon name="ios-briefcase" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -43,7 +43,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToBanksetup()" *ngIf="BankDisplay">
+  <ion-card class="round1" (click)="goToBanksetup()" *ngIf="Setup.Bank">
     <ion-card-header class="icon">
       <ion-icon name="logo-usd" color="primary" class="iconf"></ion-icon>
     </ion-card-header>
@@ -52,7 +52,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToCashcardsetup()" *ngIf="CashcardDisplay">
+  <ion-card class="round1" (click)="goToCashcardsetup()" *ngIf="Setup.CashcardDisplay">
     <ion-card-header class="icon">
       <ion-icon name="cash" color="secondary400" class="iconf"></ion-icon>
     </ion-card-header>
@@ -61,7 +61,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToClaimtypesetup()" *ngIf="ClaimTypeDisplay">
+  <ion-card class="round1" (click)="goToClaimtypesetup()" *ngIf="Setup.ClaimType">
     <ion-card-header class="icon">
       <ion-icon name="list" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -70,7 +70,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToDesignationsetup()" *ngIf="DesignationDisplay">
+  <ion-card class="round1" (click)="goToDesignationsetup()" *ngIf="Setup.Designation">
     <ion-card-header class="icon">
       <ion-icon name="person" color="primary" class="iconf"></ion-icon>
     </ion-card-header>
@@ -79,7 +79,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToDepartmentsetup()" *ngIf="DepartmentDisplay">
+  <ion-card class="round1" (click)="goToDepartmentsetup()" *ngIf="Setup.Department">
     <ion-card-header class="icon">
       <ion-icon name="git-pull-request" color="secondary400" class="iconf"></ion-icon>
     </ion-card-header>
@@ -88,7 +88,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToMileagesetup()" *ngIf="MileageDisplay">
+  <ion-card class="round1" (click)="goToMileagesetup()" *ngIf="Setup.Mileage">
     <ion-card-header class="icon">
       <ion-icon name="car" color="secondary400" class="iconf"></ion-icon>
     </ion-card-header>
@@ -97,7 +97,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToPaymenttypesetup()" *ngIf="PaymentTypeDisplay">
+  <ion-card class="round1" (click)="goToPaymenttypesetup()" *ngIf="Setup.PaymentType">
     <ion-card-header class="icon">
       <ion-icon name="list-box" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -107,7 +107,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToQualificationsetup()" *ngIf="QualificationDisplay">
+  <ion-card class="round1" (click)="goToQualificationsetup()" *ngIf="Setup.Qualification">
     <ion-card-header class="icon">
       <ion-icon name="medal" color="primary" class="iconf"></ion-icon>
     </ion-card-header>
@@ -116,7 +116,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToUser()" *ngIf="UserDisplay">
+  <ion-card class="round1" (click)="goToUser()" *ngIf="Setup.User">
     <ion-card-header class="icon">
       <ion-icon name="people" color="secondary400" class="iconf"></ion-icon>
     </ion-card-header>
@@ -125,7 +125,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToCustomer()" *ngIf="CustomerDisplay">
+  <ion-card class="round1" (click)="goToCustomer()" *ngIf="Setup.Customer">
     <ion-card-header class="icon">
       <ion-icon name="man" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -134,7 +134,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToSOC()" *ngIf="SocDisplay">
+  <ion-card class="round1" (click)="goToSOC()" *ngIf="Setup.Soc">
     <ion-card-header class="icon">
       <ion-icon name="md-clipboard" color="primary" class="iconf"></ion-icon>
     </ion-card-header>
@@ -143,7 +143,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToCountrysetup()" *ngIf="CountryDisplay">
+  <ion-card class="round1" (click)="goToCountrysetup()" *ngIf="Setup.Country">
     <ion-card-header class="icon">
       <ion-icon name="ios-pin" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -152,7 +152,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToStatesetup()" *ngIf="StateDisplay">
+  <ion-card class="round1" (click)="goToStatesetup()" *ngIf="Setup.State">
     <ion-card-header class="icon">
       <ion-icon name="ios-pin-outline" color="primary" class="iconf"></ion-icon>
     </ion-card-header>
@@ -161,7 +161,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToDevicesetup()" *ngIf="DeviceDisplay">
+  <ion-card class="round1" (click)="goToDevicesetup()" *ngIf="Setup.Device">
     <ion-card-header class="icon">
       <ion-icon name="ios-finger-print-outline" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -170,7 +170,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToImport_Excel_Data_setup()" *ngIf="ImportDataDisplay">
+  <ion-card class="round1" (click)="goToImport_Excel_Data_setup()" *ngIf="Setup.ImportData">
     <ion-card-header class="icon">
       <ion-icon name="ios-stats-outline" color="primary" class="iconf"></ion-icon>
     </ion-card-header>
@@ -188,7 +188,7 @@
     </ion-card-content>
   </ion-card> -->
 
-  <ion-card class="round1" (click)="goToCompanySettings()" *ngIf="CompanySettingsDisplay">
+  <ion-card class="round1" (click)="goToCompanySettings()" *ngIf="Setup.CompanySettings">
     <ion-card-header class="icon">
       <ion-icon name="settings" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -197,7 +197,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToDBMaintenance()" *ngIf="DBMaintenanceDisplay">
+  <ion-card class="round1" (click)="goToDBMaintenance()" *ngIf="Setup.DBMaintenance">
     <ion-card-header class="icon">
       <ion-icon name="cloud-download" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -206,7 +206,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToRolesetup()" *ngIf="RoleSetupDisplay">
+  <ion-card class="round1" (click)="goToRolesetup()" *ngIf="Setup.RoleSetup">
     <ion-card-header class="icon">
       <ion-icon name="git-network" color="primary" class="iconf"></ion-icon>
     </ion-card-header>
@@ -215,7 +215,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToRoleModulesetup()" *ngIf="RoleModuleDisplay">
+  <ion-card class="round1" (click)="goToRoleModulesetup()" *ngIf="Setup.RoleModule">
     <ion-card-header class="icon">
       <ion-icon name="ios-git-network" color="secondary400" class="iconf"></ion-icon>
     </ion-card-header>
@@ -224,7 +224,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToApprovalProfileSetup()" *ngIf="ApprovalProfileDisplay">
+  <ion-card class="round1" (click)="goToApprovalProfileSetup()" *ngIf="Setup.ApprovalProfile">
     <ion-card-header class="icon">
       <ion-icon name="basket" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -233,7 +233,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="round1" (click)="goToOtRateSetup()" *ngIf="OtRateDisplay">
+  <ion-card class="round1" (click)="goToOtRateSetup()" *ngIf="Setup.OtRate">
       <ion-card-header class="icon">
         <ion-icon name="calculator" color="primary500" class="iconf"></ion-icon>
       </ion-card-header>

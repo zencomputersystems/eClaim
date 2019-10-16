@@ -1,23 +1,20 @@
-export class CashcardSetup_Model {
-	constructor(
-        public CASHCARD_GUID: string = null,
-        public CASHCARD_SNO: string = null,
-        public DESCRIPTION: string = null,	
-        public ACTIVATION_FLAG: number = null,
-        public ACCOUNT_ID: string = null,
-        public ACCOUNT_PASSWORD: string = null,
-        public MANAGEMENT_URL: string = null,
-		public CREATION_TS: string = null,
-		public CREATION_USER_GUID: string = null,
-		public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null,
-        public TENANT_GUID: string = null
-	) { }
-
+import { Base_Activation_Model } from './base_model';
+export class CashcardSetup_Model extends Base_Activation_Model {
+	constructor() {
+        super();
+    }
+    public CASHCARD_GUID: string = null;
+    public CASHCARD_SNO: string = null;
+    public DESCRIPTION: string = null;
+//    public ACTIVATION_FLAG: number = null;
+    public ACCOUNT_ID: string = null;
+    public ACCOUNT_PASSWORD: string = null;
+    public MANAGEMENT_URL: string = null;
+    public TENANT_GUID: string = null
 
 	static fromJson(json: any) {
 		if (!json) return;
-		return new CashcardSetup_Model(
+		return (
 			json.CASHCARD_GUID,
 		    json.CASHCARD_SNO,
 			json.DESCRIPTION,

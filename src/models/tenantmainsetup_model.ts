@@ -1,17 +1,16 @@
-export class TenantMainSetup_Model {
-	constructor(
-        public TENANT_GUID: string = null,
-        public PARENT_TENANT_GUID: string = null,
-        public TENANT_ACCOUNT_NAME: string = null,
-        public ACTIVATION_FLAG: string = null,
-        public CREATION_TS: string = null,
-        public CREATION_USER_GUID: string = null,
-        public UPDATE_TS: string = null,
-        public UPDATE_USER_GUID: string = null,
-    ) { }
+import { Base_Activation_Model } from './base_model';
+export class TenantMainSetup_Model extends Base_Activation_Model {
+  constructor() {
+    super();
+  }
+  
+  public TENANT_GUID: string = null;
+  public PARENT_TENANT_GUID: string = null;
+  public TENANT_ACCOUNT_NAME: string = null;
+
     static fromJson(json: any) {
 		if (!json) return;
-		return new TenantMainSetup_Model(
+		return (
 			json.TENANT_GUID,
 		    json.PARENT_TENANT_GUID,
 			json.TENANT_ACCOUNT_NAME,
