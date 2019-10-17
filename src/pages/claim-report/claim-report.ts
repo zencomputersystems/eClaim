@@ -1,9 +1,12 @@
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../app/config/constants';
+
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
-import { presentToast } from '../../providers/toast/toast';
+// import { presentToast } from '../../providers/toast/toast';
 
 
 
@@ -50,7 +53,7 @@ export class ClaimReportPage {
   }
 
   BindData() {
-    presentToast("Binding data...");
+//    this.presentToast("Binding data...");
     this.totalClaimAmount = 0;
     this.http
       .get(this.baseResourceUrl)
