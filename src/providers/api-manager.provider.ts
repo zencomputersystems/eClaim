@@ -9,6 +9,7 @@ import { MainClaimRequestModel } from '../models/main-claim-request.model';
 import { Observable } from 'rxjs/Observable';
 import { ToastController } from 'ionic-angular';
 import moment from 'moment';
+
 //import { postHeaders } from '../models/extended_headers_model';
 @Injectable()
 export class ApiManagerProvider {
@@ -221,7 +222,7 @@ export class ApiManagerProvider {
     queryHeaders.append('Content-Type', 'application/json');
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     let options = new RequestOptions({ headers: queryHeaders });
-    return this.http.patch(getURL("table", 'main_claim_request'), claim_main.toJson(true), options)
+    return this.http.patch(getURL("table", 'main_claim_request'), JSON.stringify({ resource: claim_main } ), options)
       .map((response) => {
         return response;
       });
@@ -260,12 +261,9 @@ export class ApiManagerProvider {
       .get(getURL("table", 'main_claim_request', [`CLAIM_REQUEST_GUID=${claimReqGUID}`]))
       .map((response) => {
         var result: any = response.json();
-        let claimData: Array<MainClaimRequestModel> = [];
-        var temp: any[] = result.resource;
-        temp.forEach((bank) => {
-          claimData.push(MainClaimRequestModel.fromJson(bank));
-        });
-
+        console.log('getClaimRequestByClaimReqGUID(',claimReqGUID,')')
+        console.log(response.json().resource);
+        let claimData: Array<MainClaimRequestModel> = result.resource;
         return claimData;
       });
   }

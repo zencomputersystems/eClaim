@@ -7,6 +7,7 @@ import { Http } from '@angular/http';
 import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
 import { Services } from '../../Services';
 import { TranslateService } from '@ngx-translate/core';
+import { getResultantStatus } from '../claim-status';
 
 @IonicPage()
 @Component({

@@ -339,6 +339,29 @@ export class MiscellaneousClaimPage {
   ProfileImage: any;
   newImage: boolean = true;
 
+  private ProfileImageDisplay(e: any, fileChoose: string): void {
+    let reader = new FileReader();
+    if (e.target.files && e.target.files[0]) {
+
+      const file = e.target.files[0];
+      this.MiscellaneousForm.get(fileChoose).setValue(file);
+      if (fileChoose === 'avatar1')
+        this.fileName1 = file.name;
+
+      reader.onload = (event: any) => {
+        this.ProfileImage = event.target.result;
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    this.imageGUID = this.uploadFileName;
+    this.chooseFile = true;
+    this.newImage = false;
+    this.onFileChange(e);
+    this.ImageUploadValidation = false;
+    this.saveIm();
+  }
+
+
   imageGUID: any;
   saveIm() {
 /*     this.loading = this.loadingCtrl.create(
@@ -356,7 +379,7 @@ export class MiscellaneousClaimPage {
 
   /* UploadImage() {
     this.CloudFilePath = 'eclaim/'
-    this.uniqueName = new Date().toISOString() + this.uploadFileName;
+    this.uniqueName = new Date().getTime() + this.uploadFileName;
     const queryHeaders = new Headers();
     queryHeaders.append('filename', this.uploadFileName);
     queryHeaders.append('Content-Type', 'multipart/form-data');
