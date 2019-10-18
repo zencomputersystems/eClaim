@@ -79,8 +79,8 @@
       <button ion-button color="primary500" (click)='submitAction(OTform.value)' [disabled]= "(!OTform.valid || !dirty || !(!getOT() || getOT() < 8))">{{ 'SUBMIT'}}</button>     
    </div> 
 
-   <ion-item *ngIf="getOT() >= 8">
-    <p style="color: red; text-align:right;margin-right: 34%;">You have worked for 8 hours or more. Please apply for replacement leave instead.</p>
+   <ion-item *ngIf="getOT() > 8">
+    <p style="color: red; text-align:right;margin-right: 34%;">You have worked for more than 8 hours. Please apply for replacement leave instead.</p>
   </ion-item>
    <ion-item *ngIf="!OTform.controls.claim_amount.valid  && (OTform.controls.claim_amount.dirty) && dirty">
     <p style="color: red; text-align:right;margin-right: 34%;">Claim amount should be {{currency}} {{min_claim_amount}} - {{max_claim_amount}}</p>
