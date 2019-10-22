@@ -399,7 +399,7 @@ export class DashboardPage {
         }
         else {
           let tempdata: any; tempdata = {
-            MONTH_NUM: this.monthNameToNum_true(this.MONTH), MONTH: this.MONTH, YEAR: this.year_value, ApprovedClaimAmount: null, ApprovedReqCount: '0',
+            MONTH_NUM: this.monthNameToNum_true(this.MONTH), MONTH: this.MONTH, YEAR: this.year_value, ApprovedClaimAmount: null, ApprovedReqCount: 0,
             CLAIM_REF_GUID: null, PendingClaimAmount: null, PendingReqCount: '0', RejectedClaimAmount: null, RejectedReqCount: null, USER_GUID: null
           };
           let item;
