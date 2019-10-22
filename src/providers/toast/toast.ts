@@ -9,16 +9,15 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class ToastProvider {
-  constructor() {
-  }
-}
-  export function presentToast(text: string) {
-    let toast = this.ToastController.create({
-      message: text,
-      duration: 3000,
-      position: 'bottom'
+  constructor(public toastCtrl: ToastController) { }
+  
+  presentToast(textmsg: string, msduration: number = 3000) {
+    const toast = this.toastCtrl.create({
+      message: textmsg,
+      duration: msduration,
+      position: 'top'
     });
     toast.present();
   }
 
-
+}
