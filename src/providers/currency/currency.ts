@@ -16,10 +16,9 @@ export class CurrencyProvider {
 
 }
 
-export function toCurrency( amount: any, currencyCode: string="RM") {
+export function toCurrency( amount: any = 0, currencyCode: string="RM") {
   if (Array.isArray(amount)) {
     return amount.map((value) => formatMoney(value, { symbol: currencyCode }));
   }
-//  console.log("Returning: ",formatMoney(amount, { symbol: currencyCode }));
-  return formatMoney(amount,{ symbol: (currencyCode) ? currencyCode : "" });
+    return formatMoney(amount,{ symbol: (currencyCode) ? currencyCode : "" }) || formatMoney(0,{ symbol: (currencyCode) ? currencyCode : "" })
 }

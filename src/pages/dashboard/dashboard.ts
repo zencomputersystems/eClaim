@@ -711,77 +711,22 @@ export class DashboardPage {
         // console.log('user '+this.baseResourceUrl_Card);      
 
         if (this.Year_Card.length != 0) {
-          this.RejectedClaimCount_year = this.Year_Card[0]["RejectedClaimCount_year"];
-          if (this.RejectedClaimCount_year != null && this.RejectedClaimCount_year != undefined)
-            this.RejectedClaimCount_year;
-          else
-            this.RejectedClaimCount_year = '0';
-
-          this.PendingClaimCount_year = this.Year_Card[0]["PendingClaimCount_year"];
-          if (this.PendingClaimCount_year != null && this.PendingClaimCount_year != undefined)
-            this.PendingClaimCount_year;
-          else
-            this.PendingClaimCount_year = '0';
+          this.RejectedClaimCount_year = this.Year_Card[0]["RejectedClaimCount_year"] || '0';
+          this.PendingClaimCount_year = this.Year_Card[0]["PendingClaimCount_year"] || '0';
           // Superior
-          this.PendingClaimCount_year_Superior = this.Year_Card[0]["PendingClaimCount_year_superior"];
-          if (this.PendingClaimCount_year_Superior != null && this.PendingClaimCount_year_Superior != undefined)
-            this.PendingClaimCount_year_Superior;
-          else
-            this.PendingClaimCount_year_Superior = '0';
+          this.PendingClaimCount_year_Superior = this.Year_Card[0]["PendingClaimCount_year_superior"] || '0';
           // Finance
-          this.PendingClaimCount_year_Finance = this.Year_Card[0]["PendingClaimCount_year_finance"];
-          if (this.PendingClaimCount_year_Finance != null && this.PendingClaimCount_year_Finance != undefined)
-            this.PendingClaimCount_year_Finance;
-          else
-            this.PendingClaimCount_year_Finance = '0';
-
-          this.ApprovedClaimCount_year = this.Year_Card[0]["ApprovedClaimCount_year"];
-          if (this.ApprovedClaimCount_year != null && this.ApprovedClaimCount_year != undefined)
-            this.ApprovedClaimCount_year;
-          else
-            this.ApprovedClaimCount_year = '0';
-
-          this.PaidClaimCount_year = this.Year_Card[0]["PaidClaimCount_year"];
-          if (this.PaidClaimCount_year != null && this.PaidClaimCount_year != undefined)
-            this.PaidClaimCount_year;
-          else
-            this.PaidClaimCount_year = '0';
-
-          this.RejectedClaimAmount_year = this.Year_Card[0]["RejectedClaimAmount_year"];
-          if (this.RejectedClaimAmount_year != null && this.RejectedClaimAmount_year != undefined)
-            this.RejectedClaimAmount_year = toCurrency(this.RejectedClaimAmount_year, this.currency);
-          else
-            this.RejectedClaimAmount_year = '0.00';
-
-          this.PendingClaimAmount_year = this.Year_Card[0]["PendingClaimAmount_year"];
-          if (this.PendingClaimAmount_year != null && this.PendingClaimAmount_year != undefined)
-            this.PendingClaimAmount_year = toCurrency(this.PendingClaimAmount_year, this.currency);
-          else
-            this.PendingClaimAmount_year = '0.00';
+          this.PendingClaimCount_year_Finance = this.Year_Card[0]["PendingClaimCount_year_finance"] || '0';
+          this.ApprovedClaimCount_year = this.Year_Card[0]["ApprovedClaimCount_year"] || '0';
+          this.PaidClaimCount_year = this.Year_Card[0]["PaidClaimCount_year"] || '0';
+          this.RejectedClaimAmount_year = toCurrency(this.Year_Card[0]["RejectedClaimAmount_year"], this.currency);
+          this.PendingClaimAmount_year = toCurrency(this.Year_Card[0]["RejectedClaimAmount_year"], this.currency);
           // Superior
-          this.PendingClaimAmount_year_Superior = this.Year_Card[0]["PendingClaimAmount_year_superior"];
-          if (this.PendingClaimAmount_year_Superior != null && this.PendingClaimAmount_year_Superior != undefined)
-            this.PendingClaimAmount_year_Superior = toCurrency(this.PendingClaimAmount_year_Superior, this.currency);
-          else
-            this.PendingClaimAmount_year_Superior = '0.00';
+          this.PendingClaimAmount_year_Superior = toCurrency(this.Year_Card[0]["PendingClaimAmount_year_superior"], this.currency);
           // Finance
-          this.PendingClaimAmount_year_Finance = this.Year_Card[0]["PendingClaimAmount_year_finance"];
-          if (this.PendingClaimAmount_year_Finance != null && this.PendingClaimAmount_year_Finance != undefined)
-            this.PendingClaimAmount_year_Finance = toCurrency(this.PendingClaimAmount_year_Finance, this.currency);
-          else
-            this.PendingClaimAmount_year_Finance = '0.00';
-
-          this.ApprovedClaimAmount_year = this.Year_Card[0]["ApprovedClaimAmount_year"];
-          if (this.ApprovedClaimAmount_year != null && this.ApprovedClaimAmount_year != undefined)
-            this.ApprovedClaimAmount_year = toCurrency(this.ApprovedClaimAmount_year, this.currency);
-          else
-            this.ApprovedClaimAmount_year = '0.00';
-
-          this.PaidClaimAmount_year = this.Year_Card[0]["PaidClaimAmount_year"];
-          if (this.PaidClaimAmount_year != null && this.PaidClaimAmount_year != undefined)
-            this.PaidClaimAmount_year = toCurrency(this.PaidClaimAmount_year, this.currency);
-          else
-            this.PaidClaimAmount_year = '0.00';
+          this.PendingClaimAmount_year_Finance = toCurrency(this.Year_Card[0]["PendingClaimAmount_year_finance"], this.currency);
+            this.ApprovedClaimAmount_year = toCurrency(this.Year_Card[0]["ApprovedClaimAmount_year"], this.currency);
+            this.PaidClaimAmount_year = toCurrency(this.Year_Card[0]["PaidClaimAmount_year"], this.currency);
         }
         else {
           this.RejectedClaimCount_year = '0';

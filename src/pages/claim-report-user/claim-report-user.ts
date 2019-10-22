@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
+
+import { Component } from '@angular/core';
+import { Http } from '@angular/http';
+import { ToastProvider } from '../../providers/toast/toast';
 import { getURL } from '../../providers/sanitizer/sanitizer';
+
 /**
  * Generated class for the ClaimReportUserPage page.
  *
@@ -31,7 +34,7 @@ export class ClaimReportUserPage {
   claimsListSummary: any[];
   claimsSocSummary: any[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http, private alertCtrl: AlertController, private toast: ToastProvider) {
     this.loginUserGuid = localStorage.getItem("g_USER_GUID");
     this.BindMonths();
     this.BindEmpDetails();
@@ -45,6 +48,7 @@ export class ClaimReportUserPage {
 
 
   BindData(printSectionId: any, item: string) {
+    this.toast.presentToast("Working on the report. Please wait until this message disappear before clicking OK.",5000);
     if (this.loginUserGuid !== undefined) {
       this.month = item.split(' ')[0].substring(0, 3);
       //alert(this.month);
@@ -108,7 +112,7 @@ export class ClaimReportUserPage {
     }
     let alert1 = this.alertCtrl.create({
       title: 'Print Report',
-      message: 'Printable report ready. Please click OK to continue.',
+      message: 'Report is ready. Please click OK to open print dialog.',
       buttons: [
         {
           text: 'Cancel',
@@ -124,7 +128,8 @@ export class ClaimReportUserPage {
         }
       ]
     })
-    alert1.present();
+    setTimeout(function() { alert1.present() },5000)
+    // alert1.present();
   }
   BindEmpDetails() {
     this.http
