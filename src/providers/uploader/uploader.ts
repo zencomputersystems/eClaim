@@ -1,9 +1,9 @@
-import { RequestOptions, Headers, Http } from '@angular/http';
+import { Headers, Http, RequestOptions } from '@angular/http';
+
+import { DREAMFACTORY_API_KEY } from '../../app/config/constants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getURL } from '../sanitizer/sanitizer';
-import { DREAMFACTORY_API_KEY } from '../../app/config/constants';
-import { LoadingController, Loading } from 'ionic-angular';
 
 /*
   Generated class for the UploaderProvider provider.

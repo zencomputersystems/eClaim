@@ -280,6 +280,12 @@ export class OvertimeclaimPage {
       });
   }
 
+  getWorkingHours() {
+    var startTime = new Date(this.Start_DT_ngModel);
+    var endTime = new Date(this.End_DT_ngModel);
+    return Math.round( (endTime.getTime() - startTime.getTime()) / 60000)/60;
+  }  
+  
   getOT() {
     if (this.dirty) {
     let from = moment(
