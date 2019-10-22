@@ -1,5 +1,3 @@
-import * as Settings from '../../../dbSettings/companySettings';
-
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
@@ -9,16 +7,18 @@ import { Http } from '@angular/http';
 import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
 import { Services } from '../../Services';
 import { TranslateService } from '@ngx-translate/core';
+import { getResultantStatus } from '../claim-status';
+
 //import { ExcelService } from '../../providers/excel.service';
 
 @IonicPage()
 @Component({
   selector: 'page-entertainment-claim-view',
-  templateUrl: 'entertainment-claim-view.html', 
+  templateUrl: 'entertainment-claim-view.html',
 })
 export class EntertainmentClaimViewPage {
 
-  totalClaimAmount:number=0; 
+  totalClaimAmount: number = 0;
   remarks: any;
   claimRequestData: any[];
 
@@ -34,7 +34,7 @@ export class EntertainmentClaimViewPage {
   isActionTaken: boolean = false;
 
   constructor(public profileMngProvider: ProfileManagerProvider, public api: ApiManagerProvider, public api1: Services, public http: Http, public translate: TranslateService, public navCtrl: NavController, public navParams: NavParams) {
-  
+
     this.isApprover = this.navParams.get("isApprover");
     this.claimRequestGUID = this.navParams.get("cr_GUID");
     this.Approver_GUID = this.navParams.get("approver_GUID");
@@ -42,7 +42,7 @@ export class EntertainmentClaimViewPage {
     // this.approverDesignation = this.navParams.get("approverDesignation");
 
     this.LoadMainClaim();
-  } 
+  }
 
   travelDate: any;
   isAccepted(val: string) {
@@ -63,8 +63,8 @@ export class EntertainmentClaimViewPage {
           this.profileMngProvider.ProcessProfileMng(this.Remarks_NgModel, this.Approver_GUID, this.level, this.claimRequestGUID, this.isRemarksAccepted, 1);
         })
     }
-  } 
- 
+  }
+
   isImage: boolean = false;
   LoadMainClaim() {
     this.api.getApiModel('view_claim_request', 'filter=CLAIM_REQUEST_GUID=' + this.claimRequestGUID).subscribe(res => {
@@ -72,53 +72,27 @@ export class EntertainmentClaimViewPage {
       this.claimRequestData.forEach(element => {
         // element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
         this.travelDate = element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
-        element.CREATION_TS = new Date(element.CREATION_TS.replace(/-/g, "/"))
-
-       
-        if (element.PROFILE_LEVEL == Settings.ProfileLevels.ONE && element.STATUS == Settings.StatusConstants.PENDING)
-        element.STATUS = Settings.StatusConstants.PENDINGSUPERIOR
-        else if (element.PROFILE_LEVEL == Settings.ProfileLevels.TWO && element.STATUS == Settings.StatusConstants.PENDING)
-        element.STATUS = Settings.StatusConstants.PENDINGFINANCEVALIDATION
-        else if (element.PROFILE_LEVEL == Settings.ProfileLevels.THREE && element.STATUS == Settings.StatusConstants.APPROVED)
-        element.STATUS = Settings.StatusConstants.PENDINGPAYMENT
-        else if (element.PROFILE_LEVEL == Settings.ProfileLevels.ZERO && element.PREVIOUS_LEVEL == Settings.ProfileLevels.ONE && element.STATUS == Settings.StatusConstants.REJECTED)
-        element.STATUS = Settings.StatusConstants.SUPERIORREJECTED
-        else if (element.PROFILE_LEVEL == Settings.ProfileLevels.ZERO && element.PREVIOUS_LEVEL == Settings.ProfileLevels.TWO && element.STATUS == Settings.StatusConstants.REJECTED)
-        element.STATUS = Settings.StatusConstants.FINANCEREJECTED
-        else if (element.PROFILE_LEVEL == Settings.ProfileLevels.ZERO && element.PREVIOUS_LEVEL == Settings.ProfileLevels.THREE && element.STATUS == Settings.StatusConstants.REJECTED)
-        element.STATUS = Settings.StatusConstants.PAYMENTREJECTED 
-        
-        
-
-
-        if (element.ATTACHMENT_ID !== null) { 
-          this.imageURL = this.api.getImageUrl(element.ATTACHMENT_ID); 
-      }      
-        this.totalClaimAmount = element.MILEAGE_AMOUNT;   
-        this.remarks = element.REMARKS;    
+        element.CREATION_TS = new Date(element.CREATION_TS.replace(/-/g, "/"));
+        element.STATUS = getResultantStatus(element);
+        if (element.ATTACHMENT_ID !== null) {
+          this.imageURL = this.api.getImageUrl(element.ATTACHMENT_ID);
+        }
+        this.totalClaimAmount = element.MILEAGE_AMOUNT;
+        this.remarks = element.REMARKS;
       });
     })
-}
+  }
 
-EditClaim() {
-  this.navCtrl.push(EntertainmentclaimPage, {
-    isFormEdit: 'true',
-    cr_GUID: this.claimRequestGUID
-  });
-}
+  EditClaim() {
+    this.navCtrl.push(EntertainmentclaimPage, {
+      isFormEdit: 'true',
+      cr_GUID: this.claimRequestGUID
+    });
+  }
 
-displayImage: any
-CloseDisplayImage()  {
-  this.displayImage = false;
-}
-imageURL: string;
-// DisplayImage(val: any) {
-//   this.displayImage = true;
-//   this.imageURL = val;
-//   if (val !== null) { 
-//     this.imageURL = this.api.getImageUrl(val); 
-//     this.displayImage = true; 
-//     this.isImage = this.api.isFileImage(val); 
-//   }
-// }
+  displayImage: any
+  CloseDisplayImage() {
+    this.displayImage = false;
+  }
+  imageURL: string;
 }

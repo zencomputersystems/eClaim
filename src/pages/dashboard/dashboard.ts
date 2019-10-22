@@ -1,20 +1,20 @@
-// import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { DecimalPipe } from "@angular/common";
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Http } from '@angular/http';
-import { Chart } from 'chart.js';
 import 'chart.piecelabel.js';
-import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-import * as constants from '../../app/config/constants';
+
 import * as Settings from '../../dbSettings/companySettings';
-import { toCurrency } from '../../providers/currency/currency';
-import { DashboardCards } from './../../interfaces/dashboard-card';
+import * as constants from '../../app/config/constants';
+
+import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getURL, sanitizeURL } from './../../providers/sanitizer/sanitizer';
 
-
-
+import { Chart } from 'chart.js';
+import { Component } from '@angular/core';
+import { DashboardCards } from './../../interfaces/dashboard-card';
+// import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { DecimalPipe } from "@angular/common";
+import { Http } from '@angular/http';
+import { toCurrency } from '../../providers/currency/currency';
 
 /**
  * Generated class for the DashboardPage page.
@@ -234,8 +234,6 @@ export class DashboardPage {
     // register plugin    
     Chart.plugins.register({
       beforeDraw: function (chart: any) {
-        if (chart.config.options.plugin_one_attribute === 'chart1') {
-          // Plugin code here...    
           var data = chart.data.datasets[0].data;
           var sum = data.reduce(function (a: any, b: any) {
             var x = a + b;
@@ -265,41 +263,6 @@ export class DashboardPage {
           }
           ctx.fillText(text, textX, textY);
           ctx.save();
-        }
-
-        if (chart.config.options.plugin_one_attribute === 'chart2') {
-          var data = chart.data.datasets[0].data;
-          var sum = data.reduce(function (a: any, b: any) {
-            var x = a + b;
-            var y = parseFloat(x.toFixed(2));
-            return y;
-          }, 0);
-          var width = chart.chart.width,
-            height = chart.chart.height,
-            ctx = chart.chart.ctx;
-          ctx.restore();
-          var fontSize = (height / 18).toFixed(2);
-          ctx.font = fontSize + "px Verdana";
-          ctx.textBaseline = "middle";
-          ctx.fillStyle = "blue";
-          ctx.fontStyle = "bold";
-
-
-          if (sum != 0) {
-            // var text = sum,
-            var text = sum.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-              textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2;
-            // this.chart2 = true;
-          }
-          else {
-            // this.chart2 = false;
-            text = 'Data Not Available', textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2;
-          }
-          ctx.fillText(text, textX, textY);
-          ctx.save();
-        }
       }
     });
 
@@ -598,32 +561,19 @@ export class DashboardPage {
         // console.log(this.claimrequestdetails);
         let val = this.GetPaidData();
         val.then((paid_data: any) => {
-          // console.log(paid_data);
           var paid = paid_data["PaidReqCount"];
           paid = parseInt(paid);
           this.PaidReqCount = paid;
           this.PaidClaimAmount = paid_data["PaidClaimAmount"];
-          /*           if (this.PaidClaimAmount !== null && this.PaidClaimAmount !== undefined) {
-                      this.PaidClaimAmount = parseFloat(this.PaidClaimAmount).toFixed(2);
-                    }
-                    else { this.PaidClaimAmount = '0.00' } */
-          this.PaidClaimAmount = paid_data["PaidClaimAmount"];
-          //          if (this.PaidClaimAmount != null) {
           this.PaidClaimAmount = toCurrency(this.PaidClaimAmount, this.currency);
-          /*           }
-                    else this.PaidClaimAmount = '0.00';
-           */
-          if (data["resource"][0] != null) {
-            var approve = parseInt(this.claimrequestdetails.ApprovedReqCount);
-            // alert(approve)
-            // var pending = parseInt(this.claimrequestdetails.PendingReqCount);
+          if (data["resource"][0]) {
+            console.log(data["resource"][0]);
+            var approve = parseInt(this.claimrequestdetails.ApprovedReqCount) || 0;
             var pending_Finance = parseInt(this.claimrequestdetails.PendingReqCount_Finance);
             var pending_Superior = parseInt(this.claimrequestdetails.PendingReqCount_Superior);
             var rejected = parseInt(this.claimrequestdetails.RejectedReqCount);
-            // var paid = parseInt(this.claimrequestdetails.PaidReqCount);
-            var paid = paid_data["PaidReqCount"];
+            paid = paid_data["PaidReqCount"];
             paid = parseInt(paid);
-            //  console.log(paid);
 
             this.doughnutChartData = [approve, pending_Finance, pending_Superior, rejected, paid];
 
@@ -633,63 +583,64 @@ export class DashboardPage {
             else { approveAmount = '0.00' }
 
             // Superior
-            if (this.claimrequestdetails.PendingClaimAmount_Superior !== null && this.claimrequestdetails.PendingClaimAmount_Superior !== undefined) {
+            if (this.claimrequestdetails.PendingClaimAmount_Superior) {
               var pendingAmount_Superior = parseFloat(this.claimrequestdetails.PendingClaimAmount_Superior).toFixed(2);
 
             }
             else { pendingAmount_Superior = '0.00' }
             // Finance
-            if (this.claimrequestdetails.PendingClaimAmount_Finance !== null && this.claimrequestdetails.PendingClaimAmount_Finance !== undefined) {
+            if (this.claimrequestdetails.PendingClaimAmount_Finance) {
               var pendingAmount_Finance = parseFloat(this.claimrequestdetails.PendingClaimAmount_Finance).toFixed(2);
 
             }
             else { pendingAmount_Finance = '0.00' }
 
-            if (this.claimrequestdetails.RejectedClaimAmount !== null && this.claimrequestdetails.RejectedClaimAmount !== undefined) {
+            if (this.claimrequestdetails.RejectedClaimAmount) {
               var rejectedAmount = parseFloat(this.claimrequestdetails.RejectedClaimAmount).toFixed(2);
             }
             else { rejectedAmount = '0.00' }
             this.PaidClaimAmount = paid_data["PaidClaimAmount"];
-            if (this.PaidClaimAmount !== null && this.PaidClaimAmount !== undefined) {
+            if (this.PaidClaimAmount) {
               this.PaidClaimAmount = parseFloat(this.PaidClaimAmount).toFixed(2);
             }
             else { this.PaidClaimAmount = '0.00' }
             this.claimAmountData = [parseFloat(approveAmount), parseFloat(pendingAmount_Finance), parseFloat(pendingAmount_Superior), parseFloat(rejectedAmount), parseFloat(this.PaidClaimAmount)];
+            console.log(data["resource"][0]);
 
             // For Display Data In Ion-cards
             this.Rejected_Claim_Count = this.claimrequestdetails.RejectedReqCount;
             this.Pending_Claim_Count = this.claimrequestdetails.PendingReqCount;
-            this.Approved_Claim_Count = this.claimrequestdetails.ApprovedReqCount;
+            this.Approved_Claim_Count = this.claimrequestdetails.ApprovedReqCount || 0;
             // this.PaidReqCount = this.claimrequestdetails.PaidReqCount;
             this.PaidReqCount = paid_data["PaidReqCount"];
             this.Pending_Claim_Count_Superior = this.claimrequestdetails.PendingReqCount_Superior;
             this.Pending_Claim_Count_Finance = this.claimrequestdetails.PendingReqCount_Finance;
 
-            if (this.claimrequestdetails.RejectedClaimAmount != null) {
+            if (this.claimrequestdetails.RejectedClaimAmount) {
               this.Rejected_Claim_Amount = this.claimrequestdetails.RejectedClaimAmount.toFixed(2).toString();
               this.Rejected_Claim_Amount = toCurrency(this.Rejected_Claim_Amount, this.currency);
             }
             else this.Rejected_Claim_Amount = '0.00';
 
-            if (this.claimrequestdetails.PendingClaimAmount != null) {
+            if (this.claimrequestdetails.PendingClaimAmount) {
               this.Pending_Claim_Amount = this.claimrequestdetails.PendingClaimAmount.toFixed(2).toString();
               this.Pending_Claim_Amount = toCurrency(this.Pending_Claim_Amount, this.currency);
             }
             else this.Pending_Claim_Amount = '0.00';
             // Superior
-            if (this.claimrequestdetails.PendingClaimAmount_Superior != null) {
+            if (this.claimrequestdetails.PendingClaimAmount_Superior) {
               this.Pending_Claim_Amount_Superior = this.claimrequestdetails.PendingClaimAmount_Superior.toFixed(2).toString();
               this.Pending_Claim_Amount_Superior = toCurrency(this.Pending_Claim_Amount_Superior, this.currency);
             }
             else this.Pending_Claim_Amount_Superior = '0.00';
             // Finance
-            if (this.claimrequestdetails.PendingClaimAmount_Finance != null) {
+            if (this.claimrequestdetails.PendingClaimAmount_Finance) {
               this.Pending_Claim_Amount_Finance = this.claimrequestdetails.PendingClaimAmount_Finance.toFixed(2).toString();
               this.Pending_Claim_Amount_Finance = toCurrency(this.Pending_Claim_Amount_Finance, this.currency);
             }
             else this.Pending_Claim_Amount_Finance = '0.00';
 
-            if (this.claimrequestdetails.ApprovedClaimAmount != null) {
+            if (this.claimrequestdetails.ApprovedClaimAmount) {
               this.Approved_Claim_Amount = this.claimrequestdetails.ApprovedClaimAmount.toFixed(2).toString();
               this.Approved_Claim_Amount = toCurrency(this.Approved_Claim_Amount, this.currency);
             }

@@ -269,7 +269,7 @@ export class GiftclaimPage {
 
   UploadImage() {
     this.CloudFilePath = 'eclaim/'
-    this.uniqueName = new Date().toISOString() + this.uploadFileName;
+    this.uniqueName = new Date().getTime() + this.uploadFileName;
     const queryHeaders = new Headers();
     queryHeaders.append('filename', this.uploadFileName);
     queryHeaders.append('Content-Type', 'multipart/form-data');

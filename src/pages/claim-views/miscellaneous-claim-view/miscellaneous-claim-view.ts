@@ -1,11 +1,10 @@
-import * as Settings from '../../../dbSettings/companySettings';
-
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { Component } from '@angular/core';
 import { MiscellaneousClaimPage } from '../../claim-forms/miscellaneous-claim/miscellaneous-claim';
 import { ProfileManagerProvider } from '../../../providers/profile-manager.provider';
+import { getResultantStatus } from '../claim-status';
 
 @IonicPage()
 @Component({
@@ -31,9 +30,9 @@ export class MiscellaneousClaimViewPage {
     this.claimRequestGUID = this.navParams.get("cr_GUID");
     this.Approver_GUID = this.navParams.get("approver_GUID");
     this.level = navParams.get('level_no');
-    this.LoadMainClaim();   
+    this.LoadMainClaim();
     // this.approverDesignation = this.navParams.get("approverDesignation"); 
-  } 
+  }
 
   travelDate: any;
   isAccepted(val: string) {
@@ -53,8 +52,9 @@ export class MiscellaneousClaimViewPage {
           }
           this.profileMngProvider.ProcessProfileMng(this.Remarks_NgModel, this.Approver_GUID, this.level, this.claimRequestGUID, this.isRemarksAccepted, 1);
         })
-    }  }
-  
+    }
+  }
+
   stringToSplit: string = "";
   tempUserSplit1: string = "";
   tempUserSplit2: string = "";
@@ -63,32 +63,19 @@ export class MiscellaneousClaimViewPage {
   LoadMainClaim() {
     this.api.getApiModel('view_claim_request', 'filter=CLAIM_REQUEST_GUID=' + this.claimRequestGUID).subscribe(res => {
       this.claimRequestData = res['resource'];
-      this.claimRequestData.forEach(element => { 
-        if (element.ATTACHMENT_ID !== null) { 
-          this.imageURL = this.api.getImageUrl(element.ATTACHMENT_ID); 
-      }    
-      // element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
-      this.travelDate = element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
-      element.CREATION_TS = new Date(element.CREATION_TS.replace(/-/g, "/"))
-
-      if (element.PROFILE_LEVEL == Settings.ProfileLevels.ONE && element.STATUS == Settings.StatusConstants.PENDING)
-      element.STATUS = Settings.StatusConstants.PENDINGSUPERIOR
-      else if (element.PROFILE_LEVEL == Settings.ProfileLevels.TWO && element.STATUS == Settings.StatusConstants.PENDING)
-      element.STATUS = Settings.StatusConstants.PENDINGFINANCEVALIDATION
-      else if (element.PROFILE_LEVEL == Settings.ProfileLevels.THREE && element.STATUS == Settings.StatusConstants.APPROVED)
-      element.STATUS = Settings.StatusConstants.PENDINGPAYMENT
-      else if (element.PROFILE_LEVEL == Settings.ProfileLevels.ZERO && element.PREVIOUS_LEVEL == Settings.ProfileLevels.ONE && element.STATUS == Settings.StatusConstants.REJECTED)
-      element.STATUS = Settings.StatusConstants.SUPERIORREJECTED
-      else if (element.PROFILE_LEVEL == Settings.ProfileLevels.ZERO && element.PREVIOUS_LEVEL == Settings.ProfileLevels.TWO && element.STATUS == Settings.StatusConstants.REJECTED)
-      element.STATUS = Settings.StatusConstants.FINANCEREJECTED
-      else if (element.PROFILE_LEVEL == Settings.ProfileLevels.ZERO && element.PREVIOUS_LEVEL == Settings.ProfileLevels.THREE && element.STATUS == Settings.StatusConstants.REJECTED)
-      element.STATUS = Settings.StatusConstants.PAYMENTREJECTED 
-   
+      this.claimRequestData.forEach(element => {
+        if (element.ATTACHMENT_ID !== null) {
+          this.imageURL = this.api.getImageUrl(element.ATTACHMENT_ID);
+        }
+        // element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
+        this.travelDate = element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
+        element.CREATION_TS = new Date(element.CREATION_TS.replace(/-/g, "/"));
+        element.STATUS = getResultantStatus(element);
         this.totalClaimAmount = element.MILEAGE_AMOUNT;
         this.remarks = element.REMARKS;
       });
     })
-}  
+  }
 
   EditClaim() {
     this.navCtrl.push(MiscellaneousClaimPage, {
@@ -98,7 +85,7 @@ export class MiscellaneousClaimViewPage {
   }
 
   displayImage: any
-  CloseDisplayImage()  {
+  CloseDisplayImage() {
     this.displayImage = false;
   }
   imageURL: string;
@@ -111,5 +98,5 @@ export class MiscellaneousClaimViewPage {
   //     this.isImage = this.api.isFileImage(val); 
   //   }
   // }
- 
+
 }

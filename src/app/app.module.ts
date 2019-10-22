@@ -37,7 +37,6 @@ import { CommonHistorylistPage } from '../pages/common-historylist/common-histor
 import { CommonTasklistPage } from '../pages/common-tasklist/common-tasklist';
 import { CompanysettingsPage } from '../pages/setup/companysettings/companysettings';
 import { CompanysetupPage } from '../pages/setup/companysetup/companysetup';
-import { ConferenceData } from '../providers/conference-data';
 import { CountrysetupPage } from '../pages/setup/countrysetup/countrysetup';
 import { CurrencyProvider } from '../providers/currency/currency';
 import { CustomerSetupPage } from '../pages/setup/customer-setup/customer-setup';
@@ -376,7 +375,7 @@ DashboardPage,
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    ConferenceData, HttpClientModule, ApiManagerProvider,
+    HttpClientModule, ApiManagerProvider,
     UserData, DatePipe, DecimalPipe,
     Services,
 

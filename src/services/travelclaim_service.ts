@@ -1,19 +1,19 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers,RequestOptions, URLSearchParams} from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
+
+import { Headers, Http, RequestOptions, URLSearchParams } from '@angular/http';
+
+//import {MasterClaim_Model} from '../models/masterclaim_model';
+import { BaseHttpService } from './base-http';
+import { Injectable } from '@angular/core';
+//import 'rxjs/add/observable/throw';
+import { NavController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 //import * as constants_home from '../app/config/constants_home';
 //import {EntertainmentClaim_Model} from '../models/entertainment_model';
-import {TravelClaim_Model} from '../models/travelclaim_model';
-//import {MasterClaim_Model} from '../models/masterclaim_model';
-import {BaseHttpService} from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import {Observable} from 'rxjs/Observable';
-//import 'rxjs/add/observable/throw';
-
-import { NavController } from 'ionic-angular';
+import { TravelClaim_Model } from '../models/travelclaim_model';
 
 class ServerResponse {
 	constructor(public resource: any, public http:Http) {
@@ -74,19 +74,6 @@ export class TravelClaim_Service
 				return response;
 			});
 	}
-	
-	// save_main_claim_request (master_main: MasterClaim_Model): Observable<any> 
-	// {
-	// 	var queryHeaders = new Headers();
-    // 	queryHeaders.append('Content-Type', 'application/json');
-    // 	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    // 	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-	// 	let options = new RequestOptions({ headers: queryHeaders });
-	// 	return this.httpService.http.post(this.baseResourceUrl1, master_main.toJson(true),options)
-	// 		.map((response) => {
-	// 			return response;
-	// 		});
-	// }
 
 	postUrl(table: string) {
 		return constants.DREAMFACTORY_TABLE_URL + '/' + table;

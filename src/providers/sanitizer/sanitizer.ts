@@ -1,6 +1,7 @@
-import { urlsanitizer } from '@zencloudservices/urlsanitizer';
-import { DREAMFACTORY_IMAGE_URL, DREAMFACTORY_TABLE_URL, DREAMFACTORY_API_KEY, DREAMFACTORY_TEMPLATE_URL, DREAMFACTORY_EMAIL_URL, DREAMFACTORY_INSTANCE_URL } from './../../app/config/constants';
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_EMAIL_URL, DREAMFACTORY_IMAGE_URL, DREAMFACTORY_INSTANCE_URL, DREAMFACTORY_TABLE_URL, DREAMFACTORY_TEMPLATE_URL } from './../../app/config/constants';
+
 import { Injectable } from '@angular/core';
+import { urlsanitizer } from '@zencloudservices/urlsanitizer';
 
 /*
   Generated class for the SanitizerProvider provider.
@@ -54,7 +55,7 @@ switch (serviceType) {
     break };
   case 'image': { urlstring = `${DREAMFACTORY_IMAGE_URL}/${resourceName}?api_key=${DREAMFACTORY_API_KEY}`; break };
   case 'template': { urlstring = `${DREAMFACTORY_TEMPLATE_URL}/${resourceName}?api_key=${DREAMFACTORY_API_KEY}`; break; }
-  case 'email': { urlstring = `${DREAMFACTORY_EMAIL_URL}?api_key=${DREAMFACTORY_API_KEY}`; break; }
+  case 'email': { urlstring = `${DREAMFACTORY_EMAIL_URL}`; break; }
   case 'distance': { urlstring = `${DREAMFACTORY_INSTANCE_URL}/api/v2/google/distancematrix/json?api_key=${DREAMFACTORY_API_KEY}`; break; }
 }
   return sanitizeURL(urlstring);

@@ -153,7 +153,7 @@ export class AddTollPage {
       claimReqRef.ATTACHMENT_ID = this.imageGUID;
 
       this.api
-        .postData('claim_request_detail', claimReqRef.toJson(true))
+        .postData('claim_request_detail', JSON.stringify( { resource: claimReqRef } ))
         .subscribe(() => {
           alert(
             'Your ' + this.ClaimMethodName + ' details submitted successfully.'
@@ -303,6 +303,29 @@ export class AddTollPage {
   uniqueName: any;
   imageGUID: any;
 
+  private ProfileImageDisplay(e: any, fileChoose: string): void {
+    let reader = new FileReader();
+    if (e.target.files && e.target.files[0]) {
+
+      const file = e.target.files[0];
+      this.DetailsForm.get(fileChoose).setValue(file);
+      if (fileChoose === 'avatar1')
+        this.fileName1 = file.name;
+
+      reader.onload = (event: any) => {
+        this.ProfileImage = event.target.result;
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    this.imageGUID = this.uploadFileName;
+    this.chooseFile = true;
+    this.newImage = false;
+    this.onFileChange(e);
+    this.ImageUploadValidation = false;
+    this.saveIm();
+  }
+
+
   saveIm() {
     let uploadImage = this.UploadImage();
     uploadImage.then(() => {
@@ -319,7 +342,7 @@ export class AddTollPage {
   UploadImage() {
     this.CloudFilePath = 'eclaim/';
     // this.loading = true;
-    this.uniqueName = new Date().toISOString() + this.uploadFileName;
+    this.uniqueName = new Date().getTime() + this.uploadFileName;
     const queryHeaders = new Headers();
     queryHeaders.append('filename', this.uploadFileName);
     queryHeaders.append('Content-Type', 'multipart/form-data');

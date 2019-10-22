@@ -126,34 +126,17 @@ export class ClaimapprovertasklistPage {
         this.claimrequestdetails = [];
        
         this.claimrequestdetails = data["resource"];
-        // console.log( this.claimrequestdetails)
+         console.log( this.claimrequestdetails)
         this.totalClaimAmount = 0;
         let key: any;
         this.claimrequestdetails.forEach(element => {
           element.TRAVEL_DATE = new Date(element.TRAVEL_DATE.replace(/-/g, "/"))
-
-          // if (this.FinanceLogin) {
-          // For Status changing
           if (element.PROFILE_LEVEL == Settings.ProfileLevels.ONE && element.STATUS == Settings.StatusConstants.PENDING)
             element.STATUS = Settings.StatusConstants.PENDINGSUPERIOR
           else if (element.PROFILE_LEVEL == Settings.ProfileLevels.TWO && element.STATUS == Settings.StatusConstants.PENDING)
             element.STATUS = Settings.StatusConstants.PENDINGFINANCEVALIDATION
           else if (element.PROFILE_LEVEL == Settings.ProfileLevels.THREE && element.STATUS == Settings.StatusConstants.APPROVED)
             element.STATUS = Settings.StatusConstants.PENDINGPAYMENT
-          // }
-          // if (element.STATUS === 'Rejected') {
-          //   element.STAGE_GUID = null;
-          // }
-          // else {
-          //   key = element.PROFILE_LEVEL;
-          // }
-
-          // switch (key) {
-          //   case 1: element.STAGE_GUID = 'Superior'; break;
-          //   case 2: element.STAGE_GUID = 'Finance Executive'; break;
-          //   case 3:
-          //   case -1: element.STAGE_GUID = 'Finance & Admin'; break;
-          // }
         });
         this.claimrequestdetails1 = this.claimrequestdetails;
         if (this.claimrequestdetails.length != 0) {
@@ -238,10 +221,6 @@ export class ClaimapprovertasklistPage {
   // }
 
   getCheckboxValue(event: Checkbox, claimRequestGuid: any, level: number, status: string) {
-    // alert(event.id);
-    // alert(event.checked);
-    // alert(claimRequestGuid);
-    // debugger;
     let checkboxData: Checkboxlist = new Checkboxlist(event.checked, claimRequestGuid, level, status);
     if (event.checked) {
       this.checkboxDataList.push(checkboxData);
@@ -253,9 +232,6 @@ export class ClaimapprovertasklistPage {
         this.checkboxDataList.splice(index, 1);
       }
     }
-    // console.log(this.checkboxDataList);
-    // alert(this.checkboxDataList.length);
-    // alert(this.checkboxDataList.find(item => item.Chkid == event.id).Chkid + ","+this.checkboxDataList.find(item => item.Chkid == event.id).Checked+ ","+this.checkboxDataList.find(item => item.Chkid == event.id).claimRequestGuid);
   }
 
   approveAll() {
@@ -321,7 +297,7 @@ export class ClaimapprovertasklistPage {
                   claimRefObj["resource"][0].STATUS = 'Paid';
                 //debugger;
                 this.api.updateApiModel('main_claim_ref', claimRefObj, false).subscribe(() => {
-                  alert('Claim has been Approved.');
+                  alert('Claim has been Approved. (1)');
                   this.BindData("All", "All");
                   this.checkboxDataList = [];
                   this.navCtrl.setRoot(ClaimtasklistPage);
@@ -330,7 +306,7 @@ export class ClaimapprovertasklistPage {
           })
       }
       if (this.claimrefguid === null || this.claimrefguid === undefined) {
-        alert('Claim has been Approved.')
+        alert('Claim has been Approved. (2)')
         this.claimrequestdetails = [];
         this.checkboxDataList = [];
         this.BindData("All", "All");
