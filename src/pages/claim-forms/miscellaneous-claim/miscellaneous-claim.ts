@@ -5,6 +5,7 @@ import * as Settings from '../../../dbSettings/companySettings';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
+import { maxDate, minDate } from '../../../shared/GlobalFunction';
 
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { DecimalPipe } from '@angular/common';
@@ -36,7 +37,6 @@ export class MiscellaneousClaimPage {
   CloudFilePath: string;
   Miscellaneous_Amount_ngModel: any;
   travelAmount: any;
-  validDate = new Date().toISOString();
   isCustomer: boolean = false;
   Customer_GUID: any;
   Soc_GUID: any;
@@ -53,7 +53,11 @@ export class MiscellaneousClaimPage {
   claimFor: string = 'seg_project';
   currency = localStorage.getItem("cs_default_currency");
   rejectedLevel: any;
+  minDateAllowed: string = minDate();
+  minDateRejected: string = minDate(true);
+  validDate: string = maxDate();
 
+  
   ImageUploadValidation: boolean = false;
   chooseFile: boolean = false;
   min_claim_amount: any; min_claim: any;

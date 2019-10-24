@@ -5,6 +5,7 @@ import * as Settings from '../../../dbSettings/companySettings';
 import { ActionSheetController, IonicPage, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { maxDate, minDate } from '../../../shared/GlobalFunction';
 
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { BaseHttpService } from '../../../services/base-http';
@@ -76,7 +77,6 @@ export class OvertimeclaimPage {
   VehicleId: any;
   VehicleRate: any;
   travelAmount: any;
-  validDate = new Date().toISOString();
   ClaimRequestMain: any;
   isCustomer: boolean = false;
   ImageUploadValidation: boolean = false;
@@ -85,6 +85,10 @@ export class OvertimeclaimPage {
   min_claim: any;
   max_claim_amount: any;
   max_claim: any;
+  minDateAllowed: string = minDate();
+  minDateRejected: string = minDate(true);
+  validDate: string = maxDate();
+  
   /********FORM EDIT VARIABLES***********/
   isFormEdit: boolean = false;
   claimRequestGUID: any;
@@ -280,6 +284,12 @@ export class OvertimeclaimPage {
       });
   }
 
+  getWorkingHours() {
+    var startTime = new Date(this.Start_DT_ngModel);
+    var endTime = new Date(this.End_DT_ngModel);
+    return Math.round( (endTime.getTime() - startTime.getTime()) / 60000)/60;
+  }  
+  
   getOT() {
     if (this.dirty) {
     let from = moment(
