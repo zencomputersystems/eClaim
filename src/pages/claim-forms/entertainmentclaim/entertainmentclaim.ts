@@ -8,6 +8,7 @@ import { ActionSheetController, IonicPage, Loading, LoadingController, NavContro
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
+import { maxDate, minDate } from '../../../shared/GlobalFunction';
 
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { BaseHttpService } from '../../../services/base-http';
@@ -76,7 +77,6 @@ export class EntertainmentclaimPage {
   currentItems: any;
   public MainClaimSaved: boolean = false;
   travelAmount: any;
-  validDate = new Date().toISOString();
   isCustomer: boolean = false;
   ClaimRequestMainId: any;
   ImageUploadValidation: boolean = false;
@@ -89,6 +89,9 @@ export class EntertainmentclaimPage {
   claimRequestGUID: any;
   claimRequestData: any;
   // cdRef: any;
+  minDateAllowed: string = minDate();
+  minDateRejected: string = minDate(true);
+  validDate: string = maxDate();
 
   constructor( private httpService: BaseHttpService, public numberPipe: DecimalPipe, public apiMng: ApiManagerProvider, public profileMng: ProfileManagerProvider, public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, public translate: TranslateService, fb: FormBuilder, public http: Http, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, public toastCtrl: ToastController) {
 

@@ -7,6 +7,7 @@ import { ActionSheetController, IonicPage, Loading, LoadingController, NavContro
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
+import { maxDate, minDate } from '../../../shared/GlobalFunction';
 
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { BaseHttpService } from '../../../services/base-http';
@@ -68,12 +69,14 @@ export class GiftclaimPage {
   public MainClaimSaved: boolean = false;
   VehicleId: any;
   travelAmount: any;
-  validDate = new Date().toISOString();
   ClaimRequestMain: any;
   isCustomer: boolean = false;
   ImageUploadValidation: boolean = false;
   chooseFile: boolean = false;
-
+  minDateAllowed: string = minDate();
+  minDateRejected: string = minDate(true);
+  validDate: string = maxDate();
+  
   /********FORM EDIT VARIABLES***********/
   isFormEdit: boolean = false;
   claimRequestGUID: any;

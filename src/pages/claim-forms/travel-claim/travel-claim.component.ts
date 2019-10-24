@@ -6,6 +6,7 @@ import * as constants from '../../../app/config/constants';
 import { ActionSheetController, IonicPage, Loading, ModalController, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getURL, sanitizeURL } from '../../../providers/sanitizer/sanitizer';
+import { maxDate, minDate } from '../../../shared/GlobalFunction';
 
 import { AddTollPage } from './add-toll/add-toll.component';
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
@@ -96,7 +97,6 @@ export class TravelclaimPage {
   VehicleId: any;
   VehicleRate: any;
   travelAmount: number;
-  validDate = new Date().toISOString();
   ClaimRequestMain: any;
   isCustomer: boolean = false;
   claimDetailsData: any[];
@@ -116,6 +116,10 @@ export class TravelclaimPage {
   rejectedLevel: any;
   CalculationData: any[] = [];
   One_Way_Distance: any;
+  minDateAllowed: string = minDate();
+  minDateRejected: string = minDate(true);
+  validDate: string = maxDate()
+  
   constructor(public numberPipe: DecimalPipe, public profileMng: ProfileManagerProvider, public api: ApiManagerProvider, public navCtrl: NavController, public viewCtrl: ViewController, public modalCtrl: ModalController, public navParams: NavParams, public translate: TranslateService, fb: FormBuilder, public http: Http, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController) {
     this.countries = [{ id: 'IN', name: 'India' }, { id: 'MY', name: 'Malaysia' }];
     this.country_select = 'Malaysia';
@@ -199,7 +203,7 @@ export class TravelclaimPage {
 
   GetNewDistance(pointA: string, pointB: string, roundtrip: boolean = false): any {
     let url = `${getURL("distance")}&destinations=place_id:${pointB}&origins=place_id:${pointA}`;
-    
+  
     if (roundtrip) {
     } else {
       let distancePromise = new Promise(() => this.http.get(url).map(res => res.json())
@@ -370,8 +374,6 @@ export class TravelclaimPage {
       this.totalClaimAmount = amount;
     }
   }
-
-
 
   totalClaimAmount: number;
   ionViewWillEnter() {
@@ -1168,5 +1170,4 @@ export class TravelclaimPage {
       alert('Claim detail has been deleted successfully.');
     });
   }
-
 }

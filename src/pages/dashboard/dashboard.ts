@@ -1,20 +1,20 @@
-import 'chart.piecelabel.js';
-import 'rxjs/add/operator/map';
-
-import * as Settings from '../../dbSettings/companySettings';
-import * as constants from '../../app/config/constants';
-
-import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { getURL, sanitizeURL } from './../../providers/sanitizer/sanitizer';
-
-import { Chart } from 'chart.js';
-import { Component } from '@angular/core';
-import { DashboardCards } from './../../interfaces/dashboard-card';
 // import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DecimalPipe } from "@angular/common";
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http } from '@angular/http';
+import { Chart } from 'chart.js';
+import 'chart.piecelabel.js';
+import { Config, IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
+import 'rxjs/add/operator/map';
+import * as constants from '../../app/config/constants';
+import * as Settings from '../../dbSettings/companySettings';
 import { toCurrency } from '../../providers/currency/currency';
+import { DashboardCards } from './../../interfaces/dashboard-card';
+import { getURL, sanitizeURL } from './../../providers/sanitizer/sanitizer';
+
+
+
 
 /**
  * Generated class for the DashboardPage page.
@@ -80,14 +80,20 @@ export class DashboardPage {
   baseResource_RoleUrl: string;
   roleBasedData: any;
 
-  ApproverLevel_PendAmount: any; ApproverLevel_PendAmount_Year: any;
-  ApproverLevel_PendCount: any; ApproverLevel_PendCount_Year: any;
+  ApproverLevel_PendAmount: any; 
+  ApproverLevel_PendAmount_Year: any;
+  ApproverLevel_PendCount: any; 
+  ApproverLevel_PendCount_Year: any;
 
-  FinanceExecLevel_PendAmt: any; FinanceExecLevel_PendAmt_Year: any;
-  FinanceExecLevel_PendCount: any; FinanceExecLevel_PendCount_Year: any;
+  FinanceExecLevel_PendAmt: any; 
+  FinanceExecLevel_PendAmt_Year: any;
+  FinanceExecLevel_PendCount: any; 
+  FinanceExecLevel_PendCount_Year: any;
 
-  FinanceMgrLevel_PendAmt: any; FinanceMgrLevel_PendAmt_Year: any;
-  FinanceMgrLevel_PendCount: any; FinanceMgrLevel_PendCount_Year: any;
+  FinanceMgrLevel_PendAmt: any; 
+  FinanceMgrLevel_PendAmt_Year: any;
+  FinanceMgrLevel_PendCount: any; 
+  FinanceMgrLevel_PendCount_Year: any;
 
   paid_month_model: any;
 

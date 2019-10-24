@@ -40,13 +40,21 @@
   </div>
 
   <form [formGroup]="Entertainmentform">
+    <div *ngIf="rejectedLevel ; else stdStartDate">
     <ion-item class="fuha">
       <ion-label color="primary500" floating>{{ "ENTERTAINMENT_DATE_LABEL" | translate }}</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="Entertainment_Date_ngModel" formControlName="travel_date" max={{validDate}}></ion-datetime>
+      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="Entertainment_Date_ngModel" formControlName="travel_date" min="{{minDateRejected}}" max={{validDate}}></ion-datetime>
     </ion-item>
+  </div>
+
+<ng-template #stdStartDate>
+    <ion-item class="fuha">
+        <ion-label color="primary500" floating>{{ "ENTERTAINMENT_DATE_LABEL" | translate }}</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="Entertainment_Date_ngModel" formControlName="travel_date" min="{{minDateAllowed}}" max={{validDate}}></ion-datetime>
+      </ion-item>  
+</ng-template>
 
     <ion-item class="fuha">
-
       <ion-label color="primary500" floating> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{currency }}</ion-label>
       <ion-input type="text"  (change)='getCurrency($event.target.value)' formControlName="claim_amount" [(ngModel)]="Entertainment_Amount_ngModel">
       </ion-input>
