@@ -45,18 +45,31 @@
 
   <form [formGroup]="Travelform">
 
-    <!-- minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" -->
+    <div *ngIf="rejectedLevel ; else stdStartDate">
+        <ion-item class="fuha">
+            <ion-label floating color="primary500"> <span style="color:red">*</span>Departure</ion-label>
+            <ion-datetime formControlName="start_DT" [(ngModel)]="Start_DT_ngModel" displayFormat="DD/MM/YYYY HH:mm" min="{{minDateRejected}}" max="{{ validDate }}" minuteValues="0,15,30,45"></ion-datetime>
+          </ion-item>      
+    </div>
+    <ng-template #stdStartDate>
     <ion-item class="fuha">
       <ion-label floating color="primary500"> <span style="color:red">*</span>Departure</ion-label>
-      <ion-datetime formControlName="start_DT" [(ngModel)]="Start_DT_ngModel" displayFormat="DD/MM/YYYY HH:mm"></ion-datetime>
+      <ion-datetime formControlName="start_DT" [(ngModel)]="Start_DT_ngModel" displayFormat="DD/MM/YYYY HH:mm" min="{{ minDateAllowed }}" max="{{ validDate }}" minuteValues="0,15,30,45"></ion-datetime>
     </ion-item>
+  </ng-template>
 
-    <!-- minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" -->
+    <div *ngIf="rejectedLevel ; else stdEndDate">
+        <ion-item class="fuha">
+            <ion-label floating color="primary500"> <span style="color:red">*</span>Arrival</ion-label>
+            <ion-datetime displayFormat="DD/MM/YYYY HH:mm" formControlName="end_DT" [(ngModel)]="End_DT_ngModel" min="{{ Start_DT_ngModel }}" max="{{ validDate }}" minuteValues="0,15,30,45"></ion-datetime>
+          </ion-item>
+            </div>
+      <ng-template #stdEndDate>
     <ion-item class="fuha">
       <ion-label floating color="primary500"> <span style="color:red">*</span>Arrival</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" formControlName="end_DT" [(ngModel)]="End_DT_ngModel"></ion-datetime>
+      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" formControlName="end_DT" [(ngModel)]="End_DT_ngModel" min="{{ Start_DT_ngModel }}" max="{{ validDate }}" minuteValues="0,15,30,45" ></ion-datetime>
     </ion-item>
-
+  </ng-template>
 
     <ion-item class="fuha">
       <ion-label floating color="primary500"> <span style="color:red">*</span>{{ "TRAVEL_TYPE_LABEL" | translate }}</ion-label>

@@ -11,9 +11,9 @@ import { BaseHttpService } from '../../services/base-http';
 import { Component } from '@angular/core';
 import { EncryptPassword } from '../../shared/GlobalFunction';
 import { LoginPage } from '../login/login';
+import { ToastProvider } from '../../providers/toast/toast';
 import { UserMain_Model } from '../../models/user_main_model';
 import { UserSetup_Service } from '../../services/usersetup_service';
-import { presentToast } from '../../providers/toast/toast';
 
 /**
  * Generated class for the ChangePasswordPage page.
@@ -32,9 +32,9 @@ export class ChangePasswordPage {
   usermain_entry: UserMain_Model = new UserMain_Model();
   
   loading: Loading;
-  constructor(public api: ApiManagerProvider,private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private userservice: UserSetup_Service, private httpService: BaseHttpService, private loadingCtrl: LoadingController) {
+  constructor(public api: ApiManagerProvider, private toastCtrl: ToastProvider , private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private userservice: UserSetup_Service, private httpService: BaseHttpService, private loadingCtrl: LoadingController) {
     if (localStorage.getItem("g_USER_GUID") == null) {
-      presentToast('Sorry, please login first.');
+      this.toastCtrl.presentToast('Sorry, please login first.');
       this.navCtrl.push(LoginPage);
     }
     else {

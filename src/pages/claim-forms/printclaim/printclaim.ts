@@ -5,6 +5,7 @@ import * as Settings from '../../../dbSettings/companySettings';
 import { ActionSheetController, IonicPage, Loading, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { maxDate, minDate } from '../../../shared/GlobalFunction';
 
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { BaseHttpService } from '../../../services/base-http';
@@ -39,7 +40,6 @@ export class PrintclaimPage {
   isCustomer: boolean = false;
   Printform: FormGroup;
   travelAmount: any;
-  validDate = new Date().toISOString();
   claimFor: string = 'seg_project';
   currency = localStorage.getItem("cs_default_currency");
 
@@ -75,6 +75,9 @@ export class PrintclaimPage {
   claimRequestData: any;
   rejectedLevel: any;
   claimAmount: number = 0;
+  minDateAllowed: string = minDate();
+  minDateRejected: string = minDate(true);
+  validDate: string = maxDate();
   getCurrency(amount: number) {
     amount = Number(amount);
     if (amount > 99999) {

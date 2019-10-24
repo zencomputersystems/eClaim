@@ -44,11 +44,19 @@
 
 
   <form [formGroup]="MiscellaneousForm">         
-   
+      <div *ngIf="rejectedLevel ; else stdStartDate">
             <ion-item class="fuha"> 
               <ion-label color="primary500" floating>{{ "CLAIM_DATE_LABEL" | translate  }}</ion-label>        
-              <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="Miscellaneous_Date_ngModel" formControlName="travel_date" max={{validDate}} ></ion-datetime>
-            </ion-item>               
+              <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="Miscellaneous_Date_ngModel" formControlName="travel_date" min="{{minDateRejected}}" max={{validDate}} ></ion-datetime>
+            </ion-item>
+          </div>
+
+          <ng-template #stdStartDate>
+              <ion-item class="fuha"> 
+                  <ion-label color="primary500" floating>{{ "CLAIM_DATE_LABEL" | translate  }}</ion-label>        
+                  <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="Miscellaneous_Date_ngModel" formControlName="travel_date" min="{{minDateAllowed}}" max={{validDate}} ></ion-datetime>
+                </ion-item>    
+          </ng-template>
            
             <ion-item class="fuha">
                 <ion-label color="primary500" floating> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ currency }}</ion-label>
