@@ -331,6 +331,7 @@ export class AddTollPage {
     uploadImage.then(() => {
       this.imageGUID = this.uniqueName;
       this.chooseFile = false;
+      this.ImageUploadValidation = true;
     });
   }
 

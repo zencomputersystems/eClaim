@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { SubsciptionSetup_Model } from '../models/subsciptionsetup_model';
-import { BaseHttpService } from './base-http';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
+import { BaseHttpService } from './base-http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { SubsciptionSetup_Model } from '../models/subsciptionsetup_model';
 
 @Injectable()
 export class SubsciptionSetup_Service {
@@ -103,8 +104,7 @@ export class SubsciptionSetup_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let subsciption: SubsciptionSetup_Model = SubsciptionSetup_Model.fromJson(result);
+                let subsciption: Array<SubsciptionSetup_Model> = response.json();
                 return subsciption;
             }).catch(this.handleError);
     };

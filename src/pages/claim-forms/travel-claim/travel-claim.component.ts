@@ -61,8 +61,8 @@ export class TravelclaimPage {
   public Travel_Description_ngModel: any;
   public Travel_SOC_No_ngModel: any;
   public Travel_ProjectName_ngModel: any;
-  public Start_DT_ngModel: any = this.api.CreateTimestamp();
-  public End_DT_ngModel: any = this.api.CreateTimestamp();
+  public Start_DT_ngModel: any = this.api.CreateTimestamp(false);
+  public End_DT_ngModel: any = this.api.CreateTimestamp(false);
   public Travel_From_ngModel: any;
   public Travel_Destination_ngModel: any;
   public Travel_Distance_ngModel: any;

@@ -1,12 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Headers,RequestOptions, URLSearchParams} from '@angular/http';
-import * as constants from '../app/config/constants';
-import {CountrySetup_Model} from '../models/countrysetup_model';
-import {BaseHttpService} from './base-http';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
+import * as constants from '../app/config/constants';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
+import { BaseHttpService } from './base-http';
+import { CountrySetup_Model } from '../models/countrysetup_model';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class CountrySetup_Service {
@@ -32,9 +34,6 @@ export class CountrySetup_Service {
             .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
             .map(() => {
                     let countries: Array<CountrySetup_Model> = [];
-                    // result.resource.forEach((branch) => {
-                    // 	branches.push(BranchSetup_Model.fromJson(branche));
-                    // });  
                     return countries;
                 }).catch(this.handleError);
     };
@@ -63,25 +62,6 @@ export class CountrySetup_Service {
             });
     }
 
-    // get_mileage(params?: URLSearchParams): Observable<CountrySetup_Model[]> {
-    //     var queryHeaders = new Headers();
-    //     queryHeaders.append('Content-Type', 'application/json');
-    //     //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    //     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-    //     return this.httpService.http
-    //         .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
-    //         .map((response) => {
-    //             var result: any = response.json();
-    //             let branches: Array<CountrySetup_Model> = [];
-
-    //             // result.resource.forEach((branch) => {
-    //             //  	branches.push(BranchSetup_Model.fromJson(branch));
-    //             //  });
-    //             return branches;
-    //         }).catch(this.handleError);
-    // };
-
-
     remove(id: string) {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
@@ -99,19 +79,12 @@ export class CountrySetup_Service {
     get(id: string, params?: URLSearchParams): Observable<CountrySetup_Model> {        
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
-        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-//alert(id);
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                console.log(result);
-               // alert(this.baseResourceUrl);
-                let countrytype: CountrySetup_Model = CountrySetup_Model.fromJson(result);
-                console.log(countrytype);
-                //alert(JSON.stringify(claimtype));
-                return countrytype;
+                let countrytype: Array<CountrySetup_Model> = response.json(); 
+                return countrytype
             }).catch(this.handleError);
     };
 }

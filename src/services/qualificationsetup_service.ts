@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { QualificationSetup_Model } from '../models/qualificationsetup_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-
+import { QualificationSetup_Model } from '../models/qualificationsetup_model';
 
 @Injectable()
 export class QualificationSetup_Service {
@@ -104,8 +104,7 @@ export class QualificationSetup_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let qualificationsetup: QualificationSetup_Model = QualificationSetup_Model.fromJson(result);
+                let qualificationsetup: Array<QualificationSetup_Model> = response.json();
                 return qualificationsetup;
             }).catch(this.handleError);
     };

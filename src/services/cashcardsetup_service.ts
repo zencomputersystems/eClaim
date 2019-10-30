@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { CashcardSetup_Model } from '../models/cashcardsetup_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { CashcardSetup_Model } from '../models/cashcardsetup_model';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-//import 'rxjs/add/observable/throw';
-
-import { NavController } from 'ionic-angular';
 
 ;
 
@@ -111,8 +109,7 @@ export class CashcardSetup_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let cashcard: CashcardSetup_Model = CashcardSetup_Model.fromJson(result);
+                let cashcard: Array<CashcardSetup_Model> = response.json();
                 return cashcard;
             }).catch(this.handleError);
     };

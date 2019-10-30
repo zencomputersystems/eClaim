@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { MileageSetup_Model } from '../models/mileagesetup_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Injectable } from '@angular/core';
+import { MileageSetup_Model } from '../models/mileagesetup_model';
 import { Observable } from 'rxjs/Observable';
-
 
 @Injectable()
 export class MileageSetup_Service {
@@ -101,16 +101,10 @@ export class MileageSetup_Service {
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-//alert(id);
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                console.log(result);
-               // alert(this.baseResourceUrl);
-                let claimtype: MileageSetup_Model = MileageSetup_Model.fromJson(result);
-                console.log(claimtype);
-                //alert(JSON.stringify(claimtype));
+                let claimtype: Array<MileageSetup_Model> = response.json();
                 return claimtype;
             }).catch(this.handleError);
     };

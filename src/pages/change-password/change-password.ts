@@ -30,21 +30,32 @@ import { UserSetup_Service } from '../../services/usersetup_service';
 export class ChangePasswordPage {
   ChangePasswordForm: FormGroup;
   usermain_entry: UserMain_Model = new UserMain_Model();
-  
+  AD_Authentication = false;
+
   loading: Loading;
-  constructor(public api: ApiManagerProvider, private toastCtrl: ToastProvider , private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private userservice: UserSetup_Service, private httpService: BaseHttpService, private loadingCtrl: LoadingController) {
+  constructor(
+    public api: ApiManagerProvider,
+    private toastCtrl: ToastProvider,
+    private fb: FormBuilder,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: Http,
+    private userservice: UserSetup_Service,
+    private httpService: BaseHttpService,
+    private loadingCtrl: LoadingController) {
+    this.AD_Authentication = localStorage.getItem('Ad_Authentication') === 'true' ? true : false;
     if (localStorage.getItem("g_USER_GUID") == null) {
       this.toastCtrl.presentToast('Sorry, please login first.');
       this.navCtrl.push(LoginPage);
     }
     else {
-        //Get the details of user according to user_guid.
-        //------------------------------------------------
-        this.GetUser_Main_Details(localStorage.getItem("g_USER_GUID"));
-        //------------------------------------------------
+      //Get the details of user according to user_guid.
+      //------------------------------------------------
+      this.GetUser_Main_Details(localStorage.getItem("g_USER_GUID"));
+      //------------------------------------------------
     }
     this.ChangePasswordForm = fb.group({
-      Current_Password: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],      
+      Current_Password: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
       New_Password: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]{5,7}'), Validators.required])],
       Confirm_Password: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]{5,7}'), Validators.required])],
     });
@@ -72,14 +83,14 @@ export class ChangePasswordPage {
   Confirm_Password_ngModel: any = "";
 
   ChangePassword() {
-    if (this.ChangePasswordForm.valid) {      
+    if (this.ChangePasswordForm.valid) {
       // let hash = CryptoJS.SHA256(this.Current_Password_ngModel.trim()).toString(CryptoJS.enc.Hex);
       // console.log(hash);
 
       //check current password is match with database      
       if (this.user_details[0]["PASSWORD"] == EncryptPassword(this.Current_Password_ngModel)) {
         if (this.Current_Password_ngModel.trim().toUpperCase() != this.Confirm_Password_ngModel.trim().toUpperCase()) {
-          if (this.New_Password_ngModel.trim().toUpperCase() == this.Confirm_Password_ngModel.trim().toUpperCase()) {            
+          if (this.New_Password_ngModel.trim().toUpperCase() == this.Confirm_Password_ngModel.trim().toUpperCase()) {
 
             this.loading = this.loadingCtrl.create({
               content: 'Please wait...',
@@ -117,12 +128,12 @@ export class ChangePasswordPage {
           alert('Current password and confirm password is same.');
         }
       }
-      else{
+      else {
         alert('Current password is not correct.');
       }
     }
   }
-  
+
   emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
   sendEmail() {
     let name: string; let email: string
@@ -132,14 +143,6 @@ export class ChangePasswordPage {
     queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
     queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
     let options = new RequestOptions({ headers: queryHeaders });
-    //let ename = 'Shabbeer Hussain';
-    // let startDate = '1-1-2018 11:12';
-    // let endDate = '1-1-2018 11:12';
-    // let CreatedDate = '1-1-2018 11:12';
-    // let level = '1';
-    // let assignedTo = 'Bala';
-    // let dept = 'Research';
-    // let claimType = 'Travel Claim';
 
     let body = {
       "template": "",
@@ -164,38 +167,38 @@ export class ChangePasswordPage {
       ],
       "subject": "Password changed.",
       "body_text": "",
-      "body_html": '<HTML>' + 
-      '<HEAD>' + 
+      "body_html": '<HTML>' +
+        '<HEAD>' +
         '<META name=GENERATOR content="MSHTML 10.00.9200.17606">' +
-      '</HEAD>' +
-      
-      '<BODY>' +
+        '</HEAD>' +
+
+        '<BODY>' +
         '<DIV style="FONT-FAMILY: Century Gothic">' +
-          '<DIV style="MIN-WIDTH: 500px">' +
-            '<BR>' +
-            '<DIV style="PADDING-BOTTOM: 10px; TEXT-ALIGN: center; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px">' +
-              '<IMG style="WIDTH: 130px" alt=zen2.png src="http://zentranet.zen.com.my/_catalogs/masterpage/Layout/images/zen2.png">' +
-            '</DIV>' +
-            '<DIV style="MARGIN: 0px 100px; BACKGROUND-COLOR: #ec008c">' +
-              '<DIV style="TEXT-ALIGN: center; FONT-SIZE: 30px; COLOR: white; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">' +
-                '<B>' +
-                  '<I>Change Password</I>' +
-                '</B>' +
-              '</DIV>' +
-            '</DIV>' +
-            '<BR>' +
-            '<DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">Dear <h4>' + name + '</h4>' +
-              '<BR>Your password has now been changed. From now on you will use your new password.' +
-              
-              
-            '</DIV>' +
-            '<BR>' +
-              '<DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">Thank you.</DIV>' +
-          '</DIV>' +
+        '<DIV style="MIN-WIDTH: 500px">' +
+        '<BR>' +
+        '<DIV style="PADDING-BOTTOM: 10px; TEXT-ALIGN: center; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px">' +
+        '<IMG style="WIDTH: 130px" alt=zen2.png src="http://zentranet.zen.com.my/_catalogs/masterpage/Layout/images/zen2.png">' +
         '</DIV>' +
-      '</BODY>' +
-      
-      '</HTML>', 
+        '<DIV style="MARGIN: 0px 100px; BACKGROUND-COLOR: #ec008c">' +
+        '<DIV style="TEXT-ALIGN: center; FONT-SIZE: 30px; COLOR: white; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">' +
+        '<B>' +
+        '<I>Change Password</I>' +
+        '</B>' +
+        '</DIV>' +
+        '</DIV>' +
+        '<BR>' +
+        '<DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">Dear <h4>' + name + '</h4>' +
+        '<BR>Your password has now been changed. From now on you will use your new password.' +
+
+
+        '</DIV>' +
+        '<BR>' +
+        '<DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">Thank you.</DIV>' +
+        '</DIV>' +
+        '</DIV>' +
+        '</BODY>' +
+
+        '</HTML>',
       "from_name": "eClaim",
       "from_email": "balasingh73@gmail.com",
       "reply_to_name": "",
@@ -203,11 +206,11 @@ export class ChangePasswordPage {
     };
     this.http.post(this.emailUrl, body, options)
       .map(res => res.json())
-      .subscribe(data => {        
+      .subscribe(data => {
         // this.result= data["resource"];
         // alert(JSON.stringify(data));
         this.loading.dismissAll();
-        
+
         alert('Password sucessfully changed.');
         this.navCtrl.push(LoginPage);
       });

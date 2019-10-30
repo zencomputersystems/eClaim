@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { TenantCompanySiteSetup_Model } from '../models/tenantcompanysitesetup_model';
-import { BaseHttpService } from './base-http';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
+import { BaseHttpService } from './base-http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { TenantCompanySiteSetup_Model } from '../models/tenantcompanysitesetup_model';
 
 ;
 
@@ -107,10 +108,8 @@ export class TenantCompanySiteSetup_Service {
         //alert(id);
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
-            //.get(this.baseResourceUrl_view + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let tenanttype: TenantCompanySiteSetup_Model = TenantCompanySiteSetup_Model.fromJson(result);
+                let tenanttype: Array<TenantCompanySiteSetup_Model> = response.json();
                 return tenanttype;
             }).catch(this.handleError);
     };

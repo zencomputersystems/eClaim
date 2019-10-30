@@ -1,28 +1,30 @@
+import * as XLSX from 'xlsx';
+import * as constants from '../../app/config/constants';
+
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading, LoadingController } from 'ionic-angular';
-import { SocCustomer_Model } from '../../models/soc_customer_model';
-import { SocProject_Model } from '../../models/soc_project_model';
-import { SocMain_Model } from '../../models/socmain_model';
+import { Headers, Http, RequestOptions, ResponseContentType } from '@angular/http';
+import { IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+
+import { ApiManagerProvider } from '../../providers/api-manager.provider';
+import { Device_Raw_Data_Model } from '../../models/device_raw_data_model';
+import { Leave_Raw_Data_Model } from '../../models/leave_raw_data_model';
+import { Main_Attendance_Model } from '../../models/main_attendance_model';
+import { Observable } from 'rxjs/Rx';
 import { SocCustomerLocation_Model } from '../../models/soc_customer_location_model';
-import { UserMain_Model } from '../../models/user_main_model';
-import { UserInfo_Model } from '../../models/usersetup_info_model';
+import { SocCustomer_Model } from '../../models/soc_customer_model';
+import { SocMain_Model } from '../../models/socmain_model';
+import { SocProject_Model } from '../../models/soc_project_model';
+import { UUID } from 'angular2-uuid';
 import { UserAddress_Model } from '../../models/usersetup_address_model';
 import { UserCompany_Model } from '../../models/user_company_model';
 import { UserContact_Model } from '../../models/user_contact_model';
+import { UserInfo_Model } from '../../models/usersetup_info_model';
+import { UserMain_Model } from '../../models/user_main_model';
 import { UserQualification_Model } from '../../models/user_qualification_model';
 import { UserRole_Model } from '../../models/user_role_model';
-import { Main_Attendance_Model } from '../../models/main_attendance_model';
-import { Device_Raw_Data_Model } from '../../models/device_raw_data_model';
 import { User_Attendance_Main_Model } from '../../models/user_attendance_main_model';
-import { Leave_Raw_Data_Model } from '../../models/leave_raw_data_model';
-import * as constants from '../../app/config/constants';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
-import * as XLSX from 'xlsx';
-import { UUID } from 'angular2-uuid';
-import { ApiManagerProvider } from '../../providers/api-manager.provider';
-import moment from 'moment';
-import { Observable } from 'rxjs/Rx';
 import { saveAs as importedSaveAs } from "file-saver";
+import moment from 'moment';
 import { sanitizeURL } from '../../providers/sanitizer/sanitizer';
 
 /**
@@ -1512,6 +1514,7 @@ export class ImportExcelDataPage {
 
   //duplicate check for user_contact_template
   duplicateCheck_user_contact(checkData: any) {
+    var queryHeaders = new Headers();
     this.apiMng.getApiModel('user_contact', 'filter=CONTACT_NO=' + checkData.CONTACT_NO)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
@@ -1536,7 +1539,6 @@ export class ImportExcelDataPage {
           this.Contact_Template_Model.CONTACT_INFO_GUID = UUID.UUID();
           console.log(this.Contact_Template_Model);
           console.table(this.Contact_Template_Model);
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -1553,12 +1555,8 @@ export class ImportExcelDataPage {
           })
         }
         else {
-
           this.Contact_Template_Model.CONTACT_INFO_GUID = checkDataFromDB[0]["CONTACT_INFO_GUID"];
           alert('contact updating record');
-
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -1581,6 +1579,7 @@ export class ImportExcelDataPage {
   //duplicate check for user_qualification_template
 
   duplicateCheck_user_qualification(checkData: any) {
+    var queryHeaders = new Headers();
     this.apiMng.getApiModel('user_qualification', 'filter=MAJOR=' + checkData.MAJOR)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
@@ -1603,17 +1602,11 @@ export class ImportExcelDataPage {
           this.Qualification_Template_Model.HIGHEST_QUALIFICATION = res.toString();
           console.log(this.t_qualification)
           console.log(this.Qualification_Template_Model.HIGHEST_QUALIFICATION);
-
-
           if (checkDataFromDB.length == 0) {
             alert('qualification inserting record');
-
-
-
             this.Qualification_Template_Model.USER_QUALIFICATION_GUID = UUID.UUID();
             console.log(this.Qualification_Template_Model);
             console.table(this.Qualification_Template_Model);
-            var queryHeaders = new Headers();
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
@@ -1634,9 +1627,6 @@ export class ImportExcelDataPage {
 
             this.Qualification_Template_Model.USER_QUALIFICATION_GUID = checkDataFromDB[0]["USER_QUALIFICATION_GUID"];
             alert('qualificationupdating  record');
-
-
-            var queryHeaders = new Headers();
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
@@ -1659,6 +1649,7 @@ export class ImportExcelDataPage {
 
   //duplicate check for user_role_template
   duplicateCheck_user_role(checkData: any) {
+    var queryHeaders = new Headers();
     this.apiMng.getApiModel('user_role', 'filter=USER_GUID=' + checkData.USER_GUID)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
@@ -1679,17 +1670,11 @@ export class ImportExcelDataPage {
           this.Role_Template_Model.ROLE_GUID = res.toString();
           console.log(this.t_role)
           console.log(this.Role_Template_Model.ROLE_GUID);
-
-
           if (checkDataFromDB.length == 0) {
             alert('role inserting record');
-
-
-
             this.Role_Template_Model.USER_ROLE_GUID = UUID.UUID();
             console.log(this.Role_Template_Model);
             console.table(this.Role_Template_Model);
-            var queryHeaders = new Headers();
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
@@ -1706,9 +1691,6 @@ export class ImportExcelDataPage {
 
             this.Role_Template_Model.USER_ROLE_GUID = checkDataFromDB[0]["USER_ROLE_GUID"];
             alert('role updating record');
-
-
-            var queryHeaders = new Headers();
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });
@@ -1845,6 +1827,7 @@ export class ImportExcelDataPage {
   //code for inserting data into customer start
   checkData: any
   duplicateCheck_customer(checkData: any) {
+    var queryHeaders = new Headers();
     this.apiMng.getApiModel('main_customer', 'filter=CUSTOMER_GUID=' + checkData.CUSTOMER_GUID)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
@@ -1855,11 +1838,8 @@ export class ImportExcelDataPage {
         this.Customer_Template_Model.CREATION_USER_GUID = 'sva_test';
         this.Customer_Template_Model.UPDATE_TS = new Date().toISOString();;
         this.Customer_Template_Model.UPDATE_USER_GUID = 'sva_test';
-
         if (checkDataFromDB.length == 0) {
-
           this.Customer_Template_Model.CUSTOMER_GUID = UUID.UUID();
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -1876,10 +1856,7 @@ export class ImportExcelDataPage {
           })
         }
         else {
-
           this.Customer_Template_Model.CUSTOMER_GUID = checkDataFromDB[0]["CUSTOMER_GUID"];
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -1900,6 +1877,7 @@ export class ImportExcelDataPage {
   //code for inserting data into customer location start
 
   duplicateCheck_customer_location(checkData: any) {
+    var queryHeaders = new Headers();
     this.apiMng.getApiModel('main_customer_location', 'filter=CUSTOMER_LOCATION_GUID=' + checkData.CUSTOMER_LOCATION_GUID)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
@@ -1926,7 +1904,6 @@ export class ImportExcelDataPage {
           this.CustomerLocation_Template_Model.CUSTOMER_LOCATION_GUID = UUID.UUID();
           console.log(this.CustomerLocation_Template_Model);
           console.table(this.CustomerLocation_Template_Model);
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -1942,8 +1919,6 @@ export class ImportExcelDataPage {
         else {
 
           this.CustomerLocation_Template_Model.CUSTOMER_LOCATION_GUID = checkDataFromDB[0]["CUSTOMER_LOCATION_GUID"];
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -2013,6 +1988,7 @@ export class ImportExcelDataPage {
   }
 
   duplicateCheck_project(checkData: any) {
+    var queryHeaders = new Headers();
     this.apiMng.getApiModel('main_project', 'filter=PROJECT_GUID=' + checkData.PROJECT_GUID)
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
@@ -2032,7 +2008,6 @@ export class ImportExcelDataPage {
           this.Project_Template_Model.PROJECT_GUID = UUID.UUID();
           console.log(this.Project_Template_Model);
           console.table(this.Project_Template_Model);
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -2049,10 +2024,7 @@ export class ImportExcelDataPage {
           })
         }
         else {
-
           this.Project_Template_Model.PROJECT_GUID = checkDataFromDB[0]["PROJECT_GUID"];
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -2074,6 +2046,7 @@ export class ImportExcelDataPage {
   //code for inserting data into soc start
 
   duplicateCheck_soc(checkData: any) {
+    var queryHeaders = new Headers();
     console.table(checkData);
     console.log(checkData);
     this.apiMng.getApiModel('soc_main', 'filter=SOC_GUID=' + checkData.SOC_GUID)
@@ -2097,7 +2070,6 @@ export class ImportExcelDataPage {
           this.SOC_Template_Model.SOC_GUID = UUID.UUID();
           console.log(this.SOC_Template_Model);
           console.table(this.SOC_Template_Model);
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -2111,10 +2083,7 @@ export class ImportExcelDataPage {
           })
         }
         else {
-
           this.SOC_Template_Model.SOC_GUID = checkDataFromDB[0]["SOC_GUID"];
-
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -2216,12 +2185,12 @@ export class ImportExcelDataPage {
 
   attendance_main_Url: string = constants.DREAMFACTORY_TABLE_URL + '/user_attendance_main?&api_key=' + constants.DREAMFACTORY_API_KEY;
   InsertAttRecord() {
+    var queryHeaders = new Headers();
     console.log(this.User_Attendance_Main_Model_List);
     this.apiMng.getApiModel('user_attendance_main', 'filter=(USER_GUID=' + this.User_Attendance_Main_Model.USER_GUID.trim() + ') AND (ATTENDANCE_DATE=' + this.User_Attendance_Main_Model.ATTENDANCE_DATE + ') AND (IN_TS=' + this.User_Attendance_Main_Model.IN_TS + ') AND (OUT_TS=' + this.User_Attendance_Main_Model.OUT_TS + ')')
       .subscribe(data => {
         let checkDataFromDB = data["resource"];
         if (checkDataFromDB.length == 0) {
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -2236,7 +2205,6 @@ export class ImportExcelDataPage {
         }
         else {
           this.User_Attendance_Main_Model.USER_ATTENDANCE_GUID = checkDataFromDB[0]["USER_ATTENDANCE_GUID"];
-          var queryHeaders = new Headers();
           queryHeaders.append('Content-Type', 'application/json');
           queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
           let options = new RequestOptions({ headers: queryHeaders });
@@ -2305,6 +2273,7 @@ export class ImportExcelDataPage {
   }
 
   duplicateCheck_leave_raw_data(checkData: any) {
+    var queryHeaders = new Headers();
     this.ctr = this.ctr + 1;
     this.apiMng.getApiModel('user_leave_raw_data', 'filter=LEAVE_ID=' + checkData.LEAVE_ID)
       .subscribe(data => {
@@ -2318,13 +2287,10 @@ export class ImportExcelDataPage {
             this.Leave_Raw_Data_Model.LEAVE_ID = checkData.LEAVE_ID;
             this.Leave_Raw_Data_Model.HALF_DAY_DATE = checkData.HALF_DAY_DATE;
             this.Leave_Raw_Data_Model.SESSION = checkData.SESSION;
-
             this.Leave_Raw_Data_Model.CREATION_TS = new Date().toISOString();
             this.Leave_Raw_Data_Model.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
             this.Leave_Raw_Data_Model.UPDATE_TS = new Date().toISOString();
             this.Leave_Raw_Data_Model.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-
-            var queryHeaders = new Headers();
             queryHeaders.append('Content-Type', 'application/json');
             queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
             let options = new RequestOptions({ headers: queryHeaders });

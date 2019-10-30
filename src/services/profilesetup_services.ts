@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { Main_Profile_Model } from '../models/main_profile_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Injectable } from '@angular/core';
+import { Main_Profile_Model } from '../models/main_profile_model';
 import { Observable } from 'rxjs/Observable';
-
-
 
 @Injectable()
 export class ProfileSetup_Service {
@@ -90,8 +89,7 @@ export class ProfileSetup_Service {
 		return this.httpService.http
 			.get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
 			.map((response) => {
-				var result: any = response.json();
-				let profiles: Main_Profile_Model = Main_Profile_Model.fromJson(result);
+				let profiles: Array<Main_Profile_Model> = response.json();
 				return profiles;
 			}).catch(this.handleError);
 	};
