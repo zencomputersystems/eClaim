@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { StateSetup_Model } from '../models/statesetup_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 //import 'rxjs/add/observable/throw';
-
 import { NavController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { StateSetup_Model } from '../models/statesetup_model';
 
 class ServerResponse {
     constructor(public resource: any) {
@@ -80,8 +80,7 @@ export class StateSetup_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let state: StateSetup_Model = StateSetup_Model.fromJson(result);
+                let state: Array<StateSetup_Model> = response.json();
                 return state;
             }).catch(this.handleError);
     };

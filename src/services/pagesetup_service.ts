@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { PageSetup_Model } from '../models/pagesetup_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 //import 'rxjs/add/observable/throw';
-
 import { NavController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { PageSetup_Model } from '../models/pagesetup_model';
 
 class ServerResponse {
     constructor(public resource: any) {
@@ -117,8 +117,7 @@ export class PageSetup_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let page: PageSetup_Model = PageSetup_Model.fromJson(result);
+                let page: Array<PageSetup_Model> = response.json();
                 return page;
             }).catch(this.handleError);
     };

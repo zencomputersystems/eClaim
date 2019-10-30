@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { Settings_Model } from '../models/settings_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-//import 'rxjs/add/observable/throw';
-
-import { NavController } from 'ionic-angular';
+import { Settings_Model } from '../models/settings_model';
 
 @Injectable()
 export class Settings_Service {
@@ -69,8 +67,7 @@ export class Settings_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let bank: Settings_Model = Settings_Model.fromJson(result);
+                let bank: Array<Settings_Model> = response.json();
                 return bank;
             }).catch(this.handleError);
     };

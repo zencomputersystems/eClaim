@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { BranchSetup_Model } from '../models/branchsetup_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { BranchSetup_Model } from '../models/branchsetup_model';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-//import 'rxjs/add/observable/throw';
-
-import { NavController } from 'ionic-angular';
 
 ;
 
@@ -85,8 +83,7 @@ export class BranchSetup_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: this.queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let branch: BranchSetup_Model = BranchSetup_Model.fromJson(result);
+                let branch: BranchSetup_Model = response.json();
                 return branch;
             }).catch(this.handleError);
     };

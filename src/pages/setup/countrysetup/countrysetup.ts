@@ -29,7 +29,7 @@ import { UUID } from 'angular2-uuid';
 export class CountrysetupPage {
   country_entry: CountrySetup_Model = new CountrySetup_Model();
   Countryform: FormGroup;
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_country' + '?order=NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
   public countries: CountrySetup_Model[] = [];
@@ -41,7 +41,7 @@ export class CountrysetupPage {
   public exist_record_details: any;
 
   //Set the Model Name for Add------------------------------------------
-  public NAME_ngModel_Add: any; 
+  public NAME_ngModel_Add: any;
   // public CODE_ngModel_Add: any;
   //---------------------------------------------------------------------
 
@@ -58,22 +58,30 @@ export class CountrysetupPage {
   }
 
   public EditClick(COUNTRY_GUID: any) {
+    console.log('Country GUID clicked: ', COUNTRY_GUID);
     this.loading = this.loadingCtrl.create({
       content: 'Loading...',
     });
     this.loading.present();
 
     this.ClearControls();
-    this.AddCountryClicked = true; this.Add_Form = false; this.Edit_Form = true; this.HeaderText = "UPDATE COUNTRY";
+    this.AddCountryClicked = true;
+    this.Add_Form = false;
+    this.Edit_Form = true;
+    this.HeaderText = "UPDATE COUNTRY";
 
     var self = this;
     this.countrysetupservice
       .get(COUNTRY_GUID)
       .subscribe((data) => {
+        console.log('Data variable: ', data);
         self.country_details = data;
 
-        this.NAME_ngModel_Add = self.country_details.NAME; localStorage.setItem('Prev_country', self.country_details.NAME);
+        this.NAME_ngModel_Add = self.country_details.NAME;
+        localStorage.setItem('Prev_country', self.country_details.NAME);
         this.loading.dismissAll();
+        console.log('Self: ',self);
+        console.log('ngModel_Add: ',this.NAME_ngModel_Add);
       });
   }
 
@@ -129,7 +137,7 @@ export class CountrysetupPage {
         if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
         if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
       }
-      
+
       //Clear localStorage value--------------------------------      
       this.ClearLocalStorage();
 

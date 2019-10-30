@@ -1,18 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BankSetup_Model } from '../models/banksetup_model';
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-//import 'rxjs/add/observable/throw';
-
-import { NavController } from 'ionic-angular';
-
-
 
 @Injectable()
 export class BankSetup_Service {
@@ -80,11 +76,7 @@ export class BankSetup_Service {
 		return this.httpService.http
 			.get(this.baseResourceUrl, { search: params, headers: queryHeaders })
 			.map((response) => {
-				let banks: Array<BankSetup_Model> = [];
-
-				// result.resource.forEach((bank) => {
-				//  	banks.push(BankSetup_Model.fromJson(bank));
-				//  });
+				let banks: Array<BankSetup_Model> = response.json();
 				return banks;
 			}).catch(this.handleError);
 	};
@@ -113,8 +105,7 @@ export class BankSetup_Service {
 		return this.httpService.http
 			.get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
 			.map((response) => {
-				var result: any = response.json();
-				let bank: BankSetup_Model = BankSetup_Model.fromJson(result);//alert(JSON.stringify(bank)); 
+				let bank: BankSetup_Model = response.json();
 				return bank;
 			}).catch(this.handleError);
 	};

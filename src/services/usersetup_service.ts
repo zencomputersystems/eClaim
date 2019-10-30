@@ -163,13 +163,7 @@ export class UserSetup_Service {
 		return this.httpService.http
 			.get(this.UserUrl.address + "?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY, { search: params, headers: this.queryHeaders })
 			.map((response) => {
-				var result: any = response.json();
-				console.log(result);
-				alert(this.UserUrl.address);
-				let viewtype: UserAddress_Model = UserAddress_Model.fromJson(result);
-				console.log(viewtype);
-				alert(JSON.stringify(viewtype));
-				alert('end of service');
+				let viewtype: Array<UserAddress_Model> = response.json();
 				return viewtype;
 
 			}).catch(this.handleError);

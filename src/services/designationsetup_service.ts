@@ -1,13 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Headers,RequestOptions, URLSearchParams} from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import {DesignationSetup_Model} from '../models/designationsetup_model';
-import {BaseHttpService} from './base-http';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import {Observable} from 'rxjs/Observable';
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
+import { BaseHttpService } from './base-http';
+import { DesignationSetup_Model } from '../models/designationsetup_model';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class DesignationSetup_Service 
@@ -123,8 +124,7 @@ export class DesignationSetup_Service
 		return this.httpService.http
 			.get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders})
 			.map((response) => {
-				var result: any = response.json();
-				let designation: DesignationSetup_Model = DesignationSetup_Model.fromJson(result);//alert(JSON.stringify(designation)); 
+				let designation: Array<DesignationSetup_Model> = response.json();
 				return designation; 
 			}).catch(this.handleError);	
 	};

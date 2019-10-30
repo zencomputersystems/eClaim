@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { PaymentTypeSetup_Model } from '../models/paymenttypesetup_model';
-import { BaseHttpService } from './base-http';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
+import { BaseHttpService } from './base-http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { PaymentTypeSetup_Model } from '../models/paymenttypesetup_model';
 
 @Injectable()
 export class PaymentTypeSetup_Service {
@@ -98,14 +99,11 @@ export class PaymentTypeSetup_Service {
         get(id: string, params?: URLSearchParams): Observable<PaymentTypeSetup_Model> {        
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
-        //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
         queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-//alert(id);
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let paymenttype: PaymentTypeSetup_Model = PaymentTypeSetup_Model.fromJson(result);
+                let paymenttype: Array<PaymentTypeSetup_Model> = response.json();
                 return paymenttype;
             }).catch(this.handleError);
     };

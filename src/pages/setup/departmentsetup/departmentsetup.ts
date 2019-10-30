@@ -75,7 +75,9 @@ export class DepartmentsetupPage {
       .subscribe((data) => {
         self.department_details = data;
         this.Tenant_Add_ngModel = self.department_details.TENANT_GUID;
-        this.NAME_ngModel_Add = self.department_details.NAME; localStorage.setItem('Prev_Name', self.department_details.NAME); localStorage.setItem('Prev_TenantGuid', self.department_details.TENANT_GUID);
+        this.NAME_ngModel_Add = self.department_details.NAME; 
+        localStorage.setItem('Prev_Name', self.department_details.NAME); 
+        localStorage.setItem('Prev_TenantGuid', self.department_details.TENANT_GUID);
         this.DESCRIPTION_ngModel_Add = self.department_details.DESCRIPTION;
 
         this.loading.dismissAll();

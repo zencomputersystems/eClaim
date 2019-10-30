@@ -1,15 +1,16 @@
-import {Injectable} from '@angular/core';
-import {Headers,RequestOptions, URLSearchParams} from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-//import {EntertainmentClaim_Model} from '../models/entertainment_model';
-import {GiftClaim_Model} from '../models/giftclaim_model';
-//import {MasterClaim_Model} from '../models/masterclaim_model';
-import {BaseHttpService} from './base-http';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import {Observable} from 'rxjs/Observable';
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
+//import {MasterClaim_Model} from '../models/masterclaim_model';
+import { BaseHttpService } from './base-http';
+//import {EntertainmentClaim_Model} from '../models/entertainment_model';
+import { GiftClaim_Model } from '../models/giftclaim_model';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class GiftClaim_Service 
@@ -43,25 +44,10 @@ export class GiftClaim_Service
 			.get(this.baseResourceUrl, { search: params, headers: queryHeaders})
 			.map(() => {
 					let banks: Array<GiftClaim_Model> = [];
-					// result.resource.forEach((bank) => {
-					// 	banks.push(BankSetup_Model.fromJson(bank));
-					// });  
 					return banks;
 				}).catch(this.handleError);
 	};
 	
-	// save_main_claim_request (master_main: MasterClaim_Model): Observable<any> 
-	// {
-	// 	var queryHeaders = new Headers();
-    // 	queryHeaders.append('Content-Type', 'application/json');
-    // 	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    // 	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-	// 	let options = new RequestOptions({ headers: queryHeaders });
-	// 	return this.httpService.http.post(this.baseResourceUrl1, master_main.toJson(true),options)
-	// 		.map((response) => {
-	// 			return response;
-	// 		});
-    // }
     
     save_claim_request_detail (gift_main: GiftClaim_Model): Observable<any> 
 	{

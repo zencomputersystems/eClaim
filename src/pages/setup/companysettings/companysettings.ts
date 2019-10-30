@@ -319,9 +319,9 @@ export class CompanysettingsPage {
         // if (element.KEY_NAME == "default_payment_type") { element.KEY_VALUE = formValues.PaymentType.trim(); }
 
         if (element.KEY_NAME == "default_payment_type") {
-          for (var item in this.PaymentTypes) {
-            if (this.PaymentTypes[item]["PAYMENT_TYPE_GUID"] == formValues.PaymentType.trim()) {
-              if (element.KEY_NAME == "default_payment_type") { element.KEY_VALUE = formValues.PaymentType.trim() + ',' + this.PaymentTypes[item]["NAME"]; }
+          for (var itemA in this.PaymentTypes) {
+            if (this.PaymentTypes[itemA]["PAYMENT_TYPE_GUID"] == formValues.PaymentType.trim()) {
+              if (element.KEY_NAME == "default_payment_type") { element.KEY_VALUE = formValues.PaymentType.trim() + ',' + this.PaymentTypes[itemA]["NAME"]; }
             }
           }
         }

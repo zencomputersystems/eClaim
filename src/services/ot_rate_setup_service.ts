@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import * as constants from '../app/config/constants';
-import { OTRateSetup_Model } from '../models/ot_rate_setup_model';
+
+import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
+
 import { BaseHttpService } from './base-http';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { Injectable } from '@angular/core';
+import { OTRateSetup_Model } from '../models/ot_rate_setup_model';
 import { Observable } from 'rxjs/Observable';
-
 
 @Injectable()
 export class OTRateSetup_Service {
@@ -97,8 +97,7 @@ export class OTRateSetup_Service {
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
-                var result: any = response.json();
-                let claimtype: OTRateSetup_Model = OTRateSetup_Model.fromJson(result);
+                let claimtype: Array<OTRateSetup_Model> = response.json();
                 return claimtype;
             }).catch(this.handleError);
     };
