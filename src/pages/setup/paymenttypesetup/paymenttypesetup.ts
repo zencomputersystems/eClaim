@@ -143,27 +143,8 @@ export class PaymenttypesetupPage extends authCheck {
     // Get super();
     super(navCtrl);
 
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------
-        this.FillTenant();
-
-        //Display Grid---------------------------------------------
+    //Display Grid---------------------------------------------
         this.DisplayGrid();
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
 
       //-------------------------------------------------------
       if (localStorage.getItem("g_USER_GUID") != "sva") {
@@ -183,37 +164,6 @@ export class PaymenttypesetupPage extends authCheck {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PaymenttypesetupPage');
-  }
-
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_Name') == null) {
-      localStorage.setItem('Prev_Name', null);
-    }
-    else {
-      localStorage.removeItem("Prev_Name");
-    }
-    if (localStorage.getItem('Prev_TenantGuid') == null) {
-      localStorage.setItem('Prev_TenantGuid', null);
-    }
-    else {
-      localStorage.removeItem("Prev_TenantGuid");
-    }
-  }
-
-  FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
   }
 
   DisplayGrid() {

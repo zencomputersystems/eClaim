@@ -10,8 +10,8 @@ import { CashcardSetup_Model } from '../../../models/cashcardsetup_model';
 import { CashcardSetup_Service } from '../../../services/cashcardsetup_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the CashcardsetupPage page.
@@ -24,10 +24,10 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-cashcardsetup',
   templateUrl: 'cashcardsetup.html', providers: [CashcardSetup_Service, BaseHttpService]
 })
-export class CashcardsetupPage {
+export class CashcardsetupPage extends authCheck {
   cashcard_entry: CashcardSetup_Model = new CashcardSetup_Model();
   Cashform: FormGroup;
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_cashcard' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
@@ -125,108 +125,49 @@ export class CashcardsetupPage {
     }); alert.present();
   }
 
-  loading: Loading; button_Add_Disable:boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private cashcardsetupservice: CashcardSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, Please login.');
-      this.navCtrl.push(LoginPage);
+  loading: Loading;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private cashcardsetupservice:
+      CashcardSetup_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController
+  ) {
+    super(navCtrl, true);
+    //Display Grid---------------------------------------------
+    this.DisplayGrid();
+
+    //-------------------------------------------------------
+    if (localStorage.getItem("g_IS_SUPER") != "1") {
+      this.Cashform = fb.group({
+        CASHCARD_SNO: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        ACCOUNT_ID: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        ACCOUNT_PASSWORD: [null, Validators.compose([Validators.pattern('((?=.*\)(?=.*[a-zA-Z0-9]).{4,20})'), Validators.required])],
+        //MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$'), Validators.required])],          
+        MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http[s]?:\\/\\/){0,1}(www\\.){0,1}[a-zA-Z0-9\\.\\-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}$'), Validators.required])],
+
+        //For email validation
+        //Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}')
+        DESCRIPTION: [null],
+      });
     }
     else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_IS_SUPER") != "1") {
-        //Get the role for this page------------------------------        
-        if(localStorage.getItem("g_KEY_ADD") == "0"){ this.button_Add_Disable = true; }
-        if(localStorage.getItem("g_KEY_EDIT") == "0"){ this.button_Edit_Disable = true; }
-        if(localStorage.getItem("g_KEY_DELETE") == "0"){ this.button_Delete_Disable = true; }
-        if(localStorage.getItem("g_KEY_VIEW") == "0"){ this.button_View_Disable = true; }
-        
-        //Clear localStorage value--------------------------------      
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------
-        this.FillTenant();
-
-        //Display Grid---------------------------------------------
-        this.DisplayGrid();
-
-        //-------------------------------------------------------
-        if (localStorage.getItem("g_IS_SUPER") != "1") {
-          this.Cashform = fb.group({
-            CASHCARD_SNO: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            ACCOUNT_ID: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            ACCOUNT_PASSWORD: [null, Validators.compose([Validators.pattern('((?=.*\)(?=.*[a-zA-Z0-9]).{4,20})'), Validators.required])],
-            //MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$'), Validators.required])],          
-            MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http[s]?:\\/\\/){0,1}(www\\.){0,1}[a-zA-Z0-9\\.\\-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}$'), Validators.required])],
-
-            //For email validation
-            //Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}')
-            DESCRIPTION: [null],
-          });
-        }
-        else {
-          this.Cashform = fb.group({
-            CASHCARD_SNO: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            ACCOUNT_ID: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            ACCOUNT_PASSWORD: [null, Validators.compose([Validators.pattern('((?=.*\)(?=.*[a-zA-Z0-9]).{6,20})'), Validators.required])],
-            //MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$'), Validators.required])],
-            MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http[s]?:\\/\\/){0,1}(www\\.){0,1}[a-zA-Z0-9\\.\\-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}$'), Validators.required])],
-            DESCRIPTION: [null],
-            TENANT_NAME: [null, Validators.required],
-          });
-        }
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
+      this.Cashform = fb.group({
+        CASHCARD_SNO: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        ACCOUNT_ID: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        ACCOUNT_PASSWORD: [null, Validators.compose([Validators.pattern('((?=.*\)(?=.*[a-zA-Z0-9]).{6,20})'), Validators.required])],
+        //MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$'), Validators.required])],
+        MANAGEMENT_URL: [null, Validators.compose([Validators.pattern('^(http[s]?:\\/\\/){0,1}(www\\.){0,1}[a-zA-Z0-9\\.\\-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}$'), Validators.required])],
+        DESCRIPTION: [null],
+        TENANT_NAME: [null, Validators.required],
+      });
     }
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_TenantGuid') == null) {
-      localStorage.setItem('Prev_TenantGuid', null);
-    }
-    else {
-      localStorage.removeItem("Prev_TenantGuid");
-    }
 
-    if (localStorage.getItem('Prev_ACCOUNT_ID') == null) {
-      localStorage.setItem('Prev_ACCOUNT_ID', null);
-    }
-    else {
-      localStorage.removeItem("Prev_ACCOUNT_ID");
-    }
-
-    if (localStorage.getItem('Prev_CASHCARD_SNO') == null) {
-      localStorage.setItem('Prev_CASHCARD_SNO', null);
-    }
-    else {
-      localStorage.removeItem("Prev_CASHCARD_SNO");
-    }
-
-    if (localStorage.getItem('Prev_MANAGEMENT_URL') == null) {
-      localStorage.setItem('Prev_MANAGEMENT_URL', null);
-    }
-    else {
-      localStorage.removeItem("Prev_MANAGEMENT_URL");
-    }
-  }
-
-  FillTenant() {
-    if (localStorage.getItem("g_IS_SUPER") == "1") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
-  }
 
   DisplayGrid() {
     this.loading = this.loadingCtrl.create({
@@ -338,7 +279,7 @@ export class CashcardsetupPage {
     this.cashcard_entry.CREATION_TS = this.cashcard_details.CREATION_TS;
     this.cashcard_entry.CREATION_USER_GUID = this.cashcard_details.CREATION_USER_GUID;
     this.cashcard_entry.UPDATE_TS = new Date().toISOString();
-      this.cashcard_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
+    this.cashcard_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
   }
 
   SetCommonEntityForAddUpdate() {
@@ -399,7 +340,7 @@ export class CashcardsetupPage {
       url = this.baseResource_Url + "main_cashcard?filter=TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     else {
-      url = this.baseResource_Url + "main_cashcard?filter=TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;      
+      url = this.baseResource_Url + "main_cashcard?filter=TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     }
     let result: any;
     return new Promise((resolve) => {

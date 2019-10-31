@@ -10,9 +10,9 @@ import { Component } from '@angular/core';
 import { DeviceSetup_Model } from '../../../models/devicesetup_model';
 import { DeviceSetup_Service } from '../../../services/devicesetup_service';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the DeviceSetupPage page.
@@ -26,7 +26,7 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-device-setup',
   templateUrl: 'device-setup.html', providers: [DeviceSetup_Service, BaseHttpService, TitleCasePipe]
 })
-export class DeviceSetupPage {
+export class DeviceSetupPage extends authCheck {
   Deviceform: FormGroup;
   device_entry: DeviceSetup_Model = new DeviceSetup_Model();
   public page: number = 1;
@@ -182,51 +182,36 @@ export class DeviceSetupPage {
     });
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private devicesetupservice: DeviceSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
+  loading: Loading;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private devicesetupservice: DeviceSetup_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe
+  ) {
+    super(navCtrl, true);
+    //Display Grid---------------------------------------------
+    this.DisplayGrid();
+
+    //-------------------------------------------------------
+    if (localStorage.getItem("g_USER_GUID") != "sva") {
+      this.Deviceform = fb.group({
+        NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        ROLE: [null, Validators.required],
+        STATUS: [null, Validators.required],
+      });
     }
     else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------
-        this.FillTenant();
-
-        //Display Grid---------------------------------------------
-        this.DisplayGrid();
-
-        //-------------------------------------------------------
-        if (localStorage.getItem("g_USER_GUID") != "sva") {
-          this.Deviceform = fb.group({
-            NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            ROLE: [null, Validators.required],
-            STATUS: [null, Validators.required],
-          });
-        }
-        else {
-          this.Deviceform = fb.group({
-            NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            ROLE: [null, Validators.required],
-            STATUS: [null, Validators.required],
-            TENANT_NAME: [null, Validators.required],
-          });
-        }
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
+      this.Deviceform = fb.group({
+        NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        ROLE: [null, Validators.required],
+        STATUS: [null, Validators.required],
+        TENANT_NAME: [null, Validators.required],
+      });
     }
   }
 
@@ -234,36 +219,6 @@ export class DeviceSetupPage {
     console.log('ionViewDidLoad DeviceSetupPage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_Name') == null) {
-      localStorage.setItem('Prev_Name', null);
-    }
-    else {
-      localStorage.removeItem("Prev_Name");
-    }
-    if (localStorage.getItem('Prev_TenantGuid') == null) {
-      localStorage.setItem('Prev_TenantGuid', null);
-    }
-    else {
-      localStorage.removeItem("Prev_TenantGuid");
-    }
-  }
-
-  FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
-  }
 
   stores: any[];
   search(searchString: any) {
