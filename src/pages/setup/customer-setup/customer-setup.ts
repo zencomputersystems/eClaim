@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { SocCustomerLocation_Model } from '../../../models/soc_customer_location_model';
 import { SocCustomer_Model } from '../../../models/soc_customer_model';
 import { SocMain_Service } from '../../../services/socmain_service';
@@ -16,6 +15,7 @@ import { Tenant_Main_Model } from '../../../models/tenant_main_model';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
 import { View_SOC_Model } from '../../../models/view_soc_model';
+import { authCheck } from '../../../shared/authcheck';
 import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
@@ -30,7 +30,7 @@ import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
   selector: 'page-customer-setup',
   templateUrl: 'customer-setup.html', providers: [SocMain_Service, BaseHttpService, TitleCasePipe]
 })
-export class CustomerSetupPage {
+export class CustomerSetupPage extends authCheck {
   customer_entry: SocCustomer_Model = new SocCustomer_Model();
   customer_location_entry: SocCustomerLocation_Model = new SocCustomerLocation_Model();
   tenant_entry: Tenant_Main_Model = new Tenant_Main_Model();
@@ -133,7 +133,6 @@ export class CustomerSetupPage {
               text: 'OK',
               handler: () => {
                 console.log('OK clicked');
-                var self = this;
                 //For Customer-----------------------------------
                 this.socservice.remove_customer(CUSTOMER_GUID)
                   .subscribe(() => {
@@ -175,107 +174,59 @@ export class CustomerSetupPage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private socservice: SocMain_Service, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe, private alertCtrl: AlertController) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.setRoot(LoginPage);
+  loading: Loading;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private socservice: SocMain_Service,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe,
+    private alertCtrl: AlertController
+  ) {
+    super(navCtrl, true);
+    //Display Grid---------------------------------------------
+    this.DisplayGrid();
+
+    //-------------------------------------------------------
+    if (localStorage.getItem("g_USER_GUID") != "sva") {
+      this.Customerform = fb.group({
+        customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        location_name: [null],
+        registration_no: [null],
+        address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
+        address2: [null],
+        address3: [null],
+        contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
+        contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$')])],
+        contact_no1: [null],
+        contact_no2: [null],
+        email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}')])],
+        division: [null],
+      });
     }
     else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_IS_SUPER") != "1") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------      
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------
-        this.FillTenant();
-
-        //Display Grid---------------------------------------------
-        this.DisplayGrid();
-
-        //-------------------------------------------------------
-        if (localStorage.getItem("g_USER_GUID") != "sva") {
-          this.Customerform = fb.group({
-            customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            location_name: [null],
-            registration_no: [null],
-            address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
-            address2: [null],
-            address3: [null],
-            contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
-            contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$')])],
-            contact_no1: [null],
-            contact_no2: [null],
-            email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}')])],
-            division: [null],
-          });
-        }
-        else {
-          this.Customerform = fb.group({
-            customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            location_name: [null],
-            registration_no: [null],
-            address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
-            address2: [null],
-            address3: [null],
-            contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
-            contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$')])],
-            contact_no1: [null],
-            contact_no2: [null],
-            email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}')])],
-            division: [null],
-            TENANT_NAME: [null],
-          });
-        }
-
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
+      this.Customerform = fb.group({
+        customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        location_name: [null],
+        registration_no: [null],
+        address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
+        address2: [null],
+        address3: [null],
+        contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$')])],
+        contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$')])],
+        contact_no1: [null],
+        contact_no2: [null],
+        email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}')])],
+        division: [null],
+        TENANT_NAME: [null],
+      });
     }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CustomerSetupPage');
-  }
-
-  ClearLocalStorage() {
-    if (localStorage.getItem('PREV_TENANT_GUID') == null) {
-      localStorage.setItem('PREV_TENANT_GUID', null);
-    }
-    else {
-      localStorage.removeItem("PREV_TENANT_GUID");
-    }
-
-    if (localStorage.getItem('PREV_CUSTOMER_NAME') == null) {
-      localStorage.setItem('PREV_CUSTOMER_NAME', null);
-    }
-    else {
-      localStorage.removeItem("PREV_CUSTOMER_NAME");
-    }
-  }
-
-  FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
   }
 
   stores: any[];

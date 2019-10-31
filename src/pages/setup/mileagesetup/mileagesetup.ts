@@ -9,11 +9,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { MileageSetup_Model } from '../../../models/mileagesetup_model';
 import { MileageSetup_Service } from '../../../services/mileagesetup_service';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the MileagesetupPage page.
@@ -26,7 +26,7 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-mileagesetup',
   templateUrl: 'mileagesetup.html', providers: [MileageSetup_Service, BaseHttpService, TitleCasePipe]
 })
-export class MileagesetupPage {
+export class MileagesetupPage extends authCheck {
   mileage_entry: MileageSetup_Model = new MileageSetup_Model();
   Mileageform: FormGroup;
   public page: number = 1;
@@ -83,7 +83,10 @@ export class MileagesetupPage {
         self.mileage_details = data;
 
         this.Tenant_Add_ngModel = self.mileage_details.TENANT_GUID;
-        this.CATEGORY_ngModel_Add = self.mileage_details.CATEGORY; localStorage.setItem('Prev_Category', self.mileage_details.CATEGORY); localStorage.setItem('Prev_TenantGuid', self.mileage_details.TENANT_GUID); localStorage.setItem('Prev_RateDate', new Date(self.mileage_details.RATE_DATE).toISOString());
+        this.CATEGORY_ngModel_Add = self.mileage_details.CATEGORY; 
+        localStorage.setItem('Prev_Category', self.mileage_details.CATEGORY); 
+        localStorage.setItem('Prev_TenantGuid', self.mileage_details.TENANT_GUID); 
+        localStorage.setItem('Prev_RateDate', new Date(self.mileage_details.RATE_DATE).toISOString());
         this.RATE_PER_UNIT_ngModel_Add = self.mileage_details.RATE_PER_UNIT.toFixed(2);
         this.RATE_DATE_ngModel_Add = new Date(self.mileage_details.RATE_DATE).toISOString();
 
@@ -134,34 +137,20 @@ export class MileagesetupPage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private mileagesetupservice: MileageSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------
-        this.FillTenant();
-
+  loading: Loading; 
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    fb: FormBuilder, 
+    public http: Http, 
+    private mileagesetupservice: MileageSetup_Service, 
+    private alertCtrl: AlertController, 
+    private loadingCtrl: LoadingController, 
+    private titlecasePipe: TitleCasePipe
+    ) {
+      super(navCtrl, true);
         //Display Grid---------------------------------------------
         this.DisplayGrid(); 
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
       //-------------------------------------------------------
 
       if (localStorage.getItem("g_USER_GUID") != "sva") {
@@ -182,50 +171,12 @@ export class MileagesetupPage {
           TENANT_NAME: [null, Validators.required],
         });
       }
-    }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MileagesetupPage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_Category') == null) {
-      localStorage.setItem('Prev_Category', null);
-    }
-    else {
-      localStorage.removeItem("Prev_Category");
-    }
-    if (localStorage.getItem('Prev_TenantGuid') == null) {
-      localStorage.setItem('Prev_TenantGuid', null);
-    }
-    else {
-      localStorage.removeItem("Prev_TenantGuid");
-    }
-    if (localStorage.getItem('Prev_RateDate') == null) {
-      localStorage.setItem('Prev_RateDate', null);
-    }
-    else {
-      localStorage.removeItem("Prev_RateDate");
-    }
-  }
-
-  FillTenant() {
-    //fill all the tenant details----------------------------
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }    
-  }
 
   DisplayGrid() {
     //Display Grid---------------------------------------------

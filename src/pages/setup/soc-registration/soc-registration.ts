@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { SocCustomerLocation_Model } from '../../../models/soc_customer_location_model';
 import { SocCustomer_Model } from '../../../models/soc_customer_model';
 import { SocMain_Model } from '../../../models/socmain_model';
@@ -18,6 +17,7 @@ import { Tenant_Main_Model } from '../../../models/tenant_main_model';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
 import { View_SOC_Model } from '../../../models/view_soc_model';
+import { authCheck } from '../../../shared/authcheck';
 import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
@@ -31,7 +31,7 @@ import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
   selector: 'page-soc-registration',
   templateUrl: 'soc-registration.html', providers: [SocMain_Service, BaseHttpService, TitleCasePipe]
 })
-export class SocRegistrationPage {
+export class SocRegistrationPage extends authCheck {
   soc_entry: SocMain_Model = new SocMain_Model();
   project_entry: SocProject_Model = new SocProject_Model();
   customer_entry: SocCustomer_Model = new SocCustomer_Model();
@@ -211,76 +211,60 @@ export class SocRegistrationPage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private socservice: SocMain_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
+  loading: Loading;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private socservice: SocMain_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe
+  ) {
+    super(navCtrl, true);
+    //Display Grid---------------------------------------------
+    this.DisplayGrid();
+
+    this.LoadCustomers();
+
+    //-------------------------------------------------------
+    if (localStorage.getItem("g_USER_GUID") != "sva") {
+      this.Socform = fb.group({
+        soc: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
+        project_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
+        customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
+        // location_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // registration_no: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // address2: [null],
+        // address3: [null],
+        // contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // contact_no1: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // contact_no2: [null],
+        // email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}'), Validators.required])],            
+        // division: [null],
+      });
     }
     else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------      
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------
-        this.FillTenant();
-
-        //Display Grid---------------------------------------------
-        this.DisplayGrid();
-
-        this.LoadCustomers();
-
-        //-------------------------------------------------------
-        if (localStorage.getItem("g_USER_GUID") != "sva") {
-          this.Socform = fb.group({
-            soc: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
-            project_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
-            customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
-            // location_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // registration_no: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // address2: [null],
-            // address3: [null],
-            // contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // contact_no1: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // contact_no2: [null],
-            // email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}'), Validators.required])],            
-            // division: [null],
-          });
-        }
-        else {
-          this.Socform = fb.group({
-            soc: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
-            project_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
-            customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
-            location_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$')])],
-            // registration_no: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // address2: [null],
-            // address3: [null],
-            // contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // contact_no1: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            // contact_no2: [null],
-            // email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}'), Validators.required])],
-            // division: [null],
-            TENANT_NAME: [null, Validators.required],
-          });
-        }
-
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
+      this.Socform = fb.group({
+        soc: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
+        project_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
+        customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
+        location_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$')])],
+        // registration_no: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // address2: [null],
+        // address3: [null],
+        // contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // contact_no1: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        // contact_no2: [null],
+        // email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}'), Validators.required])],
+        // division: [null],
+        TENANT_NAME: [null, Validators.required],
+      });
     }
   }
 
@@ -339,51 +323,6 @@ export class SocRegistrationPage {
     this.CloseCustomerLookup();
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('PREV_TENANT_GUID') == null) {
-      localStorage.setItem('PREV_TENANT_GUID', null);
-    }
-    else {
-      localStorage.removeItem("PREV_TENANT_GUID");
-    }
-
-    if (localStorage.getItem('PREV_SOC_NO') == null) {
-      localStorage.setItem('PREV_SOC_NO', null);
-    }
-    else {
-      localStorage.removeItem("PREV_SOC_NO");
-    }
-
-    if (localStorage.getItem('PREV_PROJECT_NAME') == null) {
-      localStorage.setItem('PREV_PROJECT_NAME', null);
-    }
-    else {
-      localStorage.removeItem("PREV_PROJECT_NAME");
-    }
-
-    if (localStorage.getItem('PREV_CUSTOMER_NAME') == null) {
-      localStorage.setItem('PREV_CUSTOMER_NAME', null);
-    }
-    else {
-      localStorage.removeItem("PREV_CUSTOMER_NAME");
-    }
-  }
-
-  FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
-  }
 
   stores: any[];
   search(searchString: any) {

@@ -10,9 +10,9 @@ import { Component } from '@angular/core';
 import { DepartmentSetup_Model } from '../../../models/departmentsetup_model';
 import { DepartmentSetup_Service } from '../../../services/departmentsetup_service';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the DepartmentsetupPage page.
@@ -25,10 +25,10 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-departmentsetup',
   templateUrl: 'departmentsetup.html', providers: [DepartmentSetup_Service, BaseHttpService, TitleCasePipe]
 })
-export class DepartmentsetupPage {
+export class DepartmentsetupPage extends authCheck {
   department_entry: DepartmentSetup_Model = new DepartmentSetup_Model();
   Departmentform: FormGroup;
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = "";
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
@@ -75,8 +75,8 @@ export class DepartmentsetupPage {
       .subscribe((data) => {
         self.department_details = data;
         this.Tenant_Add_ngModel = self.department_details.TENANT_GUID;
-        this.NAME_ngModel_Add = self.department_details.NAME; 
-        localStorage.setItem('Prev_Name', self.department_details.NAME); 
+        this.NAME_ngModel_Add = self.department_details.NAME;
+        localStorage.setItem('Prev_Name', self.department_details.NAME);
         localStorage.setItem('Prev_TenantGuid', self.department_details.TENANT_GUID);
         this.DESCRIPTION_ngModel_Add = self.department_details.DESCRIPTION;
 
@@ -121,48 +121,27 @@ export class DepartmentsetupPage {
     }
   }
 
-  loading: Loading; button_Add_Disable:boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private departmentsetupservice: DepartmentSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if(localStorage.getItem("g_KEY_ADD") == "0"){ this.button_Add_Disable = true; }
-        if(localStorage.getItem("g_KEY_EDIT") == "0"){ this.button_Edit_Disable = true; }
-        if(localStorage.getItem("g_KEY_DELETE") == "0"){ this.button_Delete_Disable = true; }
-        if(localStorage.getItem("g_KEY_VIEW") == "0"){ this.button_View_Disable = true; }
-        
-        //Clear localStorage value--------------------------------
-        this.ClearLocalStorage();
+  loading: Loading;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private departmentsetupservice: DepartmentSetup_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe
+  ) {
+    super(navCtrl, true);
+    //Display Grid---------------------------------------------
+    this.DisplayGrid();
 
-        //fill all the tenant details----------------------------
-        this.FillTenant();
-
-        //Display Grid---------------------------------------------
-        this.DisplayGrid();
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
-      //-------------------------------------------------------
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        this.Departmentform = fb.group({
-          NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-          DESCRIPTION: [null],
-        });
-      }
-      else {
-        this.Departmentform = fb.group({
-          NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-          DESCRIPTION: [null],
-          TENANT_NAME: [null, Validators.required],
-        });
-      }
+    //-------------------------------------------------------
+    if (localStorage.getItem("g_USER_GUID") != "sva") {
+      this.Departmentform = fb.group({
+        NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        DESCRIPTION: [null],
+      });
     }
   }
 
@@ -170,46 +149,16 @@ export class DepartmentsetupPage {
     console.log('ionViewDidLoad DepartmentsetupPage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_Name') == null) {
-      localStorage.setItem('Prev_Name', null);
-    }
-    else {
-      localStorage.removeItem("Prev_Name");
-    }
-    if (localStorage.getItem('Prev_TenantGuid') == null) {
-      localStorage.setItem('Prev_TenantGuid', null);
-    }
-    else {
-      localStorage.removeItem("Prev_TenantGuid");
-    }
-  }
 
-  FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
-  }
-
-  stores: any[]; 
+  stores: any[];
   search(searchString: any) {
     let val = searchString.target.value;
     if (!val || !val.trim()) {
-      this.departments = this.stores;      
+      this.departments = this.stores;
       return;
     }
     this.departments = this.filter({
-      NAME: val      
+      NAME: val
     });
   }
 
@@ -217,7 +166,7 @@ export class DepartmentsetupPage {
     if (!params) {
       return this.stores;
     }
-    
+
     return this.stores.filter((item) => {
       for (let key in params) {
         let field = item[key];
