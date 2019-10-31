@@ -16,6 +16,7 @@ import { TenantCompanySetup_Service } from '../../../services/tenantcompanysetup
 import { TenantCompanySiteSetup_Model } from '../../../models/tenantcompanysitesetup_model';
 import { TenantCompanySiteSetup_Service } from '../../../services/tenantcompanysitesetup_service';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the BranchsetupPage page.
@@ -28,7 +29,7 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-branchsetup',
   templateUrl: 'branchsetup.html', providers: [TenantCompanySetup_Service, TenantCompanySiteSetup_Service, BaseHttpService]
 })
-export class BranchsetupPage {
+export class BranchsetupPage extends authCheck {
   tenant_company_entry: TenantCompanySetup_Model = new TenantCompanySetup_Model();
   tenant_company_site_entry: TenantCompanySiteSetup_Model = new TenantCompanySiteSetup_Model();
 
@@ -115,7 +116,16 @@ export class BranchsetupPage {
     // }); alert.present();
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private TenantCompanySetupService: TenantCompanySetup_Service, private tenantcompanysitesetupservice: TenantCompanySiteSetup_Service) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    fb: FormBuilder, 
+    public http: Http, 
+    private TenantCompanySetupService: TenantCompanySetup_Service, 
+    private tenantcompanysitesetupservice: TenantCompanySiteSetup_Service
+    ) {
+      super(navCtrl, true);
+      
     if (localStorage.getItem("g_USER_GUID") != null) {
       this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/zcs/_table/vw_tenantcompanysitedetails?filter=(TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
       this.http

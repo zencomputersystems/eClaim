@@ -11,9 +11,9 @@ import { BankSetup_Service } from '../../../services/banksetup_service';
 import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { ExcelService } from '../../../providers/excel.service';
-import { LoginPage } from '../../login/login';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the BanksetupPage page.
@@ -26,7 +26,7 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-banksetup',
   templateUrl: 'banksetup.html', providers: [BankSetup_Service, BaseHttpService, TitleCasePipe, ExcelService]
 })
-export class BanksetupPage {
+export class BanksetupPage extends authCheck {
   NAME: any;
   bank_entry: BankSetup_Model = new BankSetup_Model();
   Bankform: FormGroup;
@@ -44,7 +44,7 @@ export class BanksetupPage {
   Tenant_Add_ngModel: any;
   AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
   tenants: any;
-  public page:number = 1;
+  public page: number = 1;
   //Set the Model Name for Add------------------------------------------
   public NAME_ngModel_Add: any;
   //---------------------------------------------------------------------
@@ -119,49 +119,35 @@ export class BanksetupPage {
     }); alert.present();
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(private excelService: ExcelService, private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private banksetupservice: BankSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
+  loading: Loading;
+  constructor(
+    private excelService: ExcelService,
+    fb: FormBuilder,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: Http,
+    private banksetupservice: BankSetup_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe) {
+    super(navCtrl, true);
+
+    //Display Grid---------------------------------------------      
+    this.DisplayGrid();
+
+    //----------------------------------------------------------
+    if (localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
+      this.Bankform = fb.group({
+        NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      });
     }
     else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------      
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------      
-        this.FillTenant();
-
-        //Display Grid---------------------------------------------      
-        this.DisplayGrid();
-
-        //----------------------------------------------------------
-        if (localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
-          this.Bankform = fb.group({
-            NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-          });
-        }
-        else {
-          this.Bankform = fb.group({
-            NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-            TENANT_NAME: [null, Validators.required],
-          });
-        }
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
-      this.excelService = excelService;
+      this.Bankform = fb.group({
+        NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+        TENANT_NAME: [null, Validators.required],
+      });
     }
+    this.excelService = excelService;
   }
 
   ionViewDidLoad() {
@@ -183,22 +169,6 @@ export class BanksetupPage {
     }
   }
 
-  FillTenant() {
-    if (localStorage.getItem("g_IS_SUPER") == "1") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
-  }
 
   DisplayGrid() {
     this.loading = this.loadingCtrl.create({
@@ -295,7 +265,7 @@ export class BanksetupPage {
     this.bank_entry.CREATION_TS = this.bank_details.CREATION_TS;
     this.bank_entry.CREATION_USER_GUID = this.bank_details.CREATION_USER_GUID;
     this.bank_entry.UPDATE_TS = new Date().toISOString();
-      this.bank_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
+    this.bank_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
   }
 
   SetCommonEntityForAddUpdate() {
@@ -369,12 +339,12 @@ export class BanksetupPage {
     this.Tenant_Add_ngModel = "";
   }
 
-  ExportToExcel(evt: any) {
-    this.excelService.exportAsExcelFile(this.banks,'Data');
+  ExportToExcel() {
+    this.excelService.exportAsExcelFile(this.banks, 'Data');
   }
-  
+
   emailUrl: string = constants.DREAMFACTORY_EMAIL_URL;
-  EmailTest(evt: any){
+  EmailTest() {
     var queryHeaders = new Headers();
     queryHeaders.append('Content-Type', 'application/json');
     queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
@@ -405,72 +375,72 @@ export class BanksetupPage {
       "subject": "Test mail.",
       "body_text": "",
       "body_html": '<html>' +
-      '<head>' +
-          '<meta name="GENERATOR" content="MSHTML 10.00.9200.17606">'+
-      '</head>'+
-      '<body>'+
-          '<div style="FONT-FAMILY: Century Gothic">'+
-              '<div style="MIN-WIDTH: 500px">'+
-                  '<br>'+
-                  '<div style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src="http://api.zen.com.my/api/v2/azurefs/azurefs/2018-09-17T13:33:42.429Zzen2.png?api_key=' + constants.DREAMFACTORY_API_KEY+'"></div>'+
-                  '<div style="MARGIN: 0 30px;">'+
-                      '<div style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><b>Test mail</b></div>'+
-                  '</div>'+
-                  '<div style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding: 11px 30px">'+
-                      '<hr>'+
-                      '<div style="FONT-SIZE: 16px; TEXT-ALIGN: left;"><b>Mail Details :</b></div>'+
-                      '<br />'+
-                      '<table style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;">'+
-                          '<tbody>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left">Employee</td>'+
-                                  '<td>:</td>'+
-                                  '<td colspan="2">&nbsp;</td>'+
-                              '</tr>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left">Applied Date</td>'+
-                                  '<td>:</td>'+
-                                  '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>'+
-                              '</tr>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left">Claim Date </td>'+
-                                  '<td>:</td>'+
-                                  '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>'+
-                              '</tr>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left">Claim Type</td>'+
-                                  '<td>: </td>'+
-                                  '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>'+
-                              '</tr>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left">Project / Customer / SOC</td>'+
-                                  '<td>:</td>'+
-                                  '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>'+
-                              '</tr>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left">Claim Amount</td>'+
-                                  '<td>: </td>'+
-                                  '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>'+
-                              '</tr>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left">Description</td>'+
-                                  '<td>: </td>'+
-                                  '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>'+
-                              '</tr>'+
-                              '<tr>'+
-                                  '<td style="TEXT-ALIGN: left"></td>'+
-                                  '<td></td>'+
-                                  '<td style="TEXT-ALIGN: left" colspan="2"><a href="http://autobuild.zeontech.com.my/eclaim/#/ClaimapprovertasklistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">Open eClaim</a></td>'+
-                              '</tr>'+
-                          '</tbody>'+
-                      '</table>'+
-                      '<hr>'+
-                      '<div style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</div>'+
-                  '</div>'+
-              '</div>'+
-          '</div>'+
-      '</body>'+
-      '</html>',
+        '<head>' +
+        '<meta name="GENERATOR" content="MSHTML 10.00.9200.17606">' +
+        '</head>' +
+        '<body>' +
+        '<div style="FONT-FAMILY: Century Gothic">' +
+        '<div style="MIN-WIDTH: 500px">' +
+        '<br>' +
+        '<div style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src="http://api.zen.com.my/api/v2/azurefs/azurefs/2018-09-17T13:33:42.429Zzen2.png?api_key=' + constants.DREAMFACTORY_API_KEY + '"></div>' +
+        '<div style="MARGIN: 0 30px;">' +
+        '<div style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><b>Test mail</b></div>' +
+        '</div>' +
+        '<div style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding: 11px 30px">' +
+        '<hr>' +
+        '<div style="FONT-SIZE: 16px; TEXT-ALIGN: left;"><b>Mail Details :</b></div>' +
+        '<br />' +
+        '<table style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;">' +
+        '<tbody>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left">Employee</td>' +
+        '<td>:</td>' +
+        '<td colspan="2">&nbsp;</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left">Applied Date</td>' +
+        '<td>:</td>' +
+        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left">Claim Date </td>' +
+        '<td>:</td>' +
+        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left">Claim Type</td>' +
+        '<td>: </td>' +
+        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left">Project / Customer / SOC</td>' +
+        '<td>:</td>' +
+        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left">Claim Amount</td>' +
+        '<td>: </td>' +
+        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left">Description</td>' +
+        '<td>: </td>' +
+        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td style="TEXT-ALIGN: left"></td>' +
+        '<td></td>' +
+        '<td style="TEXT-ALIGN: left" colspan="2"><a href="http://autobuild.zeontech.com.my/eclaim/#/ClaimapprovertasklistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">Open eClaim</a></td>' +
+        '</tr>' +
+        '</tbody>' +
+        '</table>' +
+        '<hr>' +
+        '<div style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</body>' +
+        '</html>',
       "from_name": "eClaim",
       "from_email": "balasingh73@gmail.com",
       "reply_to_name": "",
@@ -479,8 +449,8 @@ export class BanksetupPage {
 
     this.http.post(this.emailUrl, body, options)
       .map(res => res.json())
-      .subscribe(data => {
-        alert('Mail sent sucessfully.'); 
+      .subscribe(() => {
+        alert('Mail sent sucessfully.');
       });
   }
 }

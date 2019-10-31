@@ -15,7 +15,7 @@
 
 <ion-content padding>
   <ion-fab top right edge>
-    <button ion-fab mini (click)="AddCompanyClick()"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab mini (click)="AddCompanyClick()" [disabled]="button_Add_Disable"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
   <ion-list>
@@ -42,8 +42,8 @@
           <td class="lgl1">{{company.PHONE}}</td>
           <td class="lgl1">{{company.EMAIL}}</td>
           <td class="lgl1 fColor">
-            <button ion-button item-end (click)="EditClick(company.COMPANY_GUID)"><ion-icon name="md-create"></ion-icon></button>
-            <button ion-button item-end (click)="DeleteClick(company.COMPANY_GUID)"><ion-icon name="md-close"></ion-icon></button>
+            <button ion-button item-end (click)="EditClick(company.COMPANY_GUID)" [disabled]="button_Edit_Disable" ><ion-icon name="md-create"></ion-icon></button>
+            <button ion-button item-end (click)="DeleteClick(company.COMPANY_GUID)" [disabled]="button_Delete_Disable" ><ion-icon name="md-close"></ion-icon></button>
           </td>
         </tr>
 

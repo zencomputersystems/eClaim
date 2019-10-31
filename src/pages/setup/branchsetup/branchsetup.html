@@ -15,7 +15,7 @@
 
 <ion-content padding>
   <ion-fab top right edge>
-    <button ion-fab mini (click)="AddBranchsClick()">
+    <button ion-fab mini (click)="AddBranchsClick()" [disabled]="button_Add_Disable">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>
@@ -49,17 +49,17 @@
           <td class="lgl1 getHeader"reshead="Branch Name">{{branch.SITE_NAME}}</td>
           <td class="lgl1 getHeader" reshead="Action">
             <ion-item>
-                <ion-toggle class="tog" *ngIf="branch.ISHQ==1" checked=true></ion-toggle>
-                <ion-toggle class="tog" *ngIf="branch.ISHQ==0" checked=false></ion-toggle>
+                <ion-toggle class="tog" *ngIf="branch.ISHQ==1" checked=true [disabled]="button_Edit_Disable"></ion-toggle>
+                <ion-toggle class="tog" *ngIf="branch.ISHQ==0" checked=false [disabled]="button_Edit_Disable"></ion-toggle>
             </ion-item>
 
           </td>
 
           <td class="lgl1 getHeader fColor">
-            <button ion-button item-end (click)="EditClick(branch.TENANT_COMPANY_GUID, branch.TENANT_COMPANY_SITE_GUID, branch.NAME, branch.SITE_NAME)">
+            <button ion-button item-end (click)="EditClick(branch.TENANT_COMPANY_GUID, branch.TENANT_COMPANY_SITE_GUID, branch.NAME, branch.SITE_NAME)"  [disabled]="button_Edit_Disable">
               <ion-icon name="md-create"></ion-icon>
             </button>
-            <button ion-button item-end (click)="DeleteClick(branch.TENANT_COMPANY_GUID, branch.TENANT_COMPANY_SITE_GUID)">
+            <button ion-button item-end (click)="DeleteClick(branch.TENANT_COMPANY_GUID, branch.TENANT_COMPANY_SITE_GUID)"  [disabled]="button_Delete_Disable">
               <ion-icon name="md-close"></ion-icon>
             </button>
           </td>

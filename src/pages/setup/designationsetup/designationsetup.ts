@@ -10,9 +10,9 @@ import { Component } from '@angular/core';
 import { DesignationSetup_Model } from '../../../models/designationsetup_model';
 import { DesignationSetup_Service } from '../../../services/designationsetup_service';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the DesignationsetupPage page.
@@ -25,11 +25,11 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-designationsetup',
   templateUrl: 'designationsetup.html', providers: [DesignationSetup_Service, BaseHttpService, TitleCasePipe]
 })
-export class DesignationsetupPage {
+export class DesignationsetupPage extends authCheck {
 
   Designationform: FormGroup;
   designation_entry: DesignationSetup_Model = new DesignationSetup_Model();
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string;
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
@@ -46,7 +46,9 @@ export class DesignationsetupPage {
   //---------------------------------------------------------------------
 
   Tenant_Add_ngModel: any;
-  AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
+  AdminLogin: boolean = false; 
+  Add_Form: boolean = false; 
+  Edit_Form: boolean = false;
   tenants: any;
   Key_Param: string = 'api_key=' + constants.DREAMFACTORY_API_KEY;
   HeaderText: string = "";
@@ -122,26 +124,18 @@ export class DesignationsetupPage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private designationsetupservice: DesignationSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------
-        this.FillTenant();
+  loading: Loading;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private designationsetupservice: DesignationSetup_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe
+  ) {
+    super(navCtrl, true);
 
         //Display Grid---------------------------------------------
         this.DisplayGrid();
@@ -160,58 +154,21 @@ export class DesignationsetupPage {
             TENANT_NAME: [null, Validators.required],
           });
         }
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
-    }
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DesignationsetupPage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_Name') == null) {
-      localStorage.setItem('Prev_Name', null);
-    }
-    else {
-      localStorage.removeItem("Prev_Name");
-    }
-    if (localStorage.getItem('Prev_TenantGuid') == null) {
-      localStorage.setItem('Prev_TenantGuid', null);
-    }
-    else {
-      localStorage.removeItem("Prev_TenantGuid");
-    }
-  }
-
-  FillTenant() {
-    if (localStorage.getItem("g_USER_GUID") == "sva") {
-      let tenantUrl: string = this.baseResource_Url + 'tenant_main?order=TENANT_ACCOUNT_NAME&' + this.Key_Param;
-      this.http
-        .get(tenantUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.tenants = data.resource;
-        });
-      this.AdminLogin = true;
-    }
-    else {
-      this.AdminLogin = false;
-    }
-  }
-
-  stores: any[]; 
+  stores: any[];
   search(searchString: any) {
     let val = searchString.target.value;
     if (!val || !val.trim()) {
-      this.designations = this.stores;      
+      this.designations = this.stores;
       return;
     }
     this.designations = this.filter({
-      NAME: val      
+      NAME: val
     });
   }
 
@@ -219,7 +176,7 @@ export class DesignationsetupPage {
     if (!params) {
       return this.stores;
     }
-    
+
     return this.stores.filter((item) => {
       for (let key in params) {
         let field = item[key];
