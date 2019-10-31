@@ -11,6 +11,7 @@ import { CompanySetup_Model } from '../../../models/companysetup_model';
 import { CompanySetup_Service } from '../../../services/companysetup_service';
 import { Component } from '@angular/core';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 //import { FormBuilder, FormGroup } from '@angular/forms';
@@ -29,7 +30,7 @@ import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
   selector: 'page-companysetup',
   templateUrl: 'companysetup.html', providers: [CompanySetup_Service, BaseHttpService]
 })
-export class CompanysetupPage {
+export class CompanysetupPage extends authCheck {
   company_entry: CompanySetup_Model = new CompanySetup_Model();
   //company: CompanySetup_Model = new CompanySetup_Model();
   Companyform: FormGroup;
@@ -129,6 +130,8 @@ export class CompanysetupPage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private companysetupservice: CompanySetup_Service, private alertCtrl: AlertController) {
+    super(navCtrl, true);
+    
     this.http
       .get(this.baseResourceUrl)
       .map(res => res.json())

@@ -8,11 +8,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { PaymentTypeSetup_Model } from '../../../models/paymenttypesetup_model';
 import { PaymentTypeSetup_Service } from '../../../services/paymenttypesetup_service';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the PaymenttypesetupPage page.
@@ -25,11 +25,11 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-paymenttypesetup',
   templateUrl: 'paymenttypesetup.html', providers: [PaymentTypeSetup_Service, BaseHttpService, TitleCasePipe]
 })
-export class PaymenttypesetupPage {
+export class PaymenttypesetupPage extends authCheck {
   Paymenttype_entry: PaymentTypeSetup_Model = new PaymentTypeSetup_Model();
   Paymenttypeform: FormGroup;
   //paymenttype: PaymentTypeSetup_Model = new PaymentTypeSetup_Model();
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_payment_type' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
@@ -47,7 +47,9 @@ export class PaymenttypesetupPage {
   //---------------------------------------------------------------------
 
   Tenant_Add_ngModel: any;
-  AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
+  AdminLogin: boolean = false; 
+  Add_Form: boolean = false; 
+  Edit_Form: boolean = false;
   tenants: any;
   Key_Param: string = 'api_key=' + constants.DREAMFACTORY_API_KEY;
 
@@ -68,7 +70,9 @@ export class PaymenttypesetupPage {
     this.loading.present();
 
     this.ClearControls();
-    this.AddPaymentTypeClicked = true; this.Add_Form = false; this.Edit_Form = true;
+    this.AddPaymentTypeClicked = true;
+    this.Add_Form = false;
+    this.Edit_Form = true;
 
     var self = this;
     this.paymenttypesetupservice
@@ -76,7 +80,9 @@ export class PaymenttypesetupPage {
       .subscribe((data) => {
         self.paymenttype_details = data;
         this.Tenant_Add_ngModel = self.paymenttype_details.TENANT_GUID;
-        this.NAME_ngModel_Add = self.paymenttype_details.NAME; localStorage.setItem('Prev_Name', self.paymenttype_details.NAME); localStorage.setItem('Prev_TenantGuid', self.paymenttype_details.TENANT_GUID);
+        this.NAME_ngModel_Add = self.paymenttype_details.NAME;
+        localStorage.setItem('Prev_Name', self.paymenttype_details.NAME);
+        localStorage.setItem('Prev_TenantGuid', self.paymenttype_details.TENANT_GUID);
         this.DESCRIPTION_ngModel_Add = self.paymenttype_details.DESCRIPTION;
 
         this.loading.dismissAll();
@@ -98,7 +104,6 @@ export class PaymenttypesetupPage {
         {
           text: 'OK',
           handler: () => {
-            console.log('OK clicked');
             var self = this;
             this.paymenttypesetupservice.remove(PAYMENT_TYPE_GUID)
               .subscribe(() => {
@@ -106,11 +111,11 @@ export class PaymenttypesetupPage {
                   return item.PAYMENT_TYPE_GUID != PAYMENT_TYPE_GUID
                 });
               });
-            //this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
         }
       ]
-    }); alert.present();
+    });
+    alert.present();
   }
 
   public ClosePaymentTypeClick() {
@@ -120,13 +125,24 @@ export class PaymenttypesetupPage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private paymenttypesetupservice: PaymentTypeSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
+  loading: Loading;
+  button_Add_Disable: boolean = false;
+  button_Edit_Disable: boolean = false;
+  button_Delete_Disable: boolean = false;
+  button_View_Disable: boolean = false;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private paymenttypesetupservice: PaymentTypeSetup_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe
+  ) {
+    // Get super();
+    super(navCtrl);
+
       this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
       if (localStorage.getItem("g_USER_GUID") != "sva") {
         //Get the role for this page------------------------------        
@@ -163,7 +179,6 @@ export class PaymenttypesetupPage {
           TENANT_NAME: [null, Validators.required],
         });
       }
-    }
   }
 
   ionViewDidLoad() {
