@@ -12,7 +12,6 @@ import { BranchsetupPage } from './branchsetup/branchsetup';
 import { CashcardsetupPage } from './cashcardsetup/cashcardsetup';
 import { ClaimtypePage } from './claimtype/claimtype';
 import { CompanysettingsPage } from './companysettings/companysettings';
-import { CompanysetupPage } from './companysetup/companysetup';
 import { Component } from '@angular/core';
 import { CountrysetupPage } from './countrysetup/countrysetup';
 import { CustomerSetupPage } from './customer-setup/customer-setup';
@@ -23,13 +22,13 @@ import { DeviceSetupPage } from './device-setup/device-setup';
 import { Http } from '@angular/http';
 import { ImportExcelDataPage } from '../import-excel-data/import-excel-data';
 import { LoginPage } from '../login/login';
+import { MenuCardInterface } from '../../interfaces/menu-card';
 import { MileagesetupPage } from './mileagesetup/mileagesetup';
 import { OtRateSetupPage } from './ot-rate-setup/ot-rate-setup';
 import { PaymenttypesetupPage } from './paymenttypesetup/paymenttypesetup';
 import { QualificationsetupPage } from './qualificationsetup/qualificationsetup';
 import { RolemodulesetupPage } from './rolemodulesetup/rolemodulesetup';
 import { RolesetupPage } from './rolesetup/rolesetup';
-import { SettingsPage } from './settings/settings';
 import { SetupguidePage } from './setupguide/setupguide';
 import { SocRegistrationPage } from './soc-registration/soc-registration';
 import { StatesetupPage } from './statesetup/statesetup';
@@ -84,57 +83,83 @@ export class SetupPage {
   TenantCompanyDisplay: boolean = false;
   BankDisplay: boolean = false;
   CashcardDisplay: boolean = false; */
-  Setup: { [ index: string] : boolean } = {
-    "SetupGuide"     : false,
-    "TenantCompany"  : false,
-    "Bank"           : false,
-    "Cashcard"       : false,
-    "ClaimType"      : false,
-    "Designation"    : false,
-    "Department"     : false,
-    "Mileage"        : false,
-    "PaymentType"    : false,
-    "Qualification"  : false,
-    "User"           : false,
-    "Customer"       : false,
-    "Soc"            : false,
-    "Country"        : false,
-    "State"          : false,
-    "Device"         : false,
-    "ImportData"     : false,
+  Setup: { [index: string]: boolean } = {
+    "SetupGuide": false,
+    "TenantCompany": false,
+    "Bank": false,
+    "Cashcard": false,
+    "ClaimType": false,
+    "Designation": false,
+    "Department": false,
+    "Mileage": false,
+    "PaymentType": false,
+    "Qualification": false,
+    "User": false,
+    "Customer": false,
+    "Soc": false,
+    "Country": false,
+    "State": false,
+    "Device": false,
+    "ImportData": false,
     "CompanySettings": false,
-    "DBMaintenance"  : false,
-    "RoleSetup"      : false,
-    "RoleModule"     : false,
+    "DBMaintenance": false,
+    "RoleSetup": false,
+    "RoleModule": false,
     "ApprovalProfile": false,
-    "OtRate"         : false,
+    "OtRate": false,
   }
- 
-  SetupPageMap: { [index: string] : string } = {
-    "SetupGuide"          : 'SetupguidePage',
-    "TenantCompany"       : 'BranchsetupPage',
-    "Bank"                : 'BanksetupPage',
-    "Cashcard"            : 'CashcardsetupPage',
-    "ClaimType"           : 'ClaimtypePage',
-    "Designation"         : 'DesignationsetupPage',
-    "Department"          : 'DepartmentsetupPage',
-    "Mileage"             : 'MileagesetupPage',
-    "PaymentType"         : 'PaymenttypesetupPage',
-    "Qualification"       : 'QualificationsetupPage',
-    "User"                : 'UserPage',
-    "Customer"            : 'CustomerSetupPage',
-    "Soc"                 : 'SocRegistrationPage',
-    "Country"             : 'CountrysetupPage',
-    "State"               : 'StatesetupPage',
-    "Device"              : 'DeviceSetupPage',
-    "ImportData"          : 'ImportExcelDataPage',
-    "CompanySettings"     : 'CompanysettingsPage',
-    "DBMaintenance"       : 'DbmaintenancePage',
-    "RoleSetup"           : 'RolesetupPage',
-    "RoleModule"          : 'RolemodulesetupPage',
-    "ApprovalProfile"     : 'ApprovalProfilePage',
-    "OtRate"              : 'OTRateSetupPage'
+
+  SetupPageMap: { [index: string]: string } = {
+    "SetupGuide": 'SetupguidePage',
+    "TenantCompany": 'BranchsetupPage',
+    "Bank": 'BanksetupPage',
+    "Cashcard": 'CashcardsetupPage',
+    "ClaimType": 'ClaimtypePage',
+    "Designation": 'DesignationsetupPage',
+    "Department": 'DepartmentsetupPage',
+    "Mileage": 'MileagesetupPage',
+    "PaymentType": 'PaymenttypesetupPage',
+    "Qualification": 'QualificationsetupPage',
+    "User": 'UserPage',
+    "Customer": 'CustomerSetupPage',
+    "Soc": 'SocRegistrationPage',
+    "Country": 'CountrysetupPage',
+    "State": 'StatesetupPage',
+    "Device": 'DeviceSetupPage',
+    "ImportData": 'ImportExcelDataPage',
+    "CompanySettings": 'CompanysettingsPage',
+    "DBMaintenance": 'DbmaintenancePage',
+    "RoleSetup": 'RolesetupPage',
+    "RoleModule": 'RolemodulesetupPage',
+    "ApprovalProfile": 'ApprovalProfilePage',
+    "OtRate": 'OTRateSetupPage'
   }
+
+  SetupCards: MenuCardInterface[] = [
+    { name: 'SetupguidePage', page: SetupguidePage, icon: "ios-cog", text: "SETUP_GUID" },
+    { name: 'BranchsetupPage', page: BranchsetupPage, icon: "ios-briefcase", text: "TENANT_COMPANY" },
+    { name: 'BanksetupPage', page: BanksetupPage, icon: "logo-usd", text: "BANK" },
+    { name: 'CashcardsetupPage', page: CashcardsetupPage, icon: "cash", text: "CASH_CARD" },
+    { name: 'ClaimtypePage', page: ClaimtypePage, icon: "list", text: "SETUP_CLAIM_TYPE" },
+    { name: 'DesignationsetupPage', page: DesignationsetupPage, icon: "person", text: "SETUP_DESIGNATION" },
+    { name: 'DepartmentsetupPage', page: DepartmentsetupPage, icon: "git-pull-request", text: "SETUP_DEPARTMENT" },
+    { name: 'MileagesetupPage', page: MileagesetupPage, icon: "car", text: "SETUP_MILEAGE" },
+    { name: 'PaymenttypesetupPage', page: PaymenttypesetupPage, icon: "list-box", text: "PAYMENT_TYPE" },
+    { name: 'QualificationsetupPage', page: QualificationsetupPage, icon: "medal", text: "SETUP_QUALIFICATION" },
+    { name: 'UserPage', page: UserPage, icon: "people", text: "USER_REGISTRATION" },
+    { name: 'CustomerSetupPage', page: CustomerSetupPage, icon: "man", text: "SETUP_CUSTOMER_REGISTRATION" },
+    { name: 'SocRegistrationPage', page: SocRegistrationPage, icon: "md-clipboard", text: "S_SETUP_GUID" },
+    { name: 'CountrysetupPage', page: CountrysetupPage, icon: "ios-pin", text: "SETUP_COUNTRY" },
+    { name: 'StatesetupPage', page: StatesetupPage, icon: "ios-pin-outline", text: "SETUP_STATE" },
+    { name: 'DeviceSetupPage', page: DeviceSetupPage, icon: "ios-finger-print-outline", text: "ATTENDANCE" },
+    { name: 'ImportExcelDataPage', page: ImportExcelDataPage, icon: "ios-stats-outline", text: "SETUP_IMPORT_DATA" },
+    { name: 'CompanysettingsPage', page: CompanysettingsPage, icon: "settings", text: "COMPANY_SETTINGS" },
+    { name: 'DbmaintenancePage', page: DbmaintenancePage, icon: "cloud-download", text: "DB_MAINTENANCE" },
+    { name: 'RolesetupPage', page: RolesetupPage, icon: "git-network", text: "Role Setup" },
+    { name: "RolemodulesetupPage", page: RolemodulesetupPage, icon: "ios-git-network", text: "Role Module Setup" },
+    { name: "ApprovalProfilePage", page: ApprovalProfilePage, icon: "basket", text: "Approval Profile" },
+    { name: "OTRateSetupPage", page: OtRateSetupPage, icon: "calculator", text: "OT Rate Setup" }
+  ];
 
   public DisableSetupAccess() {
     let Key: any;
@@ -151,7 +176,13 @@ export class SetupPage {
   }
 
   submodules: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private TenantCompanySetupService: TenantCompanySetup_Service, private tenantcompanysitesetupservice: TenantCompanySiteSetup_Service) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http
+  ) {
+
     if (localStorage.getItem("g_USER_GUID") != null) {
       this.DisableSetupAccess();
       if (localStorage.getItem("g_IS_TENANT_ADMIN") == "1") {
@@ -166,7 +197,7 @@ export class SetupPage {
           .subscribe(data => {
             this.submodules = data.resource;
             for (var item in data.resource) {
-              this.Setup[getKeyByValue(this.SetupPageMap,data.resource[item]["CODE_PAGE_NAME"])] = true;
+              this.Setup[getKeyByValue(this.SetupPageMap, data.resource[item]["CODE_PAGE_NAME"])] = true;
             }
           });
         //------------------------------------------------------------------------
@@ -177,108 +208,7 @@ export class SetupPage {
     }
   }
 
-  goToSetupGuide() {
-    this.navCtrl.push(SetupguidePage);
-  }
-
-  goToBanksetup() {
-    this.navCtrl.push(BanksetupPage)
-  }
-
-  goToBranchsetup() {
-    this.navCtrl.push(BranchsetupPage)
-  }
-
-  goToCashcardsetup() {
-    this.navCtrl.push(CashcardsetupPage)
-  }
-
-  goToClaimtypesetup() {
-    this.navCtrl.push(ClaimtypePage)
-  }
-
-  goToUser() {
-    this.navCtrl.push(UserPage)
-  }
-
-  goToCustomer() {
-    this.navCtrl.push(CustomerSetupPage);
-  }
-
-  goToSOC() {
-    this.navCtrl.push(SocRegistrationPage)
-  }
-
-  goToCompanysetup() {
-    this.navCtrl.push(CompanysetupPage)
-  }
-
-  goToDesignationsetup() {
-    this.navCtrl.push(DesignationsetupPage)
-  }
-
-  goToDepartmentsetup() {
-    this.navCtrl.push(DepartmentsetupPage)
-  }
-
-  goToPaymenttypesetup() {
-    this.navCtrl.push(PaymenttypesetupPage)
-  }
-
-  goToStatesetup() {
-    this.navCtrl.push(StatesetupPage)
-  }
-
-  goToCountrysetup() {
-    this.navCtrl.push(CountrysetupPage)
-  }
-
-  goToQualificationsetup() {
-    this.navCtrl.push(QualificationsetupPage)
-  }
-
-  goToMileagesetup() {
-    this.navCtrl.push(MileagesetupPage)
-  }
-
-  goToDevicesetup() {
-    this.navCtrl.push(DeviceSetupPage);
-  }
-
-  goToImport_Excel_Data_setup() {
-    this.navCtrl.push(ImportExcelDataPage)
-  }
-
-  goToOtRateSetup(){
-    this.navCtrl.push(OtRateSetupPage);
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SetupPage');
-    console.log(this.Setup);
-  }
-
-  goToSettings() {
-    this.navCtrl.push(SettingsPage);
-  }
-
-  goToCompanySettings() {
-    this.navCtrl.push(CompanysettingsPage);
-  }
-
-  goToDBMaintenance() {
-    this.navCtrl.push(DbmaintenancePage);
-  }
-
-  goToRolesetup() {
-    this.navCtrl.push(RolesetupPage)
-  }
-
-  goToRoleModulesetup() {
-    this.navCtrl.push(RolemodulesetupPage)
-  }
-
-  goToApprovalProfileSetup() {
-    this.navCtrl.push(ApprovalProfilePage);
+  goToPage(PageIndex: any) {
+    this.navCtrl.push(PageIndex);
   }
 }

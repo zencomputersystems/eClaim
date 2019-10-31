@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
+import { NgModule } from '@angular/core';
 import { SetupguidePage } from './setupguide';
 
 @NgModule({
@@ -9,5 +9,8 @@ import { SetupguidePage } from './setupguide';
   imports: [
     IonicPageModule.forChild(SetupguidePage),
   ],
+  entryComponents: [
+    SetupguidePage
+  ]
 })
 export class SetupguidePageModule {}

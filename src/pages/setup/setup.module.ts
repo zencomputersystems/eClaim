@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
+import { NgModule } from '@angular/core';
 import { SetupPage } from './setup';
 
 @NgModule({
@@ -10,6 +10,9 @@ import { SetupPage } from './setup';
     IonicPageModule.forChild(SetupPage),
   ],
   exports: [
+    SetupPage
+  ],
+  entryComponents: [
     SetupPage
   ]
 })
