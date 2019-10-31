@@ -148,7 +148,7 @@ ion-fab[top1] {
 }
 
 .iconf {
-  font-size: 3.5vw;
+  font-size: 2em;
 
   transition: width 2s;
 }
@@ -748,13 +748,17 @@ $tablet7: 600px;
 
   .Subtitle {
     text-align: center;
-    font-size: 3.5vw;
+    font-size: 1em;
   }
 
   .iconf {
-    font-size: 10vw;
-    color: #009688;
+    font-size: 2em;
+    color: random_element('red','green','blue');
   }
+}
+
+@function random_element($elements...) {
+  @return nth($elements, random(length($elements)))
 }
 
 @media (max-width: 599px) {
@@ -804,7 +808,7 @@ $tablet7: 600px;
   }
 
   .iconf {
-    font-size: 10vw;
+    font-size: 2em;
     color: #009688;
   }
 }
