@@ -154,22 +154,6 @@ export class BanksetupPage extends authCheck {
     console.log('ionViewDidLoad BanksetupPage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_Name') == null) {
-      localStorage.setItem('Prev_Name', null);
-    }
-    else {
-      localStorage.removeItem("Prev_Name");
-    }
-    if (localStorage.getItem('Prev_TenantGuid') == null) {
-      localStorage.setItem('Prev_TenantGuid', null);
-    }
-    else {
-      localStorage.removeItem("Prev_TenantGuid");
-    }
-  }
-
-
   DisplayGrid() {
     this.loading = this.loadingCtrl.create({
       content: 'Loading...',

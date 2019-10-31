@@ -155,14 +155,6 @@ export class QualificationsetupPage {
     console.log('ionViewDidLoad QualificationsetupPage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_qu_Name') == null) {
-      localStorage.setItem('Prev_qu_Name', null);
-    }
-    else {
-      localStorage.removeItem("Prev_qu_Name");
-    }
-  }
 
   stores: any[]; 
   search(searchString: any) {

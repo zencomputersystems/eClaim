@@ -9,11 +9,11 @@ import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 // import { GlobalFunction } from '../../../shared/GlobalFunction';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { Settings_Model } from '../../../models/settings_model';
 import { Settings_Service } from '../../../services/settings_service';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the SettingsPage page.
@@ -27,12 +27,11 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-settings',
   templateUrl: 'settings.html', providers: [Settings_Service, BaseHttpService, TitleCasePipe]
 })
-export class SettingsPage {
+export class SettingsPage extends authCheck {
   AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
   KEY_NAME_ngModel_Add: any; KEY_VALUE_ngModel_Add: any;
   AddSettingsClicked: boolean = false;
-  loading: Loading; button_Add_Disable: boolean = false;
-  button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
+  loading: Loading; 
 
   setting_details: Settings_Model = new Settings_Model(); setting_entry: Settings_Model = new Settings_Model();
   public setting_detail: Settings_Model[] = [];
@@ -41,26 +40,15 @@ export class SettingsPage {
 
   public page: number = 1;
 
-  constructor(private fb: FormBuilder, public navCtrl: NavController, public navParams: NavParams, public http: Http, private httpService: BaseHttpService, private settingservice: Settings_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-
-        //Clear localStorage value--------------------------------      
-        this.ClearLocalStorage();
-
-        //fill all the tenant details----------------------------      
-        // this.FillTenant();
-
+  constructor(
+    fb: FormBuilder, 
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public http: Http, 
+    private settingservice: Settings_Service, 
+    private alertCtrl: AlertController, 
+    private loadingCtrl: LoadingController    ) {
+    super(navCtrl, true);
         //Display Grid---------------------------------------------      
         this.DisplayGrid();
 
@@ -70,12 +58,6 @@ export class SettingsPage {
           KEY_NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
           KEY_VALUE: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
         });
-      }
-      else {
-        alert('Sorry, you are not authorized for the action. authorized.');
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
-    }
   }
 
   public AddSettingsClick() {
@@ -172,14 +154,6 @@ export class SettingsPage {
     this.KEY_VALUE_ngModel_Add = "";
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_KEY_NAME') == null) {
-      localStorage.setItem('Prev_KEY_NAME', null);
-    }
-    else {
-      localStorage.removeItem("Prev_KEY_NAME");
-    }
-  }
 
   Save() {
     if (this.Settingsform.valid) {

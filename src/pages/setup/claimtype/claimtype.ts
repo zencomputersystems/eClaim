@@ -151,14 +151,6 @@ export class ClaimtypePage {
     console.log('ionViewDidLoad ClaimtypePage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_cl_Name') == null) {
-      localStorage.setItem('Prev_cl_Name', null);
-    }
-    else {
-      localStorage.removeItem("Prev_cl_Name");
-    }
-  }
 
   DisplayGrid() {
     this.loading = this.loadingCtrl.create({
