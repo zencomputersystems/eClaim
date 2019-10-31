@@ -27,7 +27,8 @@
 </div>
 
 <ion-content padding style="background: #eeeeee;">
-  <ion-card class="round1" *ngFor="let item of SetupCards" (click)="goToPage(item.page)">
+  <div *ngFor="let item of SetupCards">
+  <ion-card class="round1"  (click)="goToPage(item.page)" *ngIf="item.enabled">
     <ion-card-header class="icon">
       <ion-icon name="{{item.icon}}" color="primary500" class="iconf"></ion-icon>
     </ion-card-header>
@@ -35,4 +36,5 @@
       {{ item.text | translate }}
     </ion-card-content>
   </ion-card>
+</div>
 </ion-content>
