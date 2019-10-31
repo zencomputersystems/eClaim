@@ -9,11 +9,11 @@ import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { CountrySetup_Model } from '../../../models/countrysetup_model';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { StateSetup_Model } from '../../../models/statesetup_model';
 import { StateSetup_Service } from '../../../services/statesetup_service';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the StatesetupPage page.
@@ -27,12 +27,12 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-statesetup',
   templateUrl: 'statesetup.html', providers: [StateSetup_Service, BaseHttpService, TitleCasePipe]
 })
-export class StatesetupPage {
+export class StatesetupPage extends authCheck {
   state_entry: StateSetup_Model = new StateSetup_Model();
   country_entry: CountrySetup_Model = new CountrySetup_Model();
   Stateform: FormGroup;
   public countries: any;
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_state' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
   baseResourceUrl_country: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_country' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
@@ -128,37 +128,29 @@ export class StatesetupPage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private statesetupservice: StateSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-      }
+  loading: Loading;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    fb: FormBuilder,
+    public http: Http,
+    private statesetupservice: StateSetup_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private titlecasePipe: TitleCasePipe
+  ) {
+    super(navCtrl, true);
+    //Bind Country-------------
+    this.BindCountry();
 
-      //Clear localStorage value--------------------------------      
-      this.ClearLocalStorage();
+    //Display Grid---------------------------- 
+    this.DisplayGrid();
 
-      //Bind Country-------------
-      this.BindCountry();
-
-      //Display Grid---------------------------- 
-      this.DisplayGrid();
-
-      //----------------------------------------
-      this.Stateform = fb.group({
-        NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        COUNTRY_GUID: ["", Validators.required],
-      });
-    }
+    //----------------------------------------
+    this.Stateform = fb.group({
+      NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      COUNTRY_GUID: ["", Validators.required],
+    });
   }
 
   BindCountry() {

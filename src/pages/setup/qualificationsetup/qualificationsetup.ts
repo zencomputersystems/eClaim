@@ -8,11 +8,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { QualificationSetup_Model } from '../../../models/qualificationsetup_model';
 import { QualificationSetup_Service } from '../../../services/qualificationsetup_service';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the QualificationsetupPage page.
@@ -26,11 +26,11 @@ import { UUID } from 'angular2-uuid';
   templateUrl: 'qualificationsetup.html', providers: [QualificationSetup_Service, BaseHttpService, TitleCasePipe]
 
 })
-export class QualificationsetupPage {
+export class QualificationsetupPage extends authCheck {
   Qualify_entry: QualificationSetup_Model = new QualificationSetup_Model();
   Qualifyform: FormGroup;
   //qualificationsetup: QualificationSetup_Model = new QualificationSetup_Model();
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_qualification_type' + '?order=TYPE_NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
@@ -121,34 +121,17 @@ export class QualificationsetupPage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
+  loading: Loading;
   constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private qualificationsetupservice: QualificationSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_USER_GUID") != "sva") {
-        //Get the role for this page------------------------------        
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-      }
-      
-      //Clear localStorage value--------------------------------      
-      this.ClearLocalStorage();
+    super(navCtrl, true);
+    //Display Grid---------------------------- 
+    this.DisplayGrid();
 
-      //Display Grid---------------------------- 
-      this.DisplayGrid();
-
-      //Load the Form control---------------------------      
-      this.Qualifyform = fb.group({
-        TYPE_NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        TYPE_DESC: [null],
-      });
-    }
+    //Load the Form control---------------------------      
+    this.Qualifyform = fb.group({
+      TYPE_NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      TYPE_DESC: [null],
+    });
   }
 
   ionViewDidLoad() {
@@ -156,15 +139,15 @@ export class QualificationsetupPage {
   }
 
 
-  stores: any[]; 
+  stores: any[];
   search(searchString: any) {
     let val = searchString.target.value;
     if (!val || !val.trim()) {
-      this.qualificationsetups = this.stores;      
+      this.qualificationsetups = this.stores;
       return;
     }
     this.qualificationsetups = this.filter({
-      TYPE_NAME: val     
+      TYPE_NAME: val
     });
   }
 
@@ -172,7 +155,7 @@ export class QualificationsetupPage {
     if (!params) {
       return this.stores;
     }
-    
+
     return this.stores.filter((item) => {
       for (let key in params) {
         let field = item[key];

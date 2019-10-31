@@ -126,10 +126,6 @@ export class PaymenttypesetupPage extends authCheck {
   }
 
   loading: Loading;
-  button_Add_Disable: boolean = false;
-  button_Edit_Disable: boolean = false;
-  button_Delete_Disable: boolean = false;
-  button_View_Disable: boolean = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -141,7 +137,7 @@ export class PaymenttypesetupPage extends authCheck {
     private titlecasePipe: TitleCasePipe
   ) {
     // Get super();
-    super(navCtrl);
+    super(navCtrl, true);
 
     //Display Grid---------------------------------------------
         this.DisplayGrid();

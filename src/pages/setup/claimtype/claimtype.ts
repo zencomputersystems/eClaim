@@ -11,9 +11,9 @@ import { ClaimTypeSetup_Model } from '../../../models/claimtypesetup_model';
 import { ClaimTypeSetup_Service } from '../../../services/claimtypesetup_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
-import { LoginPage } from '../../login/login';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
+import { authCheck } from '../../../shared/authcheck';
 
 /**
  * Generated class for the ClaimtypePage page.
@@ -26,11 +26,11 @@ import { UUID } from 'angular2-uuid';
   selector: 'page-claimtype',
   templateUrl: 'claimtype.html', providers: [ClaimTypeSetup_Service, BaseHttpService, TitleCasePipe]
 })
-export class ClaimtypePage {
+export class ClaimtypePage extends authCheck {
   claimtype_entry: ClaimTypeSetup_Model = new ClaimTypeSetup_Model();
   Claimtypeform: FormGroup;
   //claimtype: ClaimTypeSetup_Model = new ClaimTypeSetup_Model();
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_claim_type' + '?order=NAME&api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
@@ -117,34 +117,17 @@ export class ClaimtypePage {
     }
   }
 
-  loading: Loading; button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
-  constructor(public api: ApiManagerProvider,public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private claimtypesetupservice: ClaimTypeSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
-    if (localStorage.getItem("g_USER_GUID") == null) {
-      alert('Sorry, you are not logged in. Please login.');
-      this.navCtrl.push(LoginPage);
-    }
-    else {
-      //Get the role for this page------------------------------
-      this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
-      if (localStorage.getItem("g_IS_SUPER") != "1") {
-        if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-        if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-        if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-        if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-      }
+  loading: Loading;
+  constructor(public api: ApiManagerProvider, public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private claimtypesetupservice: ClaimTypeSetup_Service, private alertCtrl: AlertController, private loadingCtrl: LoadingController, private titlecasePipe: TitleCasePipe) {
+    super(navCtrl, true);
+    //Display Grid---------------------------- 
+    this.DisplayGrid();
 
-      //Clear localStorage value--------------------------------      
-      this.ClearLocalStorage();
-
-      //Display Grid---------------------------- 
-      this.DisplayGrid();
-
-      //----------------------------------------
-      this.Claimtypeform = fb.group({
-        NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        DESCRIPTION: [null],
-      });
-    }
+    //----------------------------------------
+    this.Claimtypeform = fb.group({
+      NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      DESCRIPTION: [null],
+    });
   }
 
   ionViewDidLoad() {

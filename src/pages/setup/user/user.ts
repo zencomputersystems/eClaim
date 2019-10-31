@@ -12,7 +12,6 @@ import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { ImageUpload_model } from '../../../models/image-upload.model';
-import { LoginPage } from '../../login/login';
 import { Random } from '../../../shared/GlobalFunction';
 import { Services } from '../../Services';
 import { TitleCasePipe } from '@angular/common';
@@ -31,6 +30,7 @@ import { UserSetup_Service } from '../../../services/usersetup_service';
 import { UserSpouse_Model } from '../../../models/user_spouse_model';
 import { ViewUser_Model } from '../../../models/viewuser_model';
 import { View_Dropdown_Model } from '../../../models/view_dropdown';
+import { authCheck } from '../../../shared/authcheck';
 import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 declare var cordova: any;
@@ -46,7 +46,7 @@ declare var cordova: any;
   selector: 'page-user',
   templateUrl: 'user.html', providers: [UserSetup_Service, BaseHttpService, FileTransfer, Transfer, TitleCasePipe]
 })
-export class UserPage {
+export class UserPage extends authCheck {
   //selectedValue: number;
   simple: boolean = false;
 
@@ -473,22 +473,11 @@ export class UserPage {
     }); alert.present();
   }
 
-  button_Add_Disable: boolean = false; button_Edit_Disable: boolean = false; button_Delete_Disable: boolean = false; button_View_Disable: boolean = false;
   constructor(public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, fb: FormBuilder, public http: Http, private api: Services, private userservice: UserSetup_Service, private alertCtrl: AlertController, private camera: Camera, public actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController, private file: File, private filePath: FilePath, public toastCtrl: ToastController, public platform: Platform, private titlecasePipe: TitleCasePipe) {
-    this.button_Add_Disable = false; this.button_Edit_Disable = false; this.button_Delete_Disable = false; this.button_View_Disable = false;
+    super(navCtrl, true);
     localStorage.removeItem("Unique_File_Name");
 
-    if (localStorage.getItem("g_USER_GUID") != "sva") {
-      //Get the role for this page------------------------------        
-      if (localStorage.getItem("g_KEY_ADD") == "0") { this.button_Add_Disable = true; }
-      if (localStorage.getItem("g_KEY_EDIT") == "0") { this.button_Edit_Disable = true; }
-      if (localStorage.getItem("g_KEY_DELETE") == "0") { this.button_Delete_Disable = true; }
-      if (localStorage.getItem("g_KEY_VIEW") == "0") { this.button_View_Disable = true; }
-    }
-
-    //this.ProfileImageGet();
-    if (localStorage.getItem("g_USER_GUID") != null) {
-      //---------Bind Designation-----------------      
+    //---------Bind Designation-----------------      
       //this.GetDesignation("main_designation", "NAME");
 
       //---------Bind Company---------------------
@@ -601,10 +590,6 @@ export class UserPage {
         ROLE_NAME: [null, Validators.required],
         ADDITIONAL_ROLE_NAME: [null]
       });
-    }
-    else {
-      this.navCtrl.push(LoginPage);
-    }
   }
 
   public attachment_ref: any;
