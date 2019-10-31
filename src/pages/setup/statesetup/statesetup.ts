@@ -170,15 +170,6 @@ export class StatesetupPage {
       });
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Previ_state') == null) {
-      localStorage.setItem('Previ_state', null);
-    }
-    else {
-      localStorage.removeItem("Previ_state");
-    }
-  }
-
   DisplayGrid() {
     this.loading = this.loadingCtrl.create({
       content: 'Loading...',

@@ -156,14 +156,6 @@ export class CountrysetupPage {
     console.log('ionViewDidLoad CountrysetupPage');
   }
 
-  ClearLocalStorage() {
-    if (localStorage.getItem('Prev_country') == null) {
-      localStorage.setItem('Prev_country', null);
-    }
-    else {
-      localStorage.removeItem("Prev_country");
-    }
-  }
 
   DisplayGrid() {
     this.loading = this.loadingCtrl.create({
