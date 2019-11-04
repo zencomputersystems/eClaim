@@ -9,6 +9,7 @@ import { BaseHttpService } from './base-http';
 import { DesignationSetup_Model } from '../models/designationsetup_model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { remove_multiple } from './db_removal_service';
 
 @Injectable()
 export class DesignationSetup_Service 
@@ -101,18 +102,8 @@ export class DesignationSetup_Service
 			});
 	}
 
-	remove_multiple(id: string, tablename: string) {       
-		let url_multiple = this.baseResource_Url + tablename + "?filter=(TENANT_GUID=" + id + ")";		
-        var queryHeaders = new Headers();
-        queryHeaders.append('Content-Type', 'application/json');
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-
-        return this.httpService.http
-            .delete(url_multiple, { headers: queryHeaders })
-            .map((response) => {
-				//return result.PAGE_GUID;
-				return response;
-            });
+	remove_multiple(id: string, tablename: string) {
+		return remove_multiple(id, tablename);
 	}
 
 	get (id: string, params?: URLSearchParams): Observable<DesignationSetup_Model> {
@@ -120,7 +111,6 @@ export class DesignationSetup_Service
     	queryHeaders.append('Content-Type', 'application/json');
     	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
 		queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-		
 		return this.httpService.http
 			.get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders})
 			.map((response) => {

@@ -1,6 +1,7 @@
 import 'rxjs/add/operator/map';
 
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_TABLE_URL } from '../../../app/config/constants';
 //import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions, URLSearchParams } from '@angular/http';
@@ -9,7 +10,6 @@ import { getURL, sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 import { BaseHttpService } from '../../../services/base-http';
 import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
-import { DREAMFACTORY_TABLE_URL } from '../../../app/config/constants';
 import { SubsciptionSetup_Model } from '../../../models/subsciptionsetup_model';
 import { SubsciptionSetup_Service } from '../../../services/subsciptionsetup_service';
 import { UUID } from 'angular2-uuid';
@@ -176,7 +176,7 @@ export class SubsciptionsetupPage {
       headers.append('Content-Type', 'application/json');
       let options = new RequestOptions({ headers: headers });
       let url: string;
-      url = this.baseResource_Url + "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      url = this.baseResource_Url + "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Add.trim() + ')&api_key=' + DREAMFACTORY_API_KEY;
       this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
@@ -251,7 +251,7 @@ export class SubsciptionsetupPage {
       //debugger;
       if (this.PLAN_NAME_ngModel_Edit.trim() != localStorage.getItem('Prev_sub_Name')) {
         let url: string;
-        url = this.baseResource_Url + "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Edit + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+        url = this.baseResource_Url + "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Edit + ')&api_key=' + DREAMFACTORY_API_KEY;
         this.http.get(sanitizeURL(url))
           .map(res => res.json())
           .subscribe(

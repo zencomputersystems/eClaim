@@ -1,19 +1,19 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../app/config/constants';
-
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_INSTANCE_URL } from '../app/config/constants';
 import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
 
 import { BaseHttpService } from './base-http';
 import { DepartmentSetup_Model } from '../models/departmentsetup_model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { remove_multiple } from './db_removal_service';
 
 @Injectable()
 export class DepartmentSetup_Service {
-    baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_department';
-    baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+    baseResourceUrl: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_department';
+    baseResource_Url: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
     constructor(private httpService: BaseHttpService) { };
 
@@ -29,7 +29,7 @@ export class DepartmentSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         return this.httpService.http
             .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
             .map(() => {
@@ -46,7 +46,7 @@ export class DepartmentSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         let options = new RequestOptions({ headers: queryHeaders });//alert(JSON.stringify(department_main));
         return this.httpService.http.post(this.baseResourceUrl, department_main.toJson(true), options)
             .map((response) => {
@@ -58,7 +58,7 @@ export class DepartmentSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         let options = new RequestOptions({ headers: queryHeaders });
         return this.httpService.http.patch(this.baseResourceUrl, department_main.toJson(true), options)
             .map((response) => {
@@ -70,7 +70,7 @@ export class DepartmentSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         return this.httpService.http
             .get(this.baseResourceUrl, { search: params, headers: queryHeaders })
             .map(() => {
@@ -87,7 +87,7 @@ export class DepartmentSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         return this.httpService.http
             .delete(this.baseResourceUrl + '/' + id, { headers: queryHeaders })
             .map((response) => {
@@ -96,25 +96,15 @@ export class DepartmentSetup_Service {
             });
     }
 
-    remove_multiple(id: string, tablename: string) {       
-        let url_multiple = this.baseResource_Url + tablename + "?filter=(TENANT_GUID=" + id + ")";
-        var queryHeaders = new Headers();
-        queryHeaders.append('Content-Type', 'application/json');
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-
-        return this.httpService.http
-            .delete(url_multiple, { headers: queryHeaders })
-            .map((response) => {
-				//return result.PAGE_GUID;
-				return response;
-            });
+    remove_multiple(id: string, tablename: string) {
+        return remove_multiple(id, tablename);
 	}
 
     get(id: string, params?: URLSearchParams): Observable<DepartmentSetup_Model> {        
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
             .map((response) => {
