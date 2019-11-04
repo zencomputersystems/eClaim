@@ -9,6 +9,7 @@ import { BaseHttpService } from './base-http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { TenantCompanySiteSetup_Model } from '../models/tenantcompanysitesetup_model';
+import { remove_multiple } from './db_removal_service';
 
 ;
 
@@ -86,18 +87,8 @@ export class TenantCompanySiteSetup_Service {
             });
     }
 
-    remove_multiple(id: string, tablename: string) {       
-        let url_multiple = this.baseResource_Url + tablename + "?filter=(TENANT_COMPANY_GUID=" + id + ")";
-        var queryHeaders = new Headers();
-        queryHeaders.append('Content-Type', 'application/json');
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-
-        return this.httpService.http
-            .delete(url_multiple, { headers: queryHeaders })
-            .map((response) => {
-				//return result.PAGE_GUID;
-				return response;
-            });
+    remove_multiple(id: string, tablename: string) {
+        return remove_multiple(id, tablename);
 	}
 
     get(id: string, params?: URLSearchParams): Observable<TenantCompanySiteSetup_Model> {

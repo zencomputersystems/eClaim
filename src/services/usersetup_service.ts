@@ -20,6 +20,7 @@ import { UserMain_Model } from '../models/user_main_model';
 import { UserQualification_Model } from '../models/user_qualification_model';
 import { UserRole_Model } from '../models/user_role_model';
 import { UserSpouse_Model } from '../models/user_spouse_model';
+import { remove_multiple } from './db_removal_service';
 
 @Injectable()
 
@@ -180,13 +181,7 @@ export class UserSetup_Service {
 	}
 
 	remove_multiple(id: string, tablename: string) {
-		let url_multiple = this.UserUrl.baseResource_Url + tablename + "?filter=(USER_GUID=" + id + ")AND(ROLE_FLAG=ADDITIONAL)";
-		console.log(url_multiple);
-		return this.httpService.http
-			.delete(url_multiple, { headers: this.queryHeaders })
-			.map((response) => {
-				return response;
-			});
+		return remove_multiple(id, tablename);
 	}
 
 	remove_multiple_records(id: string, tablename: string) {

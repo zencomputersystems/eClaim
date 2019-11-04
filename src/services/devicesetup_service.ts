@@ -9,6 +9,7 @@ import { BaseHttpService } from './base-http';
 import { DeviceSetup_Model } from '../models/devicesetup_model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { remove_multiple } from './db_removal_service';
 
 @Injectable()
 export class DeviceSetup_Service {
@@ -81,17 +82,7 @@ export class DeviceSetup_Service {
     }
 
     remove_multiple(id: string, tablename: string) {
-        let url_multiple = this.baseResource_Url + tablename + "?filter=(TENANT_GUID=" + id + ")";
-        var queryHeaders = new Headers();
-        queryHeaders.append('Content-Type', 'application/json');
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-
-        return this.httpService.http
-            .delete(url_multiple, { headers: queryHeaders })
-            .map((response) => {
-                //return result.PAGE_GUID;
-                return response;
-            });
+        return remove_multiple(id, tablename);
     }
 
     get(id: string, params?: URLSearchParams): Observable<DeviceSetup_Model> {
