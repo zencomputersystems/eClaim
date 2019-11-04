@@ -7,6 +7,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { OTRateSetup_Model } from '../../../models/ot_rate_setup_model';
@@ -59,7 +60,7 @@ export class OtRateSetupPage extends authCheck {
   public AddOTRateClick() {
     if (this.Edit_Form == false) {
       this.AddOTRateClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -72,7 +73,7 @@ export class OtRateSetupPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddOTRateClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
     var self = this;
@@ -159,173 +160,165 @@ export class OtRateSetupPage extends authCheck {
         WEEK_END_RATE: ["", Validators.required],
       });
     }
-}
-
-ionViewDidLoad() {
-  console.log('ionViewDidLoad OtRateSetupPage');
-}
-
-DisplayGrid() {
-  //Display Grid---------------------------------------------
-  this.loading = this.loadingCtrl.create({
-    content: 'Loading...',
-  });
-  this.loading.present();
-
-  if (localStorage.getItem("g_USER_GUID") == "sva") {
-    this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_ot_rate' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.AdminLogin = true;
   }
-  else {
-    this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_ot_rate' + '?filter=(TENANT_GUID=' + localStorage.getItem('g_TENANT_GUID') + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
-    this.AdminLogin = false;
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad OtRateSetupPage');
   }
-  this.http
-    .get(this.baseResourceUrl)
-    .map(res => res.json())
-    .subscribe(data => {
-      this.otrates = data.resource;
-      this.loading.dismissAll();
-    });
-}
 
-Save() {
-  if (this.OTRateform.valid) {
-    //for Save Set Entities-------------------------------------------------------------
-    if (this.Add_Form == true) {
-      this.SetEntityForAdd();
-    }
-    //for Update Set Entities------------------------------------------------------------
-    else {
-      this.SetEntityForUpdate();
-    }
-    //Common Entitity For Insert/Update------------------------------------------------- 
-    this.SetCommonEntityForAddUpdate();
-
-    //Load the Controller--------------------------------
+  DisplayGrid() {
+    //Display Grid---------------------------------------------
     this.loading = this.loadingCtrl.create({
-      content: 'Please wait...',
+      content: 'Loading...',
     });
     this.loading.present();
 
-    //---------------------------------------------------
-
-    let strPrev_Hours: string = "";
-    if (localStorage.getItem('Prev_Hours') != null) { strPrev_Hours = localStorage.getItem('Prev_Hours').toUpperCase(); }
-
-    if (this.HOURS_ngModel_Add.trim().toUpperCase() != strPrev_Hours || this.Tenant_Add_ngModel != localStorage.getItem('Prev_TenantGuid') || this.WEEK_DAY_RATE_ngModel_Add != localStorage.getItem('Prev_Week_Day_Rate')) {
-      let val = this.CheckDuplicate();
-      val.then((res) => {
-        if (res.toString() == "0") {
-          //---Insert or Update-------------------------------------------------------
-          if (this.Add_Form == true) {
-            //**************Save service if it is new details*************************
-            this.Insert();
-            //**************************************************************************
-          }
-          else {
-            //**************Update service if it is new details*************************
-            this.Update();
-            //**************************************************************************
-          }
-        }
-        else {
-          alert("The ot rate is already Exist.");
-          this.loading.dismissAll();
-        }
-      });
-      val.catch((err) => {
-        console.log(err);
-      });
+    if (localStorage.getItem("g_USER_GUID") == "sva") {
+      this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_ot_rate' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+      this.AdminLogin = true;
     }
     else {
-      //Simple update----------------------------------------------------------
-      this.Update();
+      this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_ot_rate' + '?filter=(TENANT_GUID=' + localStorage.getItem('g_TENANT_GUID') + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      this.AdminLogin = false;
     }
-  }
-}
-
-SetEntityForAdd() {
-  this.otrate_entry.ot_rate_guid = UUID.UUID();
-
-  this.otrate_entry.hours = this.titlecasePipe.transform(this.HOURS_ngModel_Add.trim());
-  this.otrate_entry.week_day_rate = this.WEEK_DAY_RATE_ngModel_Add.trim();
-  this.otrate_entry.week_end_rate = this.WEEK_END_RATE_ngModel_Add.trim();
-  this.otrate_entry.tenant_guid = this.Tenant_Add_ngModel;
-}
-
-SetEntityForUpdate() {
-  this.otrate_entry.ot_rate_guid = this.otRate_details.ot_rate_guid;
-}
-
-SetCommonEntityForAddUpdate() {
-  this.otrate_entry.hours = this.titlecasePipe.transform(this.HOURS_ngModel_Add.trim());
-  this.otrate_entry.week_day_rate = this.WEEK_DAY_RATE_ngModel_Add.trim();
-  this.otrate_entry.week_end_rate = this.WEEK_END_RATE_ngModel_Add.trim();
-  this.otrate_entry.tenant_guid = this.Tenant_Add_ngModel;
-}
-
-RemoveStorageValues() {
-  localStorage.removeItem("Prev_Hours");
-  localStorage.removeItem("Prev_TenantGuid");
-  localStorage.removeItem("Prev_Week_Day_Rate");
-}
-
-Insert() {
-  this.otratesetupservice.save(this.otrate_entry)
-    .subscribe((response) => {
-      if (response.status == 200) {
-        alert('OT Rate Registered successfully');
-
-        //Remove all storage values-----------------------------------------
-        this.RemoveStorageValues();
-        //------------------------------------------------------------------
-
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
-    });
-}
-
-Update() {
-  this.otratesetupservice.update(this.otrate_entry)
-    .subscribe((response) => {
-      if (response.status == 200) {
-        alert('OT Rate updated successfully');
-
-        //Remove all storage values-----------------------------------------
-        this.RemoveStorageValues();
-        //------------------------------------------------------------------
-
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      }
-    });
-}
-
-CheckDuplicate() {
-  let url: string = "";
-  if (localStorage.getItem("g_USER_GUID") != "sva") {
-    url = this.baseResource_Url + "ot_rate?filter=hours=" + this.HOURS_ngModel_Add.trim() + ' AND TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ' AND week_day_rate=' + this.WEEK_DAY_RATE_ngModel_Add + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-  }
-  else {
-    url = this.baseResource_Url + "ot_rate?filter=hours=" + this.HOURS_ngModel_Add.trim() + ' AND TENANT_GUID=' + this.Tenant_Add_ngModel + ' AND week_day_rate=' + this.WEEK_DAY_RATE_ngModel_Add + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-  }
-  let result: any;
-  return new Promise((resolve) => {
     this.http
-      .get(url)
+      .get(this.baseResourceUrl)
       .map(res => res.json())
       .subscribe(data => {
-        result = data["resource"];
-        resolve(result.length);
+        this.otrates = data.resource;
+        this.loading.dismissAll();
       });
-  });
-}
+  }
 
-ClearControls() {
-  this.HOURS_ngModel_Add = "";
-  this.WEEK_DAY_RATE_ngModel_Add = "";
-  this.WEEK_END_RATE_ngModel_Add = "";
-  this.Tenant_Add_ngModel = "";
-}
+  Save() {
+    if (this.OTRateform.valid) {
+      //for Save Set Entities-------------------------------------------------------------
+      if (this.Add_Form == true) {
+        this.SetEntityForAdd();
+      }
+      //for Update Set Entities------------------------------------------------------------
+      else {
+        this.SetEntityForUpdate();
+      }
+      //Common Entitity For Insert/Update------------------------------------------------- 
+      this.SetCommonEntityForAddUpdate();
 
+      //Load the Controller--------------------------------
+      this.loading = this.loadingCtrl.create({
+        content: 'Please wait...',
+      });
+      this.loading.present();
+
+      //---------------------------------------------------
+
+      let strPrev_Hours: string = "";
+      if (localStorage.getItem('Prev_Hours') != null) { strPrev_Hours = localStorage.getItem('Prev_Hours').toUpperCase(); }
+
+      if (this.HOURS_ngModel_Add.trim().toUpperCase() != strPrev_Hours || this.Tenant_Add_ngModel != localStorage.getItem('Prev_TenantGuid') || this.WEEK_DAY_RATE_ngModel_Add != localStorage.getItem('Prev_Week_Day_Rate')) {
+        let val = this.CheckDuplicate();
+        val.then((res) => {
+          if (res.toString() == "0") {
+            //---Insert or Update-------------------------------------------------------
+            if (this.Add_Form == true) {
+              //**************Save service if it is new details*************************
+              this.Insert();
+              //**************************************************************************
+            }
+            else {
+              //**************Update service if it is new details*************************
+              this.Update();
+              //**************************************************************************
+            }
+          }
+          else {
+            alert("The ot rate is already Exist.");
+            this.loading.dismissAll();
+          }
+        });
+        val.catch((err) => {
+          console.log(err);
+        });
+      }
+      else {
+        //Simple update----------------------------------------------------------
+        this.Update();
+      }
+    }
+  }
+
+  SetEntityForAdd() {
+    this.otrate_entry.ot_rate_guid = UUID.UUID();
+
+    this.otrate_entry.hours = this.titlecasePipe.transform(this.HOURS_ngModel_Add.trim());
+    this.otrate_entry.week_day_rate = this.WEEK_DAY_RATE_ngModel_Add.trim();
+    this.otrate_entry.week_end_rate = this.WEEK_END_RATE_ngModel_Add.trim();
+    this.otrate_entry.tenant_guid = this.Tenant_Add_ngModel;
+  }
+
+  SetEntityForUpdate() {
+    this.otrate_entry.ot_rate_guid = this.otRate_details.ot_rate_guid;
+  }
+
+  SetCommonEntityForAddUpdate() {
+    this.otrate_entry.hours = this.titlecasePipe.transform(this.HOURS_ngModel_Add.trim());
+    this.otrate_entry.week_day_rate = this.WEEK_DAY_RATE_ngModel_Add.trim();
+    this.otrate_entry.week_end_rate = this.WEEK_END_RATE_ngModel_Add.trim();
+    this.otrate_entry.tenant_guid = this.Tenant_Add_ngModel;
+  }
+
+  RemoveStorageValues() {
+    localStorage.removeItem("Prev_Hours");
+    localStorage.removeItem("Prev_TenantGuid");
+    localStorage.removeItem("Prev_Week_Day_Rate");
+  }
+
+  Insert() {
+    this.otratesetupservice.save(this.otrate_entry)
+      .subscribe((response) => {
+        if (response.status == 200) {
+          alert('OT Rate Registered successfully');
+
+          //Remove all storage values-----------------------------------------
+          this.RemoveStorageValues();
+          //------------------------------------------------------------------
+
+          this.navCtrl.setRoot(this.navCtrl.getActive().component);
+        }
+      });
+  }
+
+  Update() {
+    this.otratesetupservice.update(this.otrate_entry)
+      .subscribe((response) => {
+        if (response.status == 200) {
+          alert('OT Rate updated successfully');
+
+          //Remove all storage values-----------------------------------------
+          this.RemoveStorageValues();
+          //------------------------------------------------------------------
+
+          this.navCtrl.setRoot(this.navCtrl.getActive().component);
+        }
+      });
+  }
+
+  CheckDuplicate() {
+    let url: string = "";
+    if (localStorage.getItem("g_USER_GUID") != "sva") {
+      url = this.baseResource_Url + "ot_rate?filter=hours=" + this.HOURS_ngModel_Add.trim() + ' AND TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ' AND week_day_rate=' + this.WEEK_DAY_RATE_ngModel_Add + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+    }
+    else {
+      url = this.baseResource_Url + "ot_rate?filter=hours=" + this.HOURS_ngModel_Add.trim() + ' AND TENANT_GUID=' + this.Tenant_Add_ngModel + ' AND week_day_rate=' + this.WEEK_DAY_RATE_ngModel_Add + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+    }
+    let result: any;
+    return new Promise((resolve) => {
+      this.http
+        .get(url)
+        .map(res => res.json())
+        .subscribe(data => {
+          result = data["resource"];
+          resolve(result.length);
+        });
+    });
+  }
 }

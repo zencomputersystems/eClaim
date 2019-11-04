@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 // import { GlobalFunction } from '../../../shared/GlobalFunction';
 import { Http } from '@angular/http';
@@ -31,7 +32,7 @@ export class SettingsPage extends authCheck {
   AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
   KEY_NAME_ngModel_Add: any; KEY_VALUE_ngModel_Add: any;
   AddSettingsClicked: boolean = false;
-  loading: Loading; 
+  loading: Loading;
 
   setting_details: Settings_Model = new Settings_Model(); setting_entry: Settings_Model = new Settings_Model();
   public setting_detail: Settings_Model[] = [];
@@ -41,29 +42,29 @@ export class SettingsPage extends authCheck {
   public page: number = 1;
 
   constructor(
-    fb: FormBuilder, 
-    public navCtrl: NavController, 
-    public navParams: NavParams, 
-    public http: Http, 
-    private settingservice: Settings_Service, 
-    private alertCtrl: AlertController, 
-    private loadingCtrl: LoadingController    ) {
+    fb: FormBuilder,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: Http,
+    private settingservice: Settings_Service,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController) {
     super(navCtrl, true);
-        //Display Grid---------------------------------------------      
-        this.DisplayGrid();
+    //Display Grid---------------------------------------------      
+    this.DisplayGrid();
 
-        //----------------------------------------------------------
+    //----------------------------------------------------------
 
-        this.Settingsform = fb.group({
-          KEY_NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-          KEY_VALUE: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        });
+    this.Settingsform = fb.group({
+      KEY_NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+      KEY_VALUE: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
+    });
   }
 
   public AddSettingsClick() {
     if (this.Edit_Form == false) {
       this.AddSettingsClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -84,7 +85,7 @@ export class SettingsPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddSettingsClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
     var self = this;
@@ -144,16 +145,9 @@ export class SettingsPage extends authCheck {
       .map(res => res.json())
       .subscribe(data => {
         this.setting_details_new = this.settings = data.resource;
-
         this.loading.dismissAll();
       });
   }
-
-  ClearControls() {
-    this.KEY_NAME_ngModel_Add = "";
-    this.KEY_VALUE_ngModel_Add = "";
-  }
-
 
   Save() {
     if (this.Settingsform.valid) {

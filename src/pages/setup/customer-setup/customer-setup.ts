@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { SocCustomerLocation_Model } from '../../../models/soc_customer_location_model';
@@ -68,7 +69,7 @@ export class CustomerSetupPage extends authCheck {
   public AddCustomerClick() {
     if (this.Edit_Form == false) {
       this.AddCustomerClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
       this.TitleHeader = "REGISTER NEW CUSTOMER";
     }
     else {
@@ -82,7 +83,7 @@ export class CustomerSetupPage extends authCheck {
     });
 
     this.loading.present();
-    this.ClearControls();
+    ClearControls(this);
     this.AddCustomerClicked = true; this.Add_Form = false; this.Edit_Form = true;
     this.TitleHeader = "UPDATE CUSTOMER";
 
@@ -578,21 +579,5 @@ export class CustomerSetupPage extends authCheck {
           this.customer_entry.NAME = this.customer_details[0]["NAME"];
           this.customer_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
         });
-  }
-
-  ClearControls() {
-    this.Tenant_Add_ngModel = "";
-    this.CUSTOMER_NAME_ngModel_Add = "";
-    this.LOCATION_NAME_ngModel_Add = "";
-    this.REGISTRATION_NO_ngModel_Add = "";
-    this.ADDRESS1_ngModel_Add = "";
-    this.ADDRESS2_ngModel_Add = "";
-    this.ADDRESS3_ngModel_Add = "";
-    this.CONTACT_PERSON_ngModel_Add = "";
-    this.CONTACT_PERSON_MOBILE_NO_ngModel_Add = "";
-    this.CONTACT_NO1_ngModel_Add = "";
-    this.CONTACT_NO2_ngModel_Add = "";
-    this.EMAIL_ngModel_Add = "";
-    this.DIVISION_ngModel_Add = "";
   }
 }

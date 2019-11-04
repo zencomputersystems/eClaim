@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UUID } from 'angular2-uuid';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-import { approval_profile_model } from '../../../models/approval_profile_model';
-import { Main_Profile_Model } from '../../../models/main_profile_model';
+
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import { ApiManagerProvider } from '../../../providers/api-manager.provider';
-import { OptimizeProvider } from '../../../providers/optimize.provider';
-import moment from 'moment';
+import { ClearControls } from '../../../services/controls_service';
+import { Component } from '@angular/core';
+import { Main_Profile_Model } from '../../../models/main_profile_model';
+import { UUID } from 'angular2-uuid';
+import { approval_profile_model } from '../../../models/approval_profile_model';
 
 @IonicPage()
 @Component({
@@ -100,19 +101,10 @@ export class ApprovalProfilePage {
   public CreateProfile() {
     this.AddProfileClicked = true;
     this.Buttons_SetVisible();
-    this.ClearControls();
+    ClearControls(this);
+    this.AddLevelClicked = true;
     this.Level_Id_ngModel = "";
     this.Temp_Data = [];
-  }
-
-  public ClearControls() {
-    this.Approver_Value_ngModel = "";
-    this.Rejected_Level_ngModel = "";
-    this.Approved_Level_ngModel = "";
-    this.Approver_name_ngModel = "directManager";
-    this.Approved_Condition_ngModel = "false";
-    this.Rejected_Condition_ngModel = "false";
-    this.AddLevelClicked = true;
   }
 
   save() {
@@ -181,7 +173,8 @@ export class ApprovalProfilePage {
       this.Temp_Data = this.Temp_Data.concat('{' + data + '}');
     }
     console.log(this.Temp_Data)
-    this.ClearControls();
+    ClearControls(this);
+    this.AddLevelClicked = true;
     this.Level_Id_ngModel = (parseInt(this.Level_Id_ngModel) + 1).toString();
     this.Buttons_SetVisible();
   }

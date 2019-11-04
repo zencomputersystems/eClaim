@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { LoginPage } from '../../login/login';
 import { PageSetup_Model } from '../../../models/pagesetup_model';
@@ -56,7 +57,7 @@ export class PagesetupPage {
   //---------------------------------------------------------------------
 
   public AddPageClick() {
-    this.ClearControls();
+    ClearControls(this);
     this.AddPageClicked = true;
   }
 
@@ -72,7 +73,7 @@ export class PagesetupPage {
 
   public EditClick(PAGE_GUID: any) {
 
-    //this.ClearControls();
+    //ClearControls(this);
     this.EditPageClicked = true;
     var self = this;
     this.pagesetupservice
@@ -309,11 +310,4 @@ export class PagesetupPage {
       return null;
     });
   }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.DESCRIPTION_ngModel_Add = "";
-    this.URL_ngModel_Add = "";
-  }
-
 }

@@ -1,19 +1,20 @@
-import { Component } from '@angular/core';
+import 'rxjs/add/operator/map';
+
+import * as constants from '../../../app/config/constants';
+
+import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
 //import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
-import { UUID } from 'angular2-uuid';
-import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
-import 'rxjs/add/operator/map';
-import * as constants from '../../../app/config/constants';
-import { RoleSetup_Model } from '../../../models/rolesetup_model';
-import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
+
 import { BaseHttpService } from '../../../services/base-http';
-import { RoleSetup_Service } from '../../../services/rolesetup_service';
+import { ClearControls } from '../../../services/controls_service';
+import { Component } from '@angular/core';
 import { LoginPage } from '../../login/login';
-
-
-
+import { RoleSetup_Model } from '../../../models/rolesetup_model';
+import { RoleSetup_Service } from '../../../services/rolesetup_service';
+import { UUID } from 'angular2-uuid';
+import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the RolesetupPage page.
@@ -31,7 +32,7 @@ export class RolesetupPage {
   role_entry: RoleSetup_Model = new RoleSetup_Model();
   //role: RoleSetup_Model = new RoleSetup_Model();
   Roleform: FormGroup;
-  public page:number = 1;
+  public page: number = 1;
   baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_role' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   baseResource_Url: string = constants.DREAMFACTORY_TABLE_URL;
 
@@ -71,18 +72,18 @@ export class RolesetupPage {
   public AddRoleClick() {
     this.AddRoleClicked = true;
     this.ACTIVATION_FLAG_ngModel_Add = false;
-    this.ClearControls();
+    ClearControls(this);
   }
 
   public EditClick(ROLE_GUID: any) {
-    this.ClearControls();
+    ClearControls(this);
     this.EditRoleClicked = true;
     var self = this;
     this.rolesetupservice
       .get(ROLE_GUID)
       .subscribe((data) => {
         self.role_details = data;
-        this.NAME_ngModel_Edit = self.role_details.NAME; 
+        this.NAME_ngModel_Edit = self.role_details.NAME;
         localStorage.setItem('Prev_Role_Name', self.role_details.NAME);
         this.DESCRIPTION_ngModel_Edit = self.role_details.DESCRIPTION;
         this.ACTIVATION_FLAG_ngModel_Edit = self.role_details.ACTIVATION_FLAG == "1" ? true : false;
@@ -125,7 +126,7 @@ export class RolesetupPage {
 
   public CloseRoleClick() {
     this.AddRoleClicked = this.AddRoleClicked ? false : false;
-    this.EditRoleClicked = this.EditRoleClicked ? false: false;
+    this.EditRoleClicked = this.EditRoleClicked ? false : false;
   }
 
   loading: Loading;
@@ -241,7 +242,7 @@ export class RolesetupPage {
       this.role_entry.CREATION_TS = this.role_details.CREATION_TS
       this.role_entry.CREATION_USER_GUID = this.role_details.CREATION_USER_GUID;
       this.role_entry.UPDATE_TS = this.role_details.UPDATE_TS;
-      
+
       //this.role_entry.TENANT_GUID = UUID.UUID();
       this.role_entry.ROLE_GUID = ROLE_GUID;
       this.role_entry.UPDATE_TS = new Date().toISOString();
@@ -329,29 +330,9 @@ export class RolesetupPage {
           return item;
         } else {
           return field == params[key] ? item : null;
-        } 
+        }
       }
       return null;
     });
-  }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.DESCRIPTION_ngModel_Add = "";
-    this.ACTIVATION_FLAG_ngModel_Add = false;
-    this.ADD_ngModel_Add = false;
-    this.EDIT_ngModel_Add = false;
-    this.DELETE_ngModel_Add = false;
-    this.VIEW_ngModel_Add = false;
-    this.PRIORITYLEVEL_ngModel_Add = "";
-
-    this.NAME_ngModel_Edit = "";
-    this.DESCRIPTION_ngModel_Edit = "";
-    this.ACTIVATION_FLAG_ngModel_Edit = false;
-    this.ADD_ngModel_Edit = false;
-    this.EDIT_ngModel_Edit = false;
-    this.DELETE_ngModel_Edit = false;
-    this.VIEW_ngModel_Edit = false;
-    this.PRIORITYLEVEL_ngModel_Edit = "";
   }
 }

@@ -1,18 +1,18 @@
 import 'rxjs/add/operator/map';
 
-import * as constants from '../../../app/config/constants';
-
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 //import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions, URLSearchParams } from '@angular/http';
+import { getURL, sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
+import { DREAMFACTORY_TABLE_URL } from '../../../app/config/constants';
 import { SubsciptionSetup_Model } from '../../../models/subsciptionsetup_model';
 import { SubsciptionSetup_Service } from '../../../services/subsciptionsetup_service';
 import { UUID } from 'angular2-uuid';
-import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the SubsciptionsetupPage page.
@@ -29,140 +29,139 @@ export class SubsciptionsetupPage {
   Subscription_entry: SubsciptionSetup_Model = new SubsciptionSetup_Model();
   //subscription: SubsciptionSetup_Model = new SubsciptionSetup_Model();
   Subscriptionform: FormGroup;
-  public page:number = 1;
-  baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_subscription' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+  public page: number = 1;
+  baseResourceUrl: string = getURL("table","main_subscription");
+  baseResource_Url: string = DREAMFACTORY_TABLE_URL;
 
-  public subscriptions: SubsciptionSetup_Model[] = []; 
+  public subscriptions: SubsciptionSetup_Model[] = [];
 
-  public AddSubscriptionClicked: boolean = false; 
-  public EditSubscriptionClicked: boolean = false; 
+  public AddSubscriptionClicked: boolean = false;
+  public EditSubscriptionClicked: boolean = false;
   public Exist_Record: boolean = false;
-  
-  public subscription_details: any; 
+
+  public subscription_details: any;
   public exist_record_details: any;
 
   //Set the Model Name for Add------------------------------------------
-  public PLAN_NAME_ngModel_Add:      any;
-  public DURATION_ngModel_Add:       any;
-  public RATE_ngModel_Add:           any;  
-  public EFFECTIVE_DATE_ngModel_Add: any;  
-  public ACTIVE_FLAG_ngModel_Add:    any;  
-  public DESCRIPTION_ngModel_Add:    any;   
+  public PLAN_NAME_ngModel_Add: any;
+  public DURATION_ngModel_Add: any;
+  public RATE_ngModel_Add: any;
+  public EFFECTIVE_DATE_ngModel_Add: any;
+  public ACTIVE_FLAG_ngModel_Add: any;
+  public DESCRIPTION_ngModel_Add: any;
   //---------------------------------------------------------------------
 
   //Set the Model Name for edit------------------------------------------
-  public PLAN_NAME_ngModel_Edit:        any;
-  public DURATION_ngModel_Edit:         any;
-  public RATE_ngModel_Edit:             any;  
-  public EFFECTIVE_DATE_ngModel_Edit:   any;  
-  public ACTIVE_FLAG_ngModel_Edit:      any;  
-  public DESCRIPTION_ngModel_Edit:      any;  
+  public PLAN_NAME_ngModel_Edit: any;
+  public DURATION_ngModel_Edit: any;
+  public RATE_ngModel_Edit: any;
+  public EFFECTIVE_DATE_ngModel_Edit: any;
+  public ACTIVE_FLAG_ngModel_Edit: any;
+  public DESCRIPTION_ngModel_Edit: any;
   //---------------------------------------------------------------------
 
-  
-   
-    public AddSubscriptionClick() {
-      this.ClearControls();
-        this.AddSubscriptionClicked = true; 
-        this.ACTIVE_FLAG_ngModel_Add = false;
-        this.EFFECTIVE_DATE_ngModel_Add = "";
-    }
 
-    public EditClick(SUBSCRIPTION_GUID: any) {
-      this.ClearControls();
-      this.EditSubscriptionClicked = true;
-      var self = this;
-      this.subscriptionsetupservice
-        .get(SUBSCRIPTION_GUID)
-        .subscribe((data) => 
-        {
-          self.subscription_details = data;
 
-          this.PLAN_NAME_ngModel_Edit = self.subscription_details.PLAN_NAME; localStorage.setItem('Prev_sub_Name', self.subscription_details.PLAN_NAME);
-          this.DURATION_ngModel_Edit = self.subscription_details.DURATION;
-          this.RATE_ngModel_Edit = self.subscription_details.RATE;
-          this.EFFECTIVE_DATE_ngModel_Edit = new Date(self.subscription_details.EFFECTIVE_DATE).toISOString();
-          this.DESCRIPTION_ngModel_Edit = self.subscription_details.DESCRIPTION;   
-          if(self.subscription_details.ACTIVE_FLAG == "1"){
-            this.ACTIVE_FLAG_ngModel_Edit = true;
-          }
-          else{
-            this.ACTIVE_FLAG_ngModel_Edit = false;
-          }    
+  public AddSubscriptionClick() {
+    ClearControls(this);
+    this.AddSubscriptionClicked = true;
+    this.ACTIVE_FLAG_ngModel_Add = false;
+    this.EFFECTIVE_DATE_ngModel_Add = "";
+  }
+
+  public EditClick(SUBSCRIPTION_GUID: any) {
+    ClearControls(this);
+    this.EditSubscriptionClicked = true;
+    var self = this;
+    this.subscriptionsetupservice
+      .get(SUBSCRIPTION_GUID)
+      .subscribe((data) => {
+        self.subscription_details = data;
+
+        this.PLAN_NAME_ngModel_Edit = self.subscription_details.PLAN_NAME; localStorage.setItem('Prev_sub_Name', self.subscription_details.PLAN_NAME);
+        this.DURATION_ngModel_Edit = self.subscription_details.DURATION;
+        this.RATE_ngModel_Edit = self.subscription_details.RATE;
+        this.EFFECTIVE_DATE_ngModel_Edit = new Date(self.subscription_details.EFFECTIVE_DATE).toISOString();
+        this.DESCRIPTION_ngModel_Edit = self.subscription_details.DESCRIPTION;
+        if (self.subscription_details.ACTIVE_FLAG == "1") {
+          this.ACTIVE_FLAG_ngModel_Edit = true;
+        }
+        else {
+          this.ACTIVE_FLAG_ngModel_Edit = false;
+        }
       });
-    }
-       
-    public DeleteClick(SUBSCRIPTION_GUID: any) {
-      let alert = this.alertCtrl.create({
-        title: 'Remove Confirmation',
-        message: 'Are you sure to remove?',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel clicked');
-            }
-          },
-          {
-            text: 'OK',
-            handler: () => {
-              console.log('OK clicked');
-              var self = this;
-              this.subscriptionsetupservice.remove(SUBSCRIPTION_GUID)
-                .subscribe(() => {
-                  self.subscriptions = self.subscriptions.filter((item) => {
-                    return item.SUBSCRIPTION_GUID != SUBSCRIPTION_GUID
-                  });
-                });
-              //this.navCtrl.setRoot(this.navCtrl.getActive().component);
-            }
+  }
+
+  public DeleteClick(SUBSCRIPTION_GUID: any) {
+    let alert = this.alertCtrl.create({
+      title: 'Remove Confirmation',
+      message: 'Are you sure to remove?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
           }
-        ]
-      }); alert.present();
-    }
-  
-
-      public CloseSubscriptionClick() {
-
-        if (this.AddSubscriptionClicked == true) {
-          this.AddSubscriptionClicked = false;
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            console.log('OK clicked');
+            var self = this;
+            this.subscriptionsetupservice.remove(SUBSCRIPTION_GUID)
+              .subscribe(() => {
+                self.subscriptions = self.subscriptions.filter((item) => {
+                  return item.SUBSCRIPTION_GUID != SUBSCRIPTION_GUID
+                });
+              });
+            //this.navCtrl.setRoot(this.navCtrl.getActive().component);
+          }
         }
-        if (this.EditSubscriptionClicked == true) {
-          this.EditSubscriptionClicked = false;
-        }
+      ]
+    }); alert.present();
+  }
+
+
+  public CloseSubscriptionClick() {
+
+    if (this.AddSubscriptionClicked == true) {
+      this.AddSubscriptionClicked = false;
     }
+    if (this.EditSubscriptionClicked == true) {
+      this.EditSubscriptionClicked = false;
+    }
+  }
   constructor(public navCtrl: NavController, public navParams: NavParams, fb: FormBuilder, public http: Http, private subscriptionsetupservice: SubsciptionSetup_Service, private alertCtrl: AlertController) {
     this.http
       .get(this.baseResourceUrl)
       .map(res => res.json())
       .subscribe(data => {
         this.subscriptions = data.resource;
-     console.table(this.subscriptions)
-    });
+        console.table(this.subscriptions)
+      });
 
     this.Subscriptionform = fb.group({
       //PLAN_NAME: ["", Validators.required],
       //PLAN_NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])],
       PLAN_NAME: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-      
+
       //DURATION: ["", Validators.required],
       DURATION: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-      
+
       //NAME: [null, Validators.compose([Validators.pattern('[a-zA-Z][a-zA-Z0-9 ]+'), Validators.required])], 
       //RATE: [null, Validators.compose([Validators.pattern('^[a-zA-Z][a-zA-Z0-9\\s]+$'), Validators.required])],
       //RATE: ["", Validators.required],
       //RATE: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])],
       RATE: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-      
+
       EFFECTIVE_DATE: ["", Validators.required],
       //DESCRIPTION: ["", Validators.required],
       //DESCRIPTION: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9][a-zA-Z0-9 ]+'), Validators.required])],
       DESCRIPTION: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-      
+
       ACTIVE_FLAG: ["", Validators.required],
-             
+
     });
   }
 
@@ -177,70 +176,70 @@ export class SubsciptionsetupPage {
       headers.append('Content-Type', 'application/json');
       let options = new RequestOptions({ headers: headers });
       let url: string;
-      url = this.baseResource_Url+ "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;      
+      url = this.baseResource_Url + "main_subscription?filter=(PLAN_NAME=" + this.PLAN_NAME_ngModel_Add.trim() + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
       this.http.get(sanitizeURL(url), options)
         .map(res => res.json())
         .subscribe(
-        data => {
-          let res = data["resource"];
-          if (res.length == 0) {
-            console.log("No records Found");
-            if (this.Exist_Record == false) {
-              this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Add.trim();
-              this.Subscription_entry.DURATION = this.DURATION_ngModel_Add.trim();
-              this.Subscription_entry.RATE = this.RATE_ngModel_Add.trim();
-              this.Subscription_entry. EFFECTIVE_DATE = this. EFFECTIVE_DATE_ngModel_Add;
-              this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Add.trim();
-              this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Add;
+          data => {
+            let res = data["resource"];
+            if (res.length == 0) {
+              console.log("No records Found");
+              if (this.Exist_Record == false) {
+                this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Add.trim();
+                this.Subscription_entry.DURATION = this.DURATION_ngModel_Add.trim();
+                this.Subscription_entry.RATE = this.RATE_ngModel_Add.trim();
+                this.Subscription_entry.EFFECTIVE_DATE = this.EFFECTIVE_DATE_ngModel_Add;
+                this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Add.trim();
+                this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Add;
 
-      this.Subscription_entry.SUBSCRIPTION_GUID = UUID.UUID();
-      this.Subscription_entry.CREATION_TS = new Date().toISOString();
-      this.Subscription_entry.CREATION_USER_GUID = "1";
-      this.Subscription_entry.UPDATE_TS = new Date().toISOString();
-      this.Subscription_entry.TENANT_GUID = UUID.UUID();
-      this.Subscription_entry.UPDATE_USER_GUID = "";
-      //this.mileage_entry.ACTIVATION_FLAG = boolean;
-      
-      this.subscriptionsetupservice.save(this.Subscription_entry)
-        .subscribe((response) => {
-          if (response.status == 200) {
-            alert('Subscription Registered successfully');
-            //location.reload();
-            this.navCtrl.setRoot(this.navCtrl.getActive().component);
-          }
-        });
+                this.Subscription_entry.SUBSCRIPTION_GUID = UUID.UUID();
+                this.Subscription_entry.CREATION_TS = new Date().toISOString();
+                this.Subscription_entry.CREATION_USER_GUID = "1";
+                this.Subscription_entry.UPDATE_TS = new Date().toISOString();
+                this.Subscription_entry.TENANT_GUID = UUID.UUID();
+                this.Subscription_entry.UPDATE_USER_GUID = "";
+                //this.mileage_entry.ACTIVATION_FLAG = boolean;
+
+                this.subscriptionsetupservice.save(this.Subscription_entry)
+                  .subscribe((response) => {
+                    if (response.status == 200) {
+                      alert('Subscription Registered successfully');
+                      //location.reload();
+                      this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                    }
+                  });
+              }
+            }
+            else {
+              console.log("Records Found");
+              alert("The Subscription is already Exist.")
+
+            }
+          },
+          err => {
+            this.Exist_Record = false;
+            console.log("ERROR!: ", err);
+          });
     }
   }
-  else {
-    console.log("Records Found");
-    alert("The Subscription is already Exist.")
-    
-  } 
-},
-err => {
-  this.Exist_Record = false;
-  console.log("ERROR!: ", err);
-});
-}
-}
-getSubscriptionList() {
-  let self = this;
-  let params: URLSearchParams = new URLSearchParams();
-  self.subscriptionsetupservice.get_subscription(params)
-    .subscribe((subscriptions: SubsciptionSetup_Model[]) => {
-      self.subscriptions = subscriptions;
-    });
-}
+  getSubscriptionList() {
+    let self = this;
+    let params: URLSearchParams = new URLSearchParams();
+    self.subscriptionsetupservice.get_subscription(params)
+      .subscribe((subscriptions: SubsciptionSetup_Model[]) => {
+        self.subscriptions = subscriptions;
+      });
+  }
 
- Update(SUBSCRIPTION_GUID: any) {  
+  Update(SUBSCRIPTION_GUID: any) {
 
-  if (this.Subscriptionform.valid) {
- if(this.Subscription_entry.PLAN_NAME==null){this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim();}
- if(this.Subscription_entry.DURATION==null){this.Subscription_entry.DURATION = this.DURATION_ngModel_Edit.trim();}
- if(this.Subscription_entry.RATE==null){this.Subscription_entry.RATE = this.RATE_ngModel_Edit.trim();}
- if(this.Subscription_entry.EFFECTIVE_DATE==null){this.Subscription_entry.EFFECTIVE_DATE = this.EFFECTIVE_DATE_ngModel_Edit;}
- if(this.Subscription_entry.DESCRIPTION==null){this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Edit.trim();}
- if(this.Subscription_entry.ACTIVE_FLAG==null){this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Edit;}
+    if (this.Subscriptionform.valid) {
+      if (this.Subscription_entry.PLAN_NAME == null) { this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim(); }
+      if (this.Subscription_entry.DURATION == null) { this.Subscription_entry.DURATION = this.DURATION_ngModel_Edit.trim(); }
+      if (this.Subscription_entry.RATE == null) { this.Subscription_entry.RATE = this.RATE_ngModel_Edit.trim(); }
+      if (this.Subscription_entry.EFFECTIVE_DATE == null) { this.Subscription_entry.EFFECTIVE_DATE = this.EFFECTIVE_DATE_ngModel_Edit; }
+      if (this.Subscription_entry.DESCRIPTION == null) { this.Subscription_entry.DESCRIPTION = this.DESCRIPTION_ngModel_Edit.trim(); }
+      if (this.Subscription_entry.ACTIVE_FLAG == null) { this.Subscription_entry.ACTIVE_FLAG = this.ACTIVE_FLAG_ngModel_Edit; }
 
       this.Subscription_entry.CREATION_TS = this.subscription_details.CREATION_TS
       this.Subscription_entry.CREATION_USER_GUID = this.subscription_details.CREATION_USER_GUID;
@@ -248,7 +247,7 @@ getSubscriptionList() {
       this.Subscription_entry.SUBSCRIPTION_GUID = SUBSCRIPTION_GUID;
       this.Subscription_entry.UPDATE_TS = new Date().toISOString();
       this.Subscription_entry.UPDATE_USER_GUID = '1';
-      
+
       //debugger;
       if (this.PLAN_NAME_ngModel_Edit.trim() != localStorage.getItem('Prev_sub_Name')) {
         let url: string;
@@ -256,73 +255,73 @@ getSubscriptionList() {
         this.http.get(sanitizeURL(url))
           .map(res => res.json())
           .subscribe(
-          data => {
-            let res = data["resource"];
-            console.log('Current Name : ' + this.PLAN_NAME_ngModel_Edit.trim() + ', Previous Name : ' + localStorage.getItem('Prev_sub_Name'));
+            data => {
+              let res = data["resource"];
+              console.log('Current Name : ' + this.PLAN_NAME_ngModel_Edit.trim() + ', Previous Name : ' + localStorage.getItem('Prev_sub_Name'));
 
-            if (res.length == 0) {
-             
-              console.log("No records Found");
-              this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim();
-              
-              //**************Update service if it is new details*************************
-              this.subscriptionsetupservice.update(this.Subscription_entry)
-                .subscribe((response) => {
-                  if (response.status == 200) {
-                    alert('Subscription updated successfully');
-                    this.navCtrl.setRoot(this.navCtrl.getActive().component);
-                  }
-                });
-              //**************************************************************************
-            }
-            else {
-              console.log("Records Found");
-              alert("The Subscription is already Exist. ");
-            }
-          },
-          err => {
-            this.Exist_Record = false;
-            console.log("ERROR!: ", err);
-          });
+              if (res.length == 0) {
+
+                console.log("No records Found");
+                this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim();
+
+                //**************Update service if it is new details*************************
+                this.subscriptionsetupservice.update(this.Subscription_entry)
+                  .subscribe((response) => {
+                    if (response.status == 200) {
+                      alert('Subscription updated successfully');
+                      this.navCtrl.setRoot(this.navCtrl.getActive().component);
+                    }
+                  });
+                //**************************************************************************
+              }
+              else {
+                console.log("Records Found");
+                alert("The Subscription is already Exist. ");
+              }
+            },
+            err => {
+              this.Exist_Record = false;
+              console.log("ERROR!: ", err);
+            });
       }
       else {
         if (this.Subscription_entry.PLAN_NAME == null) { this.Subscription_entry.PLAN_NAME = localStorage.getItem('Prev_sub_Name'); }
         this.Subscription_entry.PLAN_NAME = this.PLAN_NAME_ngModel_Edit.trim();
-        
+
         //**************Update service if it is old details************************
-      
-      this.subscriptionsetupservice.update(this.Subscription_entry)
-        .subscribe((response) => {
-          if (response.status == 200) {
-            alert('Subscription updated successfully');
-            //location.reload();
-            this.navCtrl.setRoot(this.navCtrl.getActive().component); 
-          }
-        });
+
+        this.subscriptionsetupservice.update(this.Subscription_entry)
+          .subscribe((response) => {
+            if (response.status == 200) {
+              alert('Subscription updated successfully');
+              //location.reload();
+              this.navCtrl.setRoot(this.navCtrl.getActive().component);
+            }
+          });
+      }
     }
   }
-}
-ClearControls()
-{
-  this.PLAN_NAME_ngModel_Add = "";
-  this.DURATION_ngModel_Add = "";
-  this.RATE_ngModel_Add = "";
-  this.EFFECTIVE_DATE_ngModel_Add = "";
-  this.DESCRIPTION_ngModel_Add = "";
-  this.ACTIVE_FLAG_ngModel_Add = false;
 
-  this.PLAN_NAME_ngModel_Edit = "";
-  this.DURATION_ngModel_Edit = "";
-  this.RATE_ngModel_Edit = "";
-  this.EFFECTIVE_DATE_ngModel_Edit = "";
-  this.DESCRIPTION_ngModel_Edit = "";
-  this.ACTIVE_FLAG_ngModel_Edit = false;
+/*   ClearControls() {
+    this.PLAN_NAME_ngModel_Add = "";
+    this.DURATION_ngModel_Add = "";
+    this.RATE_ngModel_Add = "";
+    this.EFFECTIVE_DATE_ngModel_Add = "";
+    this.DESCRIPTION_ngModel_Add = "";
+    this.ACTIVE_FLAG_ngModel_Add = false;
 
-}
+    this.PLAN_NAME_ngModel_Edit = "";
+    this.DURATION_ngModel_Edit = "";
+    this.RATE_ngModel_Edit = "";
+    this.EFFECTIVE_DATE_ngModel_Edit = "";
+    this.DESCRIPTION_ngModel_Edit = "";
+    this.ACTIVE_FLAG_ngModel_Edit = false;
+
+  } */
 }
 
 // if (this.Subscriptionform.valid) {
-  
+
 //         let headers = new Headers();
 //         headers.append('Content-Type', 'application/json');
 //         let options = new RequestOptions({ headers: headers });
@@ -342,7 +341,7 @@ ClearControls()
 // else {
 //   console.log("Records Found");
 //   alert("The Subscription is already Added.")
-  
+
 // }
 // },
 // err => {

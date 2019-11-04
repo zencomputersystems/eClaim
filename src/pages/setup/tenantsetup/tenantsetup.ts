@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, URLSearchParams } from '@angular/http';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import CryptoJS from 'crypto-js';
 // import { GlobalFunction } from '../../../shared/GlobalFunction';
@@ -132,7 +133,7 @@ export class TenantsetupPage {
 
   public AddTenantClick() {
     this.AddTenantClicked = true; this.Add_Form = true; this.Edit_Form = false;
-    this.ClearControls();
+    ClearControls(this);
   }
 
   public AddTUserClick(TENANT_GUID: any, TENANT_COMPANY_GUID: any, TENANT_COMPANY_SITE_GUID: any) {
@@ -187,7 +188,7 @@ export class TenantsetupPage {
   }
 
   public EditClick(TENANT_COMPANY_SITE_GUID: any) {
-    this.ClearControls();
+    ClearControls(this);
     //this.EditTenantClicked = true;
     this.AddTenantClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
@@ -918,32 +919,6 @@ export class TenantsetupPage {
     }
   }
 
-  ClearControls() {
-    this.COMPANY_SITE_NAME_ngModel_Add = "";
-    this.REGISTRATION_NUM_ngModel_Add = "";
-    this.EMAIL_ngModel_Add = "";
-    this.ADDRESS_ngModel_Add = "";
-    this.EMAIL_ngModel_Add = "";
-    this.CONTACT_NO_ngModel_Add = "";
-    this.WEBSITE_ngModel_Add = "";
-    this.CONTACT_PERSON_ngModel_Add = "";
-    this.CONTACT_PERSON_CONTACT_NO_ngModel_Add = "";
-    this.CONTACT_PERSON_EMAIL_ngModel_Add = "";
-
-    this.SITE_NAME_ngModel_Edit = "";
-    this.REGISTRATION_NUM_ngModel_Edit = "";
-    this.EMAIL_ngModel_Edit = "";
-    this.ADDRESS_ngModel_Edit = "";
-    this.EMAIL_ngModel_Edit = "";
-    this.CONTACT_NO_ngModel_Edit = "";
-    this.WEBSITE_ngModel_Edit = "";
-    this.CONTACT_PERSON_ngModel_Edit = "";
-    this.CONTACT_PERSON_CONTACT_NO_ngModel_Edit = "";
-    this.CONTACT_PERSON_EMAIL_ngModel_Edit = "";
-
-    // this.ISHQ_FLAG_ngModel_Add = false;
-    // this.ACTIVE_FLAG_ngModel_Add = false;
-  }
 
   ClearUserControls() {
     this.User_Loginid_ngModel_Add = "";

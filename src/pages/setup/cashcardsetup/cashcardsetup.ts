@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { CashcardSetup_Model } from '../../../models/cashcardsetup_model';
 import { CashcardSetup_Service } from '../../../services/cashcardsetup_service';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { UUID } from 'angular2-uuid';
@@ -55,8 +56,10 @@ export class CashcardsetupPage extends authCheck {
 
   public AddCashClick() {
     if (this.Edit_Form == false) {
-      this.AddCashClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      this.AddCashClicked = true; 
+      this.Add_Form = true; 
+      this.Edit_Form = false;
+      ClearControls(this);
     }
     else {
       alert('Sorry, You are in edit mode.');
@@ -66,7 +69,8 @@ export class CashcardsetupPage extends authCheck {
   public CloseCashClick() {
     if (this.AddCashClicked == true) {
       this.AddCashClicked = false;
-      this.Add_Form = true; this.Edit_Form = false;
+      this.Add_Form = true; 
+      this.Edit_Form = false;
     }
   }
 
@@ -76,19 +80,25 @@ export class CashcardsetupPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
-    this.AddCashClicked = true; this.Add_Form = false; this.Edit_Form = true;
+    ClearControls(this);
+    this.AddCashClicked = true; 
+    this.Add_Form = false; 
+    this.Edit_Form = true;
 
     var self = this;
     this.cashcardsetupservice
       .get(CASHCARD_GUID)
       .subscribe((data) => {
         self.cashcard_details = data;
-        this.Tenant_Add_ngModel = self.cashcard_details.TENANT_GUID; localStorage.setItem('Prev_TenantGuid', self.cashcard_details.TENANT_GUID);
-        this.ACCOUNT_ID_ngModel_Add = self.cashcard_details.ACCOUNT_ID; localStorage.setItem('Prev_ACCOUNT_ID', self.cashcard_details.ACCOUNT_ID);
-        this.CASHCARD_SNO_ngModel_Add = self.cashcard_details.CASHCARD_SNO; localStorage.setItem('Prev_CASHCARD_SNO', self.cashcard_details.CASHCARD_SNO);
+        this.Tenant_Add_ngModel = self.cashcard_details.TENANT_GUID; 
+        localStorage.setItem('Prev_TenantGuid', self.cashcard_details.TENANT_GUID);
+        this.ACCOUNT_ID_ngModel_Add = self.cashcard_details.ACCOUNT_ID; 
+        localStorage.setItem('Prev_ACCOUNT_ID', self.cashcard_details.ACCOUNT_ID);
+        this.CASHCARD_SNO_ngModel_Add = self.cashcard_details.CASHCARD_SNO; 
+        localStorage.setItem('Prev_CASHCARD_SNO', self.cashcard_details.CASHCARD_SNO);
         this.ACCOUNT_PASSWORD_ngModel_Add = self.cashcard_details.ACCOUNT_PASSWORD;
-        this.MANAGEMENT_URL_ngModel_Add = self.cashcard_details.MANAGEMENT_URL; localStorage.setItem('Prev_MANAGEMENT_URL', self.cashcard_details.MANAGEMENT_URL);
+        this.MANAGEMENT_URL_ngModel_Add = self.cashcard_details.MANAGEMENT_URL; 
+        localStorage.setItem('Prev_MANAGEMENT_URL', self.cashcard_details.MANAGEMENT_URL);
         this.DESCRIPTION_ngModel_Add = self.cashcard_details.DESCRIPTION;
 
         this.loading.dismissAll();
@@ -352,14 +362,5 @@ export class CashcardsetupPage extends authCheck {
           resolve(result.length);
         });
     });
-  }
-
-  ClearControls() {
-    this.CASHCARD_SNO_ngModel_Add = "";
-    this.ACCOUNT_ID_ngModel_Add = "";
-    this.ACCOUNT_PASSWORD_ngModel_Add = "";
-    this.MANAGEMENT_URL_ngModel_Add = "";
-    this.DESCRIPTION_ngModel_Add = "";
-    this.Tenant_Add_ngModel = "";
   }
 }

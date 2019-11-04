@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { CountrySetup_Model } from '../../../models/countrysetup_model';
 import { Http } from '@angular/http';
@@ -61,8 +62,11 @@ export class StatesetupPage extends authCheck {
 
   public AddStateClick() {
     if (this.Edit_Form == false) {
-      this.AddStateClicked = true; this.Add_Form = true; this.Edit_Form = false; this.HeaderText = "REGISTER NEW STATE";
-      this.ClearControls();
+      this.AddStateClicked = true; 
+      this.Add_Form = true; 
+      this.Edit_Form = false; 
+      this.HeaderText = "REGISTER NEW STATE";
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -74,9 +78,11 @@ export class StatesetupPage extends authCheck {
       content: 'Loading...',
     });
     this.loading.present();
-
-    this.ClearControls();
-    this.AddStateClicked = true; this.Add_Form = false; this.Edit_Form = true; this.HeaderText = "UPDATE COUNTRY";
+    ClearControls(this);
+    this.AddStateClicked = true; 
+    this.Add_Form = false; 
+    this.Edit_Form = true; 
+    this.HeaderText = "UPDATE COUNTRY";
 
     var self = this;
     this.statesetupservice
@@ -84,7 +90,8 @@ export class StatesetupPage extends authCheck {
       .subscribe((data) => {
         self.state_details = data;
 
-        this.STATE_NAME_ngModel_Add = self.state_details.NAME; localStorage.setItem('Previ_state', self.state_details.NAME);
+        this.STATE_NAME_ngModel_Add = self.state_details.NAME; 
+        localStorage.setItem('Previ_state', self.state_details.NAME);
         this.COUNTRY_NAME_ngModel_Add = self.state_details.COUNTRY_GUID;
 
         this.loading.dismissAll();
@@ -334,10 +341,5 @@ export class StatesetupPage extends authCheck {
           this.navCtrl.setRoot(this.navCtrl.getActive().component);
         }
       });
-  }
-
-  ClearControls() {
-    this.STATE_NAME_ngModel_Add = "";
-    this.COUNTRY_NAME_ngModel_Add = "";
   }
 }

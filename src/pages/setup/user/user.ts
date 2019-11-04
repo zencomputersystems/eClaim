@@ -7,6 +7,7 @@ import { Headers, Http, RequestOptions } from '@angular/http';
 
 import { BaseHttpService } from '../../../services/base-http';
 import { Camera } from '@ionic-native/camera';
+import { ClearControls } from '../../../services/controls_service';
 import CryptoJS from 'crypto-js';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
@@ -235,7 +236,7 @@ export class UserPage extends authCheck {
 
   public AddUserClick() {
     this.AddUserClicked = true;
-    this.ClearControls();
+    ClearControls(this);
 
     //Generate Password Encrypt-----------------
     var strPassword = Random();
@@ -268,7 +269,7 @@ export class UserPage extends authCheck {
   public Profile_Image_Display: any;
 
   public EditClick_Personaldetails(id: any) {
-    this.ClearControls();
+    ClearControls(this);
 
     this.loading = this.loadingCtrl.create({
       content: 'Loading...',
@@ -2254,139 +2255,6 @@ console.log(this.view_user_details[0]);
 
   ROLE_ngModel_Add: any;
   ROLE_ngModel_Edit: any;
-
-  ClearControls() {
-    this.User_Name_ngModel = "";
-    this.User_Email_ngModel = "";
-    this.User_LoginId_ngModel = "";
-    this.User_Password_ngModel = "";
-    this.User_PersonalNo_ngModel = "";
-    this.User_CompanyNo_ngModel = "";
-    this.User_Marital_ngModel = "";
-    this.User_StaffID_ngModel = "";
-    this.User_ICNo_ngModel = "";
-    this.User_DOB_ngModel = "";
-    this.User_Gender_ngModel = "";
-
-    this.User_Designation_ngModel = "";
-    this.User_Company_ngModel = "";
-    this.User_Department_ngModel = "";
-    this.User_JoinDate_ngModel = "";
-    this.User_ConfirmationDate_ngModel = "";
-    this.User_ResignationDate_ngModel = "";
-    this.User_Branch_ngModel = "";
-    this.User_Approver1_ngModel = "";
-    // this.User_Approver2_ngModel = "";
-    this.User_EmployeeType_ngModel = "";
-    this.User_Employment_ngModel = "";
-
-    this.User_HighestQualification_ngModel = "";
-    this.User_University_ngModel = "";
-    this.User_Major_ngModel = "";
-    this.User_EduYear_ngModel = "";
-
-    this.User_Certification_ngModel = "";
-    this.User_CertificationYear_ngModel = "";
-    this.User_CertificationGrade_ngModel = "";
-    this.ProfessionalCertification = [];
-
-    this.User_Address1_ngModel = "";
-    this.User_Address2_ngModel = "";
-    this.User_Address3_ngModel = "";
-    this.User_PostCode_ngModel = "";
-    this.User_Country_ngModel = "";
-    this.User_State_ngModel = "";
-
-    this.User_Spouse_Name_ngModel = "";
-    this.User_Spouse_IcNumber_ngModel = "";
-    this.FamilyDetails = [];
-
-    this.User_Child_Name_ngModel = "";
-    this.User_Child_IcNumber_ngModel = "";
-    this.User_Child_Gender_ngModel = "";
-    this.User_SpouseChild_ngModel = "";
-    this.ChildrenDetails = [];
-
-    this.User_EMG_CONTACT_NAME1_ngModel = "";
-    this.User_EMG_RELATIONSHIP_ngModel = "";
-    this.User_EMG_CONTACT_NO1_ngModel = "";
-    this.User_EMG_CONTACT_NAME2_ngModel = "";
-    this.User_EMG_RELATIONSHIP2_ngModel = "";
-    this.User_EMG_CONTACT_NO2_ngModel = "";
-
-    this.User_EPF_NUMBER_ngModel = "";
-    this.User_INCOMETAX_NO_ngModel = "";
-    this.User_BANK_NAME_ngModel = "";
-
-    //-----------------------------------------------
-
-    this.User_Name_Edit_ngModel = "";
-    this.User_Email_Edit_ngModel = "";
-    this.User_LoginId_Edit_ngModel = "";
-    this.User_Password_Edit_ngModel = "";
-    this.User_PersonalNo_Edit_ngModel = "";
-    this.User_CompanyNo_Edit_ngModel = "";
-    this.User_Marital_Edit_ngModel = "";
-    this.User_StaffID_Edit_ngModel = "";
-    this.User_ICNo_Edit_ngModel = "";
-    this.User_DOB_Edit_ngModel = "";
-    this.User_Gender_Edit_ngModel = "";
-
-    this.User_Designation_Edit_ngModel = "";
-    this.User_Company_Edit_ngModel = "";
-    this.User_Department_Edit_ngModel = "";
-    this.User_JoinDate_Edit_ngModel = "";
-    this.User_ConfirmationDate_Edit_ngModel = "";
-    this.User_ResignationDate_Edit_ngModel = "";
-    this.User_Branch_Edit_ngModel = "";
-    // this.User_Approver1_ngModel = "";
-    // this.User_Approver2_ngModel = "";
-    this.User_EmployeeType_Edit_ngModel = "";
-    this.User_Employment_Edit_ngModel = "";
-
-    this.User_HighestQualification_Edit_ngModel = "";
-    this.User_University_Edit_ngModel = "";
-    this.User_Major_Edit_ngModel = "";
-    this.User_EduYear_Edit_ngModel = "";
-
-    this.User_Certification_Edit_ngModel = "";
-    this.User_CertificationYear_Edit_ngModel = "";
-    this.User_CertificationGrade_Edit_ngModel = "";
-
-    this.User_Address1_Edit_ngModel = "";
-    this.User_Address2_Edit_ngModel = "";
-    this.User_Address3_Edit_ngModel = "";
-    this.User_PostCode_Edit_ngModel = "";
-    this.User_Country_Edit_ngModel = "";
-    this.User_State_Edit_ngModel = "";
-
-    this.User_Spouse_Name_Edit_ngModel = "";
-    this.User_Spouse_IcNumber_Edit_ngModel = "";
-
-    this.User_Child_Name_Edit_ngModel = "";
-    this.User_Child_IcNumber_Edit_ngModel = "";
-    this.User_Child_Gender_Edit_ngModel = "";
-    this.User_SpouseChild_Edit_ngModel = "";
-
-    this.User_EMG_CONTACT_NAME1_Edit_ngModel = "";
-    this.User_EMG_RELATIONSHIP_Edit_ngModel = "";
-    this.User_EMG_CONTACT_NO1_Edit_ngModel = "";
-    this.User_EMG_CONTACT_NAME2_Edit_ngModel = "";
-    this.User_EMG_RELATIONSHIP2_Edit_ngModel = "";
-    this.User_EMG_CONTACT_NO2_Edit_ngModel = "";
-
-    this.User_EPF_NUMBER_Edit_ngModel = "";
-    this.User_INCOMETAX_NO_Edit_ngModel = "";
-    this.User_BANK_NAME_Edit_ngModel = "";
-
-    this.MaritalStatusMarried = false;
-
-    this.ROLE_ngModel_Add = "";
-    this.ROLE_ngModel_Edit = "";
-
-    localStorage.setItem("Main_User_Role_Guid_Temp", "");
-  }
-
   lastImage: string = null;
   loading: Loading;
 

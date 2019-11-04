@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { DepartmentSetup_Model } from '../../../models/departmentsetup_model';
 import { DepartmentSetup_Service } from '../../../services/departmentsetup_service';
@@ -53,7 +54,7 @@ export class DepartmentsetupPage extends authCheck {
   public AddDepartmentClick() {
     if (this.Edit_Form == false) {
       this.AddDepartmentClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -66,7 +67,7 @@ export class DepartmentsetupPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddDepartmentClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
     var self = this;
@@ -351,11 +352,5 @@ export class DepartmentsetupPage extends authCheck {
           resolve(result.length);
         });
     });
-  }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.DESCRIPTION_ngModel_Add = "";
-    this.Tenant_Add_ngModel = "";
   }
 }

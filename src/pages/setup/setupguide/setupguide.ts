@@ -564,41 +564,6 @@ export class SetupguidePage {
       });
   }
 
-  ClearControls() {
-    //-----------For Tenant Company Model-------------------
-    this.Tenant_Name_ngModel = "";
-    this.Userid_ngModel = "";
-    this.Password_ngModel = "";
-    this.ContactPerson_ngModel = "";
-
-    //-----------For Tenant HQ Model------------------------
-    this.Companyname_ngModel = "";
-    this.HQregno_ngModel = "";
-    this.Tenantemail_ngModel = "";
-    this.Tenantcontactno_ngModel = "";
-
-    //-----------For Branch Model---------------------------
-    this.BranchSaveFlag = false;
-    this.Branches = [];
-    this.Branch_Name_ngModel = "";
-    this.Branch_Regno_ngModel = "";
-    this.Branch_Email_ngModel = "";
-    this.Branch_Contactno_ngModel = "";
-    this.Branch_ISHQ_FLAG_ngModel = false;
-
-    //-----------For Department Model-----------------------
-    this.DepartmentSaveFlag = false;
-    this.Department = [];
-    this.Department_Name_ngModel = "";
-    this.Department_Desc_ngModel = "";
-
-    //-----------For Designation Model----------------------
-    this.DesignationSaveFlag = false;
-    this.Designation = [];
-    this.Designation_Name_ngModel = "";
-    this.Designation_Desc_ngModel = "";
-  }
-
   Save_User_Main() {
     //Setup Entity for Super Admin--------------------    
     if (localStorage.getItem("g_USER_GUID") == "sva") {

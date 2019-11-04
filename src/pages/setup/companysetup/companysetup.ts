@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions, URLSearchParams } from '@angular/http';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { CompanySetup_Model } from '../../../models/companysetup_model';
 import { CompanySetup_Service } from '../../../services/companysetup_service';
 import { Component } from '@angular/core';
@@ -67,11 +68,11 @@ export class CompanysetupPage extends authCheck {
 
   public AddCompanyClick() {
     this.AddCompanyClicked = true;
-    this.ClearControls();
+    ClearControls(this);
   }
 
   public EditClick(COMPANY_GUID: any) {
-    this.ClearControls();
+    ClearControls(this);
     this.EditCompanyClicked = true;
     var self = this;
     this.companysetupservice
@@ -79,11 +80,14 @@ export class CompanysetupPage extends authCheck {
       .subscribe((data) => {
         self.company_details = data;
         this.NAME_ngModel_Edit = self.company_details.NAME;
-        this.REGISTRATION_NO_ngModel_Edit = self.company_details.REGISTRATION_NO; localStorage.setItem('Prev_co_Reg', self.company_details.REGISTRATION_NO);
+        this.REGISTRATION_NO_ngModel_Edit = self.company_details.REGISTRATION_NO; 
+        localStorage.setItem('Prev_co_Reg', self.company_details.REGISTRATION_NO);
         this.ADDRESS_ngModel_Edit = self.company_details.ADDRESS;
         this.FAX_ngModel_Edit = self.company_details.FAX; localStorage.setItem('Prev_co_Fax', self.company_details.FAX);
-        this.PHONE_ngModel_Edit = self.company_details.PHONE; localStorage.setItem('Prev_co_Phone', self.company_details.PHONE);
-        this.EMAIL_ngModel_Edit = self.company_details.EMAIL; localStorage.setItem('Prev_co_Email', self.company_details.EMAIL);
+        this.PHONE_ngModel_Edit = self.company_details.PHONE; 
+        localStorage.setItem('Prev_co_Phone', self.company_details.PHONE);
+        this.EMAIL_ngModel_Edit = self.company_details.EMAIL; 
+        localStorage.setItem('Prev_co_Email', self.company_details.EMAIL);
       });
   }
 
@@ -417,51 +421,5 @@ export class CompanysetupPage extends authCheck {
       }
     }
   }
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.REGISTRATION_NO_ngModel_Add = "";
-    this.ADDRESS_ngModel_Add = "";
-    this.FAX_ngModel_Add = "";
-    this.PHONE_ngModel_Add = "";
-    this.EMAIL_ngModel_Add = "";
-
-    this.NAME_ngModel_Edit = "";
-    this.REGISTRATION_NO_ngModel_Edit = "";
-    this.ADDRESS_ngModel_Edit = "";
-    this.FAX_ngModel_Edit = "";
-    this.PHONE_ngModel_Edit = "";
-    this.EMAIL_ngModel_Edit = "";
-  }
 }
-  // if (this.Companyform.valid) {
 
-    //         let headers = new Headers();
-    //         headers.append('Content-Type', 'application/json');
-    //         let options = new RequestOptions({ headers: headers });
-    //         let url: string;
-    //         url = "http://api.zen.com.my/api/v2/zcs/_table/main_company?filter=(NAME=" + this.company_entry.NAME + ")AND(EMAIL=" + this.company_entry.EMAIL + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-    //         this.http.get(url, options)
-    //           .map(res => res.json())
-    //           .subscribe(
-    //           data => {
-    //             let res = data["resource"];
-    //             if (res.length == 0) {
-    //               console.log("No records Found");
-    //               if (this.Exist_Record == false) {
-    // if (this.Companyform.valid) {
-
-//}
-// else {
-//   console.log("Records Found");
-//   alert("The Company is already Added.")
-
-// }
-// },
-// err => {
-//   this.Exist_Record = false;
-//   console.log("ERROR!: ", err);
-// }
-// );
-// }
-// }
-// }

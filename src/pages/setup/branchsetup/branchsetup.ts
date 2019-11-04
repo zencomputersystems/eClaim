@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { LoginPage } from '../../login/login';
@@ -62,7 +63,7 @@ export class BranchsetupPage extends authCheck {
 
   public AddBranchsClick() {
     this.AddBranchsClicked = true;
-    this.ClearControls();
+    ClearControls(this);
     this.COMPANYNAME_ngModel_Add = this.branchs[0]["NAME"];
   }
 
@@ -375,12 +376,5 @@ export class BranchsetupPage extends authCheck {
     //       });
     //   }
     // }
-  }
-
-  ClearControls() {
-    this.BRANCHNAME_ngModel_Add = "";
-    this.COMPANYNAME_ngModel_Add = "";
-
-    this.NAME_ngModel_Edit = "";
   }
 }
