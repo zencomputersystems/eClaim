@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { QualificationSetup_Model } from '../../../models/qualificationsetup_model';
@@ -57,7 +58,7 @@ export class QualificationsetupPage extends authCheck {
   public AddQualifyClick() {
     if (this.Edit_Form == false) {
       this.AddQualifyClicked = true; this.Add_Form = true; this.Edit_Form = false; this.HeaderText = "REGISTER NEW QUALIFICATION";
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -69,7 +70,7 @@ export class QualificationsetupPage extends authCheck {
       content: 'Loading...',
     });
     this.loading.present();
-    this.ClearControls();
+    ClearControls(this);
     this.AddQualifyClicked = true; this.Add_Form = false; this.Edit_Form = true; this.HeaderText = "UPDATE NEW QUALIFICATION";
 
     var self = this;
@@ -315,10 +316,5 @@ export class QualificationsetupPage extends authCheck {
           this.navCtrl.setRoot(this.navCtrl.getActive().component);
         }
       });
-  }
-
-  ClearControls() {
-    this.TYPE_NAME_ngModel_Add = "";
-    this.TYPE_DESC_ngModel_Add = "";
   }
 }

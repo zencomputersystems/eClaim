@@ -9,6 +9,7 @@ import { ApiManagerProvider } from '../../../providers/api-manager.provider';
 import { BaseHttpService } from '../../../services/base-http';
 import { ClaimTypeSetup_Model } from '../../../models/claimtypesetup_model';
 import { ClaimTypeSetup_Service } from '../../../services/claimtypesetup_service';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { TitleCasePipe } from '@angular/common';
@@ -51,7 +52,7 @@ export class ClaimtypePage extends authCheck {
   public AddClaimtypeClick() {
     if (this.Edit_Form == false) {
       this.AddClaimtypeClicked = true; this.Add_Form = true; this.Edit_Form = false; this.HeaderText = "REGISTER NEW CLAIM TYPE";
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -64,7 +65,7 @@ export class ClaimtypePage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddClaimtypeClicked = true; this.Add_Form = false; this.Edit_Form = true; this.HeaderText = "UPDATE NEW CLAIM TYPE";
 
     var self = this;
@@ -279,10 +280,5 @@ export class ClaimtypePage extends authCheck {
           this.navCtrl.setRoot(this.navCtrl.getActive().component);
         }
       });
-  }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.DESCRIPTION_ngModel_Add = "";
   }
 }

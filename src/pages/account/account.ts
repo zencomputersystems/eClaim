@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
 
 import { BaseHttpService } from '../../services/base-http';
+import { ClearControls } from '../../services/controls_service';
 import { Component } from '@angular/core';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { LoginPage } from '../login/login';
@@ -280,7 +281,7 @@ export class AccountPage {
   public Profile_Image_Display: any;
 
   public Edit_Personaldetails(id: any) {
-    this.ClearControls();
+    ClearControls(this);
 
     this.loading = this.loadingCtrl.create({
       content: 'Loading...',
@@ -836,72 +837,10 @@ this.userinfo_entry.DOB = this.view_user_details[0]["DOB"]
     }
   }
 
-  ClearControls() {
-    this.User_Name_Edit_ngModel = "";
-    this.User_Email_Edit_ngModel = "";
-    this.User_LoginId_Edit_ngModel = "";
-    this.User_Password_Edit_ngModel = "";
-    this.User_PersonalNo_Edit_ngModel = "";
-    this.User_CompanyNo_Edit_ngModel = "";
-    this.User_Marital_Edit_ngModel = "";
-    this.User_StaffID_Edit_ngModel = "";
-    this.User_ICNo_Edit_ngModel = "";
-    this.User_DOB_Edit_ngModel = "";
-    this.User_Gender_Edit_ngModel = "";
 
-    this.User_Designation_Edit_ngModel = "";
-    this.User_Company_Edit_ngModel = "";
-    this.User_Department_Edit_ngModel = "";
-    this.User_JoinDate_Edit_ngModel = "";
-    this.User_ConfirmationDate_Edit_ngModel = "";
-    this.User_ResignationDate_Edit_ngModel = "";
-    this.User_Branch_Edit_ngModel = "";
-
-    this.User_EmployeeType_Edit_ngModel = "";
-    this.User_Employment_Edit_ngModel = "";
-
-    this.User_HighestQualification_Edit_ngModel = "";
-    this.User_University_Edit_ngModel = "";
-    this.User_Major_Edit_ngModel = "";
-    this.User_EduYear_Edit_ngModel = "";
-
-    this.User_Certification_Edit_ngModel = "";
-    this.User_CertificationYear_Edit_ngModel = "";
-    this.User_CertificationGrade_Edit_ngModel = "";
-
-    this.User_Address1_Edit_ngModel = "";
-    this.User_Address2_Edit_ngModel = "";
-    this.User_Address3_Edit_ngModel = "";
-    this.User_PostCode_Edit_ngModel = "";
-    this.User_Country_Edit_ngModel = "";
-    this.User_State_Edit_ngModel = "";
-
-    this.User_Spouse_Name_Edit_ngModel = "";
-    this.User_Spouse_IcNumber_Edit_ngModel = "";
-
-    this.User_Child_Name_Edit_ngModel = "";
-    this.User_Child_IcNumber_Edit_ngModel = "";
-    this.User_Child_Gender_Edit_ngModel = "";
-    this.User_SpouseChild_Edit_ngModel = "";
-
-    this.User_EMG_CONTACT_NAME1_Edit_ngModel = "";
-    this.User_EMG_RELATIONSHIP_Edit_ngModel = "";
-    this.User_EMG_CONTACT_NO1_Edit_ngModel = "";
-    this.User_EMG_CONTACT_NAME2_Edit_ngModel = "";
-    this.User_EMG_RELATIONSHIP2_Edit_ngModel = "";
-    this.User_EMG_CONTACT_NO2_Edit_ngModel = "";
-
-    this.User_EPF_NUMBER_Edit_ngModel = "";
-    this.User_INCOMETAX_NO_Edit_ngModel = "";
-    this.User_BANK_NAME_Edit_ngModel = "";
-
-    this.MaritalStatusMarried = false;
-
-    this.ROLE_ngModel_Edit = "";
-    localStorage.removeItem("Unique_File_Name");
-  }
-
-  EditProfileClicked: boolean = false; isReadonly: boolean = false; isDisabled: boolean = true;
+  EditProfileClicked: boolean = false; 
+  isReadonly: boolean = false; 
+  isDisabled: boolean = true;
 
   Readonly() {
     this.isReadonly = true;

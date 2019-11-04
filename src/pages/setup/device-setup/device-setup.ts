@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { DeviceSetup_Model } from '../../../models/devicesetup_model';
 import { DeviceSetup_Service } from '../../../services/devicesetup_service';
@@ -56,7 +57,7 @@ export class DeviceSetupPage extends authCheck {
   public AddDeviceClick() {
     if (this.Edit_Form == false) {
       this.AddDeviceClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
       this.HeaderText = "ADD NEW DEVICE";
     }
     else {
@@ -77,7 +78,7 @@ export class DeviceSetupPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddDeviceClicked = true; this.Add_Form = false; this.Edit_Form = true;
     this.HeaderText = "UPDATE DEVICE";
 
@@ -423,13 +424,4 @@ export class DeviceSetupPage extends authCheck {
         });
     });
   }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.Status_ngModel = "";
-    this.Role_ngModel = "";
-    this.Tenant_Add_ngModel = "";
-  }
-
-
 }

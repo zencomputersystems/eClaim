@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { DesignationSetup_Model } from '../../../models/designationsetup_model';
 import { DesignationSetup_Service } from '../../../services/designationsetup_service';
@@ -56,7 +57,7 @@ export class DesignationsetupPage extends authCheck {
   public AddDesignationClick() {
     if (this.Edit_Form == false) {
       this.AddDesignationClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
       this.HeaderText = "REGISTER NEW DESIGNATION";
     }
     else {
@@ -70,7 +71,7 @@ export class DesignationsetupPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddDesignationClicked = true; this.Add_Form = false; this.Edit_Form = true;
     this.HeaderText = "UPDATE DESIGNATION";
 
@@ -359,12 +360,6 @@ export class DesignationsetupPage extends authCheck {
           resolve(result.length);
         });
     });
-  }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.DESCRIPTION_ngModel_Add = "";
-    this.Tenant_Add_ngModel = "";
   }
 }
 

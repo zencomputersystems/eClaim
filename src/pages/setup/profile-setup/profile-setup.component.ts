@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions, URLSearchParams } from '@angular/http';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 // t { GlobalFunction } from '../../../shared/GlobalFunction';
 import { LoginPage } from '../../login/login';
@@ -79,7 +80,7 @@ export class ProfileSetupPage {
 
   public AddProfileClick() {
     this.AddProfileClicked = true;
-    this.ClearControls();
+    ClearControls(this);
   }
 
   public CloseProfilesClick() {
@@ -92,7 +93,7 @@ export class ProfileSetupPage {
   }
 
   public EditClick(MAIN_PROFILE_GUID: any) {
-    this.ClearControls();
+    ClearControls(this);
     this.EditProfileClicked = true;
     this.current_profileGUID = MAIN_PROFILE_GUID;
     var self = this;
@@ -263,11 +264,5 @@ export class ProfileSetupPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProfileSetupPage');
-  }
-  ClearControls() {
-    this.PROFILENAME_ngModel_Add = "";
-    this.XML_ngModel_Add = "";
-    this.PROFILENAME_ngModel_Edit = "";
-    this.XML_ngModel_Edit = "";
   }
 }

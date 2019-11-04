@@ -9,6 +9,7 @@ import { Headers, Http, RequestOptions } from '@angular/http';
 import { BankSetup_Model } from '../../../models/banksetup_model';
 import { BankSetup_Service } from '../../../services/banksetup_service';
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { ExcelService } from '../../../providers/excel.service';
 import { TitleCasePipe } from '@angular/common';
@@ -52,7 +53,7 @@ export class BanksetupPage extends authCheck {
   public AddBanksClick() {
     if (this.Edit_Form == false) {
       this.AddBanksClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -72,7 +73,7 @@ export class BanksetupPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddBanksClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
     //this.current_bankGUID = BANK_GUID;
@@ -316,11 +317,6 @@ export class BanksetupPage extends authCheck {
           resolve(result.length);
         });
     });
-  }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-    this.Tenant_Add_ngModel = "";
   }
 
   ExportToExcel() {

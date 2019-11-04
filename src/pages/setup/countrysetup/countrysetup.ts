@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { CountrySetup_Model } from '../../../models/countrysetup_model';
 import { CountrySetup_Service } from '../../../services/countrysetup_service';
@@ -50,7 +51,7 @@ export class CountrysetupPage extends authCheck {
   public AddCountryClick() {
     if (this.Edit_Form == false) {
       this.AddCountryClicked = true; this.Add_Form = true; this.Edit_Form = false; this.HeaderText = "REGISTER NEW COUNTRY";
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -64,7 +65,7 @@ export class CountrysetupPage extends authCheck {
     });
     this.loading.present();
 
-    this.ClearControls();
+    ClearControls(this);
     this.AddCountryClicked = true;
     this.Add_Form = false;
     this.Edit_Form = true;
@@ -289,9 +290,4 @@ export class CountrysetupPage extends authCheck {
         }
       });
   }
-
-  ClearControls() {
-    this.NAME_ngModel_Add = "";
-  }
-
 }

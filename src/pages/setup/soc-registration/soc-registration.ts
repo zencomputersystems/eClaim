@@ -6,6 +6,7 @@ import { AlertController, IonicPage, Loading, LoadingController, NavController, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseHttpService } from '../../../services/base-http';
+import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { SocCustomerLocation_Model } from '../../../models/soc_customer_location_model';
@@ -83,7 +84,7 @@ export class SocRegistrationPage extends authCheck {
   public AddSocClick() {
     if (this.Edit_Form == false) {
       this.AddSocClicked = true; this.Add_Form = true; this.Edit_Form = false;
-      this.ClearControls();
+      ClearControls(this);
     }
     else {
       alert('Sorry. You are in Edit Mode.');
@@ -102,7 +103,7 @@ export class SocRegistrationPage extends authCheck {
       content: 'Loading...',
     });
     this.loading.present();
-    this.ClearControls();
+    ClearControls(this);
     this.AddSocClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
     var self = this;
@@ -775,26 +776,6 @@ export class SocRegistrationPage extends authCheck {
   isReadonly: boolean = false;
   Readonly() {
     return this.isReadonly = true;
-  }
-
-  ClearControls() {
-    this.Tenant_Add_ngModel = "";
-    this.SOC_NO_ngModel_Add = "";
-    this.PROJECT_NAME_ngModel_Add = "";
-    this.CUSTOMER_NAME_ngModel_Add = "";
-    // this.LOCATION_NAME_ngModel_Add = "";
-    // this.REGISTRATION_NO_ngModel_Add = "";
-    // this.ADDRESS1_ngModel_Add = "";
-    // this.ADDRESS2_ngModel_Add = "";
-    // this.ADDRESS3_ngModel_Add = "";
-    // this.CONTACT_PERSON_ngModel_Add = "";
-    // this.CONTACT_PERSON_MOBILE_NO_ngModel_Add = "";
-    // this.CONTACT_NO1_ngModel_Add = "";
-    // this.CONTACT_NO2_ngModel_Add = "";
-    // this.EMAIL_ngModel_Add = "";
-    // this.DIVISION_ngModel_Add = "";
-
-    this.Customer_GUID = "";
   }
 
   ProjectMainActivation(PROJECT_GUID: any, Activation_Flag: any) {
