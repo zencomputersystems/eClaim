@@ -1,19 +1,19 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../app/config/constants';
-
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_INSTANCE_URL, DREAMFACTORY_TABLE_URL } from '../app/config/constants';
 import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
 
 import { BaseHttpService } from './base-http';
 import { ClaimTypeSetup_Model } from '../models/claimtypesetup_model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { getURL } from '../providers/sanitizer/sanitizer';
 
 @Injectable()
 export class ClaimTypeSetup_Service {
-    baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_claim_type';
-    baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+    baseResourceUrl: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_claim_type';
+    baseResource_Url: string = DREAMFACTORY_TABLE_URL;
 
     constructor(private httpService: BaseHttpService) { };
 
@@ -31,7 +31,7 @@ export class ClaimTypeSetup_Service {
 		var queryHeaders = new Headers();
     	queryHeaders.append('Content-Type', 'application/json');
     	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);    	
+    	queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);    	
 		return this.httpService.http
 			.get(this.baseResourceUrl, { search: params, headers: queryHeaders})
 			.map(() => {
@@ -47,7 +47,7 @@ export class ClaimTypeSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         let options = new RequestOptions({ headers: queryHeaders });
         return this.httpService.http.post(this.baseResourceUrl, claim_type_main.toJson(true), options)
             .map((response) => {
@@ -59,7 +59,7 @@ export class ClaimTypeSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         let options = new RequestOptions({ headers: queryHeaders });
         return this.httpService.http.patch(this.baseResourceUrl, claim_type_main.toJson(true), options)
             .map((response) => {
@@ -72,7 +72,7 @@ export class ClaimTypeSetup_Service {
 		var queryHeaders = new Headers();
     	queryHeaders.append('Content-Type', 'application/json');		
     	//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    	queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+    	queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 		return this.httpService.http
 			.get(this.baseResourceUrl, { search: params ,headers: queryHeaders})
 			.map(() => {
@@ -88,7 +88,7 @@ export class ClaimTypeSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
         return this.httpService.http
             .delete(this.baseResourceUrl + '/' + id, { headers: queryHeaders })
             .map((response) => {
@@ -101,7 +101,7 @@ export class ClaimTypeSetup_Service {
         var queryHeaders = new Headers();
         queryHeaders.append('Content-Type', 'application/json');
         //queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-        queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+        queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 
         return this.httpService.http
             .get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
@@ -113,14 +113,9 @@ export class ClaimTypeSetup_Service {
     GetExistingRecord (bank_name:string): Observable<ClaimTypeSetup_Model> {		
 		var queryHeaders = new Headers();
     	queryHeaders.append('Content-Type', 'application/json');
-		
-		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		//queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
-		
 		let options = new RequestOptions({ headers: queryHeaders });
 		let url:string;
-		url = "http://api.zen.com.my/api/v2/zcs/_table/main_claim_type?filter=(NAME=" + bank_name + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
-		
+        url = getURL("table","main_claim_type", ["(NAME="+bank_name])		
 		return this.httpService.http
 			.get(url, options)
 			.map((response) => {

@@ -1,8 +1,7 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../app/config/constants';
-
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_INSTANCE_URL } from '../app/config/constants';
 import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
 
 import { BankSetup_Model } from '../models/banksetup_model';
@@ -12,8 +11,8 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class BankSetup_Service {
-	baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_bank';
-	baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+	baseResourceUrl: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_bank';
+	baseResource_Url: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
 	constructor(private httpService: BaseHttpService) { };
 
@@ -30,7 +29,7 @@ export class BankSetup_Service {
 		var queryHeaders = new Headers();
 		queryHeaders.append('Content-Type', 'application/json');
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 		return this.httpService.http
 			.get(this.baseResourceUrl, { search: params, headers: queryHeaders })
 			.map((response) => {
@@ -48,7 +47,7 @@ export class BankSetup_Service {
 		var queryHeaders = new Headers();
 		queryHeaders.append('Content-Type', 'application/json');
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 		let options = new RequestOptions({ headers: queryHeaders });
 		return this.httpService.http.post(this.baseResourceUrl, bank_main.toJson(true), options)
 			.map((response) => {
@@ -60,7 +59,7 @@ export class BankSetup_Service {
 		var queryHeaders = new Headers();
 		queryHeaders.append('Content-Type', 'application/json');
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 		let options = new RequestOptions({ headers: queryHeaders });
 		return this.httpService.http.patch(this.baseResourceUrl, bank_main.toJson(true), options)
 			.map((response) => {
@@ -72,7 +71,7 @@ export class BankSetup_Service {
 		var queryHeaders = new Headers();
 		queryHeaders.append('Content-Type', 'application/json');
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 		return this.httpService.http
 			.get(this.baseResourceUrl, { search: params, headers: queryHeaders })
 			.map((response) => {
@@ -85,7 +84,7 @@ export class BankSetup_Service {
 		var queryHeaders = new Headers();
 		queryHeaders.append('Content-Type', 'application/json');
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 		return this.httpService.http
 			.delete(this.baseResourceUrl + '/' + id, { headers: queryHeaders })
 			.map((response) => {
@@ -100,7 +99,7 @@ export class BankSetup_Service {
 		var queryHeaders = new Headers();
 		queryHeaders.append('Content-Type', 'application/json');
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 
 		return this.httpService.http
 			.get(this.baseResourceUrl + '/' + id, { search: params, headers: queryHeaders })
@@ -115,7 +114,7 @@ export class BankSetup_Service {
 		queryHeaders.append('Content-Type', 'application/json');
 
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		//queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		//queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 
 		let options = new RequestOptions({ headers: queryHeaders });
 		let url: string;

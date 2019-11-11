@@ -2,8 +2,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import * as constants from '../app/config/constants';
-
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_TABLE_URL } from '../app/config/constants';
 import { Headers, RequestOptions, URLSearchParams } from '@angular/http';
 
 import { BaseHttpService } from './base-http';
@@ -26,18 +25,18 @@ import { remove_multiple } from './db_removal_service';
 
 export class UserSetup_Service {
 	UserUrl = {
-	"info": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_info',
-	"main": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_main',
-	"contact": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_contact',
-	"company": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_company',
-	"address": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_address',
-	"baseResource_Url": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/',
-	"qualification": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_qualification',
-	"role": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_role',
-	"view_user_display": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_user_display',
-	"certification": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_certification',
-	"spouse": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_spouse',
-	"children": constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/user_children'
+	"info": DREAMFACTORY_TABLE_URL + 'user_info',
+	"main": DREAMFACTORY_TABLE_URL + 'user_main',
+	"contact": DREAMFACTORY_TABLE_URL + 'user_contact',
+	"company": DREAMFACTORY_TABLE_URL + 'user_company',
+	"address": DREAMFACTORY_TABLE_URL + 'user_address',
+	"baseResource_Url": DREAMFACTORY_TABLE_URL,
+	"qualification": DREAMFACTORY_TABLE_URL + 'user_qualification',
+	"role": DREAMFACTORY_TABLE_URL + 'user_role',
+	"view_user_display": DREAMFACTORY_TABLE_URL + 'view_user_display',
+	"certification": DREAMFACTORY_TABLE_URL + 'user_certification',
+	"spouse": DREAMFACTORY_TABLE_URL + 'user_spouse',
+	"children": DREAMFACTORY_TABLE_URL + 'user_children'
 	};
 
 	queryHeaders: any = new Headers();
@@ -47,7 +46,7 @@ export class UserSetup_Service {
 	constructor(private httpService: BaseHttpService) { 
 		this.queryHeaders.append('Content-Type', 'application/json');
 		//queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-		this.queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+		this.queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
 
 	};
 
@@ -162,7 +161,7 @@ export class UserSetup_Service {
 	get(id: string, params?: URLSearchParams): Observable<UserAddress_Model> {
 		console.log('Starting of UserSetup service');
 		return this.httpService.http
-			.get(this.UserUrl.address + "?filter=(USER_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY, { search: params, headers: this.queryHeaders })
+			.get(this.UserUrl.address + "?filter=(USER_GUID=" + id + ')&api_key=' + DREAMFACTORY_API_KEY, { search: params, headers: this.queryHeaders })
 			.map((response) => {
 				let viewtype: Array<UserAddress_Model> = response.json();
 				return viewtype;

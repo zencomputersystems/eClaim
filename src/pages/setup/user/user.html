@@ -183,8 +183,7 @@
                             <span style="color:red">*</span>{{ 'COMPANY' | translate }}</ion-label>
                         <ion-select formControlName="TENANT_COMPANY_GUID" [(ngModel)]="User_Company_ngModel"
                             placeholder="{{'Please fill the company'}}" (ionChange)="GetBranch('tenant_company_site', User_Company_ngModel,'SITE_NAME'); GetDesignation('main_designation', 'NAME'); GetDepartment('main_department', 'NAME'); BindBank('main_bank', 'NAME'); BindApprover1('view_get_tenant_admin')">
-                            <ion-option *ngFor="let company of companies" [value]="company.TENANT_COMPANY_GUID"
-                                selected="true">{{company.NAME}}</ion-option>
+                            <ion-option *ngFor="let company of companies" [value]="company.TENANT_COMPANY_GUID" >{{company.NAME}}</ion-option>
                         </ion-select>
                     </ion-item>
 
@@ -193,8 +192,7 @@
                             <span style="color:red">*</span>{{ 'DESIGNATION' | translate }}</ion-label>
                         <ion-select formControlName="DESIGNATION_GUID" [(ngModel)]="User_Designation_ngModel"
                             placeholder="{{'Please fill the designation'}}">
-                            <ion-option *ngFor="let designation of designations" [value]="designation.DESIGNATION_GUID"
-                                selected="true">{{designation.NAME}}</ion-option>
+                            <ion-option *ngFor="let designation of designations" [value]="designation.DESIGNATION_GUID">{{designation.NAME}}</ion-option>
                         </ion-select>
                     </ion-item>
 
@@ -202,8 +200,7 @@
                         <ion-label stacked>
                             <span style="color:red">*</span>{{ 'DEPARTMENT' | translate }}</ion-label>
                         <ion-select formControlName="DEPT_GUID" [(ngModel)]="User_Department_ngModel" placeholder="{{'Please fill in the Department'}}">
-                            <ion-option *ngFor="let department of departments" [value]="department.DEPARTMENT_GUID"
-                                selected="true">{{department.NAME }}</ion-option>
+                            <ion-option *ngFor="let department of departments" [value]="department.DEPARTMENT_GUID">{{department.NAME }}</ion-option>
                         </ion-select>
                     </ion-item>
 
@@ -230,8 +227,7 @@
                         <ion-label stacked>
                             <span style="color:red">*</span>{{ 'BRANCH' | translate }}</ion-label>
                         <ion-select formControlName="BRANCH" [(ngModel)]="User_Branch_ngModel" placeholder="{{'Please select Branch'}}">
-                            <ion-option *ngFor="let branch of branches" [value]="branch.TENANT_COMPANY_SITE_GUID"
-                                selected="true">{{branch.SITE_NAME}}</ion-option>
+                            <ion-option *ngFor="let branch of branches" [value]="branch.TENANT_COMPANY_SITE_GUID">{{branch.SITE_NAME}}</ion-option>
                         </ion-select>
                     </ion-item>
 
@@ -260,7 +256,7 @@
                         <ion-label stacked>
                             <span style="color:red">*</span>{{"Manager"}}</ion-label>
                         <ion-select formControlName="APPROVER1" [(ngModel)]="User_Approver1_ngModel" placeholder="{{'Please select Approver'}}">
-                            <ion-option *ngFor="let approver of approvers" [value]="approver.USER_GUID" selected="true">{{approver.FULLNAME}}</ion-option>
+                            <ion-option *ngFor="let approver of approvers" [value]="approver.USER_GUID">{{approver.FULLNAME}}</ion-option>
                         </ion-select>
                     </ion-item>
 

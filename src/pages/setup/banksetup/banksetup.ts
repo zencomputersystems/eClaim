@@ -1,14 +1,14 @@
 import 'rxjs/add/operator/map';
 
-import * as constants from '../../../app/config/constants';
-
 import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_EMAIL_URL, DREAMFACTORY_INSTANCE_URL } from '../../../app/config/constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, Http, RequestOptions } from '@angular/http';
 
 import { BankSetup_Model } from '../../../models/banksetup_model';
 import { BankSetup_Service } from '../../../services/banksetup_service';
 import { BaseHttpService } from '../../../services/base-http';
+import { CheckDuplicate } from '../../../services/db_checking_service';
 import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { ExcelService } from '../../../providers/excel.service';
@@ -34,9 +34,9 @@ export class BanksetupPage extends authCheck {
   bank: BankSetup_Model = new BankSetup_Model();
   current_bankGUID: string = '';
 
-  baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_bank' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
-  Key_Param: string = 'api_key=' + constants.DREAMFACTORY_API_KEY;
+  baseResourceUrl: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_bank' + '?api_key=' + DREAMFACTORY_API_KEY;
+  baseResource_Url: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+  Key_Param: string = 'api_key=' + DREAMFACTORY_API_KEY;
   public banks: BankSetup_Model[] = []; public BankDetails: any;
 
   public AddBanksClicked: boolean = false;
@@ -163,10 +163,10 @@ export class BanksetupPage extends authCheck {
 
     let view_url: string = "";
     if (localStorage.getItem("g_IS_SUPER") != "1") {
-      view_url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_bank_details' + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      view_url = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_bank_details' + '?filter=(TENANT_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&api_key=' + DREAMFACTORY_API_KEY;
     }
     else {
-      view_url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_bank_details' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+      view_url = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_bank_details' + '?api_key=' + DREAMFACTORY_API_KEY;
     }
     this.http
       .get(view_url)
@@ -300,35 +300,24 @@ export class BanksetupPage extends authCheck {
   }
 
   CheckDuplicate() {
-    let url: string = "";
-    if (localStorage.getItem("g_IS_SUPER") != "1") {
-      url = this.baseResource_Url + "main_bank?filter=NAME=" + this.NAME_ngModel_Add.trim() + ' AND TENANT_GUID=' + this.Tenant_Add_ngModel + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+    if ((localStorage.getItem("g_IS_SUPER") != "1") && (this.Tenant_Add_ngModel != undefined)) {
+      return CheckDuplicate("main_bank", "NAME=" + this.NAME_ngModel_Add.trim() + ' AND TENANT_GUID=' + this.Tenant_Add_ngModel)
     }
     else {
-      url = this.baseResource_Url + "main_bank?filter=NAME=" + this.NAME_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+      return CheckDuplicate("main_bank", "NAME=" + this.NAME_ngModel_Add.trim());
     }
-    let result: any;
-    return new Promise((resolve) => {
-      this.http
-        .get(url)
-        .map(res => res.json())
-        .subscribe(data => {
-          result = data["resource"];
-          resolve(result.length);
-        });
-    });
   }
 
   ExportToExcel() {
     this.excelService.exportAsExcelFile(this.banks, 'Data');
   }
 
-  emailUrl: string = constants.DREAMFACTORY_EMAIL_URL;
+  emailUrl: string = DREAMFACTORY_EMAIL_URL;
   EmailTest() {
     var queryHeaders = new Headers();
     queryHeaders.append('Content-Type', 'application/json');
     queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    queryHeaders.append('X-Dreamfactory-API-Key', constants.DREAMFACTORY_API_KEY);
+    queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
     let options = new RequestOptions({ headers: queryHeaders });
 
     let body = {
@@ -362,7 +351,7 @@ export class BanksetupPage extends authCheck {
         '<div style="FONT-FAMILY: Century Gothic">' +
         '<div style="MIN-WIDTH: 500px">' +
         '<br>' +
-        '<div style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src="http://api.zen.com.my/api/v2/azurefs/azurefs/2018-09-17T13:33:42.429Zzen2.png?api_key=' + constants.DREAMFACTORY_API_KEY + '"></div>' +
+        '<div style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src="http://api.zen.com.my/api/v2/azurefs/azurefs/2018-09-17T13:33:42.429Zzen2.png?api_key=' + DREAMFACTORY_API_KEY + '"></div>' +
         '<div style="MARGIN: 0 30px;">' +
         '<div style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><b>Test mail</b></div>' +
         '</div>' +

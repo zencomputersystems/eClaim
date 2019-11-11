@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { CashcardSetup_Model } from '../../../models/cashcardsetup_model';
 import { CashcardSetup_Service } from '../../../services/cashcardsetup_service';
+import { CheckDuplicate } from '../../../services/db_checking_service';
 import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
@@ -56,8 +57,8 @@ export class CashcardsetupPage extends authCheck {
 
   public AddCashClick() {
     if (this.Edit_Form == false) {
-      this.AddCashClicked = true; 
-      this.Add_Form = true; 
+      this.AddCashClicked = true;
+      this.Add_Form = true;
       this.Edit_Form = false;
       ClearControls(this);
     }
@@ -69,7 +70,7 @@ export class CashcardsetupPage extends authCheck {
   public CloseCashClick() {
     if (this.AddCashClicked == true) {
       this.AddCashClicked = false;
-      this.Add_Form = true; 
+      this.Add_Form = true;
       this.Edit_Form = false;
     }
   }
@@ -81,8 +82,8 @@ export class CashcardsetupPage extends authCheck {
     this.loading.present();
 
     ClearControls(this);
-    this.AddCashClicked = true; 
-    this.Add_Form = false; 
+    this.AddCashClicked = true;
+    this.Add_Form = false;
     this.Edit_Form = true;
 
     var self = this;
@@ -90,14 +91,14 @@ export class CashcardsetupPage extends authCheck {
       .get(CASHCARD_GUID)
       .subscribe((data) => {
         self.cashcard_details = data;
-        this.Tenant_Add_ngModel = self.cashcard_details.TENANT_GUID; 
+        this.Tenant_Add_ngModel = self.cashcard_details.TENANT_GUID;
         localStorage.setItem('Prev_TenantGuid', self.cashcard_details.TENANT_GUID);
-        this.ACCOUNT_ID_ngModel_Add = self.cashcard_details.ACCOUNT_ID; 
+        this.ACCOUNT_ID_ngModel_Add = self.cashcard_details.ACCOUNT_ID;
         localStorage.setItem('Prev_ACCOUNT_ID', self.cashcard_details.ACCOUNT_ID);
-        this.CASHCARD_SNO_ngModel_Add = self.cashcard_details.CASHCARD_SNO; 
+        this.CASHCARD_SNO_ngModel_Add = self.cashcard_details.CASHCARD_SNO;
         localStorage.setItem('Prev_CASHCARD_SNO', self.cashcard_details.CASHCARD_SNO);
         this.ACCOUNT_PASSWORD_ngModel_Add = self.cashcard_details.ACCOUNT_PASSWORD;
-        this.MANAGEMENT_URL_ngModel_Add = self.cashcard_details.MANAGEMENT_URL; 
+        this.MANAGEMENT_URL_ngModel_Add = self.cashcard_details.MANAGEMENT_URL;
         localStorage.setItem('Prev_MANAGEMENT_URL', self.cashcard_details.MANAGEMENT_URL);
         this.DESCRIPTION_ngModel_Add = self.cashcard_details.DESCRIPTION;
 
@@ -345,22 +346,11 @@ export class CashcardsetupPage extends authCheck {
   }
 
   CheckDuplicate() {
-    let url: string = "";
     if (localStorage.getItem("g_IS_SUPER") != "1") {
-      url = this.baseResource_Url + "main_cashcard?filter=TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+      return CheckDuplicate("main_cashcard", "TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim());
     }
     else {
-      url = this.baseResource_Url + "main_cashcard?filter=TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+      return CheckDuplicate("main_cashcard", "TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim());
     }
-    let result: any;
-    return new Promise((resolve) => {
-      this.http
-        .get(url)
-        .map(res => res.json())
-        .subscribe(data => {
-          result = data["resource"];
-          resolve(result.length);
-        });
-    });
   }
 }
