@@ -2243,13 +2243,16 @@ export class UserPage extends authCheck {
   }
 
   Update_Role() {
-    //first Delete all the records------------------------------------------------------------    
-    this.userservice.remove_multiple(this.usermain_entry.USER_GUID, "user_role")
+    //first Delete all the records------------------------------------------------------------
+    if (localStorage.getItem("Main_User_Role_Guid_Temp").length == 0) {
+      localStorage.removeItem("Main_User_Role_Guid_Temp");
+    }   
+    this.userservice.remove_multiple_records(this.usermain_entry.USER_GUID, "user_role")
       .subscribe(
         (response) => {
           if (response.status == 200) {
             //Update Main Role------------------------------------------------------------------------- 
-            this.userrole_entry.USER_ROLE_GUID = this.ROLE_ngModel_Edit || localStorage.getItem("Main_User_Role_Guid_Temp");
+            this.userrole_entry.USER_ROLE_GUID = this.ROLE_ngModel_Edit || localStorage.getItem("Main_User_Role_Guid_Temp") || UUID.UUID();
             this.userrole_entry.USER_GUID = this.usermain_entry.USER_GUID;
             this.userrole_entry.ROLE_GUID = this.ROLE_ngModel_Edit;
             this.userrole_entry.ACTIVATION_FLAG = "1";
@@ -2258,11 +2261,12 @@ export class UserPage extends authCheck {
             this.userrole_entry.UPDATE_TS = new Date().toISOString();
             this.userrole_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
             this.userrole_entry.ROLE_FLAG = "MAIN";
-            this.userservice.update_user_role(this.userrole_entry)
+            console.log(this.userrole_entry);
+            this.userservice.save_user_role(this.userrole_entry)
               .subscribe((response) => {
                 if (response.status == 200) {
 
-                }
+                };
               });
 
             //Insert Record for Additional Role---------------------------------------------------------------------
