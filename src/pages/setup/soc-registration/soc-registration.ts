@@ -1,9 +1,9 @@
 import 'rxjs/add/operator/map';
 
-import * as constants from '../../../app/config/constants';
-
 import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_INSTANCE_URL } from '../../../app/config/constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { getURL, sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 import { BaseHttpService } from '../../../services/base-http';
 import { ClearControls } from '../../../services/controls_service';
@@ -19,7 +19,6 @@ import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
 import { View_SOC_Model } from '../../../models/view_soc_model';
 import { authCheck } from '../../../shared/authcheck';
-import { sanitizeURL } from '../../../providers/sanitizer/sanitizer';
 
 /**
  * Generated class for the SocRegistrationPage page.
@@ -41,8 +40,8 @@ export class SocRegistrationPage extends authCheck {
   view_entry: View_SOC_Model = new View_SOC_Model();
   Socform: FormGroup;
   public page: number = 1;
-  baseResourceUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/soc_main' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
-  baseResource_Url: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
+  baseResourceUrl: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/soc_main' + '?api_key=' + DREAMFACTORY_API_KEY;
+  baseResource_Url: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
 
   public socs: View_SOC_Model[] = [];
   public soc_main: SocMain_Model[] = [];
@@ -79,11 +78,13 @@ export class SocRegistrationPage extends authCheck {
   Tenant_Add_ngModel: any;
   AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
   tenants: any;
-  Key_Param: string = 'api_key=' + constants.DREAMFACTORY_API_KEY;
+  Key_Param: string = 'api_key=' + DREAMFACTORY_API_KEY;
 
   public AddSocClick() {
     if (this.Edit_Form == false) {
-      this.AddSocClicked = true; this.Add_Form = true; this.Edit_Form = false;
+      this.AddSocClicked = true;
+      this.Add_Form = true;
+      this.Edit_Form = false;
       ClearControls(this);
     }
     else {
@@ -107,7 +108,7 @@ export class SocRegistrationPage extends authCheck {
     this.AddSocClicked = true; this.Add_Form = false; this.Edit_Form = true;
 
     var self = this;
-    let SocEditUrl = this.baseResource_Url + "view_soc_edit?filter=(SOC_GUID=" + id + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let SocEditUrl = this.baseResource_Url + "view_soc_edit?filter=(SOC_GUID=" + id + ')&api_key=' + DREAMFACTORY_API_KEY;
 
     this.http.get(sanitizeURL(SocEditUrl))
       .map(res => res.json())
@@ -156,7 +157,7 @@ export class SocRegistrationPage extends authCheck {
             var self = this;
 
             //before delete get id of main_project table, according to that id delete the record
-            let SocEditUrl = this.baseResource_Url + "view_soc_edit?filter=(SOC_GUID=" + SOC_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+            let SocEditUrl = this.baseResource_Url + "view_soc_edit?filter=(SOC_GUID=" + SOC_GUID + ')&api_key=' + DREAMFACTORY_API_KEY;
             this.http.get(sanitizeURL(SocEditUrl))
               .map(res => res.json())
               .subscribe(
@@ -235,17 +236,6 @@ export class SocRegistrationPage extends authCheck {
         soc: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
         project_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
         customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
-        // location_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // registration_no: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // address2: [null],
-        // address3: [null],
-        // contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // contact_no1: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // contact_no2: [null],
-        // email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}'), Validators.required])],            
-        // division: [null],
       });
     }
     else {
@@ -254,16 +244,6 @@ export class SocRegistrationPage extends authCheck {
         project_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
         customer_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$'), Validators.required])],
         location_name: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\'\"\|\\s]+$')])],
-        // registration_no: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // address1: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // address2: [null],
-        // address3: [null],
-        // contact_person: [null, Validators.compose([Validators.pattern('^[a-zA-Z0-9][a-zA-Z0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // contact_person_mobile_no: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // contact_no1: [null, Validators.compose([Validators.pattern('^[0-9!@#%$&()-`.+,/\"\\s]+$'), Validators.required])],
-        // contact_no2: [null],
-        // email: [null, Validators.compose([Validators.pattern('[a-zA-Z0-9._]+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}'), Validators.required])],
-        // division: [null],
         TENANT_NAME: [null, Validators.required],
       });
     }
@@ -277,13 +257,12 @@ export class SocRegistrationPage extends authCheck {
   storeCustomers: any[];
 
   LoadCustomers() {
-    let CustomerUrl: string = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_customer' + '?filter=(TENANT_GUID=' + localStorage.getItem('g_TENANT_GUID') + ')AND(ACTIVE_FLAG=A)&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let CustomerUrl: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_customer' + '?filter=(TENANT_GUID=' + localStorage.getItem('g_TENANT_GUID') + ')AND(ACTIVE_FLAG=A)&api_key=' + DREAMFACTORY_API_KEY;
     this.http
       .get(CustomerUrl)
       .map(res => res.json())
       .subscribe(data => {
         this.storeCustomers = this.customers = data["resource"];
-
         //this.loading.dismissAll();
       });
   }
@@ -364,11 +343,11 @@ export class SocRegistrationPage extends authCheck {
     this.loading.present();
 
     if (localStorage.getItem("g_USER_GUID") == "sva") {
-      this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_soc_details' + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+      this.baseResourceUrl = getURL("table", "view_soc_details");
       this.AdminLogin = true;
     }
     else {
-      this.baseResourceUrl = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/view_soc_details' + '?filter=(TENANT_GUID=' + localStorage.getItem('g_TENANT_GUID') + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+      this.baseResourceUrl = getURL("table", '/api/v2/zcs/_table/view_soc_details', ["(TENANT_GUID=" + localStorage.getItem('g_TENANT_GUID') + ")"]);
       this.AdminLogin = false;
     }
 
@@ -393,170 +372,6 @@ export class SocRegistrationPage extends authCheck {
       alert("Sorry.Please enter valid customer.");
     }
   }
-
-  // SaveCustomer() {
-  //   //for Save Set Entities-------------------------------------------------------------    
-  //   if (this.Add_Form == true) {
-  //     this.SetEntityForCustomerAdd();
-  //   }
-  //   //for Update Set Entities------------------------------------------------------------
-  //   else {
-  //     this.SetEntityForCustomerUpdate();
-  //   }
-  //   //Common Entities-------------------------------------------------------------------
-  //   this.SetCommonEntityForCustomerAddUpdate();
-
-  //   //Loader-------------------------------
-  //   this.loading = this.loadingCtrl.create({
-  //     content: 'Please Wait...',
-  //   });
-  //   this.loading.present();
-  //   //-------------------------------------
-
-  //   if (this.Tenant_Add_ngModel != localStorage.getItem('PREV_TENANT_GUID') || this.SOC_NO_ngModel_Add.trim().toUpperCase() != localStorage.getItem('PREV_SOC_NO').toUpperCase() || this.PROJECT_NAME_ngModel_Add.trim().toUpperCase() != localStorage.getItem('PREV_PROJECT_NAME').toUpperCase() || this.CUSTOMER_NAME_ngModel_Add.trim().toUpperCase() != localStorage.getItem('PREV_CUSTOMER_NAME').toUpperCase()) {
-  //     let val = this.CheckDuplicate();
-  //     val.then((res) => {
-  //       if (res.toString() == "0") {
-  //         //**************Save service if it is new details***************************
-  //         if (this.Add_Form == true) {
-  //           this.InsertCustomer();
-  //         }
-  //         //**************Update service if it is new details*************************
-  //         else {
-  //           this.UpdateCustomer();
-  //         }
-  //       }
-  //       else {
-  //         alert("The SOC is already Exist.");
-  //         this.loading.dismissAll();
-  //       }
-  //     });
-  //     val.catch((err) => {
-  //       console.log(err);
-  //     });
-  //   }
-  //   else {
-  //     //Simple update----------------------------------------------------------
-  //     this.UpdateCustomer();
-  //   }
-  // }
-
-  // SetEntityForCustomerAdd() {
-  //   //this.customer_entry.CUSTOMER_GUID = UUID.UUID();
-  //   this.customer_entry.CUSTOMER_GUID = UUID.UUID();
-  //   this.customer_entry.CREATION_TS = new Date().toISOString();
-  //   this.customer_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-  //   this.customer_entry.UPDATE_TS = new Date().toISOString();
-  //   this.customer_entry.UPDATE_USER_GUID = "";
-  // }
-
-  // SetEntityForCustomerUpdate() {
-  //   this.customer_entry.CUSTOMER_GUID = this.soc_details_main[0]["CUSTOMER_GUID"];
-  //   this.customer_entry.CREATION_TS = this.soc_details_main[0]["CREATION_TS"];
-  //   this.customer_entry.CREATION_USER_GUID = this.soc_details_main[0]["CREATION_USER_GUID"];
-  //   this.customer_entry.UPDATE_TS = new Date().toISOString();
-  //   this.customer_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-  // }
-
-  // SetCommonEntityForCustomerAddUpdate() {
-  //   if (localStorage.getItem("g_USER_GUID") == "sva") {
-  //     this.customer_entry.TENANT_GUID = this.Tenant_Add_ngModel.trim();
-  //   }
-  //   else {
-  //     this.customer_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
-  //   }
-  //   this.customer_entry.NAME = this.titlecasePipe.transform(this.CUSTOMER_NAME_ngModel_Add.trim());
-  // }
-
-  // InsertCustomer() {
-  //   this.socservice.save_customer(this.customer_entry)
-  //     .subscribe((response) => {
-  //       if (response.status == 200) {
-  //         this.SaveCustomerLocation();
-  //         //this.SaveProject();
-  //       }
-  //     });
-  // }
-
-  // UpdateCustomer() {
-  //   this.socservice.update_customer(this.customer_entry)
-  //     .subscribe((response) => {
-  //       if (response.status == 200) {
-  //         this.SaveProject();
-  //       }
-  //     });
-  // }
-
-  // SaveCustomerLocation() {
-  //   //for Save Set Entities-------------------------------------------------------------
-  //   if (this.Add_Form == true) {
-  //     this.SetEntityForCustomerLocationAdd();
-  //   }
-  //   //for Update Set Entities------------------------------------------------------------
-  //   else {
-  //     this.SetEntityForCustomerLocationUpdate();
-  //   }
-  //   //Common Entities-------------------------------------------------------------------
-  //   this.SetCommonEntityForCustomerLocationAddUpdate();
-
-  //   //**************Save service if it is new details***************************
-  //   if (this.Add_Form == true) {
-  //     this.InsertCustomerLocation();
-  //   }
-  //   //**************Update service if it is new details*************************
-  //   else {
-  //     this.UpdateCustomerLocation();
-  //   }
-  // }
-
-  // SetEntityForCustomerLocationAdd() {
-  //   this.customer_location_entry.CUSTOMER_LOCATION_GUID = UUID.UUID();
-  // }
-
-  // SetEntityForCustomerLocationUpdate() {
-  //   this.customer_location_entry.CUSTOMER_LOCATION_GUID = this.soc_details_main[0]["CUSTOMER_LOCATION_GUID"];
-  // }
-
-  // SetCommonEntityForCustomerLocationAddUpdate() {
-  //   this.customer_location_entry.CUSTOMER_GUID = this.customer_entry.CUSTOMER_GUID;
-  //   this.customer_location_entry.NAME = this.titlecasePipe.transform(this.LOCATION_NAME_ngModel_Add.trim());
-  //   this.customer_location_entry.DESCRIPTION = "NA";
-  //   this.customer_location_entry.REGISTRATION_NO = this.REGISTRATION_NO_ngModel_Add.trim();
-  //   this.customer_location_entry.ADDRESS1 = this.titlecasePipe.transform(this.ADDRESS1_ngModel_Add.trim());
-  //   this.customer_location_entry.ADDRESS2 = this.titlecasePipe.transform(this.ADDRESS2_ngModel_Add.trim());
-  //   this.customer_location_entry.ADDRESS3 = this.titlecasePipe.transform(this.ADDRESS3_ngModel_Add.trim());
-  //   this.customer_location_entry.CONTACT_PERSON = this.titlecasePipe.transform(this.CONTACT_PERSON_ngModel_Add.trim());
-  //   this.customer_location_entry.CONTACT_PERSON_MOBILE_NO = this.CONTACT_PERSON_MOBILE_NO_ngModel_Add.trim();
-  //   this.customer_location_entry.CONTACT_NO1 = this.CONTACT_NO1_ngModel_Add.trim();
-  //   this.customer_location_entry.CONTACT_NO2 = this.CONTACT_NO2_ngModel_Add.trim();
-  //   this.customer_location_entry.EMAIL = this.EMAIL_ngModel_Add.trim().toLowerCase();
-  //   this.customer_location_entry.DIVISION = this.titlecasePipe.transform(this.DIVISION_ngModel_Add.trim());
-
-  //   this.customer_location_entry.CREATION_TS = this.customer_entry.CREATION_TS;
-  //   this.customer_location_entry.CREATION_USER_GUID = this.customer_entry.CREATION_USER_GUID;
-  //   this.customer_location_entry.UPDATE_TS = this.customer_entry.UPDATE_TS;
-  //   this.customer_location_entry.UPDATE_USER_GUID = this.customer_entry.UPDATE_USER_GUID
-  // }
-
-  // InsertCustomerLocation() {
-  //   this.socservice.save_customer_location(this.customer_location_entry)
-  //     .subscribe((response) => {
-  //       if (response.status == 200) {
-
-  //         this.SaveProject();
-  //       }
-  //     });
-  // }
-
-  // UpdateCustomerLocation() {
-  //   this.socservice.update_customer_location(this.customer_location_entry)
-  //     .subscribe((response) => {
-  //       if (response.status == 200) {
-
-  //         this.SaveProject();
-  //       }
-  //     });
-  // }
 
   SaveProject() {
     //for Save Set Entities-------------------------------------------------------------
@@ -586,7 +401,12 @@ export class SocRegistrationPage extends authCheck {
     let strPREV_CUSTOMER_NAME: string = "";
     if (localStorage.getItem('PREV_CUSTOMER_NAME') != null) { strPREV_CUSTOMER_NAME = localStorage.getItem('PREV_CUSTOMER_NAME').toUpperCase(); }
 
-    if (this.Tenant_Add_ngModel != localStorage.getItem('PREV_TENANT_GUID') || this.SOC_NO_ngModel_Add.trim().toUpperCase() != strPREV_SOC_NO || this.PROJECT_NAME_ngModel_Add.trim().toUpperCase() != strPREV_PROJECT_NAME || this.CUSTOMER_NAME_ngModel_Add.trim().toUpperCase() != strPREV_CUSTOMER_NAME) {
+    if (
+      this.Tenant_Add_ngModel != localStorage.getItem('PREV_TENANT_GUID') ||
+      this.SOC_NO_ngModel_Add.trim().toUpperCase() != strPREV_SOC_NO ||
+      this.PROJECT_NAME_ngModel_Add.trim().toUpperCase() != strPREV_PROJECT_NAME ||
+      this.CUSTOMER_NAME_ngModel_Add.trim().toUpperCase() != strPREV_CUSTOMER_NAME
+    ) {
       let val = this.CheckDuplicate();
       val.then((res) => {
         if (res.toString() == "0") {
@@ -646,13 +466,6 @@ export class SocRegistrationPage extends authCheck {
     else {
       this.project_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");
     }
-
-    //this.project_entry.TENANT_GUID = this.customer_entry.TENANT_GUID;
-    // this.project_entry.ACTIVATION_FLAG = "1";
-    // this.project_entry.CREATION_TS = new Date().toISOString();
-    // this.project_entry.CREATION_USER_GUID = localStorage.getItem("g_USER_GUID");
-    // this.project_entry.UPDATE_TS = new Date().toISOString();
-    // this.project_entry.UPDATE_USER_GUID = "";
   }
 
   InsertProject() {
@@ -755,11 +568,11 @@ export class SocRegistrationPage extends authCheck {
   CheckDuplicate() {
     let url: string = "";
     if (localStorage.getItem("g_USER_GUID") != "sva") {
-      // url = this.baseResource_Url + "view_soc_details?filter=TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND soc=' + this.SOC_NO_ngModel_Add.trim() + ' AND project_name=' + this.PROJECT_NAME_ngModel_Add.trim() + ' AND customer_name=' + this.CUSTOMER_NAME_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
-      url = this.baseResource_Url + "view_soc_details?filter=TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND soc=' + this.SOC_NO_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+      // url = this.baseResource_Url + "view_soc_details?filter=TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND soc=' + this.SOC_NO_ngModel_Add.trim() + ' AND project_name=' + this.PROJECT_NAME_ngModel_Add.trim() + ' AND customer_name=' + this.CUSTOMER_NAME_ngModel_Add.trim() + '&api_key=' + DREAMFACTORY_API_KEY;
+      url = this.baseResource_Url + "view_soc_details?filter=TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND soc=' + this.SOC_NO_ngModel_Add.trim() + '&api_key=' + DREAMFACTORY_API_KEY;
     }
     else {
-      url = this.baseResource_Url + "view_soc_details?filter=TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND soc=' + this.SOC_NO_ngModel_Add.trim() + ' AND project_name=' + this.PROJECT_NAME_ngModel_Add.trim() + ' AND customer_name=' + this.CUSTOMER_NAME_ngModel_Add.trim() + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+      url = this.baseResource_Url + "view_soc_details?filter=TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND soc=' + this.SOC_NO_ngModel_Add.trim() + ' AND project_name=' + this.PROJECT_NAME_ngModel_Add.trim() + ' AND customer_name=' + this.CUSTOMER_NAME_ngModel_Add.trim() + '&api_key=' + DREAMFACTORY_API_KEY;
     }
     let result: any;
     return new Promise((resolve) => {
@@ -829,7 +642,7 @@ export class SocRegistrationPage extends authCheck {
   }
 
   GetProjectDetails(PROJECT_GUID: any) {
-    let ProjectActivationUrl = this.baseResource_Url + "main_project?filter=(PROJECT_GUID=" + PROJECT_GUID + ')&api_key=' + constants.DREAMFACTORY_API_KEY;
+    let ProjectActivationUrl = this.baseResource_Url + "main_project?filter=(PROJECT_GUID=" + PROJECT_GUID + ')&api_key=' + DREAMFACTORY_API_KEY;
     this.http.get(sanitizeURL(ProjectActivationUrl))
       .map(res => res.json())
       .subscribe(
