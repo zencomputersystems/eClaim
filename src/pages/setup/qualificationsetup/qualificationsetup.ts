@@ -265,7 +265,7 @@ export class QualificationsetupPage extends authCheck {
 
   SetCommonEntityForAddUpdate() {
     this.Qualify_entry.TYPE_NAME = this.titlecasePipe.transform(this.TYPE_NAME_ngModel_Add.trim());
-    this.Qualify_entry.TYPE_DESC = this.titlecasePipe.transform(this.TYPE_DESC_ngModel_Add.trim());
+    this.Qualify_entry.TYPE_DESC = this.titlecasePipe.transform(this.TYPE_DESC_ngModel_Add ? this.TYPE_DESC_ngModel_Add.trim() : "");
   }
 
   RemoveStorageValues() {

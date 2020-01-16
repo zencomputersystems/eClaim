@@ -271,7 +271,7 @@ export class PaymenttypesetupPage extends authCheck {
 
   SetCommonEntityForAddUpdate() {
     this.Paymenttype_entry.NAME = this.titlecasePipe.transform(this.NAME_ngModel_Add.trim());
-    this.Paymenttype_entry.DESCRIPTION = this.titlecasePipe.transform(this.DESCRIPTION_ngModel_Add.trim());
+    this.Paymenttype_entry.DESCRIPTION = this.titlecasePipe.transform(this.DESCRIPTION_ngModel_Add ? this.DESCRIPTION_ngModel_Add.trim(): "");
 
     if (localStorage.getItem("g_USER_GUID") != "sva") {
       this.Paymenttype_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");

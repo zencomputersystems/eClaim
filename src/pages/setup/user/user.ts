@@ -319,11 +319,11 @@ export class UserPage extends authCheck {
           this.USER_GUID_FOR_COMPANY_CONTACT = this.view_user_details[0]["USER_COMPANY_GUID"];
           this.USER_GUID_FOR_CONTACT = this.view_user_details[0]["CONTACT_INFO_GUID"];
 
-          this.User_Company_Edit_ngModel = this.view_user_details[0]["COMPANY_GUID"]; 
+          this.User_Company_Edit_ngModel = this.view_user_details[0]["COMPANY_GUID"];
           this.GetBranch("tenant_company_site", this.User_Company_Edit_ngModel, "SITE_NAME");
 
-//          this.GetDesignation('main_designation', 'NAME');
-//          this.GetDepartment('main_department', 'NAME');
+          //          this.GetDesignation('main_designation', 'NAME');
+          //          this.GetDepartment('main_department', 'NAME');
           this.BindBank('main_bank', 'NAME');
           this.BindApprover1("view_get_tenant_admin");
           this.BindRole();
@@ -428,7 +428,7 @@ export class UserPage extends authCheck {
         this.roles = data.resource;
         for (var itemA in this.roles) {
           if (this.roles[itemA]["ROLE_FLAG"] == "MAIN") {
-            CheckRole.push(this.roles[itemA]["ROLE_GUID"]); 
+            CheckRole.push(this.roles[itemA]["ROLE_GUID"]);
             localStorage.setItem("Main_User_Role_Guid_Temp", this.roles[itemA]["USER_ROLE_GUID"]);
           }
           else {
@@ -709,7 +709,7 @@ export class UserPage extends authCheck {
       TempUser_Company_ngModel = this.User_Company_ngModel.trim();
     }
     else {
-      TempUser_Company_ngModel = this.view_user_details ? this.view_user_details[0]["COMPANY_GUID"] : localStorage.getItem("g_TENANT_COMPANY_GUID") ;
+      TempUser_Company_ngModel = this.view_user_details ? this.view_user_details[0]["COMPANY_GUID"] : localStorage.getItem("g_TENANT_COMPANY_GUID");
     }
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
@@ -782,10 +782,9 @@ export class UserPage extends authCheck {
         TableURL = DREAMFACTORY_TABLE_URL + TableName + '?' + 'order=' + SortField + '&' + this.Key_Param;
       }
       else {
-        TableURL = DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_COMPANY_GUID=' + localStorage.getItem("g_TENANT_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
+        TableURL = DREAMFACTORY_TABLE_URL + TableName + '?filter=(TENANT_COMPANY_GUID=' + localStorage.getItem("g_TENANT_COMPANY_GUID") + ')&' + 'order=' + SortField + '&' + this.Key_Param;
       }
     }
-
     this.http
       .get(TableURL)
       .map(res => res.json())
@@ -825,7 +824,7 @@ export class UserPage extends authCheck {
       TempUser_Company_ngModel = this.User_Company_ngModel.trim();
     }
     else {
-      TempUser_Company_ngModel = this.view_user_details ? this.view_user_details[0]["COMPANY_GUID"] : localStorage.getItem("g_TENANT_COMPANY_GUID") ;;
+      TempUser_Company_ngModel = this.view_user_details ? this.view_user_details[0]["COMPANY_GUID"] : localStorage.getItem("g_TENANT_COMPANY_GUID");;
     }
 
     let val = this.GetTenant_GUID(TempUser_Company_ngModel);
@@ -1338,7 +1337,7 @@ export class UserPage extends authCheck {
     val.then((res) => {
       this.usermain_entry.TENANT_GUID = res.toString();
       this.usermain_entry.USER_GUID = USER_GUID;
-      this.usermain_entry.STAFF_ID = this.User_StaffID_Edit_ngModel.trim();
+      this.usermain_entry.STAFF_ID = this.User_StaffID_Edit_ngModel ? this.User_StaffID_Edit_ngModel.trim() : null;
       this.usermain_entry.LOGIN_ID = this.User_Email_Edit_ngModel.trim();
       if (this.User_Password_Edit_ngModel != undefined) {
         this.usermain_entry.PASSWORD = this.User_Password_Edit_ngModel.trim();
@@ -1421,8 +1420,16 @@ export class UserPage extends authCheck {
       .subscribe((response) => {
         if (response.status == 200) {
           this.Save_User_Address();
+          this.Save_User_Company();
+          if (this.User_PersonalNo_ngModel) {
+            this.Save_User_Contact();
+          }
+          this.Save_User_Spouse();
+          this.Save_User_Children();
+          this.Save_Role();
           //alert("User Info inserted");
           console.log('User info inserted');
+          this.navCtrl.setRoot(this.navCtrl.getActive().component);
         }
       });
     // return new Promise((resolve, reject) => {
@@ -1442,14 +1449,14 @@ export class UserPage extends authCheck {
     this.userinfo_entry.FULLNAME = this.titlecasePipe.transform(this.User_Name_Edit_ngModel.trim());
     //NICKNAME
     //SALUTATION
-    this.userinfo_entry.MANAGER_USER_GUID = this.User_Approver1_Edit_ngModel.trim();
-    this.userinfo_entry.PERSONAL_ID_TYPE = this.User_StaffID_Edit_ngModel.trim();
-    this.userinfo_entry.PERSONAL_ID = this.User_ICNo_Edit_ngModel.trim();
-    this.userinfo_entry.DOB = this.User_DOB_Edit_ngModel.trim();
+    this.userinfo_entry.MANAGER_USER_GUID = this.User_Approver1_Edit_ngModel ? this.User_Approver1_Edit_ngModel.trim() : null;
+    this.userinfo_entry.PERSONAL_ID_TYPE = this.User_StaffID_Edit_ngModel ? this.User_StaffID_Edit_ngModel.trim() : null;
+    this.userinfo_entry.PERSONAL_ID = this.User_ICNo_Edit_ngModel ? this.User_ICNo_Edit_ngModel.trim() : null;
+    this.userinfo_entry.DOB = this.User_DOB_Edit_ngModel ? this.User_DOB_Edit_ngModel.trim() : null;
     this.userinfo_entry.GENDER = this.User_Gender_Edit_ngModel;
-    this.userinfo_entry.JOIN_DATE = this.User_JoinDate_Edit_ngModel.trim();
+    this.userinfo_entry.JOIN_DATE = this.User_JoinDate_Edit_ngModel.trim() ? this.User_JoinDate_Edit_ngModel.trim() : "";
     this.userinfo_entry.MARITAL_STATUS = this.User_Marital_Edit_ngModel;
-    this.userinfo_entry.BRANCH = this.User_Branch_Edit_ngModel.trim();
+    this.userinfo_entry.BRANCH = this.User_Branch_Edit_ngModel ? this.User_Branch_Edit_ngModel.trim() : "";
     //this.userinfo_entry.EMPLOYEE_TYPE = this.User_EmployeeType_Edit_ngModel.trim()===undefined?this.EmployeeTypeAdjuster:this.User_EmployeeType_Edit_ngModel.trim();
     this.userinfo_entry.EMPLOYEE_TYPE = this.User_EmployeeType_Edit_ngModel;
 
@@ -1499,7 +1506,15 @@ export class UserPage extends authCheck {
       .subscribe((response) => {
         if (response.status == 200) {
           this.Update_User_Address();
+          this.Update_User_Company();
+          if (this.User_PersonalNo_ngModel) {
+            this.Update_User_Contact();
+          }
+          this.Update_User_Spouse();
+          this.Update_User_Children();
+          this.Update_Role();
         }
+        this.navCtrl.setRoot(this.navCtrl.getActive().component);
       });
   }
 
@@ -1522,7 +1537,6 @@ export class UserPage extends authCheck {
       .subscribe((response) => {
         if (response.status == 200) {
           console.log('User address inserted');
-          this.Save_User_Company();
           //alert("User Address inserted");
         }
       });
@@ -1551,7 +1565,6 @@ export class UserPage extends authCheck {
       .subscribe((response) => {
         if (response.status == 200) {
           //alert('3');
-          this.Update_User_Company();
           //alert(this.useraddress_entry.USER_ADDRESS2);
         }
       });
@@ -1571,9 +1584,7 @@ export class UserPage extends authCheck {
       .subscribe((response) => {
         if (response.status == 200) {
           console.log('User Company added');
-          if (this.User_PersonalNo_ngModel) {
-            this.Save_User_Contact();
-          }
+
           //alert("User Company inserted");
         }
       });
@@ -1594,7 +1605,7 @@ export class UserPage extends authCheck {
     this.userservice.update_user_company(this.usercompany_entry)
       .subscribe((response) => {
         if (response.status == 200) {
-          this.Update_User_Contact();
+          console.log("User contact updated")
         }
       });
   }
@@ -1663,11 +1674,8 @@ export class UserPage extends authCheck {
           //          this.Update_User_Qualification()
           // Moved from Update_User_Qualification:
           // this.Update_User_Certification();
-          this.Update_User_Spouse();
-          this.Update_User_Children();
-          this.Update_Role();
 
-          alert('User updated successfully.');
+          alert('User contact updated successfully.');
           this.navCtrl.setRoot(this.navCtrl.getActive().component);
         }
       });
@@ -1707,12 +1715,7 @@ export class UserPage extends authCheck {
                         }) */
 
             //this.Save_User_Certification();
-            this.Save_User_Spouse();
-            this.Save_User_Children();
-            this.Save_Role();
-
             alert('User inserted successfully.');
-            this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
         });
 
@@ -2215,7 +2218,7 @@ export class UserPage extends authCheck {
     this.userrole_entry.ROLE_FLAG = "MAIN";
     this.userservice.save_user_role(this.userrole_entry)
       .subscribe((response) => {
-        if (response.status == 200) {
+        if ((response.status == 200) && (this.ADDITIONAL_ROLE_ngModel_Add)) {
           //Insert Record for Additional Role---------------------------------------------------------------------
           for (var ROLE_GUID of this.ADDITIONAL_ROLE_ngModel_Add) {
             if (ROLE_GUID != this.ROLE_ngModel_Edit) {
@@ -2246,7 +2249,7 @@ export class UserPage extends authCheck {
     //first Delete all the records------------------------------------------------------------
     if (localStorage.getItem("Main_User_Role_Guid_Temp").length == 0) {
       localStorage.removeItem("Main_User_Role_Guid_Temp");
-    }   
+    }
     this.userservice.remove_multiple_records(this.usermain_entry.USER_GUID, "user_role")
       .subscribe(
         (response) => {
@@ -2270,24 +2273,26 @@ export class UserPage extends authCheck {
               });
 
             //Insert Record for Additional Role---------------------------------------------------------------------
-            for (var ROLE_GUID of this.ADDITIONAL_ROLE_ngModel_Edit) {
-              if (ROLE_GUID != this.ROLE_ngModel_Edit) {
-                this.userrole_entry.USER_ROLE_GUID = UUID.UUID();
-                this.userrole_entry.USER_GUID = this.usermain_entry.USER_GUID;
-                this.userrole_entry.ROLE_GUID = ROLE_GUID;
-                this.userrole_entry.ACTIVATION_FLAG = "1";
-                this.userrole_entry.CREATION_TS = this.usermain_entry.CREATION_TS;
-                this.userrole_entry.CREATION_USER_GUID = this.usermain_entry.CREATION_USER_GUID;
-                this.userrole_entry.UPDATE_TS = new Date().toISOString();
-                this.userrole_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
-                this.userrole_entry.ROLE_FLAG = "ADDITIONAL";
+            if (this.ADDITIONAL_ROLE_ngModel_Edit) {
+              for (var ROLE_GUID of this.ADDITIONAL_ROLE_ngModel_Edit) {
+                if (ROLE_GUID != this.ROLE_ngModel_Edit) {
+                  this.userrole_entry.USER_ROLE_GUID = UUID.UUID();
+                  this.userrole_entry.USER_GUID = this.usermain_entry.USER_GUID;
+                  this.userrole_entry.ROLE_GUID = ROLE_GUID;
+                  this.userrole_entry.ACTIVATION_FLAG = "1";
+                  this.userrole_entry.CREATION_TS = this.usermain_entry.CREATION_TS;
+                  this.userrole_entry.CREATION_USER_GUID = this.usermain_entry.CREATION_USER_GUID;
+                  this.userrole_entry.UPDATE_TS = new Date().toISOString();
+                  this.userrole_entry.UPDATE_USER_GUID = localStorage.getItem("g_USER_GUID");
+                  this.userrole_entry.ROLE_FLAG = "ADDITIONAL";
 
-                this.userservice.save_user_role(this.userrole_entry)
-                  .subscribe((response) => {
-                    if (response.status == 200) {
+                  this.userservice.save_user_role(this.userrole_entry)
+                    .subscribe((response) => {
+                      if (response.status == 200) {
 
-                    }
-                  });
+                      }
+                    });
+                }
               }
             }
             //--------------------------------------------------------------------------------------------------------
