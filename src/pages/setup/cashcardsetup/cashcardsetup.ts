@@ -8,12 +8,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseHttpService } from '../../../services/base-http';
 import { CashcardSetup_Model } from '../../../models/cashcardsetup_model';
 import { CashcardSetup_Service } from '../../../services/cashcardsetup_service';
-import { CheckDuplicate } from '../../../services/db_checking_service';
 import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { UUID } from 'angular2-uuid';
 import { authCheck } from '../../../shared/authcheck';
+import { dbServices } from '../../../services/db_checking_service';
 
 /**
  * Generated class for the CashcardsetupPage page.
@@ -27,6 +27,7 @@ import { authCheck } from '../../../shared/authcheck';
   templateUrl: 'cashcardsetup.html', providers: [CashcardSetup_Service, BaseHttpService]
 })
 export class CashcardsetupPage extends authCheck {
+  dbservices = new dbServices(this.http)
   cashcard_entry: CashcardSetup_Model = new CashcardSetup_Model();
   Cashform: FormGroup;
   public page: number = 1;
@@ -228,11 +229,11 @@ export class CashcardsetupPage extends authCheck {
       });
       this.loading.present();
       //--------------------------------------------------
-
-      if (this.Tenant_Add_ngModel != localStorage.getItem('Prev_TenantGuid') || this.ACCOUNT_ID_ngModel_Add.trim().toUpperCase() != localStorage.getItem('Prev_ACCOUNT_ID').toUpperCase() || this.CASHCARD_SNO_ngModel_Add != localStorage.getItem('Prev_CASHCARD_SNO') || this.MANAGEMENT_URL_ngModel_Add != localStorage.getItem('Prev_MANAGEMENT_URL')) {
-        let val = this.CheckDuplicate();
-        val.then((res) => {
-          if (res.toString() == "0") {
+      this.ACCOUNT_ID_ngModel_Add = this.ACCOUNT_ID_ngModel_Add ? this.ACCOUNT_ID_ngModel_Add.trim().trim().toUpperCase() : "";
+      var Prev_AccountID = localStorage.getItem('Prev_ACCOUNT_ID') ? localStorage.getItem('Prev_ACCOUNT_ID').trim().toUpperCase() : "";
+      if (this.Tenant_Add_ngModel != localStorage.getItem('Prev_TenantGuid') || this.ACCOUNT_ID_ngModel_Add.trim() != Prev_AccountID || this.CASHCARD_SNO_ngModel_Add != localStorage.getItem('Prev_CASHCARD_SNO') || this.MANAGEMENT_URL_ngModel_Add != localStorage.getItem('Prev_MANAGEMENT_URL')) {
+        let exists = this.CheckDuplicate();
+          if (!exists) {
             //---Insert or Update-------------------------------------------------------
             if (this.Add_Form == true) {
               //**************Save service if it is new details*************************
@@ -249,10 +250,6 @@ export class CashcardsetupPage extends authCheck {
             alert("The Cashcard is already Exist.");
             this.loading.dismissAll();
           }
-        });
-        val.catch((err) => {
-          console.log(err);
-        });
       }
       else {
         //Simple update----------------------------------------------------------        
@@ -345,12 +342,12 @@ export class CashcardsetupPage extends authCheck {
       });
   }
 
-  CheckDuplicate() {
+  CheckDuplicate(): any {
     if (localStorage.getItem("g_IS_SUPER") != "1") {
-      return CheckDuplicate("main_cashcard", "TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim());
+      return this.dbservices.CheckExistence("main_cashcard", "TENANT_GUID=" + localStorage.getItem("g_TENANT_GUID") + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim());
     }
     else {
-      return CheckDuplicate("main_cashcard", "TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim());
+      return this.dbservices.CheckExistence("main_cashcard", "TENANT_GUID=" + this.Tenant_Add_ngModel + ' AND ACCOUNT_ID=' + this.ACCOUNT_ID_ngModel_Add.trim() + ' AND CASHCARD_SNO=' + this.CASHCARD_SNO_ngModel_Add.trim() + ' AND MANAGEMENT_URL=' + this.MANAGEMENT_URL_ngModel_Add.trim());
     }
   }
 }

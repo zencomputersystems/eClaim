@@ -1,20 +1,20 @@
 import 'rxjs/add/operator/map';
 
 import { AlertController, IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular';
-import { DREAMFACTORY_API_KEY, DREAMFACTORY_EMAIL_URL, DREAMFACTORY_INSTANCE_URL } from '../../../app/config/constants';
+import { DREAMFACTORY_API_KEY, DREAMFACTORY_INSTANCE_URL } from '../../../app/config/constants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Headers, Http, RequestOptions } from '@angular/http';
 
 import { BankSetup_Model } from '../../../models/banksetup_model';
 import { BankSetup_Service } from '../../../services/banksetup_service';
 import { BaseHttpService } from '../../../services/base-http';
-import { CheckDuplicate } from '../../../services/db_checking_service';
 import { ClearControls } from '../../../services/controls_service';
 import { Component } from '@angular/core';
 import { ExcelService } from '../../../providers/excel.service';
+import { Http } from '@angular/http';
 import { TitleCasePipe } from '@angular/common';
 import { UUID } from 'angular2-uuid';
 import { authCheck } from '../../../shared/authcheck';
+import { dbServices } from '../../../services/db_checking_service';
 
 /**
  * Generated class for the BanksetupPage page.
@@ -28,6 +28,7 @@ import { authCheck } from '../../../shared/authcheck';
   templateUrl: 'banksetup.html', providers: [BankSetup_Service, BaseHttpService, TitleCasePipe, ExcelService]
 })
 export class BanksetupPage extends authCheck {
+  dbservices = new dbServices(this.http);
   NAME: any;
   bank_entry: BankSetup_Model = new BankSetup_Model();
   Bankform: FormGroup;
@@ -37,13 +38,16 @@ export class BanksetupPage extends authCheck {
   baseResourceUrl: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/main_bank' + '?api_key=' + DREAMFACTORY_API_KEY;
   baseResource_Url: string = DREAMFACTORY_INSTANCE_URL + '/api/v2/zcs/_table/';
   Key_Param: string = 'api_key=' + DREAMFACTORY_API_KEY;
-  public banks: BankSetup_Model[] = []; public BankDetails: any;
+  public banks: BankSetup_Model[] = [];
+  public BankDetails: any;
 
   public AddBanksClicked: boolean = false;
   public bank_details: any;
 
   Tenant_Add_ngModel: any;
-  AdminLogin: boolean = false; Add_Form: boolean = false; Edit_Form: boolean = false;
+  AdminLogin: boolean = false;
+  Add_Form: boolean = false;
+  Edit_Form: boolean = false;
   tenants: any;
   public page: number = 1;
   //Set the Model Name for Add------------------------------------------
@@ -52,7 +56,9 @@ export class BanksetupPage extends authCheck {
 
   public AddBanksClick() {
     if (this.Edit_Form == false) {
-      this.AddBanksClicked = true; this.Add_Form = true; this.Edit_Form = false;
+      this.AddBanksClicked = true;
+      this.Add_Form = true;
+      this.Edit_Form = false;
       ClearControls(this);
     }
     else {
@@ -63,7 +69,8 @@ export class BanksetupPage extends authCheck {
   public CloseBanksClick() {
     if (this.AddBanksClicked == true) {
       this.AddBanksClicked = false;
-      this.Add_Form = true; this.Edit_Form = false;
+      this.Add_Form = true;
+      this.Edit_Form = false;
     }
   }
 
@@ -74,7 +81,9 @@ export class BanksetupPage extends authCheck {
     this.loading.present();
 
     ClearControls(this);
-    this.AddBanksClicked = true; this.Add_Form = false; this.Edit_Form = true;
+    this.AddBanksClicked = true;
+    this.Add_Form = false;
+    this.Edit_Form = true;
 
     //this.current_bankGUID = BANK_GUID;
     var self = this;
@@ -204,29 +213,24 @@ export class BanksetupPage extends authCheck {
       }
 
       if (this.NAME_ngModel_Add.trim().toUpperCase() != strPrev_Name || this.Tenant_Add_ngModel != localStorage.getItem('Prev_TenantGuid')) {
-        let val = this.CheckDuplicate();
-        val.then((res) => {
-          if (res.toString() == "0") {
-            //---Insert or Update-----------
-            if (this.Add_Form == true) {
-              //**************Save service if it is new details***************************              
-              this.Insert();
-              //**************************************************************************
+        let exists = this.CheckDuplicate();
+            if (!exists) {
+              //---Insert or Update-----------
+              if (this.Add_Form == true) {
+                //**************Save service if it is new details***************************              
+                this.Insert();
+                //**************************************************************************
+              }
+              else {
+                //**************Update service if it is existing details*************************              
+                this.Update();
+                //**************************************************************************
+              }
             }
             else {
-              //**************Update service if it is new details*************************              
-              this.Update();
-              //**************************************************************************
+              alert("The Bank is already exist.");
+              this.loading.dismissAll();
             }
-          }
-          else {
-            alert("The Bank is already exist.");
-            this.loading.dismissAll();
-          }
-        });
-        val.catch((err) => {
-          console.log(err);
-        });
       }
       else {
         //Simple update----------        
@@ -299,127 +303,16 @@ export class BanksetupPage extends authCheck {
       });
   }
 
-  CheckDuplicate() {
+  CheckDuplicate(): any {
     if ((localStorage.getItem("g_IS_SUPER") != "1") && (this.Tenant_Add_ngModel != undefined)) {
-      return CheckDuplicate("main_bank", "NAME=" + this.NAME_ngModel_Add.trim() + ' AND TENANT_GUID=' + this.Tenant_Add_ngModel)
+      return this.dbservices.CheckExistence("main_bank", "NAME='" + this.NAME_ngModel_Add.trim() + "' AND TENANT_GUID=" + this.Tenant_Add_ngModel)
     }
     else {
-      return CheckDuplicate("main_bank", "NAME=" + this.NAME_ngModel_Add.trim());
+      return this.dbservices.CheckExistence("main_bank", "NAME='" + this.NAME_ngModel_Add.trim() + "'");
     }
   }
 
   ExportToExcel() {
     this.excelService.exportAsExcelFile(this.banks, 'Data');
-  }
-
-  emailUrl: string = DREAMFACTORY_EMAIL_URL;
-  EmailTest() {
-    var queryHeaders = new Headers();
-    queryHeaders.append('Content-Type', 'application/json');
-    queryHeaders.append('X-Dreamfactory-Session-Token', localStorage.getItem('session_token'));
-    queryHeaders.append('X-Dreamfactory-API-Key', DREAMFACTORY_API_KEY);
-    let options = new RequestOptions({ headers: queryHeaders });
-
-    let body = {
-      "template": "",
-      "template_id": 0,
-      "to": [
-        {
-          "name": name,
-          "email": "tarmimi@zen.com.my"
-        }
-      ],
-      "cc": [
-        {
-          "name": name,
-          "email": "stephen@zen.com.my"
-        }
-      ],
-      "bcc": [
-        {
-          "name": name,
-          "email": "bijay@zen.com.my"
-        }
-      ],
-      "subject": "Test mail.",
-      "body_text": "",
-      "body_html": '<html>' +
-        '<head>' +
-        '<meta name="GENERATOR" content="MSHTML 10.00.9200.17606">' +
-        '</head>' +
-        '<body>' +
-        '<div style="FONT-FAMILY: Century Gothic">' +
-        '<div style="MIN-WIDTH: 500px">' +
-        '<br>' +
-        '<div style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src="http://api.zen.com.my/api/v2/azurefs/azurefs/2018-09-17T13:33:42.429Zzen2.png?api_key=' + DREAMFACTORY_API_KEY + '"></div>' +
-        '<div style="MARGIN: 0 30px;">' +
-        '<div style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><b>Test mail</b></div>' +
-        '</div>' +
-        '<div style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding: 11px 30px">' +
-        '<hr>' +
-        '<div style="FONT-SIZE: 16px; TEXT-ALIGN: left;"><b>Mail Details :</b></div>' +
-        '<br />' +
-        '<table style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;">' +
-        '<tbody>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left">Employee</td>' +
-        '<td>:</td>' +
-        '<td colspan="2">&nbsp;</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left">Applied Date</td>' +
-        '<td>:</td>' +
-        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left">Claim Date </td>' +
-        '<td>:</td>' +
-        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left">Claim Type</td>' +
-        '<td>: </td>' +
-        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left">Project / Customer / SOC</td>' +
-        '<td>:</td>' +
-        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left">Claim Amount</td>' +
-        '<td>: </td>' +
-        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left">Description</td>' +
-        '<td>: </td>' +
-        '<td style="TEXT-ALIGN: left" colspan="2">&nbsp;</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="TEXT-ALIGN: left"></td>' +
-        '<td></td>' +
-        '<td style="TEXT-ALIGN: left" colspan="2"><a href="http://autobuild.zeontech.com.my/eclaim/#/ClaimapprovertasklistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">Open eClaim</a></td>' +
-        '</tr>' +
-        '</tbody>' +
-        '</table>' +
-        '<hr>' +
-        '<div style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</div>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '</body>' +
-        '</html>',
-      "from_name": "eClaim",
-      "from_email": "balasingh73@gmail.com",
-      "reply_to_name": "",
-      "reply_to_email": ""
-    };
-
-    this.http.post(this.emailUrl, body, options)
-      .map(res => res.json())
-      .subscribe(() => {
-        alert('Mail sent sucessfully.');
-      });
   }
 }

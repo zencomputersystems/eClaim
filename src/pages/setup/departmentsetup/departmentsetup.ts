@@ -289,7 +289,7 @@ export class DepartmentsetupPage extends authCheck {
 
   SetCommonEntityForAddUpdate() {
     this.department_entry.NAME = this.titlecasePipe.transform(this.NAME_ngModel_Add.trim());
-    this.department_entry.DESCRIPTION = this.titlecasePipe.transform(this.DESCRIPTION_ngModel_Add.trim());
+    this.department_entry.DESCRIPTION = this.titlecasePipe.transform(this.DESCRIPTION_ngModel_Add ? this.DESCRIPTION_ngModel_Add.trim(): "");
 
     if (localStorage.getItem("g_USER_GUID") != "sva") {
       this.department_entry.TENANT_GUID = localStorage.getItem("g_TENANT_GUID");

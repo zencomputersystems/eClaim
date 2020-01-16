@@ -171,8 +171,8 @@ export class ClaimtypePage extends authCheck {
       });
       this.loading.present();
       //--------------------------------------------------
-
-      if (this.NAME_ngModel_Add.trim().toUpperCase() != localStorage.getItem('Prev_cl_Name').toUpperCase()) {
+      let Prev_cl_Name = localStorage.getItem('Prev_cl_Name') ? localStorage.getItem('Prev_cl_Name').toUpperCase() : "";
+      if (this.NAME_ngModel_Add.trim().toUpperCase() != Prev_cl_Name) {
         let val = this.CheckDuplicate();
         val.then((res) => {
           if (res.toString() == "0") {
@@ -229,7 +229,7 @@ export class ClaimtypePage extends authCheck {
 
   SetCommonEntityForAddUpdate() {
     this.claimtype_entry.NAME = this.titlecasePipe.transform(this.NAME_ngModel_Add.trim());
-    this.claimtype_entry.DESCRIPTION = this.titlecasePipe.transform(this.DESCRIPTION_ngModel_Add.trim());
+    this.claimtype_entry.DESCRIPTION = this.titlecasePipe.transform(this.DESCRIPTION_ngModel_Add ? this.DESCRIPTION_ngModel_Add.trim() : "");
   }
 
   RemoveStorageValues() {

@@ -115,11 +115,14 @@ export class SocRegistrationPage extends authCheck {
       .subscribe(
         data => {
           this.soc_details_main = data["resource"];
-
-          this.Tenant_Add_ngModel = self.soc_details_main[0]["TENANT_GUID"]; localStorage.setItem('PREV_TENANT_GUID', self.soc_details_main[0]["TENANT_GUID"]);
-          this.SOC_NO_ngModel_Add = self.soc_details_main[0]["SOC_NO"]; localStorage.setItem('PREV_SOC_NO', self.soc_details_main[0]["SOC_NO"]);
-          this.PROJECT_NAME_ngModel_Add = self.soc_details_main[0]["PROJECT_NAME"]; localStorage.setItem('PREV_PROJECT_NAME', self.soc_details_main[0]["PROJECT_NAME"]);
-          this.CUSTOMER_NAME_ngModel_Add = self.soc_details_main[0]["CUSTOMER_NAME"]; localStorage.setItem('PREV_CUSTOMER_NAME', self.soc_details_main[0]["CUSTOMER_NAME"]);
+          this.Tenant_Add_ngModel = self.soc_details_main[0]["TENANT_GUID"]; 
+          localStorage.setItem('PREV_TENANT_GUID', self.soc_details_main[0]["TENANT_GUID"]);
+          this.SOC_NO_ngModel_Add = self.soc_details_main[0]["SOC_NO"]; 
+          localStorage.setItem('PREV_SOC_NO', self.soc_details_main[0]["SOC_NO"]);
+          this.PROJECT_NAME_ngModel_Add = self.soc_details_main[0]["PROJECT_NAME"]; 
+          localStorage.setItem('PREV_PROJECT_NAME', self.soc_details_main[0]["PROJECT_NAME"]);
+          this.CUSTOMER_NAME_ngModel_Add = self.soc_details_main[0]["CUSTOMER_NAME"]; 
+          localStorage.setItem('PREV_CUSTOMER_NAME', self.soc_details_main[0]["CUSTOMER_NAME"]);
           this.Customer_GUID = this.soc_details_main[0]["CUSTOMER_GUID"];
 
           // this.LOCATION_NAME_ngModel_Add = self.soc_details_main[0]["CUSTOMER_LOCATION_NAME"];
@@ -147,13 +150,11 @@ export class SocRegistrationPage extends authCheck {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
           text: 'OK',
           handler: () => {
-            console.log('OK clicked');
             var self = this;
 
             //before delete get id of main_project table, according to that id delete the record
@@ -347,7 +348,7 @@ export class SocRegistrationPage extends authCheck {
       this.AdminLogin = true;
     }
     else {
-      this.baseResourceUrl = getURL("table", '/api/v2/zcs/_table/view_soc_details', ["(TENANT_GUID=" + localStorage.getItem('g_TENANT_GUID') + ")"]);
+      this.baseResourceUrl = getURL("table", 'view_soc_details', ["(TENANT_GUID=" + localStorage.getItem('g_TENANT_GUID') + ")"]);
       this.AdminLogin = false;
     }
 
@@ -611,7 +612,6 @@ export class SocRegistrationPage extends authCheck {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
             // this.socs.ACTIVATION_FLAG = Activation_Flag;
             this.navCtrl.setRoot(this.navCtrl.getActive().component);
           }
@@ -619,8 +619,6 @@ export class SocRegistrationPage extends authCheck {
         {
           text: 'OK',
           handler: () => {
-            console.log('OK clicked');
-
             if (Activation_Flag == true) {
               this.project_entry.ACTIVATION_FLAG = "0";
             }
