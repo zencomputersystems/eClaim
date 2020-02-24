@@ -248,6 +248,9 @@ export class UserPage extends authCheck {
     if (this.EditUserClicked == true) {
       this.EditUserClicked = false;
     }
+    if (localStorage.getItem("Main_User_Role_Guid_Temp")) {
+      localStorage.removeItem("Main_User_Role_Guid_Temp");
+    }
   }
 
   // Edit Function
@@ -2246,16 +2249,16 @@ export class UserPage extends authCheck {
   }
 
   Update_Role() {
-    //first Delete all the records------------------------------------------------------------
-    if (localStorage.getItem("Main_User_Role_Guid_Temp").length == 0) {
+/*     //first Delete all the records------------------------------------------------------------
+     if (localStorage.getItem("Main_User_Role_Guid_Temp").length == 0) {
       localStorage.removeItem("Main_User_Role_Guid_Temp");
-    }
+    }  */
     this.userservice.remove_multiple_records(this.usermain_entry.USER_GUID, "user_role")
       .subscribe(
         (response) => {
           if (response.status == 200) {
             //Update Main Role------------------------------------------------------------------------- 
-            this.userrole_entry.USER_ROLE_GUID = this.ROLE_ngModel_Edit || localStorage.getItem("Main_User_Role_Guid_Temp") || UUID.UUID();
+            this.userrole_entry.USER_ROLE_GUID = localStorage.getItem("Main_User_Role_Guid_Temp") || UUID.UUID();
             this.userrole_entry.USER_GUID = this.usermain_entry.USER_GUID;
             this.userrole_entry.ROLE_GUID = this.ROLE_ngModel_Edit;
             this.userrole_entry.ACTIVATION_FLAG = "1";
