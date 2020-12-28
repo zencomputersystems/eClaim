@@ -68,7 +68,7 @@
   "devDependencies": {
     "@angular/tsc-wrapped": "^4.4.7",
     "@ionic/app-scripts": "3.2.4",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "rebuild-node-sass": ">=1.1.0",
     "typescript": "^2.9.2"
   }
