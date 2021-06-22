@@ -2113,7 +2113,7 @@ export class ImportExcelDataPage {
    * @memberof ImportExcelDataPage
    */
   downloadFile_service_user(): Observable<Blob> {
-    const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/user_template.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+    const url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/azurefs/Templates/user_template.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
     return this.http.get(sanitizeURL(url), options)
@@ -2133,7 +2133,7 @@ export class ImportExcelDataPage {
    * @memberof ImportExcelDataPage
    */
   downloadFile_service_soc(): Observable<Blob> {
-    const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/SOC.xlsx?api_key=' + constants.DREAMFACTORY_API_KEY;
+    const url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/azurefs/Templates/SOC.xlsx?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
     return this.http.get(sanitizeURL(url), options)
@@ -2153,7 +2153,7 @@ export class ImportExcelDataPage {
    * @memberof ImportExcelDataPage
    */
   downloadFile_service_customer(): Observable<Blob> {
-    const url = 'http://api.zen.com.my/api/v2/azurefs/Templates/Customer.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
+    const url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/azurefs/Templates/Customer.xlsx' + this.download_file_name + '?api_key=' + constants.DREAMFACTORY_API_KEY;
     let options = new RequestOptions({ responseType: ResponseContentType.Blob });
     console.log(url)
     return this.http.get(sanitizeURL(url), options)

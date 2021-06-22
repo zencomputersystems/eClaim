@@ -286,7 +286,7 @@ export class GiftclaimPage {
 
     const options = new RequestOptions({ headers: queryHeaders });
     return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Giftform.get('avatar').value, options)
+      this.http.post(constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Giftform.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
           return response;

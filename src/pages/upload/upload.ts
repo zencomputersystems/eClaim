@@ -30,7 +30,7 @@ export class UploadPage {
   //     const formData = new FormData();
   //     formData.append('files', fileBrowser.files[0]);
   //     const xhr = new XMLHttpRequest();
-  //     xhr.open('POST', 'http://api.zen.com.my/api/v2/azurefs/', true);
+  //     xhr.open('POST', 'https://api.zen.com.my/api/v2/azurefs/', true);
   //     xhr.onload = function () {
   //       if (this['status'] === 200) {
   //           const responseText = this['responseText'];

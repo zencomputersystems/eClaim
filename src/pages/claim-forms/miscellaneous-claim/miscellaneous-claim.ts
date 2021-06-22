@@ -396,7 +396,7 @@ export class MiscellaneousClaimPage {
     });
     this.loading.present();
     return new Promise((resolve, reject) => {
-      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.MiscellaneousForm.get('avatar').value, options)
+      this.http.post('https://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.MiscellaneousForm.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
           return response;

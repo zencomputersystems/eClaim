@@ -359,7 +359,7 @@ export class AddTollPage {
     });
     this.loading.present();
     return new Promise((resolve) => {
-      // this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uploadFileName, this.DetailsForm.get('avatar').value, options)
+      // this.http.post('https://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uploadFileName, this.DetailsForm.get('avatar').value, options)
       this.http.post(getURL("image", this.uniqueName), this.DetailsForm.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
