@@ -35,7 +35,7 @@
     "@zencloudservices/urlsanitizer": "0.0.3",
     "accounting-js": "^1.1.1",
     "angular2-uuid": "^1.1.1",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "chart.piecelabel.js": "^0.10.0",
     "cli-cursor": "^2.1.0",
     "cli-width": "^2.2.0",
