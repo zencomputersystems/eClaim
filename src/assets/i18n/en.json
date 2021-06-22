@@ -359,7 +359,7 @@
  "ATTENDANCE": "Attendance Device",
  "SETUP_IMPORT_DATA": "Import Data",
  "SETUP_SETTING": "Settings",
- "COMPANY_SETTING": " Company Settings",
+ "COMPANY_SETTINGS": " Company Settings",
  "DB_MAINTENANCE": "DB Maintenance",
  "SETUP_GUIDE": "Setup Guide",
  "REGISTER_COMPANY": "STEP 1 : REGISTER YOUR COMPANY",
@@ -430,6 +430,7 @@
  "ROUND_TRIP_NOTE": "Check if you make a round trip, you go on a journey and return to where you started from.",
 
  "SAVE_AS_DRAFT": "Save As Draft",
- "NO_OF_DAYS":"Days"
+ "NO_OF_DAYS":"Days",
 
+ "PUBLIC_HOLIDAY_LABEL": "Public Holiday"
 } 

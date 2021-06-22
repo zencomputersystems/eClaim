@@ -43,5 +43,7 @@
   "AMOUNT_LABEL": "Amount",
 
   "PAY_BY_LABEL": "Pay By",
-  "DASHBOARD_HEADING": "Dashboard"
+  "DASHBOARD_HEADING": "Dashboard",
+
+  "PUBLIC_HOLIDAY_LABEL": "Cuti Umum"
 }
