@@ -134,7 +134,7 @@ export class ChangePasswordPage {
     }
   }
 
-  emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
+  emailUrl: string = constants.DREAMFACTORY_EMAIL_URL;
   sendEmail() {
     let name: string; let email: string
     name = localStorage.getItem("g_FULLNAME"); email = this.user_details[0]["EMAIL"];
@@ -177,7 +177,7 @@ export class ChangePasswordPage {
         '<DIV style="MIN-WIDTH: 500px">' +
         '<BR>' +
         '<DIV style="PADDING-BOTTOM: 10px; TEXT-ALIGN: center; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px">' +
-        '<IMG style="WIDTH: 130px" alt=zen2.png src="http://zentranet.zen.com.my/_catalogs/masterpage/Layout/images/zen2.png">' +
+        '<IMG style="WIDTH: 130px" alt=zen2.png src="https://www.zen.com.my/wp-content/uploads/2019/06/ZEN_logo1.png">' +
         '</DIV>' +
         '<DIV style="MARGIN: 0px 100px; BACKGROUND-COLOR: #ec008c">' +
         '<DIV style="TEXT-ALIGN: center; FONT-SIZE: 30px; COLOR: white; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">' +
@@ -200,9 +200,9 @@ export class ChangePasswordPage {
 
         '</HTML>',
       "from_name": "eClaim",
-      "from_email": "balasingh73@gmail.com",
-      "reply_to_name": "",
-      "reply_to_email": ""
+      "from_email": "eclaim@beesuite.app",
+      "reply_to_name": "noreply@beesuite.app",
+      "reply_to_email": "noreply@beesuite.app"
     };
     this.http.post(this.emailUrl, body, options)
       .map(res => res.json())

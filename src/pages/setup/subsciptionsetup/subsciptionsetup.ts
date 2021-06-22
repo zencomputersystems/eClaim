@@ -326,7 +326,7 @@ export class SubsciptionsetupPage {
 //         headers.append('Content-Type', 'application/json');
 //         let options = new RequestOptions({ headers: headers });
 //         let url: string;
-//         url = "http://api.zen.com.my/api/v2/zcs/_table/main_subscription?filter=(PLAN_NAME=" + this.Subscription_entry.PLAN_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+//         url = "https://api.zen.com.my/api/v2/zcs/_table/main_subscription?filter=(PLAN_NAME=" + this.Subscription_entry.PLAN_NAME + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
 //         this.http.get(url, options)
 //           .map(res => res.json())
 //           .subscribe(

@@ -118,7 +118,7 @@ export class BankSetup_Service {
 
 		let options = new RequestOptions({ headers: queryHeaders });
 		let url: string;
-		url = "http://api.zen.com.my/api/v2/zcs/_table/main_bank?filter=(NAME=" + bank_name + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
+		url = constants.DREAMFACTORY_INSTANCE_URL + "/api/v2/zcs/_table/main_bank?filter=(NAME=" + bank_name + ")&api_key=cb82c1df0ba653578081b3b58179158594b3b8f29c4ee1050fda1b7bd91c3881";
 
 		return this.httpService.http
 			.get(url, options)

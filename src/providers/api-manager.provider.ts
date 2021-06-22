@@ -181,7 +181,7 @@ export class ApiManagerProvider {
                                 <TR>
                                    <TD style="TEXT-ALIGN: left"></TD>
                                    <TD></TD>
-                                   <TD style="TEXT-ALIGN: left" colSpan=2><a href="http://claim.beesuite.app/#/UserclaimslistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display:inline-block;">Open eClaim</a></TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2><a href="https://claim.beesuite.app/#/UserclaimslistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display:inline-block;">Open eClaim</a></TD>
                                 </TR>
                              </TBODY>
                           </TABLE>
@@ -295,9 +295,9 @@ export class ApiManagerProvider {
             "body_text": "",
             "body_html": strBody_html,
             "from_name": "eClaim",
-            "from_email": "balasingh73@gmail.com",
-            "reply_to_name": "",
-            "reply_to_email": ""
+            "from_email": "eclaim@beesuite.app",
+            "reply_to_name": "noreply@beesuite.app",
+            "reply_to_email": "noreply@beesuite.app"
           };
 
           //Added by bijay on 18/10/2018--------------
@@ -321,9 +321,9 @@ export class ApiManagerProvider {
               "body_text": "",
               "body_html": strBody_html,
               "from_name": "eClaim",
-              "from_email": "balasingh73@gmail.com",
-              "reply_to_name": "",
-              "reply_to_email": ""
+              "from_email": "eclaim@beesuite.app",
+              "reply_to_name": "noreply@beesuite.app",
+              "reply_to_email": "noreply@beesuite.app"
             };
           }
 
@@ -341,17 +341,13 @@ export class ApiManagerProvider {
 
   getImageUrl(imageName: string) {
     return constants.IMAGE_VIEW_URL + encodeURIComponent((imageName)).replace(/\%20/gi, '%2520'); //+constants.SAS_QUERY_STRING;
-
-    //    return constants.DREAMFACTORY_IMAGE_URL + imageName + '?api_key=' + constants.DREAMFACTORY_API_KEY;
   }
 
   getModelUrl(table: string, args?: string) {
     if (args != null) {
       return getURL("table", table) + `&${args}`
-      //     return constants.DREAMFACTORY_TABLE_URL + '/' + table + '?' + args;
     }
     return getURL("table", table);
-    //    return constants.DREAMFACTORY_TABLE_URL + '/' + table;
   }
 
   postUrl(table: string) {
@@ -433,7 +429,7 @@ export class ApiManagerProvider {
       items = [];
       return;
     }
-    var url = 'http://api.zen.com.my/api/v2/google/place/autocomplete/json?json?radius=50000&input=' + val + '&api_key=' + constants.DREAMFACTORY_API_KEY;
+    var url = constants.DREAMFACTORY_INSTANCE_URL + '/api/v2/google/place/autocomplete/json?json?radius=50000&input=' + val + '&api_key=' + constants.DREAMFACTORY_API_KEY;
     this.http.get(sanitizeURL(url)).map(res => res.json()).subscribe(data => {
       items = data["predictions"];
       return items;

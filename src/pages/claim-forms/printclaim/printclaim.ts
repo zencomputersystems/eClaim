@@ -425,7 +425,7 @@ export class PrintclaimPage {
     this.loading.present();
 
     return new Promise((resolve) => {
-      this.http.post('http://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Printform.get('avatar').value, options)
+      this.http.post('https://api.zen.com.my/api/v2/azurefs/' + this.CloudFilePath + this.uniqueName, this.Printform.get('avatar').value, options)
         .map((response) => {
           this.loading.dismissAll()
           return response;

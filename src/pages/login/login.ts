@@ -182,9 +182,9 @@ export class LoginPage {
   }
  */
 
-  emailUrl: string = 'http://api.zen.com.my/api/v2/zenmail?api_key=' + constants.DREAMFACTORY_API_KEY;
+  emailUrl: string = constants.DREAMFACTORY_EMAIL_URL;
   sendEmail(strName: string, strEmail: string, strPassword: string) {
-    let ImgageSrc: string = constants.DREAMFACTORY_IMAGE_URL + localStorage.getItem("cs_email_logo") + "?api_key=" + constants.DREAMFACTORY_API_KEY;
+    let ImageSrc: string = constants.DREAMFACTORY_IMAGE_URL + localStorage.getItem("cs_email_logo") + "?api_key=" + constants.DREAMFACTORY_API_KEY;
     let name: string; let email: string
     name = strName; email = strEmail;
     var queryHeaders = new Headers();
@@ -215,7 +215,7 @@ export class LoginPage {
         '<BR>' +
         '<DIV style="PADDING-BOTTOM: 10px; TEXT-ALIGN: center; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px">' +
         // '<IMG style="WIDTH: 130px" alt=zen2.png src="http://zentranet.zen.com.my/_catalogs/masterpage/Layout/images/zen2.png">' +
-        '<IMG style="WIDTH: 130px" alt=zen2.png src=' + ImgageSrc + '>' +
+        '<IMG style="WIDTH: 130px" alt=zen2.png src=' + ImageSrc + '>' +
         '</DIV>' +
         '<DIV style="MARGIN: 0px 100px; BACKGROUND-COLOR: #ec008c">' +
         '<DIV style="TEXT-ALIGN: center; FONT-SIZE: 30px; COLOR: white; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; PADDING-LEFT: 20px; PADDING-RIGHT: 20px">' +
@@ -238,9 +238,9 @@ export class LoginPage {
 
         '</HTML>',
       "from_name": "eClaim",
-      "from_email": "balasingh73@gmail.com",
-      "reply_to_name": "",
-      "reply_to_email": ""
+      "from_email": "eclaim@beesuite.app",
+      "reply_to_name": "noreply@beesuite.app",
+      "reply_to_email": "noreply@beesuite.app"
     };
     this.http.post(this.emailUrl, body, options)
       .map(res => res.json())
