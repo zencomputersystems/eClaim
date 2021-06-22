@@ -81,11 +81,18 @@
       </ion-item>
     </ng-template>
 
-    <ion-item>
+    <ion-item class="fuha">
       <ion-label color="primary500" floating> {{ "CLAIM_AMOUNT_LABEL" | translate }} {{ currency }}</ion-label>
       <ion-input type="text" formControlName="claim_amount" [disabled]="false" [(ngModel)]="OT_Amount_ngModel">
       </ion-input>
     </ion-item>
+
+    <ion-item class="fuha">
+      <ion-label color="primary500"> {{ "PUBLIC_HOLIDAY_LABEL" | translate }}
+      <ion-checkbox formControlName="public_holiday_check" [disabled]="false" [(ngModel)]="OT_public_holiday_check_ngModel" (ionChange)="dirty = Dirty(); getOT();"></ion-checkbox>
+    </ion-label>
+    </ion-item>
+
     <!-- <ion-item *ngIf="!OTform.controls.claim_amount.valid  && (OTform.controls.claim_amount.dirty)">
       <p style="color: red; text-align:left;">Amount is {{min_claim_amount}} - {{max_claim_amount}} RM.</p>
   </ion-item> -->

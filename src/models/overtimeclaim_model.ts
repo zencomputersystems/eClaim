@@ -11,6 +11,7 @@ export class OvertimeClaim_Model extends Base_Model {
     public FROM: string = null;
     public DESTINATION: string = null;
     public DISTANCE_KM: string = null;
+    public PUBLIC_HOLIDAY_CHECK: string = null;
     public DESCRIPTION: string = null;
     public PAYMENT_TYPE_GUID: string = null;
     public START_TS: string = null;
@@ -29,6 +30,7 @@ export class OvertimeClaim_Model extends Base_Model {
             json.FROM,
             json.DESTINATION,
             json.DISTANCE_KM,
+            json.PUBLIC_HOLIDAY_CHECK,
             json.DESCRIPTION,
             json.PAYMENT_TYPE_GUID,
             json.START_TS,
@@ -51,6 +53,7 @@ export class OvertimeClaim_Model extends Base_Model {
             FROM:this.FROM,
             DESTINATION:this.DESTINATION,
             DISTANCE_KM:this.DISTANCE_KM,
+            PUBLIC_HOLIDAY_CHECK:this.PUBLIC_HOLIDAY_CHECK,
             DESCRIPTION:this.DESCRIPTION,
             PAYMENT_TYPE_GUID:this.PAYMENT_TYPE_GUID,
             START_TS:this.START_TS,
