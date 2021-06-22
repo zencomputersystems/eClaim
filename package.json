@@ -29,6 +29,7 @@
     "@ionic/storage": "^2.2.0",
     "@ngx-translate/core": "^9.1.1",
     "@ngx-translate/http-loader": "^2.0.1",
+    "@sendgrid/mail": "^7.4.5",
     "@types/chart.js": "^2.7.53",
     "@types/crypto-js": "^3.1.43",
     "@zencloudservices/urlsanitizer": "0.0.3",

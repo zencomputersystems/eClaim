@@ -566,10 +566,11 @@ export class OvertimeclaimPage {
                     " User From:W";
                 }
                 let month = new Date(formValues.travel_date).getMonth() + 1;
+                console.log(`Line 569: REF month: ${month}`)
                 let year = new Date(formValues.travel_date).getFullYear();
                 this.apiMng
                   .getApiModel(
-                    "main_claim_ref",
+                    "main_claim_ref", 
                     "filter=(USER_GUID=" +
                       this.userGUID +
                       ")AND(MONTH=" +

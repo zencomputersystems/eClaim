@@ -117,14 +117,168 @@ export class ApiManagerProvider {
           let body1: any;
           let ImgageSrc: string = constants.DREAMFACTORY_IMAGE_URL + localStorage.getItem("cs_email_logo") + "?api_key=" + constants.DREAMFACTORY_API_KEY;
 
-          if (claimType == "Entertainment Claim" || claimType == "Printing Claim" || claimType == "Gift Claim" || claimType == "Miscellaneous Claim") {
+          if (claimType == "Entertainment Claim" || claimType == "Printing Claim" || claimType == "Overtime Claim" || claimType == "Gift Claim" || claimType == "Miscellaneous Claim") {
             if (ApproverStatus == "Rejected") {
-              strBody_html = '<HTML><HEAD><META name=GENERATOR content="MSHTML 10.00.9200.17606"></HEAD><BODY><DIV style="FONT-FAMILY: Century Gothic"><DIV style="MIN-WIDTH: 500px"><BR><DIV style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src=' + ImgageSrc + '></DIV><DIV style="MARGIN: 0 30px;"><DIV style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><B>' + strSubjectApplier + '</B></DIV></DIV><DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding:11px 30px">&nbsp;<hr><div style="FONT-SIZE: 16px; TEXT-ALIGN: left; "><B>Claim Details :</B></div><BR/><TABLE style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;"><TBODY><TR><TD style="TEXT-ALIGN: left">Employee</TD><TD>:</TD><TD colSpan=2> ' + ename + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Applied Date</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + moment(AppliedDate).format('DD/MM/YYYY') + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Date </TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + moment(travelDate).format('DD/MM/YYYY') + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Type</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2>' + claimType + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Project / Customer / SOC</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + Project_OR_Customer_Name + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Amount</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + localStorage.getItem("cs_default_currency") + ' ' + ClaimAmt + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Description</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2>' + Description + ' </TD></TR><tr><td style="TEXT-ALIGN: left">Remarks</td><td>: </td><td style="TEXT-ALIGN: left" colspan="2">' + Remarks + ' </td></tr><TR><TD style="TEXT-ALIGN: left"></TD><TD></TD><TD style="TEXT-ALIGN: left" colSpan=2><a href="http://autobuild.zeontech.com.my/eclaim/#/UserclaimslistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display:inline-block;">Open eClaim</a></TD></TR></TBODY></TABLE><HR><DIV style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</DIV></DIV></DIV></DIV></BODY></HTML>'
+              strBody_html = `<HTML>
+              <HEAD>
+                 <META name=GENERATOR content="MSHTML 10.00.9200.17606">
+              </HEAD>
+              <BODY>
+                 <DIV style="FONT-FAMILY: Century Gothic">
+                    <DIV style="MIN-WIDTH: 500px">
+                       <BR>
+                       <DIV style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src=${ImgageSrc}></DIV>
+                       <DIV style="MARGIN: 0 30px;">
+                          <DIV style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><B>${strSubjectApplier}</B></DIV>
+                       </DIV>
+                       <DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding:11px 30px">
+                          &nbsp;
+                          <hr>
+                          <div style="FONT-SIZE: 16px; TEXT-ALIGN: left; "><B>Claim Details :</B></div>
+                          <BR/>
+                          <TABLE style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;">
+                             <TBODY>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Employee</TD>
+                                   <TD>:</TD>
+                                   <TD colSpan=2> ${ename}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Applied Date</TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2> ${moment(AppliedDate).format('DD/MM/YYYY')}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Claim Date </TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${moment(travelDate).format('DD/MM/YYYY')}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Claim Type</TD>
+                                   <TD>: </TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${claimType}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Project / Customer / SOC</TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2> ${Project_OR_Customer_Name}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Claim Amount</TD>
+                                   <TD>: </TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2> ${localStorage.getItem("cs_default_currency")} ${ClaimAmt}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Description</TD>
+                                   <TD>: </TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${Description}</TD>
+                                </TR>
+                                <tr>
+                                   <td style="TEXT-ALIGN: left">Remarks</td>
+                                   <td>: </td>
+                                   <td style="TEXT-ALIGN: left" colspan="2">${Remarks} </td>
+                                </tr>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left"></TD>
+                                   <TD></TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2><a href="http://claim.beesuite.app/#/UserclaimslistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display:inline-block;">Open eClaim</a></TD>
+                                </TR>
+                             </TBODY>
+                          </TABLE>
+                          <HR>
+                          <DIV style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</DIV>
+                       </DIV>
+                    </DIV>
+                 </DIV>
+              </BODY>
+           </HTML>`
             }
           }
           else if (claimType == "Travel Claim") {
             if (ApproverStatus == "Rejected") {
-              strBody_html = '<HTML><HEAD><META name=GENERATOR content="MSHTML 10.00.9200.17606"></HEAD><BODY><DIV style="FONT-FAMILY: Century Gothic"><DIV style="MIN-WIDTH: 500px"><BR><DIV style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src=' + ImgageSrc + '></DIV><DIV style="MARGIN: 0 30px;"><DIV style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><B>' + strSubjectApplier + '</B></DIV></DIV><DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding:11px 30px">&nbsp;<hr><div style="FONT-SIZE: 16px; TEXT-ALIGN: left; "><B>Claim Details :</B></div><BR/><TABLE style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;"><TBODY><TR><TD style="TEXT-ALIGN: left">Employee</TD><TD>:</TD><TD colSpan=2> ' + ename + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Applied Date</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + moment(AppliedDate).format('DD/MM/YYYY') + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Date </TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + moment(startDate).format('DD/MM/YYYY') + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Type</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2>' + claimType + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Project / Customer / SOC</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + Project_OR_Customer_Name + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Origin</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + OriginPlace + ' </TD></TR><TR><TD style="TEXT-ALIGN: left">Destination</TD><TD>:</TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + Destination + ' </TD></TR><TR><TD style="TEXT-ALIGN: left">Claim Amount</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2> ' + localStorage.getItem("cs_default_currency") + ' ' + ClaimAmt + '</TD></TR><TR><TD style="TEXT-ALIGN: left">Description</TD><TD>: </TD><TD style="TEXT-ALIGN: left" colSpan=2>' + Description + ' </TD></TR><tr><td style="TEXT-ALIGN: left">Remarks</td><td>: </td><td style="TEXT-ALIGN: left" colspan="2">' + Remarks + ' </td></tr><TR><TD style="TEXT-ALIGN: left"></TD><TD></TD><TD style="TEXT-ALIGN: left" colSpan=2><a href="http://autobuild.zeontech.com.my/eclaim/#/UserclaimslistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display:inline-block;">Open eClaim</a></TD></TR></TBODY></TABLE><HR><DIV style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</DIV></DIV></DIV></DIV></BODY></HTML>'
+              strBody_html = `<HTML>
+              <HEAD>
+                 <META name=GENERATOR content="MSHTML 10.00.9200.17606">
+              </HEAD>
+              <BODY>
+                 <DIV style="FONT-FAMILY: Century Gothic">
+                    <DIV style="MIN-WIDTH: 500px">
+                       <BR>
+                       <DIV style="PADDING-BOTTOM: 10px; text-align: left; PADDING-TOP: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px"><IMG style="WIDTH: 130px" alt=zen2.png src='${ImgageSrc}'></DIV>
+                       <DIV style="MARGIN: 0 30px;">
+                          <DIV style="FONT-SIZE: 24px; COLOR: black; PADDING-BOTTOM: 10px; TEXT-ALIGN: left; PADDING-TOP: 10px; PADDING-RIGHT: 20px"><B>${strSubjectApplier}</B></DIV>
+                       </DIV>
+                       <DIV style="FONT-SIZE: 12px; TEXT-ALIGN: left; padding:11px 30px">
+                          &nbsp;
+                          <hr>
+                          <div style="FONT-SIZE: 16px; TEXT-ALIGN: left; "><B>Claim Details :</B></div>
+                          <BR/>
+                          <TABLE style="FONT-SIZE: 12px; FONT-FAMILY: Century Gothic; MARGIN: 0px auto;">
+                             <TBODY>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Employee</TD>
+                                   <TD>:</TD>
+                                   <TD colSpan=2>${ename}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Applied Date</TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${moment(AppliedDate).format('DD/MM/YYYY')}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Claim Date </TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${moment(startDate).format('DD/MM/YYYY')}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Claim Type</TD>
+                                   <TD>: </TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${claimType}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Project / Customer / SOC</TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${Project_OR_Customer_Name}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Origin</TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${OriginPlace}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Destination</TD>
+                                   <TD>:</TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${Destination}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Claim Amount</TD>
+                                   <TD>: </TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${localStorage.getItem("cs_default_currency")} ${ClaimAmt}</TD>
+                                </TR>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left">Description</TD>
+                                   <TD>: </TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2>${Description}</TD>
+                                </TR>
+                                <tr>
+                                   <td style="TEXT-ALIGN: left">Remarks</td>
+                                   <td>: </td>
+                                   <td style="TEXT-ALIGN: left" colspan="2">${Remarks}</td>
+                                </tr>
+                                <TR>
+                                   <TD style="TEXT-ALIGN: left"></TD>
+                                   <TD></TD>
+                                   <TD style="TEXT-ALIGN: left" colSpan=2><a href="http://claim.beesuite.app/#/UserclaimslistPage" style="background: #0492C2; padding: 10px; color: white; text-decoration: none; border-radius: 5px; display:inline-block;">Open eClaim</a></TD>
+                                </TR>
+                             </TBODY>
+                          </TABLE>
+                          <HR>
+                          <DIV style="TEXT-ALIGN: left; PADDING-TOP: 20px">Thank you.</DIV>
+                       </DIV>
+                    </DIV>
+                 </DIV>
+              </BODY>
+           </HTML>`
             }
           }
 
